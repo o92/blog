@@ -71,6 +71,42 @@ function resolveContentFile(rel) {
   return null;
 }
 
+function normalizeBasePath(pathname) {
+  if (!pathname || pathname === "/") return "";
+  let p = String(pathname).trim();
+  if (/^https?:\/\//i.test(p)) {
+    try {
+      p = new URL(p).pathname;
+    } catch {
+      return "";
+    }
+  }
+  if (!p.startsWith("/")) p = `/${p}`;
+  return p.replace(/\/+$/, "");
+}
+
+/**
+ * GitHub Pages often serves under a subpath (/blog/).
+ * Prefer the already-built HTML (reflects hugo --baseURL / HUGO_BASEURL).
+ */
+function detectBasePath() {
+  const indexHtml = path.join(root, config.publicDir, "index.html");
+  if (fs.existsSync(indexHtml)) {
+    const html = fs.readFileSync(indexHtml, "utf8");
+    const m = html.match(/(?:href|src)="([^"]*css\/site\.css)"/i);
+    if (m) {
+      const prefix = m[1].replace(/\/?css\/site\.css$/i, "");
+      return normalizeBasePath(prefix || "/");
+    }
+  }
+
+  const env = process.env.HUGO_BASEURL || process.env.HUGO_BASE_URL;
+  if (env) return normalizeBasePath(env);
+  return "";
+}
+
+let basePath = "";
+
 /** content-relative md path -> site pathname ending with / */
 function contentFileToPermalink(absFile) {
   let rel = path.relative(path.join(root, config.contentDir), absFile);
@@ -85,7 +121,9 @@ function contentFileToPermalink(absFile) {
   } else {
     rel = rel.replace(/\.md(arkdown)?$/, "");
   }
-  return `/${rel}/`.replace(/\/+/g, "/");
+  const page = `/${rel}/`.replace(/\/+/g, "/");
+  if (!basePath) return page;
+  return `${basePath}${page}`.replace(/\/+/g, "/");
 }
 
 /**
@@ -530,6 +568,8 @@ function processFile(htmlPath, domains, byDomain) {
 }
 
 function main() {
+  basePath = detectBasePath();
+  console.log(`[glossary] basePath=${basePath || "/"}`);
   const byDomain = loadGlossaries();
   if (!byDomain.global) {
     console.warn("[glossary] missing data/glossary/global.yaml (continuing)");

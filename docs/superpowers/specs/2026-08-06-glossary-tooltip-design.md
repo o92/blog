@@ -49,7 +49,7 @@ goroutine:
 ```
 
 - 必填：`summary`
-- 可选：`source`（`路径.md` 或 `路径.md#标题`）；摘录长度由 `scripts/glossary.config.json` 的 `excerptMaxLength` 限制；自动生成「显示更多」跳到对应页/锚点
+- 可选：`source`（`路径.md` 或 `路径.md#标题`）；摘录长度由 `scripts/glossary.config.json` 的 `excerptMaxLength` 限制；自动生成「显示更多」跳到对应页/锚点；**链接会带上站点 basePath**（如 GitHub Pages 的 `/blog`，从构建后的 HTML 或 `HUGO_BASEURL` 识别）
 - 可选：`link`（仅 `http(s)://` 外链）；站内跳转不要用 `link`，用 `source`
 - 可选：`aliases`（字符串数组）；别名与主词条共用 summary / source / link
 - 气泡展示顺序：领域标签 → summary → 摘录（若有）→「显示更多」/「外部链接」
