@@ -311,10 +311,10 @@ function lookupSources(termIndex, matched) {
 function tipHtml(sources) {
   const blocks = sources.map((s) => {
     const label = s.domain === "global" ? "通用" : s.domain;
-    const parts = [];
-    parts.push(
+    const parts = [
+      `<span class="glossary-tip-domain">${escapeHtml(label)}</span>`,
       `<span class="glossary-tip-summary">${escapeHtml(s.summary)}</span>`,
-    );
+    ];
     if (s.excerpt) {
       parts.push(
         `<span class="glossary-tip-excerpt">${escapeHtml(s.excerpt)}</span>`,
@@ -333,10 +333,10 @@ function tipHtml(sources) {
     }
     if (actions.length) {
       parts.push(
-        `<span class="glossary-tip-actions">${actions.join(" · ")}</span>`,
+        `<span class="glossary-tip-actions">${actions.join("")}</span>`,
       );
     }
-    return `<span class="glossary-tip-block"><strong>${escapeHtml(label)}</strong>：${parts.join("")}</span>`;
+    return `<span class="glossary-tip-block">${parts.join("")}</span>`;
   });
   return blocks.join("");
 }
