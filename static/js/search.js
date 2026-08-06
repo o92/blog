@@ -12,8 +12,20 @@
 
   if (!openBtn || !dialog || !input || !resultsEl || !statusEl) return;
 
+  // Escape header stacking context (backdrop-filter) so overlay covers the viewport
+  if (dialog.parentElement !== document.body) {
+    document.body.appendChild(dialog);
+  }
+
   var pagefindBase = (root && root.getAttribute("data-pagefind-base")) || "/pagefind/";
   if (pagefindBase.slice(-1) !== "/") pagefindBase += "/";
+
+  var isApple =
+    /Mac|iPhone|iPad|iPod/.test(navigator.platform || "") ||
+    (navigator.userAgentData && navigator.userAgentData.platform === "macOS");
+  var shortcutEl = openBtn.querySelector("[data-search-shortcut]");
+  if (shortcutEl) shortcutEl.textContent = isApple ? "⌘K" : "Ctrl K";
+  openBtn.title = "搜索（" + (isApple ? "⌘K" : "Ctrl+K") + "）";
 
   var pagefindPromise = null;
   var debounceTimer = null;
@@ -183,9 +195,18 @@
     openSearch();
   });
 
-  dialog.querySelectorAll("[data-search-close]").forEach(function (el) {
-    el.addEventListener("click", closeSearch);
+  dialog.addEventListener("click", function (e) {
+    if (e.target === dialog || e.target.hasAttribute("data-search-close")) {
+      closeSearch();
+    }
   });
+
+  var panel = dialog.querySelector(".site-search__panel");
+  if (panel) {
+    panel.addEventListener("click", function (e) {
+      e.stopPropagation();
+    });
+  }
 
   input.addEventListener("input", scheduleSearch);
 

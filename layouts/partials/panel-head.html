@@ -1,0 +1,24 @@
+{{/*
+  Panel header with optional desktop collapse control.
+  .title   string
+  .rail    "menu" | "toc"  — enables collapse button for that rail
+*/}}
+<div class="panel-head">
+  <div class="panel-title">{{ .title }}</div>
+  {{ with .rail }}
+  <button
+    type="button"
+    class="panel-collapse panel-collapse--{{ . }}"
+    data-collapse-toggle="{{ . }}"
+    aria-pressed="false"
+    title="收起"
+    aria-label="{{ if eq . "menu" }}收起左栏{{ else }}收起右栏{{ end }}"
+  >
+    {{ if eq . "menu" }}
+    <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M9.78 3.22a.75.75 0 00-1.06 0L4.47 7.47a.75.75 0 000 1.06l4.25 4.25a.75.75 0 001.06-1.06L6.06 8l3.72-3.72a.75.75 0 000-1.06z"/></svg>
+    {{ else }}
+    <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M6.22 3.22a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 010-1.06z"/></svg>
+    {{ end }}
+  </button>
+  {{ end }}
+</div>

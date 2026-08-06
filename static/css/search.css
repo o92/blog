@@ -9,19 +9,22 @@ body.search-open {
   align-items: center;
 }
 
+/* Next.js Docs–like search trigger: pill bar with label + shortcut */
 .site-search__open {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 2rem;
+  gap: 0.5rem;
   height: 2rem;
-  padding: 0;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
+  min-width: 11.5rem;
+  padding: 0 0.4rem 0 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--body-bg);
   color: var(--muted);
   cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
+  font: inherit;
+  font-size: var(--font-size-sm);
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 
 .site-search__open:hover {
@@ -34,24 +37,70 @@ body.search-open {
   outline-offset: 2px;
 }
 
+.site-search__open-icon {
+  flex: 0 0 auto;
+}
+
+.site-search__open-label {
+  flex: 1 1 auto;
+  text-align: left;
+  white-space: nowrap;
+  min-width: 5.5rem;
+}
+
+.site-search__shortcut {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.6rem;
+  height: 1.25rem;
+  padding: 0 0.3rem;
+  border: 1px solid var(--border);
+  border-radius: 0.25rem;
+  background: var(--surface);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+@media (max-width: 48rem) {
+  .site-search__open {
+    min-width: 2rem;
+    width: 2rem;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .site-search__open-label,
+  .site-search__shortcut {
+    display: none;
+  }
+}
+
 .site-search__dialog[hidden] {
-  display: none;
+  display: none !important;
 }
 
 .site-search__dialog:not([hidden]) {
   display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
 }
 
 .site-search__backdrop {
-  position: fixed;
+  position: absolute;
   inset: 0;
-  z-index: 60;
   background: rgba(0, 0, 0, 0.45);
+  cursor: pointer;
 }
 
 .site-search__panel {
-  position: fixed;
-  z-index: 61;
+  position: absolute;
+  z-index: 1;
   top: min(12vh, 5rem);
   left: 50%;
   transform: translateX(-50%);

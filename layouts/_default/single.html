@@ -10,7 +10,8 @@
   <button type="button" class="sidebar-toggle sidebar-toggle--right" id="toggle-page-toc" aria-controls="page-toc" aria-expanded="false">大纲</button>
 
   <aside id="book-toc" class="book-toc-panel" aria-label="本书目录">
-    <div class="panel-title">{{ with $book }}{{ .LinkTitle }}{{ else }}目录{{ end }}</div>
+    {{ $panelTitle := "目录" }}{{ with $book }}{{ $panelTitle = .LinkTitle }}{{ end }}
+    {{ partial "panel-head.html" (dict "title" $panelTitle "rail" "menu") }}
     {{ partial "book-toc.html" (dict "book" $book "page" .) }}
   </aside>
 
@@ -29,7 +30,7 @@
   </article>
 
   <aside id="page-toc" class="toc-panel" aria-label="本章目录">
-    <div class="panel-title">本章</div>
+    {{ partial "panel-head.html" (dict "title" "本章" "rail" "toc") }}
     {{ partial "page-toc.html" . }}
   </aside>
 </main>

@@ -1,0 +1,72 @@
+<div class="width-control" data-width-control>
+  <button
+    type="button"
+    class="width-control__toggle"
+    id="width-control-toggle"
+    aria-expanded="false"
+    aria-controls="width-control-panel"
+    aria-haspopup="true"
+    title="调整栏宽（关闭浏览器后仍保留）"
+  >
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+      <path d="M4 6h16M4 12h10M4 18h14"></path>
+    </svg>
+    <span class="width-control__toggle-label">宽度</span>
+  </button>
+
+  <div class="width-control__panel" id="width-control-panel" hidden role="group" aria-label="栏宽设置">
+    <div class="width-control__row width-control__row--slider">
+      <div class="width-control__row-head">
+        <span class="width-control__row-label">正文</span>
+        <span class="width-control__value" data-width-value="content">48</span>
+      </div>
+      <input
+        type="range"
+        class="width-control__slider"
+        data-width-key="content"
+        min="28"
+        max="72"
+        step="1"
+        value="48"
+        aria-label="正文宽度（rem）"
+      />
+      <div class="width-control__range" aria-hidden="true"><span>28</span><span>72</span></div>
+    </div>
+
+    <div class="width-control__row width-control__row--slider">
+      <div class="width-control__row-head">
+        <span class="width-control__row-label">左栏</span>
+        <span class="width-control__value" data-width-value="menu">17</span>
+      </div>
+      <input
+        type="range"
+        class="width-control__slider"
+        data-width-key="menu"
+        min="12"
+        max="24"
+        step="0.5"
+        value="17"
+        aria-label="左栏宽度（rem）"
+      />
+      <div class="width-control__range" aria-hidden="true"><span>12</span><span>24</span></div>
+    </div>
+
+    <div class="width-control__row width-control__row--slider">
+      <div class="width-control__row-head">
+        <span class="width-control__row-label">右栏</span>
+        <span class="width-control__value" data-width-value="toc">15</span>
+      </div>
+      <input
+        type="range"
+        class="width-control__slider"
+        data-width-key="toc"
+        min="10"
+        max="22"
+        step="0.5"
+        value="15"
+        aria-label="右栏宽度（rem）"
+      />
+      <div class="width-control__range" aria-hidden="true"><span>10</span><span>22</span></div>
+    </div>
+  </div>
+</div>
