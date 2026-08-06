@@ -1,0 +1,32 @@
+---
+description: 站点信息架构、三栏布局与明暗主题约定
+alwaysApply: true
+---
+
+# Site layout & IA
+
+完整设计见：`docs/superpowers/specs/2026-08-06-site-ia-layout-design.md`
+
+## 结构（勿擅自改成「分类进 content 文件夹」）
+
+- 分类树：仅 `data/nav.yaml`（可多层）；顶栏导航只读此文件
+- 书与章节：`content/books/<book-id>/`，可多层；左侧目录只含本书树
+- 随笔：`content/posts/`
+- 自建 `layouts/`，不引入 Docsy 等作为主体主题
+
+## 版式
+
+书内页：顶栏（含右上角主题切换）+ 左书目 + 中 `.post-content` + 右本章 TOC。  
+移动端：侧栏进抽屉，正文优先。
+
+## 明暗主题
+
+- 默认跟随 `prefers-color-scheme`
+- 右上角手动切换；**三态**：系统 / 浅色 / 深色
+- `localStorage` 持久化；`html[data-theme]`；首屏前防闪烁脚本
+- 颜色一律走 CSS 变量；`glossary.css` 必须跟变量，禁止写死仅适浅色/仅适深色的色值（除非同时提供变量回退）
+
+## 与 glossary
+
+- 保持可配置正文选择器（默认 `.post-content`）
+- 构建仍为 `hugo` → `glossary-inject` → 部署
