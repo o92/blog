@@ -42,26 +42,35 @@
           return n;
         }
         var raw = localStorage.getItem("layout-widths");
-        if (!raw) return;
-        var w = JSON.parse(raw);
-        var root = document.documentElement;
-        if (w.content != null) {
-          root.style.setProperty(VARS.content, num("content", w.content) + "rem");
+        if (raw) {
+          var w = JSON.parse(raw);
+          var root = document.documentElement;
+          if (w.content != null) {
+            root.style.setProperty(VARS.content, num("content", w.content) + "rem");
+          }
+          if (w.menuCollapsed) {
+            root.style.setProperty(VARS.menu, "0px");
+            root.setAttribute("data-menu-collapsed", "true");
+          } else if (w.menu != null) {
+            root.style.setProperty(VARS.menu, num("menu", w.menu) + "rem");
+            root.setAttribute("data-menu-collapsed", "false");
+          }
+          if (w.tocCollapsed) {
+            root.style.setProperty(VARS.toc, "0px");
+            root.setAttribute("data-toc-collapsed", "true");
+          } else if (w.toc != null) {
+            root.style.setProperty(VARS.toc, num("toc", w.toc) + "rem");
+            root.setAttribute("data-toc-collapsed", "false");
+          }
         }
-        if (w.menuCollapsed) {
-          root.style.setProperty(VARS.menu, "0px");
-          root.setAttribute("data-menu-collapsed", "true");
-        } else if (w.menu != null) {
-          root.style.setProperty(VARS.menu, num("menu", w.menu) + "rem");
-          root.setAttribute("data-menu-collapsed", "false");
-        }
-        if (w.tocCollapsed) {
-          root.style.setProperty(VARS.toc, "0px");
-          root.setAttribute("data-toc-collapsed", "true");
-        } else if (w.toc != null) {
-          root.style.setProperty(VARS.toc, num("toc", w.toc) + "rem");
-          root.setAttribute("data-toc-collapsed", "false");
-        }
+      } catch (e) {}
+      try {
+        var sb = window.innerWidth - document.documentElement.clientWidth;
+        if (sb < 0) sb = 0;
+        document.documentElement.style.setProperty(
+          "--scrollbar-width",
+          sb + "px",
+        );
       } catch (e) {}
     })();
   </script>

@@ -39,6 +39,7 @@
   --layout-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --radius: 0.375rem;
   --space: 1rem;
+  --scrollbar-width: 0px;
 
   --font-sans: "Inter", "Geist", system-ui, -apple-system, "Segoe UI", Roboto,
     "Helvetica Neue", "Noto Sans", "PingFang SC", "Hiragino Sans GB",
@@ -115,7 +116,7 @@ html[data-theme="light"] {
 html {
   font-size: var(--font-size);
   scroll-behavior: smooth;
-  scrollbar-gutter: stable;
+  overflow-y: auto;
 }
 
 body {
@@ -267,6 +268,7 @@ a[href]:hover {
 .site-nav__item > span {
   display: inline-flex;
   align-items: center;
+  gap: 0.2rem;
   height: 100%;
   border: 0;
   background: transparent;
@@ -275,6 +277,21 @@ a[href]:hover {
   cursor: pointer;
   padding: 0 0.65rem;
   text-decoration: none;
+}
+
+.site-nav__chevron {
+  flex: 0 0 auto;
+  color: var(--muted);
+  transition: transform 0.18s ease, color 0.15s ease;
+  /* Top-level: point down when closed */
+  transform: rotate(90deg);
+}
+
+.site-nav__item.is-open > .site-nav__label > .site-nav__chevron,
+.site-nav__item:hover > .site-nav__label > .site-nav__chevron,
+.site-nav__item:focus-within > .site-nav__label > .site-nav__chevron {
+  color: var(--body-fg);
+  transform: rotate(-90deg);
 }
 
 .site-nav__item > a:visited {
@@ -325,15 +342,28 @@ a[href]:hover {
 .site-nav__sub .site-nav__item > a,
 .site-nav__sub .site-nav__item > span {
   height: auto;
+  width: 100%;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  text-align: left;
+}
+
+/* Nested levels: chevron points right toward submenu */
+.site-nav__sub .site-nav__chevron {
+  transform: rotate(0deg);
+}
+
+.site-nav__sub .site-nav__item.is-open > .site-nav__label > .site-nav__chevron,
+.site-nav__sub .site-nav__item:hover > .site-nav__label > .site-nav__chevron,
+.site-nav__sub .site-nav__item:focus-within > .site-nav__label > .site-nav__chevron {
+  transform: rotate(90deg);
 }
 
 .site-nav__sub a,
 .site-nav__sub span,
 .site-nav__sub .site-nav__label {
-  display: block;
-  width: 100%;
-  text-align: left;
-  padding: 0.4rem 0.75rem;
+  display: flex;
   color: var(--body-fg);
   text-decoration: none;
 }
@@ -594,22 +624,31 @@ html[data-theme="light"] .theme-toggle__icon--sun {
   border-right: 0;
   font-size: 0.875rem;
   box-sizing: border-box;
+  /* Scrollbar on the inner edge (toward center) */
+  direction: ltr;
 }
 
 .toc-panel {
   position: fixed;
-  right: 0;
+  /* Shift into classic scrollbar strip so the rail is flush with the screen edge */
+  right: calc(-1 * var(--scrollbar-width));
   top: var(--header-h);
   z-index: 25;
-  width: var(--toc-width);
+  width: calc(var(--toc-width) + var(--scrollbar-width));
   height: calc(100vh - var(--header-h));
   overflow: auto;
   overflow-x: hidden;
-  padding: 1rem 1rem 2rem;
+  padding: 1rem calc(1rem + var(--scrollbar-width)) 2rem 1rem;
   background: var(--body-bg);
   border-left: 0;
   font-size: var(--font-size-xs);
   box-sizing: border-box;
+  /* Mirror: put scrollbar on the inner (left) edge toward center */
+  direction: rtl;
+}
+
+.toc-panel > * {
+  direction: ltr;
 }
 
 html.layout-anim .book-toc-panel,
@@ -668,7 +707,7 @@ html[data-toc-collapsed="true"] .toc-panel {
 }
 
 .rail-expand--right {
-  right: 0;
+  right: calc(-1 * var(--scrollbar-width));
   border-right: 0;
   border-radius: var(--radius) 0 0 var(--radius);
 }
@@ -1102,9 +1141,11 @@ html.layout-anim .page-shell--book .content-panel {
     right: 0;
     left: auto;
     width: min(var(--toc-width), 86vw);
+    padding: 1rem 1rem 2rem;
     transform: translateX(105%);
     background: var(--body-bg);
     border-left: 1px solid var(--border);
+    direction: ltr;
   }
 
   .book-toc-panel.is-open,
@@ -1184,7 +1225,23 @@ html.layout-anim .page-shell--book .content-panel {
   .site-nav__item > a,
   .site-nav__item > span {
     height: auto;
+    width: 100%;
+    justify-content: space-between;
     padding: 0.35rem 0;
+  }
+
+  .site-nav__chevron,
+  .site-nav__sub .site-nav__chevron {
+    transform: rotate(90deg);
+  }
+
+  .site-nav__item.is-open > .site-nav__label > .site-nav__chevron,
+  .site-nav__item:hover > .site-nav__label > .site-nav__chevron,
+  .site-nav__item:focus-within > .site-nav__label > .site-nav__chevron,
+  .site-nav__sub .site-nav__item.is-open > .site-nav__label > .site-nav__chevron,
+  .site-nav__sub .site-nav__item:hover > .site-nav__label > .site-nav__chevron,
+  .site-nav__sub .site-nav__item:focus-within > .site-nav__label > .site-nav__chevron {
+    transform: rotate(-90deg);
   }
 
   .site-nav__sub,

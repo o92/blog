@@ -188,14 +188,25 @@
   var state = read();
   apply(state);
 
+  function syncScrollbarWidth() {
+    var sb = window.innerWidth - document.documentElement.clientWidth;
+    if (sb < 0) sb = 0;
+    document.documentElement.style.setProperty("--scrollbar-width", sb + "px");
+  }
+  syncScrollbarWidth();
+
   document.addEventListener("DOMContentLoaded", function () {
+    syncScrollbarWidth();
     apply(state);
 
     requestAnimationFrame(function () {
       requestAnimationFrame(function () {
+        syncScrollbarWidth();
         document.documentElement.classList.add("layout-anim");
       });
     });
+
+    window.addEventListener("resize", syncScrollbarWidth);
 
     var toggle = document.getElementById("width-control-toggle");
     var panel = document.getElementById("width-control-panel");

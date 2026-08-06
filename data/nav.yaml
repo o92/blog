@@ -1,13 +1,13 @@
 categories:
-  - id: tech
-    title: 技术
+  - id: software-engineering
+    title: 软件工程
+    books: [essays]
+  - id: project-management
+    title: 项目管理
+    books: []
+  - id: tech-architecture
+    title: 技术架构
     children:
       - id: go
         title: Go
         books: [go-concurrency]
-      - id: distributed
-        title: 分布式
-        books: []
-  - id: essays
-    title: 随笔
-    books: [essays]
