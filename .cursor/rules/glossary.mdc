@@ -1,0 +1,42 @@
+---
+description: Hugo 术语词库、构建后处理与悬停气泡约定
+alwaysApply: true
+---
+
+# Glossary（术语自动强调）
+
+完整设计见：`docs/superpowers/specs/2026-08-06-glossary-tooltip-design.md`
+
+## 构建顺序（必须遵守）
+
+1. `hugo` 生成 `public/`
+2. `node scripts/glossary-inject.mjs` 注入术语标记
+3. 再部署 / 预览产物
+
+`hugo server` **不会**自动注入术语。改预览或 CI 时必须保留 inject 步骤。
+
+## 词库
+
+- 路径：`data/glossary/global.yaml` + `data/glossary/<domain>.yaml`
+- 领域 ID = 文件名（不含扩展名）
+- 词条至少含 `summary`；可选 `link`
+- 文章用 front matter `glossary: ["domain1"]` 声明领域；与 categories/tags **无关**
+- 未声明时只使用 `global`
+
+## 匹配语义（勿擅自改；要改先更新本规则 + design spec）
+
+- 只处理正文容器（选择器见 `scripts/glossary.config.json`）
+- 跳过 `pre` / `code` / `kbd` / `samp` / `script` / `style` 及已处理术语节点
+- 长短优先；英文大小写不敏感（保留原文）；中文字面匹配
+- **每次出现都高亮**（不是仅首次）
+- 全局与领域重名时，气泡**同时显示**「通用」与各领域解释
+
+## 主题
+
+用户自配主题。术语功能只依赖：可配置正文选择器 + `static/css/glossary.css` 引入。不要把逻辑写死进某个主题私有 partial，除非提供可复制的接入说明。
+
+## 改动边界
+
+- 增删术语：只改 `data/glossary/*.yaml`
+- 改注入实现：`scripts/glossary-inject.mjs` + 必要时 `glossary.config.json`
+- 改 CI：`.github/workflows/hugo.yaml` 须在 upload 前跑 inject
