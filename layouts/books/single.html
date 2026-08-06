@@ -12,13 +12,12 @@
 
   <article class="content-panel">
     <header class="content-header">
+      {{ partial "book-breadcrumb.html" (dict "page" . "book" $book) }}
       <h1>{{ .Title }}</h1>
-      {{ with $book }}
-      {{ if ne .RelPermalink $.RelPermalink }}
-      <p class="breadcrumb"><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></p>
-      {{ end }}
-      {{ end }}
     </header>
+    {{ if .Params.final }}
+      {{ partial "final-page-body.html" . }}
+    {{ else }}
     <div class="post-content">
       {{ .Content }}
     </div>
@@ -31,6 +30,7 @@
       <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }} /</a></li>
       {{ end }}
     </ul>
+    {{ end }}
     {{ end }}
   </article>
 

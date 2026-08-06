@@ -1,5 +1,6 @@
 {{ $section := .section }}
 {{ $page := .page }}
+{{ $depth := or .depth 1 }}
 {{ $items := slice }}
 {{ range $section.Sections }}
   {{ $items = $items | append . }}
@@ -9,12 +10,50 @@
 {{ end }}
 {{ $items = sort $items "Weight" "asc" }}
 {{ range $items }}
-<li class="{{ if eq $page.RelPermalink .RelPermalink }}is-active{{ end }}">
-  <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+  {{ $isActive := eq $page.RelPermalink .RelPermalink }}
+  {{ $inBranch := or $isActive (in $page.Ancestors .) }}
+  {{ $isFinal := .Params.final }}
   {{ if .IsSection }}
-  <ul>
-    {{ partial "book-toc-branch.html" (dict "section" . "page" $page) }}
-  </ul>
+    {{ if $isFinal }}
+      {{ if le $depth 1 }}
+      <li class="book-toc__item book-toc__item--section book-toc__item--final{{ if $isActive }} is-active{{ end }}{{ if $inBranch }} is-current-branch{{ end }}">
+        <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+        <ul class="book-toc__level book-toc__level--{{ add $depth 1 }}">
+          {{ partial "final-toc-branch.html" (dict "section" . "final" . "page" $page "depth" (add $depth 1)) }}
+        </ul>
+      </li>
+      {{ else }}
+      <li class="book-toc__item book-toc__item--section book-toc__item--final book-toc__item--collapsible{{ if $isActive }} is-active{{ end }}{{ if $inBranch }} is-open is-current-branch{{ end }}">
+        <div class="book-toc__row">
+          <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+          <button type="button" class="book-toc__toggle" aria-expanded="{{ if $inBranch }}true{{ else }}false{{ end }}" aria-label="展开或折叠">▸</button>
+        </div>
+        <ul class="book-toc__level book-toc__level--{{ add $depth 1 }}">
+          {{ partial "final-toc-branch.html" (dict "section" . "final" . "page" $page "depth" (add $depth 1)) }}
+        </ul>
+      </li>
+      {{ end }}
+    {{ else if le $depth 1 }}
+      <li class="book-toc__item book-toc__item--section{{ if $isActive }} is-active{{ end }}{{ if $inBranch }} is-current-branch{{ end }}">
+        <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+        <ul class="book-toc__level book-toc__level--{{ add $depth 1 }}">
+          {{ partial "book-toc-branch.html" (dict "section" . "page" $page "depth" (add $depth 1)) }}
+        </ul>
+      </li>
+    {{ else }}
+      <li class="book-toc__item book-toc__item--section book-toc__item--collapsible{{ if $isActive }} is-active{{ end }}{{ if $inBranch }} is-open is-current-branch{{ end }}">
+        <div class="book-toc__row">
+          <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+          <button type="button" class="book-toc__toggle" aria-expanded="{{ if $inBranch }}true{{ else }}false{{ end }}" aria-label="展开或折叠">▸</button>
+        </div>
+        <ul class="book-toc__level book-toc__level--{{ add $depth 1 }}">
+          {{ partial "book-toc-branch.html" (dict "section" . "page" $page "depth" (add $depth 1)) }}
+        </ul>
+      </li>
+    {{ end }}
+  {{ else }}
+    <li class="book-toc__item{{ if $isActive }} is-active{{ end }}">
+      <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+    </li>
   {{ end }}
-</li>
 {{ end }}

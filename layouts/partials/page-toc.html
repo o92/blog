@@ -1,9 +1,22 @@
-{{ with .TableOfContents }}
-  {{ if . }}
-    {{ . }}
+{{ if .Params.final }}
+<nav class="final-page-toc">
+  {{ with .TableOfContents }}
+    {{ if . }}
+      {{ . }}
+    {{ end }}
+  {{ end }}
+  <ul>
+    {{ partial "final-toc-flat.html" . }}
+  </ul>
+</nav>
+{{ else }}
+  {{ with .TableOfContents }}
+    {{ if . }}
+      {{ . }}
+    {{ else }}
+      <p class="muted">本页无小标题</p>
+    {{ end }}
   {{ else }}
     <p class="muted">本页无小标题</p>
   {{ end }}
-{{ else }}
-  <p class="muted">本页无小标题</p>
 {{ end }}

@@ -10,7 +10,7 @@
 - 顶栏多层导航：领域分类（可多层）→ 书名
 - 书内阅读页三栏：左 = 本书目录，中 = 正文，右 = 当前章节 TOC
 - 书为主 + 少量随笔（`posts`）
-- 明暗主题：默认跟随系统，右上角可手动切换并记住偏好
+- 明暗主题：默认跟随系统；右上角浅/深切换；sessionStorage（关浏览器后恢复系统）
 
 ## 非目标（本期）
 
@@ -69,6 +69,31 @@ content/
 - 使用 `content/posts/`
 - 顶栏保留；左右栏可简化（无书目，可仅右 TOC 或双栏收起）
 
+### 最终页（合并子文件）
+
+在 section 的 `_index.md` 上标记：
+
+```toml
+final = true
+
+[build]
+  render = 'always'
+
+[[cascade]]
+  [cascade.build]
+    list = 'local'
+    render = 'never'
+```
+
+语义：
+
+- 该页为**最终阅读页**（独立 URL）
+- 其下所有子 `.md` / 子 section **不单独成页**，正文合并进最终页
+- **左侧书目仍显示**子项，链接为 `最终页URL#part-<文件名>`
+- 右侧「本章」也会列出这些 part
+
+非最终页行为不变（一文件一页）。
+
 ## 版式
 
 ### 书内阅读页
@@ -88,14 +113,14 @@ content/
 
 ## 明暗主题
 
-1. **默认**：`prefers-color-scheme`（跟随设备）
-2. **手动**：顶栏右上角切换按钮
-3. **持久化**：`localStorage`（如 `theme=light|dark`）；有值则覆盖系统；清除/选「系统」则回到跟随设备（实现时可做成两态切换或三态，**推荐三态**：系统 / 亮 / 暗，默认系统；若两态，则「当前相反色」手动覆盖，并提供恢复系统的方式——实现计划里选定并写清）
-4. **实现方式**：`html[data-theme="light"|"dark"]` + CSS 变量；无 `data-theme` 时用媒体查询
-5. **防闪烁**：`<head>` 内联极短脚本，在首屏前读取 localStorage 并设置 `data-theme`
-6. **术语气泡**等组件使用同一套 CSS 变量，随主题变化
+1. **默认**：跟随系统 `prefers-color-scheme`（不写 `data-theme`）
+2. **手动**：右上角只显示 **浅 / 深**，点击在两者间切换
+3. **持久化**：`sessionStorage`（键 `theme-preference`）；**关闭浏览器后清空**，下次打开重新跟随系统
+4. **实现**：有 session 值时设 `html[data-theme="light"|"dark"]`；无值时靠 CSS 媒体查询
+5. **防闪烁**：`<head>` 内联脚本读 `sessionStorage`
+6. 术语气泡等使用同一套 CSS 变量
 
-推荐交互：**三态**（系统 / 浅色 / 深色），默认系统；按钮可循环或用小菜单。定稿采用三态。
+不再提供「系统」作为按钮上的第三态。
 
 ## 与术语功能的关系
 
@@ -147,4 +172,4 @@ data/nav.yaml
 | 分类 | `data/nav.yaml`，可多层，不进 content 树 |
 | 书/章 | `content/books/<id>/` 可多层嵌套 |
 | 版式 | 顶栏 + 左书目 + 中正文 + 右章节 TOC |
-| 明暗 | 默认跟系统；右上角切换；三态；localStorage |
+| 明暗 | 默认跟系统；按钮仅浅/深；sessionStorage（关浏览器失效） |

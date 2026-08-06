@@ -1,50 +1,79 @@
 (function () {
   var KEY = "theme-preference";
-  var order = ["system", "light", "dark"];
-  var labels = { system: "系统", light: "浅色", dark: "深色" };
+  var labels = { light: "浅", dark: "深" };
 
-  function getPref() {
+  function systemTheme() {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  }
+
+  function getStored() {
     try {
-      return localStorage.getItem(KEY) || "system";
+      var v = sessionStorage.getItem(KEY);
+      return v === "light" || v === "dark" ? v : null;
     } catch (e) {
-      return "system";
+      return null;
     }
   }
 
-  function apply(pref) {
-    var root = document.documentElement;
-    if (pref === "light" || pref === "dark") {
-      root.setAttribute("data-theme", pref);
-    } else {
-      root.removeAttribute("data-theme");
-      pref = "system";
-    }
-    try {
-      if (pref === "system") localStorage.removeItem(KEY);
-      else localStorage.setItem(KEY, pref);
-    } catch (e) {}
-    var btn = document.getElementById("theme-toggle-btn");
-    if (btn) {
-      var text = btn.querySelector(".theme-toggle__text");
-      if (text) text.textContent = labels[pref] || "系统";
-      btn.setAttribute("aria-label", "主题：" + (labels[pref] || "系统") + "（点击切换）");
-    }
+  function effectiveTheme() {
+    return getStored() || systemTheme();
   }
 
-  function next(pref) {
-    var i = order.indexOf(pref);
-    if (i < 0) i = 0;
-    return order[(i + 1) % order.length];
-  }
-
-  document.addEventListener("DOMContentLoaded", function () {
-    var pref = getPref();
-    apply(pref);
+  function updateButton(theme) {
     var btn = document.getElementById("theme-toggle-btn");
     if (!btn) return;
+    var text = btn.querySelector(".theme-toggle__text");
+    if (text) text.textContent = labels[theme] || "浅";
+    btn.setAttribute(
+      "aria-label",
+      "切换为" + (theme === "dark" ? "浅色" : "深色"),
+    );
+    btn.title =
+      "当前：" +
+      (labels[theme] || "浅") +
+      "（点击切换；关闭浏览器后恢复跟随系统）";
+  }
+
+  function applyFromStorage() {
+    var stored = getStored();
+    var root = document.documentElement;
+    if (stored) {
+      root.setAttribute("data-theme", stored);
+      updateButton(stored);
+    } else {
+      root.removeAttribute("data-theme");
+      updateButton(systemTheme());
+    }
+  }
+
+  // Clear legacy localStorage key from older builds
+  try {
+    localStorage.removeItem(KEY);
+  } catch (e) {}
+
+  document.addEventListener("DOMContentLoaded", function () {
+    applyFromStorage();
+
+    var btn = document.getElementById("theme-toggle-btn");
+    if (!btn) return;
+
     btn.addEventListener("click", function () {
-      pref = next(getPref());
-      apply(pref);
+      var next = effectiveTheme() === "dark" ? "light" : "dark";
+      try {
+        sessionStorage.setItem(KEY, next);
+      } catch (e) {}
+      document.documentElement.setAttribute("data-theme", next);
+      updateButton(next);
     });
+
+    try {
+      window
+        .matchMedia("(prefers-color-scheme: dark)")
+        .addEventListener("change", function () {
+          if (!getStored()) applyFromStorage();
+        });
+    } catch (e) {}
   });
 })();

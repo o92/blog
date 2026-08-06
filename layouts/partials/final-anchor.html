@@ -1,0 +1,10 @@
+{{/*
+  Stable fragment id for a part page under a final page.
+*/}}
+{{- $base := "" -}}
+{{- with .File -}}
+  {{- $base = .ContentBaseName -}}
+{{- else -}}
+  {{- $base = .LinkTitle -}}
+{{- end -}}
+{{- return printf "part-%s" ($base | anchorize) -}}

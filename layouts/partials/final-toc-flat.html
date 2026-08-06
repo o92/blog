@@ -1,0 +1,19 @@
+{{/*
+  Flat list of part links for right TOC on a final page.
+  . = final page
+*/}}
+{{- $final := . -}}
+{{- $items := slice -}}
+{{- range $final.Sections -}}{{- $items = $items | append . -}}{{- end -}}
+{{- range $final.RegularPages -}}{{- $items = $items | append . -}}{{- end -}}
+{{- $items = sort $items "Weight" "asc" -}}
+{{- range $items -}}
+  {{- $id := partial "final-anchor.html" . -}}
+  <li><a href="#{{ $id }}">{{ .LinkTitle }}</a>
+    {{- if .IsSection -}}
+    <ul>
+      {{ partial "final-toc-flat.html" . }}
+    </ul>
+    {{- end -}}
+  </li>
+{{- end -}}

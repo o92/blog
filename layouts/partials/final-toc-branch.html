@@ -1,0 +1,41 @@
+{{/*
+  Left TOC entries for children of a final page (anchor links).
+  dict: section (current folder), final (final page), page (active page), depth
+*/}}
+{{ $section := .section }}
+{{ $final := .final }}
+{{ $page := .page }}
+{{ $depth := or .depth 2 }}
+{{ $onFinal := eq $page.RelPermalink $final.RelPermalink }}
+{{ $items := slice }}
+{{ range $section.Sections }}{{ $items = $items | append . }}{{ end }}
+{{ range $section.RegularPages }}{{ $items = $items | append . }}{{ end }}
+{{ $items = sort $items "Weight" "asc" }}
+{{ range $items }}
+  {{ $id := partial "final-anchor.html" . }}
+  {{ $href := printf "%s#%s" $final.RelPermalink $id }}
+  {{ if .IsSection }}
+    {{ if le $depth 1 }}
+      <li class="book-toc__item book-toc__item--section{{ if $onFinal }} is-current-branch{{ end }}">
+        <a href="{{ $href }}">{{ .LinkTitle }}</a>
+        <ul class="book-toc__level book-toc__level--{{ add $depth 1 }}">
+          {{ partial "final-toc-branch.html" (dict "section" . "final" $final "page" $page "depth" (add $depth 1)) }}
+        </ul>
+      </li>
+    {{ else }}
+      <li class="book-toc__item book-toc__item--section book-toc__item--collapsible{{ if $onFinal }} is-open is-current-branch{{ end }}">
+        <div class="book-toc__row">
+          <a href="{{ $href }}">{{ .LinkTitle }}</a>
+          <button type="button" class="book-toc__toggle" aria-expanded="{{ if $onFinal }}true{{ else }}false{{ end }}" aria-label="展开或折叠">▸</button>
+        </div>
+        <ul class="book-toc__level book-toc__level--{{ add $depth 1 }}">
+          {{ partial "final-toc-branch.html" (dict "section" . "final" $final "page" $page "depth" (add $depth 1)) }}
+        </ul>
+      </li>
+    {{ end }}
+  {{ else }}
+    <li class="book-toc__item{{ if $onFinal }} is-current-branch{{ end }}">
+      <a href="{{ $href }}">{{ .LinkTitle }}</a>
+    </li>
+  {{ end }}
+{{ end }}

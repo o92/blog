@@ -31,8 +31,12 @@
 
   <article class="content-panel">
     <header class="content-header">
+      {{ partial "book-breadcrumb.html" (dict "page" . "book" $book) }}
       <h1>{{ .Title }}</h1>
     </header>
+    {{ if .Params.final }}
+      {{ partial "final-page-body.html" . }}
+    {{ else }}
     <div class="post-content">
       {{ .Content }}
     </div>
@@ -44,6 +48,7 @@
       <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }} /</a></li>
       {{ end }}
     </ul>
+    {{ end }}
   </article>
 
   <aside id="page-toc" class="toc-panel" aria-label="本章目录">

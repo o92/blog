@@ -1,0 +1,21 @@
+{{/*
+  Recursively emit merged body for descendants of a final page.
+  . = current section/page whose children to include (the final page itself on first call)
+*/}}
+{{- $parent := . -}}
+{{- $items := slice -}}
+{{- range $parent.Sections -}}{{- $items = $items | append . -}}{{- end -}}
+{{- range $parent.RegularPages -}}{{- $items = $items | append . -}}{{- end -}}
+{{- $items = sort $items "Weight" "asc" -}}
+{{- range $items -}}
+  {{- $id := partial "final-anchor.html" . -}}
+  <section id="{{ $id }}" class="final-part">
+    <h2 class="final-part__title">{{ .LinkTitle }}</h2>
+    <div class="final-part__body">
+      {{ .Content }}
+    </div>
+    {{- if .IsSection -}}
+      {{ partial "final-page-parts.html" . }}
+    {{- end -}}
+  </section>
+{{- end -}}

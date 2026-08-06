@@ -2,11 +2,11 @@
 {{ $page := .page }}
 {{ if $book }}
 <nav class="book-toc">
-  <ul>
-    <li class="{{ if eq $page.RelPermalink $book.RelPermalink }}is-active{{ end }}">
+  <ul class="book-toc__level book-toc__level--1">
+    <li class="book-toc__item{{ if eq $page.RelPermalink $book.RelPermalink }} is-active{{ end }}">
       <a href="{{ $book.RelPermalink }}">{{ $book.LinkTitle }}</a>
     </li>
-    {{ partial "book-toc-branch.html" (dict "section" $book "page" $page) }}
+    {{ partial "book-toc-branch.html" (dict "section" $book "page" $page "depth" 1) }}
   </ul>
 </nav>
 {{ else }}

@@ -11,6 +11,7 @@ alwaysApply: true
 
 - 分类树：仅 `data/nav.yaml`（可多层）；顶栏导航只读此文件
 - 书与章节：`content/books/<book-id>/`，可多层；左侧目录只含本书树
+- **最终页**：`final = true` 的 section；子文件 `build.render = never`（用 cascade），合并进该页；左侧仍显示子项为页内锚点
 - 随笔：`content/posts/`
 - 自建 `layouts/`，不引入 Docsy 等作为主体主题
 
@@ -22,9 +23,10 @@ alwaysApply: true
 ## 明暗主题
 
 - 默认跟随 `prefers-color-scheme`
-- 右上角手动切换；**三态**：系统 / 浅色 / 深色
-- `localStorage` 持久化；`html[data-theme]`；首屏前防闪烁脚本
-- 颜色一律走 CSS 变量；`glossary.css` 必须跟变量，禁止写死仅适浅色/仅适深色的色值（除非同时提供变量回退）
+- 右上角仅 **浅 / 深** 切换（无「系统」选项）
+- 偏好存 `sessionStorage`；关闭浏览器后清空，下次再跟系统
+- `html[data-theme]`；首屏前防闪烁脚本读 sessionStorage
+- 颜色一律走 CSS 变量；`glossary.css` 必须跟变量
 
 ## 视觉（Hugo Book 取向）
 

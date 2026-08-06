@@ -1,0 +1,32 @@
+{{/*
+  Breadcrumb from book root to current page.
+  Usage: {{ partial "book-breadcrumb.html" (dict "page" . "book" $book) }}
+*/}}
+{{- $page := .page -}}
+{{- $book := .book -}}
+{{- if $book -}}
+  {{- $mid := slice -}}
+  {{- range $page.Ancestors -}}
+    {{- if and (ne . $book) (strings.HasPrefix .Path $book.Path) -}}
+      {{- $mid = $mid | append . -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $crumbs := slice $book -}}
+  {{- range collections.Reverse $mid -}}
+    {{- $crumbs = $crumbs | append . -}}
+  {{- end -}}
+  {{- if ne $page $book -}}
+    {{- $crumbs = $crumbs | append $page -}}
+  {{- end -}}
+  <nav class="breadcrumb" aria-label="当前目录">
+    {{- $last := sub (len $crumbs) 1 -}}
+    {{- range $i, $crumb := $crumbs -}}
+      {{- if $i -}}<span class="breadcrumb__sep" aria-hidden="true">/</span>{{- end -}}
+      {{- if eq $i $last -}}
+        <span class="breadcrumb__current">{{ $crumb.LinkTitle }}</span>
+      {{- else -}}
+        <a href="{{ $crumb.RelPermalink }}">{{ $crumb.LinkTitle }}</a>
+      {{- end -}}
+    {{- end -}}
+  </nav>
+{{- end -}}
