@@ -67,7 +67,7 @@
       <li class="site-nav__item">
         {{ if $book }}
         <a class="site-nav__hit" href="{{ $book.RelPermalink }}">
-          <span class="site-nav__label-text">{{ $book.LinkTitle }}</span>
+          <span class="site-nav__label-text">{{ partial "book-name.html" $book }}</span>
           <span class="site-nav__trail" aria-hidden="true"></span>
         </a>
         {{ else }}

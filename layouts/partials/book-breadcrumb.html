@@ -23,9 +23,9 @@
     {{- range $i, $crumb := $crumbs -}}
       {{- if $i -}}<span class="breadcrumb__sep" aria-hidden="true">/</span>{{- end -}}
       {{- if eq $i $last -}}
-        <span class="breadcrumb__current">{{ $crumb.LinkTitle }}</span>
+        <span class="breadcrumb__current">{{ if eq $crumb $book }}{{ partial "book-name.html" $crumb }}{{ else }}{{ $crumb.LinkTitle }}{{ end }}</span>
       {{- else -}}
-        <a href="{{ $crumb.RelPermalink }}">{{ $crumb.LinkTitle }}</a>
+        <a href="{{ $crumb.RelPermalink }}">{{ if eq $crumb $book }}{{ partial "book-name.html" $crumb }}{{ else }}{{ $crumb.LinkTitle }}{{ end }}</a>
       {{- end -}}
     {{- end -}}
   </nav>

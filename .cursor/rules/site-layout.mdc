@@ -14,7 +14,7 @@ alwaysApply: true
 - **一级分类**是目录；**非一级**无子分类且只有一本书时，节点本身就是书（`book: <content目录名>` 或 `books: […]`，一点进入）；多本或有 `children` 才展开；导航节点不需要 `id`
 - 书与章节：`content/<book-id>/`（无 `content/books/` 中间层）
 - 书阅读壳：`layouts/partials/book-shell.html`（`single` / `list` 共用）
-- 书根解析：`book-root.html`（按 Home 子 section；**不要**再加 `book_id` 字段）
+- 书根 `_index.md`：`book_title` = 书名（面板标题、面包屑书根等）；`title` = 本页标题（正文 h1、**左栏目录顶项**）；缺省 `book_title` 时回退 `title`
 - **最终页**：`final = true` 即可；子文合并进本页，直链子页会跳到 `#part-…`（无需手写 cascade）
 - 自建 `layouts/`，不引入 Docsy 等主体主题
 

@@ -40,7 +40,7 @@
             {{ $book := site.GetPage (printf "/%s" .) }}
             <li class="home-catalog__node">
               {{ if $book }}
-              <a class="home-catalog__link" href="{{ $book.RelPermalink }}">{{ $book.LinkTitle }}</a>
+              <a class="home-catalog__link" href="{{ $book.RelPermalink }}">{{ partial "book-name.html" $book }}</a>
               {{ else }}
               <span class="home-catalog__label muted">{{ . }}（未找到）</span>
               {{ end }}

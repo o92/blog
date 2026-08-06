@@ -1,5 +1,6 @@
 +++
-title = "Go 并发笔记"
+title = "简介"
+book_title = "Go 并发笔记"
 glossary = ["go"]
 +++
 

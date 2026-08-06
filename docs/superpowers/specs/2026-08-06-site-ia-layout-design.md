@@ -50,14 +50,23 @@ categories:
 ```text
 content/
   <书目录名>/
-    _index.md          # 书首页：title、可选 glossary
+    _index.md          # 书首页（可当简介）
     01-....md
     02-section/
       _index.md
       01-....md        # 可继续嵌套
 ```
 
-- 左侧「本书目录」= 当前 book section 下的页面树（章/节/更小节）
+书根 `_index.md` 建议：
+
+```toml
+title = "简介"                 # 本页标题（正文 h1）
+book_title = "领域驱动设计…"   # 书名（面板、面包屑书根等；左栏目录顶项用 title）
+```
+
+缺省 `book_title` 时回退为 `title`。
+
+- 左侧「本书目录」= 当前 book section 下的页面树（章/节/更深层）
 - 分类及以上层级**不**出现在左侧目录
 
 ### 随笔

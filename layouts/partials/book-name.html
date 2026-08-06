@@ -1,0 +1,5 @@
+{{/*
+  Display name for a book section: Params.book_title, else LinkTitle.
+  Usage: {{ partial "book-name.html" $book }}
+*/}}
+{{- return (.Params.book_title | default .LinkTitle) -}}
