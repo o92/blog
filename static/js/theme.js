@@ -1,6 +1,5 @@
 (function () {
   var KEY = "theme-preference";
-  var labels = { light: "浅", dark: "深" };
 
   function systemTheme() {
     return window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -24,15 +23,11 @@
   function updateButton(theme) {
     var btn = document.getElementById("theme-toggle-btn");
     if (!btn) return;
-    var text = btn.querySelector(".theme-toggle__text");
-    if (text) text.textContent = labels[theme] || "浅";
-    btn.setAttribute(
-      "aria-label",
-      "切换为" + (theme === "dark" ? "浅色" : "深色"),
-    );
+    var nextLabel = theme === "dark" ? "浅色" : "深色";
+    btn.setAttribute("aria-label", "切换为" + nextLabel);
     btn.title =
       "当前：" +
-      (labels[theme] || "浅") +
+      (theme === "dark" ? "深色" : "浅色") +
       "（点击切换；关闭浏览器后恢复跟随系统）";
   }
 

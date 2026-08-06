@@ -1,6 +1,18 @@
 <div class="theme-toggle" data-theme-toggle>
-  <button type="button" class="theme-toggle__btn" id="theme-toggle-btn" aria-live="polite" title="切换浅色/深色（关闭浏览器后恢复跟随系统）">
-    <span class="theme-toggle__icon" aria-hidden="true">◐</span>
-    <span class="theme-toggle__text">浅</span>
+  <button
+    type="button"
+    class="theme-toggle__btn"
+    id="theme-toggle-btn"
+    aria-live="polite"
+    aria-label="切换浅色/深色"
+    title="切换浅色/深色（关闭浏览器后恢复跟随系统）"
+  >
+    <svg class="theme-toggle__icon theme-toggle__icon--sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="12" r="4"></circle>
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+    </svg>
+    <svg class="theme-toggle__icon theme-toggle__icon--moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+      <path d="M21 14.5A8.5 8.5 0 0 1 9.5 3 7 7 0 1 0 21 14.5z"></path>
+    </svg>
   </button>
 </div>
