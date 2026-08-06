@@ -268,15 +268,18 @@ a[href]:hover {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
-  height: 100%;
+  height: auto;
+  min-height: 2rem;
   border: 0;
+  border-radius: var(--radius);
   background: transparent;
   color: var(--body-fg);
   font: inherit;
   cursor: pointer;
-  padding: 0 0.65rem;
+  padding: 0.35rem 0.7rem;
   text-decoration: none;
   box-sizing: border-box;
+  transition: background 0.15s ease;
 }
 
 .site-nav__hit--static {
@@ -285,6 +288,22 @@ a[href]:hover {
 
 .site-nav__label-text {
   line-height: 1.2;
+  color: inherit;
+}
+
+/* Kill global link blue / visited blue / hover blue inside nav */
+.site-nav a.site-nav__hit,
+.site-nav a.site-nav__hit:link,
+.site-nav a.site-nav__hit:visited,
+.site-nav a.site-nav__hit:hover,
+.site-nav a.site-nav__hit:active,
+.site-nav .site-nav__hit,
+.site-nav .site-nav__label,
+.site-nav .site-nav__hit--static,
+.site-nav .site-nav__label-text,
+.site-nav .muted {
+  color: var(--body-fg);
+  opacity: 1;
 }
 
 /* Fixed slot so expandable / non-expandable items share the same width rhythm */
@@ -301,8 +320,9 @@ a[href]:hover {
   display: block;
   width: 0.75rem;
   height: 0.75rem;
-  color: var(--muted);
-  transition: transform 0.18s ease, color 0.15s ease;
+  color: var(--body-fg);
+  opacity: 0.55;
+  transition: transform 0.18s ease, opacity 0.15s ease;
   /* Top-level: point down when closed */
   transform: rotate(90deg);
 }
@@ -310,28 +330,29 @@ a[href]:hover {
 .site-nav__item.is-open > .site-nav__label .site-nav__chevron,
 .site-nav__item:hover > .site-nav__label .site-nav__chevron,
 .site-nav__item:focus-within > .site-nav__label .site-nav__chevron {
-  color: var(--body-fg);
+  opacity: 0.85;
   transform: rotate(-90deg);
 }
 
-.site-nav__hit:visited {
+/* Hover/open chip: same box as the hit area; text color stays body-fg */
+.site-nav__item:hover > .site-nav__hit,
+.site-nav__item.is-open > .site-nav__hit,
+.site-nav__item:focus-within > .site-nav__hit,
+.site-nav__hit:hover {
+  background: color-mix(in srgb, var(--body-fg) 9%, var(--body-bg));
   color: var(--body-fg);
+  opacity: 1;
 }
 
-.site-nav__label:hover,
-a.site-nav__hit:hover {
-  opacity: 0.7;
-}
-
-/* Flush under full-height item — no hover gap that closes the menu */
+/* Flush under the item — no hover gap that closes the menu */
 .site-nav__sub {
   display: none;
   position: absolute;
   top: 100%;
   left: 0;
-  min-width: 11rem;
+  min-width: 12rem;
   margin: 0;
-  padding: 0.35rem 0;
+  padding: 0.35rem;
   list-style: none;
   background: var(--body-bg);
   border: 1px solid var(--border);
@@ -356,16 +377,20 @@ a.site-nav__hit:hover {
 .site-nav__sub .site-nav__item {
   height: auto;
   display: block;
+  width: 100%;
 }
 
 .site-nav__sub .site-nav__hit,
 .site-nav__sub .site-nav__label {
+  display: flex;
   height: auto;
+  min-height: 2rem;
   width: 100%;
   justify-content: flex-start;
   gap: 0.5rem;
-  padding: 0.4rem 0.75rem;
+  padding: 0.4rem 0.65rem;
   text-align: left;
+  border-radius: var(--radius);
 }
 
 .site-nav__sub .site-nav__label-text {
@@ -388,9 +413,13 @@ a.site-nav__hit:hover {
   transform: rotate(90deg);
 }
 
+.site-nav__sub .site-nav__item:hover > .site-nav__hit,
+.site-nav__sub .site-nav__item.is-open > .site-nav__hit,
+.site-nav__sub .site-nav__item:focus-within > .site-nav__hit,
 .site-nav__sub .site-nav__hit:hover {
-  opacity: 0.65;
-  background: var(--sidebar-hover);
+  background: color-mix(in srgb, var(--body-fg) 9%, var(--body-bg));
+  color: var(--body-fg);
+  opacity: 1;
 }
 
 .site-header__actions {
@@ -1240,9 +1269,10 @@ html.layout-anim .page-shell--book .content-panel {
   .site-nav__hit,
   .site-nav__label {
     height: auto;
+    min-height: 2rem;
     width: 100%;
     justify-content: flex-start;
-    padding: 0.35rem 0;
+    padding: 0.4rem 0.65rem;
   }
 
   .site-nav__chevron,
