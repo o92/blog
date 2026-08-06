@@ -1,16 +1,24 @@
 {{ $item := . }}
 {{ $hasChildren := or $item.children $item.books }}
 <li class="site-nav__item{{ if $hasChildren }} has-children{{ end }}">
-  {{ if $item.href }}
-    <a href="{{ $item.href | relURL }}">{{ $item.title }}</a>
-  {{ else if not $hasChildren }}
-    <span>{{ $item.title }}</span>
-  {{ else }}
-    <button type="button" class="site-nav__label" aria-expanded="false">
+  {{ if and $item.href (not $hasChildren) }}
+    <a class="site-nav__hit" href="{{ $item.href | relURL }}">
       <span class="site-nav__label-text">{{ $item.title }}</span>
-      <svg class="site-nav__chevron" width="12" height="12" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-        <path fill="currentColor" d="M6.22 3.22a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 010-1.06z"/>
-      </svg>
+      <span class="site-nav__trail" aria-hidden="true"></span>
+    </a>
+  {{ else if not $hasChildren }}
+    <span class="site-nav__hit site-nav__hit--static">
+      <span class="site-nav__label-text">{{ $item.title }}</span>
+      <span class="site-nav__trail" aria-hidden="true"></span>
+    </span>
+  {{ else }}
+    <button type="button" class="site-nav__hit site-nav__label" aria-expanded="false">
+      <span class="site-nav__label-text">{{ $item.title }}</span>
+      <span class="site-nav__trail" aria-hidden="true">
+        <svg class="site-nav__chevron" width="12" height="12" viewBox="0 0 16 16" focusable="false">
+          <path fill="currentColor" d="M6.22 3.22a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 010-1.06z"/>
+        </svg>
+      </span>
     </button>
   {{ end }}
 
@@ -21,11 +29,19 @@
     {{ end }}
     {{ range $item.books }}
       {{ $book := site.GetPage (printf "/books/%s" .) }}
-      {{ if $book }}
-      <li><a href="{{ $book.RelPermalink }}">{{ $book.LinkTitle }}</a></li>
-      {{ else }}
-      <li><span class="muted">{{ . }}（未找到）</span></li>
-      {{ end }}
+      <li class="site-nav__item">
+        {{ if $book }}
+        <a class="site-nav__hit" href="{{ $book.RelPermalink }}">
+          <span class="site-nav__label-text">{{ $book.LinkTitle }}</span>
+          <span class="site-nav__trail" aria-hidden="true"></span>
+        </a>
+        {{ else }}
+        <span class="site-nav__hit site-nav__hit--static">
+          <span class="site-nav__label-text muted">{{ . }}（未找到）</span>
+          <span class="site-nav__trail" aria-hidden="true"></span>
+        </span>
+        {{ end }}
+      </li>
     {{ end }}
   </ul>
   {{ end }}

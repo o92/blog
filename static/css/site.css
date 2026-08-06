@@ -263,12 +263,11 @@ a[href]:hover {
   height: 100%;
 }
 
-.site-nav__label,
-.site-nav__item > a,
-.site-nav__item > span {
+.site-nav__hit,
+.site-nav__label {
   display: inline-flex;
   align-items: center;
-  gap: 0.2rem;
+  gap: 0.25rem;
   height: 100%;
   border: 0;
   background: transparent;
@@ -277,29 +276,50 @@ a[href]:hover {
   cursor: pointer;
   padding: 0 0.65rem;
   text-decoration: none;
+  box-sizing: border-box;
+}
+
+.site-nav__hit--static {
+  cursor: default;
+}
+
+.site-nav__label-text {
+  line-height: 1.2;
+}
+
+/* Fixed slot so expandable / non-expandable items share the same width rhythm */
+.site-nav__trail {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 0.75rem;
+  width: 0.75rem;
+  height: 0.75rem;
 }
 
 .site-nav__chevron {
-  flex: 0 0 auto;
+  display: block;
+  width: 0.75rem;
+  height: 0.75rem;
   color: var(--muted);
   transition: transform 0.18s ease, color 0.15s ease;
   /* Top-level: point down when closed */
   transform: rotate(90deg);
 }
 
-.site-nav__item.is-open > .site-nav__label > .site-nav__chevron,
-.site-nav__item:hover > .site-nav__label > .site-nav__chevron,
-.site-nav__item:focus-within > .site-nav__label > .site-nav__chevron {
+.site-nav__item.is-open > .site-nav__label .site-nav__chevron,
+.site-nav__item:hover > .site-nav__label .site-nav__chevron,
+.site-nav__item:focus-within > .site-nav__label .site-nav__chevron {
   color: var(--body-fg);
   transform: rotate(-90deg);
 }
 
-.site-nav__item > a:visited {
+.site-nav__hit:visited {
   color: var(--body-fg);
 }
 
 .site-nav__label:hover,
-.site-nav__item > a:hover {
+a.site-nav__hit:hover {
   opacity: 0.7;
 }
 
@@ -338,15 +358,23 @@ a[href]:hover {
   display: block;
 }
 
-.site-nav__sub .site-nav__label,
-.site-nav__sub .site-nav__item > a,
-.site-nav__sub .site-nav__item > span {
+.site-nav__sub .site-nav__hit,
+.site-nav__sub .site-nav__label {
   height: auto;
   width: 100%;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 0.5rem;
   padding: 0.4rem 0.75rem;
   text-align: left;
+}
+
+.site-nav__sub .site-nav__label-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.site-nav__sub .site-nav__trail {
+  margin-left: auto;
 }
 
 /* Nested levels: chevron points right toward submenu */
@@ -354,25 +382,13 @@ a[href]:hover {
   transform: rotate(0deg);
 }
 
-.site-nav__sub .site-nav__item.is-open > .site-nav__label > .site-nav__chevron,
-.site-nav__sub .site-nav__item:hover > .site-nav__label > .site-nav__chevron,
-.site-nav__sub .site-nav__item:focus-within > .site-nav__label > .site-nav__chevron {
+.site-nav__sub .site-nav__item.is-open > .site-nav__label .site-nav__chevron,
+.site-nav__sub .site-nav__item:hover > .site-nav__label .site-nav__chevron,
+.site-nav__sub .site-nav__item:focus-within > .site-nav__label .site-nav__chevron {
   transform: rotate(90deg);
 }
 
-.site-nav__sub a,
-.site-nav__sub span,
-.site-nav__sub .site-nav__label {
-  display: flex;
-  color: var(--body-fg);
-  text-decoration: none;
-}
-
-.site-nav__sub a:visited {
-  color: var(--body-fg);
-}
-
-.site-nav__sub a:hover {
+.site-nav__sub .site-nav__hit:hover {
   opacity: 0.65;
   background: var(--sidebar-hover);
 }
@@ -1221,12 +1237,11 @@ html.layout-anim .page-shell--book .content-panel {
     display: block;
   }
 
-  .site-nav__label,
-  .site-nav__item > a,
-  .site-nav__item > span {
+  .site-nav__hit,
+  .site-nav__label {
     height: auto;
     width: 100%;
-    justify-content: space-between;
+    justify-content: flex-start;
     padding: 0.35rem 0;
   }
 
@@ -1235,12 +1250,12 @@ html.layout-anim .page-shell--book .content-panel {
     transform: rotate(90deg);
   }
 
-  .site-nav__item.is-open > .site-nav__label > .site-nav__chevron,
-  .site-nav__item:hover > .site-nav__label > .site-nav__chevron,
-  .site-nav__item:focus-within > .site-nav__label > .site-nav__chevron,
-  .site-nav__sub .site-nav__item.is-open > .site-nav__label > .site-nav__chevron,
-  .site-nav__sub .site-nav__item:hover > .site-nav__label > .site-nav__chevron,
-  .site-nav__sub .site-nav__item:focus-within > .site-nav__label > .site-nav__chevron {
+  .site-nav__item.is-open > .site-nav__label .site-nav__chevron,
+  .site-nav__item:hover > .site-nav__label .site-nav__chevron,
+  .site-nav__item:focus-within > .site-nav__label .site-nav__chevron,
+  .site-nav__sub .site-nav__item.is-open > .site-nav__label .site-nav__chevron,
+  .site-nav__sub .site-nav__item:hover > .site-nav__label .site-nav__chevron,
+  .site-nav__sub .site-nav__item:focus-within > .site-nav__label .site-nav__chevron {
     transform: rotate(-90deg);
   }
 
