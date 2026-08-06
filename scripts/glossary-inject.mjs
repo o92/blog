@@ -72,10 +72,15 @@ function parseFrontMatter(raw) {
 
 function contentToPublicHtml(relPosix) {
   // content/posts/foo.md -> public/posts/foo/index.html
-  // content/posts/foo/index.md -> public/posts/foo/index.html
+  // content/books/foo/_index.md -> public/books/foo/index.html
   let rel = relPosix.replace(/^content\//, "");
-  if (rel.endsWith("/index.md") || rel.endsWith("/index.markdown")) {
-    rel = rel.replace(/\/index\.md(arkdown)?$/, "");
+  if (
+    rel.endsWith("/index.md") ||
+    rel.endsWith("/index.markdown") ||
+    rel.endsWith("/_index.md") ||
+    rel.endsWith("/_index.markdown")
+  ) {
+    rel = rel.replace(/\/_?index\.md(arkdown)?$/, "");
   } else {
     rel = rel.replace(/\.md(arkdown)?$/, "");
   }

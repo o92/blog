@@ -1,0 +1,26 @@
+{{ $item := . }}
+<li class="site-nav__item{{ if or $item.children $item.books }} has-children{{ end }}">
+  {{ if $item.href }}
+    <a href="{{ $item.href | relURL }}">{{ $item.title }}</a>
+  {{ else if and (not $item.children) (not $item.books) }}
+    <span>{{ $item.title }}</span>
+  {{ else }}
+    <button type="button" class="site-nav__label" aria-expanded="false">{{ $item.title }}</button>
+  {{ end }}
+
+  {{ if or $item.children $item.books }}
+  <ul class="site-nav__sub">
+    {{ range $item.children }}
+      {{ partial "nav-item.html" . }}
+    {{ end }}
+    {{ range $item.books }}
+      {{ $book := site.GetPage (printf "/books/%s" .) }}
+      {{ if $book }}
+      <li><a href="{{ $book.RelPermalink }}">{{ $book.LinkTitle }}</a></li>
+      {{ else }}
+      <li><span class="muted">{{ . }}（未找到）</span></li>
+      {{ end }}
+    {{ end }}
+  </ul>
+  {{ end }}
+</li>

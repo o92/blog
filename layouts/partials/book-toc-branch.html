@@ -1,0 +1,20 @@
+{{ $section := .section }}
+{{ $page := .page }}
+{{ $items := slice }}
+{{ range $section.Sections }}
+  {{ $items = $items | append . }}
+{{ end }}
+{{ range $section.RegularPages }}
+  {{ $items = $items | append . }}
+{{ end }}
+{{ $items = sort $items "Weight" "asc" }}
+{{ range $items }}
+<li class="{{ if eq $page.RelPermalink .RelPermalink }}is-active{{ end }}">
+  <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+  {{ if .IsSection }}
+  <ul>
+    {{ partial "book-toc-branch.html" (dict "section" . "page" $page) }}
+  </ul>
+  {{ end }}
+</li>
+{{ end }}

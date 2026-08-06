@@ -4,3 +4,13 @@ title = 'My Blog'
 
 [markup.goldmark.renderer]
 unsafe = true
+
+[markup.tableOfContents]
+startLevel = 2
+endLevel = 3
+ordered = false
+
+[outputs]
+home = ['HTML', 'RSS']
+section = ['HTML', 'RSS']
+page = ['HTML']

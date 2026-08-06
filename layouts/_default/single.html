@@ -1,8 +1,21 @@
+{{ define "body-class" }}layout-simple{{ end }}
 {{ define "main" }}
-<article>
-  <h1>{{ .Title }}</h1>
-  <div class="post-content">
-    {{ .Content }}
-  </div>
-</article>
+<main class="page-shell page-shell--simple">
+  <article class="content-panel">
+    <header class="content-header">
+      <h1>{{ .Title }}</h1>
+    </header>
+    <div class="post-content">
+      {{ .Content }}
+    </div>
+  </article>
+  {{ with .TableOfContents }}
+  {{ if . }}
+  <aside class="toc-panel toc-panel--page" aria-label="本章目录">
+    <div class="panel-title">本章</div>
+    {{ . }}
+  </aside>
+  {{ end }}
+  {{ end }}
+</main>
 {{ end }}

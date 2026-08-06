@@ -1,0 +1,13 @@
+categories:
+  - id: tech
+    title: 技术
+    children:
+      - id: go
+        title: Go
+        books: [go-concurrency]
+      - id: distributed
+        title: 分布式
+        books: []
+  - id: essays
+    title: 随笔
+    href: /posts/

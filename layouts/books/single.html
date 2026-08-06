@@ -1,0 +1,43 @@
+{{ define "body-class" }}layout-book{{ end }}
+{{ define "main" }}
+{{ $book := partial "book-root.html" . }}
+<main class="page-shell page-shell--book">
+  <button type="button" class="sidebar-toggle sidebar-toggle--left" id="toggle-book-toc" aria-controls="book-toc" aria-expanded="false">目录</button>
+  <button type="button" class="sidebar-toggle sidebar-toggle--right" id="toggle-page-toc" aria-controls="page-toc" aria-expanded="false">大纲</button>
+
+  <aside id="book-toc" class="book-toc-panel" aria-label="本书目录">
+    <div class="panel-title">{{ with $book }}{{ .LinkTitle }}{{ else }}本书{{ end }}</div>
+    {{ partial "book-toc.html" (dict "book" $book "page" .) }}
+  </aside>
+
+  <article class="content-panel">
+    <header class="content-header">
+      <h1>{{ .Title }}</h1>
+      {{ with $book }}
+      {{ if ne .RelPermalink $.RelPermalink }}
+      <p class="breadcrumb"><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></p>
+      {{ end }}
+      {{ end }}
+    </header>
+    <div class="post-content">
+      {{ .Content }}
+    </div>
+    {{ if .IsSection }}
+    <ul class="page-list">
+      {{ range .Pages }}
+      <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+      {{ end }}
+      {{ range .Sections }}
+      <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }} /</a></li>
+      {{ end }}
+    </ul>
+    {{ end }}
+  </article>
+
+  <aside id="page-toc" class="toc-panel" aria-label="本章目录">
+    <div class="panel-title">本章</div>
+    {{ partial "page-toc.html" . }}
+  </aside>
+</main>
+<script src="{{ "js/sidebars.js" | relURL }}" defer></script>
+{{ end }}

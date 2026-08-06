@@ -1,0 +1,9 @@
+{{ with .TableOfContents }}
+  {{ if . }}
+    {{ . }}
+  {{ else }}
+    <p class="muted">本页无小标题</p>
+  {{ end }}
+{{ else }}
+  <p class="muted">本页无小标题</p>
+{{ end }}

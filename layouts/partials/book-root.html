@@ -1,0 +1,17 @@
+{{/*
+  Resolve the book section page: direct child of /books/.
+*/}}
+{{- $books := site.GetPage "/books" -}}
+{{- $book := false -}}
+{{- if $books -}}
+  {{- if and .IsSection (eq .Parent $books) -}}
+    {{- $book = . -}}
+  {{- else -}}
+    {{- range .Ancestors -}}
+      {{- if and .IsSection (eq .Parent $books) -}}
+        {{- $book = . -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return $book -}}

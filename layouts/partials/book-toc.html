@@ -1,0 +1,14 @@
+{{ $book := .book }}
+{{ $page := .page }}
+{{ if $book }}
+<nav class="book-toc">
+  <ul>
+    <li class="{{ if eq $page.RelPermalink $book.RelPermalink }}is-active{{ end }}">
+      <a href="{{ $book.RelPermalink }}">{{ $book.LinkTitle }}</a>
+    </li>
+    {{ partial "book-toc-branch.html" (dict "section" $book "page" $page) }}
+  </ul>
+</nav>
+{{ else }}
+<p class="muted">未找到所属书籍。</p>
+{{ end }}

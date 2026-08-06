@@ -9,13 +9,14 @@
     <div class="post-content">{{ . }}</div>
     {{ end }}
     <ul class="page-list">
-      {{ range .Pages }}
-      <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
-      {{ end }}
       {{ range .Sections }}
-      <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+      <li>
+        <a href="{{ .RelPermalink }}"><strong>{{ .LinkTitle }}</strong></a>
+        <span class="muted">书</span>
+      </li>
       {{ end }}
     </ul>
+    <p class="muted"><a href="{{ "/posts/" | relURL }}">随笔 →</a></p>
   </div>
 </main>
 {{ end }}
