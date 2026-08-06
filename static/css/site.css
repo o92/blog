@@ -702,6 +702,7 @@ html[data-toc-collapsed="true"] .toc-panel {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  text-align: right;
 }
 
 .panel-head {
@@ -712,6 +713,20 @@ html[data-toc-collapsed="true"] .toc-panel {
   min-height: 1.5rem;
 }
 
+/* Left: title … collapse(inner). Right: collapse(inner) … title — mirrored */
+.panel-head--menu .panel-collapse {
+  margin-left: auto;
+}
+
+.panel-head--toc .panel-collapse {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.panel-head--toc .panel-title {
+  margin-left: 0;
+}
+
 .panel-collapse {
   flex: 0 0 auto;
   display: inline-flex;
@@ -719,7 +734,6 @@ html[data-toc-collapsed="true"] .toc-panel {
   justify-content: center;
   width: 1.5rem;
   height: 1.5rem;
-  margin-left: auto;
   padding: 0;
   border: 1px solid transparent;
   border-radius: var(--radius);
