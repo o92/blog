@@ -4,64 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ with .Title }}{{ . }} | {{ end }}{{ site.Title }}</title>
+  <script src="{{ "js/layout-widths.js" | relURL }}"></script>
   <script>
     (function () {
       try {
         var p = sessionStorage.getItem("theme-preference");
         if (p === "light" || p === "dark") {
           document.documentElement.setAttribute("data-theme", p);
-        }
-      } catch (e) {}
-      try {
-        var LIMITS = {
-          content: { min: 28, max: 72, def: 48 },
-          menu: { min: 12, max: 24, def: 17 },
-          toc: { min: 10, max: 22, def: 15 },
-        };
-        var LEGACY = {
-          content: { sm: 36, md: 48, lg: 64 },
-          menu: { sm: 14, md: 17, lg: 20 },
-          toc: { sm: 12, md: 15, lg: 18 },
-        };
-        var VARS = {
-          content: "--content-max",
-          menu: "--menu-width",
-          toc: "--toc-width",
-        };
-        function num(key, raw) {
-          var lim = LIMITS[key];
-          var n;
-          if (typeof raw === "number") n = raw;
-          else if (typeof raw === "string" && LEGACY[key] && LEGACY[key][raw] != null)
-            n = LEGACY[key][raw];
-          else if (typeof raw === "string") n = parseFloat(raw);
-          else n = lim.def;
-          if (!isFinite(n)) n = lim.def;
-          if (n < lim.min) n = lim.min;
-          if (n > lim.max) n = lim.max;
-          return n;
-        }
-        var raw = localStorage.getItem("layout-widths");
-        if (raw) {
-          var w = JSON.parse(raw);
-          var root = document.documentElement;
-          if (w.content != null) {
-            root.style.setProperty(VARS.content, num("content", w.content) + "rem");
-          }
-          if (w.menuCollapsed) {
-            root.style.setProperty(VARS.menu, "0px");
-            root.setAttribute("data-menu-collapsed", "true");
-          } else if (w.menu != null) {
-            root.style.setProperty(VARS.menu, num("menu", w.menu) + "rem");
-            root.setAttribute("data-menu-collapsed", "false");
-          }
-          if (w.tocCollapsed) {
-            root.style.setProperty(VARS.toc, "0px");
-            root.setAttribute("data-toc-collapsed", "true");
-          } else if (w.toc != null) {
-            root.style.setProperty(VARS.toc, num("toc", w.toc) + "rem");
-            root.setAttribute("data-toc-collapsed", "false");
-          }
         }
       } catch (e) {}
       try {
@@ -97,6 +46,6 @@
   <script src="{{ "js/width.js" | relURL }}" defer></script>
   <script src="{{ "js/nav.js" | relURL }}" defer></script>
   <script src="{{ "js/glossary-tip.js" | relURL }}" defer></script>
-  <script src="{{ "js/search.js" | relURL }}" type="module"></script>
+  <script src="{{ "js/search.js" | relURL }}" defer></script>
 </body>
 </html>

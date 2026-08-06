@@ -1,20 +1,20 @@
 (function () {
-  var KEY = "layout-widths";
-  var VARS = {
+  var LW = window.LayoutWidths || {};
+  var KEY = LW.KEY || "layout-widths";
+  var VARS = LW.VARS || {
     content: "--content-max",
     menu: "--menu-width",
     toc: "--toc-width",
   };
-  var LIMITS = {
+  var LIMITS = LW.LIMITS || {
     content: { min: 28, max: 72, step: 1, def: 48 },
     menu: { min: 12, max: 24, step: 0.5, def: 17 },
     toc: { min: 10, max: 22, step: 0.5, def: 15 },
   };
-  var LEGACY = {
-    content: { sm: 36, md: 48, lg: 64 },
-    menu: { sm: 14, md: 17, lg: 20 },
-    toc: { sm: 12, md: 15, lg: 18 },
+  var clamp = LW.clamp || function (key, value) {
+    return Number(value) || LIMITS[key].def;
   };
+  var migrateValue = LW.migrateValue || clamp;
   var DEFAULTS = {
     content: LIMITS.content.def,
     menu: LIMITS.menu.def,
@@ -22,33 +22,6 @@
     menuCollapsed: false,
     tocCollapsed: false,
   };
-
-  function clamp(key, value) {
-    var lim = LIMITS[key];
-    var n = Number(value);
-    if (!isFinite(n)) n = lim.def;
-    if (n < lim.min) n = lim.min;
-    if (n > lim.max) n = lim.max;
-    // Snap to step
-    var steps = Math.round((n - lim.min) / lim.step);
-    n = lim.min + steps * lim.step;
-    // Avoid float noise
-    n = Math.round(n * 1000) / 1000;
-    if (n < lim.min) n = lim.min;
-    if (n > lim.max) n = lim.max;
-    return n;
-  }
-
-  function migrateValue(key, raw) {
-    if (typeof raw === "number") return clamp(key, raw);
-    if (typeof raw === "string" && LEGACY[key] && LEGACY[key][raw] != null) {
-      return clamp(key, LEGACY[key][raw]);
-    }
-    if (typeof raw === "string" && /rem$/.test(raw)) {
-      return clamp(key, parseFloat(raw));
-    }
-    return LIMITS[key].def;
-  }
 
   function read() {
     try {

@@ -7,39 +7,33 @@ alwaysApply: true
 
 完整设计见：`docs/superpowers/specs/2026-08-06-glossary-tooltip-design.md`
 
-## 构建顺序（必须遵守）
+## 构建
 
-1. `hugo` 生成 `public/`
-2. `node scripts/glossary-inject.mjs` 注入术语标记
-3. `pagefind --site public` 建搜索索引
-4. 再部署 / 预览产物
+`npm run build` = `hugo` → `glossary-inject` → `pagefind`。  
+`hugo server` **不会**注入术语或建搜索索引；完整预览用 `npm run preview`。
 
-`hugo server` **不会**自动注入术语或建搜索索引。完整预览用 `npm run preview`。
+## 词库与声明
 
-## 词库
-
-- 路径：`data/glossary/global.yaml` + `data/glossary/<domain>.yaml`
-- 领域 ID = 文件名（不含扩展名）
-- 词条必填 `summary`；可选：
-  - `source: "foo/bar.md#标题"`：摘录该标题下正文（长度见 `excerptMaxLength`），并自动生成「显示更多」跳到对应页面锚点（路径相对 `content/`）
-  - `link: "https://..."`：仅外部链接
-- 不支持站内路径当 `link`；站内跳转一律用 `source` +「显示更多」
-- 文章用 front matter `glossary: ["domain1"]` 声明领域；未声明时只使用 `global`
+- `data/glossary/global.yaml` + `data/glossary/<domain>.yaml`
+- 词条：`summary` 必填；`source`（站内摘录 +「显示更多」）；`link`（仅外链）
+- 文章 `glossary: ["domain"]`；未声明时仅 `global`
+- **继承**：子页 / 最终页会合并祖先 section `_index` 上的 `glossary`（在书根声明即可覆盖全书）
+- 正文选择器：默认仅 `.post-content`（`scripts/glossary.config.json`）
 
 ## 匹配语义（勿擅自改；要改先更新本规则 + design spec）
 
-- 只处理正文容器（选择器见 `scripts/glossary.config.json`）
-- 跳过 `pre` / `code` / `kbd` / `samp` / `script` / `style` 及已处理术语节点
-- 长短优先；英文大小写不敏感（保留原文）；中文字面匹配
-- **每次出现都高亮**（不是仅首次）
-- 全局与领域重名时，气泡**同时显示**「通用」与各领域解释
+- 跳过 `pre` / `code` / `kbd` / `samp` / `script` / `style` 及已处理术语
+- 长短优先；英文大小写不敏感；每次出现都高亮
+- 全局与领域重名时气泡并显
 
-## 主题
+## 运行时气泡
 
-用户自配主题。术语功能只依赖：可配置正文选择器 + `static/css/glossary.css` 引入。不要把逻辑写死进某个主题私有 partial，除非提供可复制的接入说明。
+- `static/js/glossary-tip.js`：fixed 浮层、避顶栏、贴边自适应、桥接热区
+- 样式：`static/css/glossary.css`（跟站点 CSS 变量）
+- `baseof` 已引入 glossary CSS；inject **不再**二次插入 stylesheet
 
 ## 改动边界
 
-- 增删术语：只改 `data/glossary/*.yaml`
-- 改注入实现：`scripts/glossary-inject.mjs` + 必要时 `glossary.config.json`
-- 改 CI：`.github/workflows/hugo.yaml` 须在 upload 前跑 inject
+- 增删术语：`data/glossary/*.yaml`
+- 注入：`scripts/glossary-inject.mjs` / `glossary.config.json`
+- CI：`.github/workflows/hugo.yaml` 使用 `npm run build`

@@ -63,6 +63,7 @@ glossary: ["go", "distributed"]   # 可选；加载 global + 列出的领域
 
 - 缺省或 `[]`：仅 `global`
 - `glossary` 表示**术语领域**，与导航用 categories/tags 解耦
+- **继承**：inject 会合并当前页与所有祖先 section（`_index.md`）上的 `glossary`。通常在书根 `_index.md` 声明一次即可覆盖全书（含最终页合并正文）
 
 ## 冲突展示
 
@@ -86,33 +87,30 @@ glossary: ["go", "distributed"]   # 可选；加载 global + 列出的领域
 ### 命令
 
 ```bash
-hugo --gc --minify
-node scripts/glossary-inject.mjs
+npm run build   # hugo --gc --minify && glossary-inject && pagefind
 ```
-
-建议封装 `npm run build` = 上述两步。
 
 ### 输入
 
 - `public/`：Hugo 产物
 - `data/glossary/*.yaml`：词库
-- 文章 `glossary` 映射（优先构建时导出 JSON；或脚本读 content front matter）
-- `scripts/glossary.config.json`：正文选择器、路径 glob、匹配开关
+- content front matter `glossary`（含祖先 section 继承）
+- `scripts/glossary.config.json`：正文选择器（默认 `.post-content`）、摘录长度
 
 ### 输出
 
 - 原地改写相关 `public/**/*.html`
-- 术语包裹为带 class / `data-*` 的元素（具体标签在实现计划中定）
-- 样式：`static/css/glossary.css`（主题侧负责引入）
+- 术语包裹为 `.glossary-term` + `.glossary-tip`
+- 样式：`static/css/glossary.css`（由 `baseof` 引入；运行时定位见 `static/js/glossary-tip.js`）
 
 ### CI
 
-在 `.github/workflows/hugo.yaml` 中，于 Hugo build 与 upload artifact 之间增加 `glossary-inject` 步骤。
+`.github/workflows/hugo.yaml` 执行 `npm run build`（设置 `HUGO_BASEURL`），再 upload artifact。
 
 ### 本地预览
 
-提供明确的 preview 脚本（先 hugo + inject，再对 `public/` 做静态预览，或文档写清流程）。  
-禁止假设 `hugo server -D` 已含术语高亮。
+`npm run preview`（build + 静态服务）。  
+禁止假设 `hugo server -D` 已含术语高亮或搜索索引。
 
 ## 主题接入（用户侧）
 

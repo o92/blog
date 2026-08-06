@@ -7,37 +7,28 @@ alwaysApply: true
 
 完整设计见：`docs/superpowers/specs/2026-08-06-site-ia-layout-design.md`
 
-## 结构（勿擅自改成「分类进 content 文件夹」）
+## 结构（勿改成「分类进 content 文件夹」）
 
-- 分类树：仅 `data/nav.yaml`（可多层）；顶栏导航只读此文件
-- 书与章节：`content/<book-id>/`，可多层；左侧目录只含本书树
-- **最终页**：`final = true` 的 section；子文件 `build.render = never`（用 cascade），合并进该页；左侧仍显示子项为页内锚点
-- 顶栏「随笔」等是 `data/nav.yaml` 分类，内容同样落在 `content/<book-id>/`，**无单独 posts 布局**
-- `nav.yaml` 的 `books: [id]` 对应 `content/<id>/`（无 `content/books/` 中间层）
-- 自建 `layouts/`，不引入 Docsy 等作为主体主题
+- 分类树：仅 `data/nav.yaml`；顶栏只读此文件
+- 书与章节：`content/<book-id>/`（无 `content/books/` 中间层）
+- 书阅读壳：`layouts/partials/book-shell.html`（`single` / `list` 共用）
+- 书根解析：`book-root.html`（按 Home 子 section；**不要**再加 `book_id` 字段）
+- **最终页**：`final = true` + cascade `render: never`；子项进页内锚点
+- 自建 `layouts/`，不引入 Docsy 等主体主题
 
 ## 版式
 
-书内页：顶栏（搜索 + 主题切换）+ 左书目 + 中 `.post-content` + 右本章 TOC。  
-移动端：侧栏进抽屉，正文优先。  
-搜索：Pagefind；顶栏按钮 + ⌘K/Ctrl+K；见 `docs/superpowers/specs/2026-08-06-search-pagefind-design.md`。
+书内：顶栏（宽度 / 搜索 / 主题）+ 左书目 + 中 `.post-content` + 右本章 TOC。  
+栏宽常量：`static/js/layout-widths.js`（首屏与 `width.js` 共用）。  
+搜索：Pagefind；见 `docs/superpowers/specs/2026-08-06-search-pagefind-design.md`。
 
 ## 明暗主题
 
-- 默认跟随 `prefers-color-scheme`
-- 右上角仅 **浅 / 深** 切换（无「系统」选项）
-- 偏好存 `sessionStorage`；关闭浏览器后清空，下次再跟系统
-- `html[data-theme]`；首屏前防闪烁脚本读 sessionStorage
-- 颜色一律走 CSS 变量；`glossary.css` 必须跟变量
+- 默认跟 `prefers-color-scheme`；右上角仅浅/深
+- 偏好 `sessionStorage`；关浏览器后清空
+- 颜色走 CSS 变量；`:root` 浅色 + dark media/`data-theme=dark`（无需再抄一份 light）
 
-## 视觉（Next.js Docs 取向）
+## 与 glossary / 构建
 
-- 明暗色板参考 https://nextjs.org/docs：浅色白底/`#171717` 字；深色黑底/`#ededed` 字；描边 `#eaeaea` / `#333`；链接蓝 `#0070f3` / `#3291ff`
-- 阅读优先：正文限宽与舒适行高；侧栏弱化
-- 改观感优先动 `static/css/site.css`，术语气泡跟 CSS 变量
-
-## 与 glossary
-
-- 保持可配置正文选择器（默认 `.post-content`）
-- 构建仍为 `hugo` → `glossary-inject` → `pagefind` → 部署
-- 单独 `hugo server` 无术语注入、无搜索索引；完整预览用 `npm run preview`
+- `npm run build`：hugo → inject → pagefind
+- 完整预览：`npm run preview`

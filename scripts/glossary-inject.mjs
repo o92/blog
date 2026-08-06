@@ -151,7 +151,6 @@ function resolveSource(source) {
   const { content } = parseFrontMatter(rawMd);
   const permalink = contentFileToPermalink(abs);
   let excerpt = "";
-  let truncated = false;
   let moreHref = permalink;
 
   if (heading) {
@@ -161,7 +160,6 @@ function resolveSource(source) {
     } else {
       const t = truncateText(sec.text, EXCERPT_MAX);
       excerpt = t.text;
-      truncated = t.truncated || sec.text.length > 0;
       moreHref = `${permalink}#${anchorize(sec.heading)}`;
     }
   } else {
@@ -172,12 +170,11 @@ function resolveSource(source) {
       .trim();
     const t = truncateText(plain, EXCERPT_MAX);
     excerpt = t.text;
-    truncated = t.truncated;
     moreHref = permalink;
   }
 
   // Always offer 显示更多 when source is set
-  return { excerpt, moreHref, truncated };
+  return { excerpt, moreHref };
 }
 
 function loadGlossaries() {
@@ -235,23 +232,85 @@ function contentToPublicHtml(relPosix) {
   return path.join(root, config.publicDir, rel, "index.html");
 }
 
+function mergeDomains(...lists) {
+  const out = [];
+  const seen = new Set();
+  for (const list of lists) {
+    for (const d of list || []) {
+      const id = String(d);
+      if (!id || seen.has(id)) continue;
+      seen.add(id);
+      out.push(id);
+    }
+  }
+  return out;
+}
+
+/**
+ * Load glossary domains per generated HTML page.
+ * Domains inherit from ancestor section `_index.md` / `index.md` up to content root,
+ * then merge the page's own front matter `glossary`.
+ */
 function loadPageGlossaries(contentDir) {
   const abs = path.join(root, contentDir);
   const files = fg.sync(["**/*.md", "**/*.markdown"], {
     cwd: abs,
     absolute: true,
   });
-  /** @type {Map<string, string[]>} */
-  const map = new Map();
+  /** @type {Map<string, string[]>} own front matter by abs path */
+  const ownByFile = new Map();
+  /** @type {Map<string, string[]>} section domains by content-relative dir ("", "go-concurrency", ...) */
+  const byDir = new Map();
+
   for (const file of files) {
     const raw = fs.readFileSync(file, "utf8");
     const { data } = parseFrontMatter(raw);
     const domains = Array.isArray(data.glossary)
       ? data.glossary.map(String)
       : [];
-    const rel = path.relative(root, file).split(path.sep).join("/");
-    const htmlPath = contentToPublicHtml(rel);
-    map.set(path.normalize(htmlPath), domains);
+    ownByFile.set(file, domains);
+
+    const rel = path.relative(abs, file).split(path.sep).join("/");
+    const base = path.posix.basename(rel);
+    if (/^_?index\.md(arkdown)?$/.test(base)) {
+      const dir =
+        rel.includes("/") ? rel.replace(/\/_?index\.md(arkdown)?$/, "") : "";
+      if (domains.length) {
+        byDir.set(dir, mergeDomains(byDir.get(dir), domains));
+      }
+    }
+  }
+
+  /** @type {Map<string, string[]>} */
+  const map = new Map();
+  for (const file of files) {
+    const relRoot = path.relative(root, file).split(path.sep).join("/");
+    const htmlPath = contentToPublicHtml(relRoot);
+    const rel = path.relative(abs, file).split(path.sep).join("/");
+    const base = path.posix.basename(rel);
+    let dir;
+    if (/^_?index\.md(arkdown)?$/.test(base)) {
+      dir = rel.includes("/")
+        ? rel.replace(/\/_?index\.md(arkdown)?$/, "")
+        : "";
+    } else {
+      dir = path.posix.dirname(rel);
+      if (dir === ".") dir = "";
+    }
+
+    const inherited = [];
+    let walk = dir;
+    for (;;) {
+      if (byDir.has(walk)) inherited.push(...byDir.get(walk));
+      if (!walk) break;
+      const parent = path.posix.dirname(walk);
+      walk = parent === "." ? "" : parent;
+    }
+
+    map.set(
+      path.normalize(htmlPath),
+      mergeDomains(inherited, ownByFile.get(file)),
+    );
   }
   return map;
 }
@@ -428,16 +487,6 @@ function injectInRoot($, rootEl, termIndex) {
   return count;
 }
 
-function ensureStylesheet($) {
-  const href = config.cssHref;
-  const exists =
-    $(`link[rel="stylesheet"][href="${href}"]`).length > 0 ||
-    $(`link[rel="stylesheet"][href$="glossary.css"]`).length > 0;
-  if (!exists) {
-    $("head").append(`<link rel="stylesheet" href="${href}">`);
-  }
-}
-
 function findContentRoot($) {
   for (const sel of config.contentSelectors) {
     const el = $(sel).first();
@@ -458,7 +507,6 @@ function processFile(htmlPath, domains, byDomain) {
   }
   const termIndex = buildTermIndex(byDomain, domains);
   const n = injectInRoot($, contentRoot, termIndex);
-  ensureStylesheet($);
   fs.writeFileSync(htmlPath, $.html(), "utf8");
   return n;
 }

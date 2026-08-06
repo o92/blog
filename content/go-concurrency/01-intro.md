@@ -1,7 +1,6 @@
 +++
 title = "简介"
 weight = 1
-glossary = ["go"]
 +++
 
 ## 这本书讲什么

@@ -1,7 +1,6 @@
 +++
 title = "G-M-P"
 weight = 1
-glossary = ["go"]
 +++
 
 ## Goroutine

@@ -131,17 +131,21 @@ final = true
 
 ```text
 layouts/
-  _default/baseof.html      # 顶栏、主题脚本、总架
-  _default/single.html      # 书内页三栏
-  _default/list.html        # 书/_index 与中间层 list
+  _default/baseof.html      # 顶栏、layout-widths、主题防闪
+  _default/single.html      # → book-shell
+  _default/list.html        # → book-shell
   partials/
+    book-shell.html         # 书内三栏壳
+    book-root.html          # 书根 section
     nav.html                # 读 data/nav.yaml
     book-toc.html           # 左栏
-    page-toc.html           # 右栏（.TableOfContents）
+    page-toc.html           # 右栏
     theme-toggle.html
+static/js/
+  layout-widths.js          # 栏宽常量 + 首屏应用
+  width.js / glossary-tip.js / search.js / ...
 static/css/
-  site.css                  # 变量、布局、明暗
-  glossary.css              # 跟变量
+  site.css / glossary.css / search.css
 data/nav.yaml
 ```
 

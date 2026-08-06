@@ -27,7 +27,12 @@
     {{ range $item.children }}
       {{ partial "nav-item.html" . }}
     {{ end }}
-    {{ range $item.books }}
+    {{ $books := $item.books }}
+    {{ if $books }}
+      {{ if not (reflect.IsSlice $books) }}
+        {{ $books = slice $books }}
+      {{ end }}
+      {{ range $books }}
       {{ $book := site.GetPage (printf "/%s" .) }}
       <li class="site-nav__item">
         {{ if $book }}
@@ -42,6 +47,7 @@
         </span>
         {{ end }}
       </li>
+      {{ end }}
     {{ end }}
   </ul>
   {{ end }}

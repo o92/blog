@@ -1,6 +1,5 @@
 +++
 title = "Go 并发笔记"
-book_id = "go-concurrency"
 glossary = ["go"]
 +++
 

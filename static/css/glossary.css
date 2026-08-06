@@ -20,23 +20,30 @@
   z-index: 1200;
   box-sizing: border-box;
   width: max-content;
-  min-width: min(16rem, calc(100vw - 2rem));
-  max-width: min(28rem, calc(100vw - 2rem));
+  min-width: min(20rem, calc(100vw - 2rem));
+  max-width: min(36rem, calc(100vw - 2rem));
   max-height: calc(100dvh - 2rem);
   overflow: hidden;
-  padding: 1.1rem 1.2rem;
-  border-radius: 0.5rem;
+  scrollbar-width: none;
+  padding: 1.15rem 1.35rem;
+  border-radius: 0.55rem;
   background: var(--tip-bg, #2e3440);
   color: var(--tip-fg, #eceff4);
-  font-size: 0.9375rem;
-  line-height: 1.55;
+  font-size: 1rem;
+  line-height: 1.6;
   font-weight: 400;
   font-style: normal;
   text-decoration: none;
   text-align: left;
-  box-shadow: 0 0.4rem 1.25rem rgba(0, 0, 0, 0.22);
+  box-shadow: 0 0.45rem 1.4rem rgba(0, 0, 0, 0.24);
   transition: opacity 0.12s ease, visibility 0.12s ease;
   pointer-events: none;
+}
+
+.glossary-tip::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 .glossary-tip.is-open {
@@ -47,7 +54,6 @@
   z-index: 1200;
 }
 
-/* Separate fixed bridge (not inside tip) — avoids overflow scrollbars */
 .glossary-tip-bridge {
   position: fixed;
   z-index: 1190;
@@ -82,12 +88,12 @@
 .glossary-tip-block {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.55rem;
 }
 
 .glossary-tip-block + .glossary-tip-block {
-  margin-top: 0.75rem;
-  padding-top: 0.75rem;
+  margin-top: 0.85rem;
+  padding-top: 0.85rem;
   border-top: 1px solid var(--tip-divider, rgba(236, 239, 244, 0.22));
 }
 
@@ -103,20 +109,20 @@
 
 .glossary-tip-summary {
   display: block;
-  font-size: 1em;
+  font-size: 1.05em;
   font-weight: 500;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 .glossary-tip-excerpt {
   display: block;
   margin: 0;
-  padding: 0.55rem 0.7rem;
-  border-radius: 0.35rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.4rem;
   background: rgba(255, 255, 255, 0.06);
   opacity: 0.92;
-  font-size: 0.875rem;
-  line-height: 1.5;
+  font-size: 0.9375rem;
+  line-height: 1.55;
   white-space: normal;
   overflow-wrap: anywhere;
 }
@@ -124,9 +130,9 @@
 .glossary-tip-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem 0.85rem;
-  margin-top: 0.1rem;
-  font-size: 0.8125rem;
+  gap: 0.4rem 1rem;
+  margin-top: 0.15rem;
+  font-size: 0.875rem;
 }
 
 .glossary-tip a {

@@ -1,7 +1,6 @@
 +++
 title = "偷取调度"
 weight = 1
-glossary = ["go"]
 +++
 
 ## Work stealing

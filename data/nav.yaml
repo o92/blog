@@ -1,7 +1,13 @@
 categories:
   - id: software-engineering
     title: 软件工程
-    books: [essays]
+    children:
+      - id: ddd
+        title: 领域驱动设计(DDD)
+        books: [ddd]
+      - id: essays
+        title: 随笔
+        books: [essays]
   - id: project-management
     title: 项目管理
     books: []

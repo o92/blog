@@ -41,15 +41,16 @@
   --space: 1rem;
   --scrollbar-width: 0px;
 
-  --font-sans: "Inter", "Geist", system-ui, -apple-system, "Segoe UI", Roboto,
-    "Helvetica Neue", "Noto Sans", "PingFang SC", "Hiragino Sans GB",
-    "Microsoft YaHei", sans-serif;
-  --font-mono: "Geist Mono", "SF Mono", ui-monospace, Menlo, Monaco, Consolas,
-    monospace;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    "Noto Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+    sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
 }
 
+/* Dark tokens: system preference (unless forced light) or explicit dark. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
+    color-scheme: dark;
     --body-bg: #000000;
     --body-fg: #ededed;
     --muted: #888888;
@@ -58,10 +59,6 @@
     --link: #3291ff;
     --link-visited: #3291ff;
     --link-active: #52a8ff;
-    --tip-bg: #111111;
-    --tip-fg: #ededed;
-    --tip-link: #52a8ff;
-    --tip-divider: rgba(255, 255, 255, 0.12);
     --sidebar-bg: #0a0a0a;
     --sidebar-hover: #171717;
     --sidebar-active-bg: #0c1929;
@@ -70,6 +67,7 @@
 }
 
 html[data-theme="dark"] {
+  color-scheme: dark;
   --body-bg: #000000;
   --body-fg: #ededed;
   --muted: #888888;
@@ -78,33 +76,10 @@ html[data-theme="dark"] {
   --link: #3291ff;
   --link-visited: #3291ff;
   --link-active: #52a8ff;
-  --tip-bg: #111111;
-  --tip-fg: #ededed;
-  --tip-link: #52a8ff;
-  --tip-divider: rgba(255, 255, 255, 0.12);
   --sidebar-bg: #0a0a0a;
   --sidebar-hover: #171717;
   --sidebar-active-bg: #0c1929;
   --sidebar-active-fg: #52a8ff;
-}
-
-html[data-theme="light"] {
-  --body-bg: #ffffff;
-  --body-fg: #171717;
-  --muted: #666666;
-  --border: #eaeaea;
-  --surface: #fafafa;
-  --link: #0070f3;
-  --link-visited: #0070f3;
-  --link-active: #0070f3;
-  --tip-bg: #111111;
-  --tip-fg: #ededed;
-  --tip-link: #52a8ff;
-  --tip-divider: rgba(255, 255, 255, 0.12);
-  --sidebar-bg: #fafafa;
-  --sidebar-hover: #f2f2f2;
-  --sidebar-active-bg: #f0f7ff;
-  --sidebar-active-fg: #0070f3;
 }
 
 *,
@@ -633,17 +608,12 @@ html[data-theme="light"] .theme-toggle__icon--sun {
 
 .page-shell--simple {
   display: grid;
-  grid-template-columns: minmax(0, var(--content-max)) var(--toc-width);
+  grid-template-columns: minmax(0, var(--content-max));
   gap: var(--space);
   justify-content: center;
-  max-width: calc(var(--content-max) + var(--toc-width) + var(--space));
+  max-width: var(--content-max);
   margin: 0 auto;
   padding: var(--space);
-}
-
-.page-shell--simple:not(:has(.toc-panel--page)) {
-  grid-template-columns: minmax(0, var(--content-max));
-  max-width: var(--content-max);
 }
 
 /* 正文相对视口居中；左右栏 fixed 贴边浮层，展开/收起不推动正文 */
@@ -1217,10 +1187,6 @@ html.layout-anim .page-shell--book .content-panel {
 
   .page-shell--simple {
     grid-template-columns: 1fr;
-  }
-
-  .toc-panel--page {
-    display: none;
   }
 }
 

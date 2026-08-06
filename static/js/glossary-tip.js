@@ -1,11 +1,12 @@
 /**
- * Glossary tip: fixed portal, stays in viewport, above header.
+ * Glossary tip: fixed portal, viewport-aware, above header, no inner scrollbar.
  */
 (function () {
   const GAP = 10;
   const PAD = 16;
   const ARROW = 8;
   const HIDE_MS = 360;
+  const MAX_TIP_REM = 36;
   let activeTerm = null;
   let activeTip = null;
   let bridgeEl = null;
@@ -31,8 +32,7 @@
   function headerBottom() {
     const header = document.querySelector(".site-header");
     if (!header) return PAD;
-    const bottom = header.getBoundingClientRect().bottom;
-    return Math.max(PAD, Math.ceil(bottom) + 8);
+    return Math.max(PAD, Math.ceil(header.getBoundingClientRect().bottom) + 8);
   }
 
   function ensureBridge() {
@@ -62,38 +62,25 @@
     const bottomMax = vh - PAD;
     const leftMin = PAD;
     const rightMax = vw - PAD;
-    const availW = Math.max(120, rightMax - leftMin);
-    const availH = Math.max(80, bottomMax - topMin);
+    const availW = Math.max(180, rightMax - leftMin);
+    const availH = Math.max(120, bottomMax - topMin);
 
-    tip.style.minWidth = "";
     tip.style.width = "";
-    tip.style.maxWidth = `${Math.min(28 * 16, availW)}px`;
+    tip.style.minWidth = "";
+    tip.style.maxWidth = `${Math.min(MAX_TIP_REM * 16, availW)}px`;
+    // Cap to safe viewport only — never shrink to a scrolling pane.
     tip.style.maxHeight = `${availH}px`;
+    tip.style.overflow = "hidden";
 
-    // First measure unconstrained height within max bounds.
+    void tip.offsetWidth; // measure once after constraints
     let tw = tip.offsetWidth;
     let th = tip.offsetHeight;
 
-    // Prefer the side with more free space; require room for tip + gap + arrow.
     const spaceAbove = r.top - topMin - GAP - ARROW;
     const spaceBelow = bottomMax - r.bottom - GAP - ARROW;
-    let below = false;
-    if (spaceAbove >= th || (spaceAbove >= spaceBelow && spaceAbove > 48)) {
-      below = false;
-    } else if (spaceBelow >= th || spaceBelow > spaceAbove) {
-      below = true;
-    } else {
-      // Both tight: pick larger side and shrink tip to fit.
-      below = spaceBelow > spaceAbove;
-    }
+    let below =
+      spaceAbove < th && (spaceBelow >= th || spaceBelow > spaceAbove);
 
-    const sideSpace = below ? spaceBelow : spaceAbove;
-    const fitH = Math.max(80, Math.min(th, Math.max(sideSpace, availH)));
-    tip.style.maxHeight = `${Math.floor(fitH)}px`;
-    tw = tip.offsetWidth;
-    th = tip.offsetHeight;
-
-    // Horizontal: center on term, then clamp fully into viewport.
     let left = r.left + r.width / 2 - tw / 2;
     if (left < leftMin) left = leftMin;
     if (left + tw > rightMax) left = rightMax - tw;
@@ -103,21 +90,19 @@
       tip.style.width = `${availW}px`;
       tw = tip.offsetWidth;
       th = tip.offsetHeight;
+      below = spaceAbove < th && (spaceBelow >= th || spaceBelow > spaceAbove);
     }
 
-    // Vertical placement relative to term, then clamp.
     let top;
     if (!below) {
       top = r.top - GAP - ARROW - th;
       if (top < topMin) {
-        // Not enough room above → flip below.
         below = true;
         top = r.bottom + GAP + ARROW;
       }
     } else {
       top = r.bottom + GAP + ARROW;
       if (top + th > bottomMax) {
-        // Not enough room below → try above.
         const aboveTop = r.top - GAP - ARROW - th;
         if (aboveTop >= topMin) {
           below = false;
@@ -128,7 +113,6 @@
       }
     }
 
-    // Final clamp: never leave the safe rect.
     if (top < topMin) top = topMin;
     if (top + th > bottomMax) top = Math.max(topMin, bottomMax - th);
     if (left < leftMin) left = leftMin;
@@ -136,19 +120,17 @@
 
     left = Math.round(left);
     top = Math.round(top);
-
     tip.style.left = `${left}px`;
     tip.style.top = `${top}px`;
     tip.classList.toggle("glossary-tip--below", below);
 
-    // Point arrow toward the term center (clamped inside tip).
     const termCx = r.left + r.width / 2;
     const arrowX = Math.min(tw - 16, Math.max(16, termCx - left));
     tip.style.setProperty("--tip-arrow-x", `${Math.round(arrowX)}px`);
 
     const bridge = ensureBridge();
-    const tipBottom = top + th;
-    const tipRight = left + tw;
+    const tipBottom = top + tip.offsetHeight;
+    const tipRight = left + tip.offsetWidth;
     const bridgeLeft = Math.min(left, r.left) - 8;
     const bridgeRight = Math.max(tipRight, r.right) + 8;
     bridge.style.left = `${Math.round(bridgeLeft)}px`;
@@ -175,9 +157,7 @@
     if (!tip) return;
 
     clearHide();
-    if (activeTip && activeTip !== tip) {
-      hideNow();
-    }
+    if (activeTip && activeTip !== tip) hideNow();
 
     tip.classList.add("is-open");
     tip.style.position = "fixed";
@@ -191,8 +171,6 @@
     term.classList.add("is-tip-open");
     activeTerm = term;
     activeTip = tip;
-
-    place(tip, term);
     place(tip, term);
   }
 
@@ -209,6 +187,7 @@
     tip.style.minWidth = "";
     tip.style.maxWidth = "";
     tip.style.maxHeight = "";
+    tip.style.overflow = "";
     tip.style.removeProperty("--tip-arrow-x");
     if (bridgeEl) {
       bridgeEl.classList.remove("is-open");
@@ -299,9 +278,7 @@
     (e) => {
       lastX = e.clientX;
       lastY = e.clientY;
-      if (hideTimer && underPointer(lastX, lastY)) {
-        clearHide();
-      }
+      if (hideTimer && underPointer(lastX, lastY)) clearHide();
     },
     { passive: true },
   );

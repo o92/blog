@@ -1,5 +1,4 @@
 # Sample workflow for building and deploying a Hugo site to GitHub Pages
-# Based on: https://github.com/actions/starter-workflows/blob/main/pages/hugo.yml
 name: Deploy Hugo site to Pages
 
 on:
@@ -32,8 +31,6 @@ jobs:
           wget -O ${{ runner.temp }}/hugo.deb \
             https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb \
           && sudo dpkg -i ${{ runner.temp }}/hugo.deb
-      - name: Install Dart Sass
-        run: sudo snap install dart-sass
       - name: Checkout
         uses: actions/checkout@v6
         with:
@@ -49,19 +46,12 @@ jobs:
           cache: npm
       - name: Install Node.js dependencies
         run: npm ci
-      - name: Build with Hugo
+      - name: Build site
         env:
           HUGO_CACHEDIR: ${{ runner.temp }}/hugo_cache
           HUGO_ENVIRONMENT: production
-        run: |
-          hugo \
-            --gc \
-            --minify \
-            --baseURL "${{ steps.pages.outputs.base_url }}/"
-      - name: Inject glossary terms
-        run: node scripts/glossary-inject.mjs
-      - name: Build Pagefind index
-        run: npx pagefind --site public --force-language zh
+          HUGO_BASEURL: ${{ steps.pages.outputs.base_url }}/
+        run: npm run build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:

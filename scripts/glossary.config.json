@@ -2,7 +2,6 @@
   "publicDir": "public",
   "contentDir": "content",
   "glossaryDir": "data/glossary",
-  "contentSelectors": [".post-content", "article .content", "article", "main"],
-  "cssHref": "/css/glossary.css",
+  "contentSelectors": [".post-content"],
   "excerptMaxLength": 100
 }
