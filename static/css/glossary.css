@@ -1,0 +1,58 @@
+/* Glossary term highlight + hover tooltip (theme-agnostic) */
+
+.glossary-term {
+  position: relative;
+  border-bottom: 1px dotted currentColor;
+  cursor: help;
+}
+
+.glossary-tip {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  z-index: 50;
+  left: 50%;
+  bottom: calc(100% + 0.4rem);
+  transform: translateX(-50%);
+  min-width: 12rem;
+  max-width: min(22rem, 80vw);
+  padding: 0.5rem 0.65rem;
+  border-radius: 0.35rem;
+  background: #1f2937;
+  color: #f9fafb;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  transition: opacity 0.12s ease, visibility 0.12s ease;
+  pointer-events: none;
+}
+
+.glossary-tip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #1f2937;
+}
+
+.glossary-term:hover > .glossary-tip,
+.glossary-term:focus-within > .glossary-tip {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.glossary-tip-block + .glossary-tip-block {
+  margin-top: 0.4rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glossary-tip a {
+  color: #93c5fd;
+}

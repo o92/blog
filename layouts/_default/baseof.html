@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="{{ or site.Language.Lang "zh-cn" }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ with .Title }}{{ . }} | {{ end }}{{ site.Title }}</title>
+  <link rel="stylesheet" href="{{ "css/glossary.css" | relURL }}">
+  {{- block "head" . }}{{ end }}
+</head>
+<body>
+  <header>
+    <a href="{{ "/" | relURL }}">{{ site.Title }}</a>
+  </header>
+  <main>
+    {{- block "main" . }}{{ end }}
+  </main>
+</body>
+</html>

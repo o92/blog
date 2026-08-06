@@ -1,0 +1,11 @@
+# Go 领域术语
+
+goroutine:
+  summary: "Go 里由 runtime 调度的轻量执行单元"
+
+channel:
+  summary: "类型为 chan T；用于 goroutine 之间通信"
+  link: "https://go.dev/ref/spec#Channel_types"
+
+Go:
+  summary: "Google 开源的编程语言；本领域词条可与全局「Hugo」等并存展示"
