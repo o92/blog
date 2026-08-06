@@ -1,16 +1,14 @@
 {{/*
-  Resolve the book section page: direct child of /books/.
+  Resolve the book section: top-level section under site home.
 */}}
-{{- $books := site.GetPage "/books" -}}
+{{- $home := site.Home -}}
 {{- $book := false -}}
-{{- if $books -}}
-  {{- if and .IsSection (eq .Parent $books) -}}
-    {{- $book = . -}}
-  {{- else -}}
-    {{- range .Ancestors -}}
-      {{- if and .IsSection (eq .Parent $books) -}}
-        {{- $book = . -}}
-      {{- end -}}
+{{- if and .IsSection (eq .Parent $home) -}}
+  {{- $book = . -}}
+{{- else -}}
+  {{- range .Ancestors -}}
+    {{- if and .IsSection (eq .Parent $home) -}}
+      {{- $book = . -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}

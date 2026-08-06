@@ -1,6 +1,5 @@
 {{ define "body-class" }}layout-book{{ end }}
 {{ define "main" }}
-{{/* Fallback: same chrome as books (no separate essay layout) */}}
 {{ $book := partial "book-root.html" . }}
 {{ if not $book }}
   {{ $book = .CurrentSection }}
@@ -10,7 +9,7 @@
   <button type="button" class="sidebar-toggle sidebar-toggle--right" id="toggle-page-toc" aria-controls="page-toc" aria-expanded="false">大纲</button>
 
   <aside id="book-toc" class="book-toc-panel" aria-label="本书目录">
-    {{ $panelTitle := "目录" }}{{ with $book }}{{ $panelTitle = .LinkTitle }}{{ end }}
+    {{ $panelTitle := "本书" }}{{ with $book }}{{ $panelTitle = .LinkTitle }}{{ end }}
     {{ partial "panel-head.html" (dict "title" $panelTitle "rail" "menu") }}
     {{ partial "book-toc.html" (dict "book" $book "page" .) }}
   </aside>
@@ -26,6 +25,16 @@
     <div class="post-content" data-pagefind-body>
       {{ .Content }}
     </div>
+    {{ if .IsSection }}
+    <ul class="page-list">
+      {{ range .Pages }}
+      <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+      {{ end }}
+      {{ range .Sections }}
+      <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }} /</a></li>
+      {{ end }}
+    </ul>
+    {{ end }}
     {{ end }}
   </article>
 

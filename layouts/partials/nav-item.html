@@ -28,7 +28,7 @@
       {{ partial "nav-item.html" . }}
     {{ end }}
     {{ range $item.books }}
-      {{ $book := site.GetPage (printf "/books/%s" .) }}
+      {{ $book := site.GetPage (printf "/%s" .) }}
       <li class="site-nav__item">
         {{ if $book }}
         <a class="site-nav__hit" href="{{ $book.RelPermalink }}">

@@ -10,9 +10,10 @@ alwaysApply: true
 ## 结构（勿擅自改成「分类进 content 文件夹」）
 
 - 分类树：仅 `data/nav.yaml`（可多层）；顶栏导航只读此文件
-- 书与章节：`content/books/<book-id>/`，可多层；左侧目录只含本书树
+- 书与章节：`content/<book-id>/`，可多层；左侧目录只含本书树
 - **最终页**：`final = true` 的 section；子文件 `build.render = never`（用 cascade），合并进该页；左侧仍显示子项为页内锚点
-- 顶栏「随笔」等是 `data/nav.yaml` 分类，内容同样落在 `content/books/`，**无单独 posts 布局**
+- 顶栏「随笔」等是 `data/nav.yaml` 分类，内容同样落在 `content/<book-id>/`，**无单独 posts 布局**
+- `nav.yaml` 的 `books: [id]` 对应 `content/<id>/`（无 `content/books/` 中间层）
 - 自建 `layouts/`，不引入 Docsy 等作为主体主题
 
 ## 版式

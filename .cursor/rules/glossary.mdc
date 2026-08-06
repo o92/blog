@@ -21,7 +21,7 @@ alwaysApply: true
 - 路径：`data/glossary/global.yaml` + `data/glossary/<domain>.yaml`
 - 领域 ID = 文件名（不含扩展名）
 - 词条必填 `summary`；可选：
-  - `source: "books/foo/bar.md#标题"`：摘录该标题下正文（长度见 `excerptMaxLength`），并自动生成「显示更多」跳到对应页面锚点
+  - `source: "foo/bar.md#标题"`：摘录该标题下正文（长度见 `excerptMaxLength`），并自动生成「显示更多」跳到对应页面锚点（路径相对 `content/`）
   - `link: "https://..."`：仅外部链接
 - 不支持站内路径当 `link`；站内跳转一律用 `source` +「显示更多」
 - 文章用 front matter `glossary: ["domain1"]` 声明领域；未声明时只使用 `global`

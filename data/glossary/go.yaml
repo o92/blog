@@ -2,7 +2,7 @@
 
 goroutine:
   summary: "Go 里由 runtime 调度的轻量执行单元"
-  source: "books/go-concurrency/01-intro.md#阅读方式"
+  source: "go-concurrency/01-intro.md#阅读方式"
 
 channel:
   summary: "类型为 chan T；用于 goroutine 之间通信"
@@ -10,4 +10,4 @@ channel:
 
 Go:
   summary: "Google 开源的编程语言"
-  source: "books/go-concurrency/01-intro.md#这本书讲什么"
+  source: "go-concurrency/01-intro.md#这本书讲什么"

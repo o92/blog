@@ -1,6 +1,5 @@
 {{ define "body-class" }}layout-simple{{ end }}
 {{ define "main" }}
-{{ $books := site.GetPage "/books" }}
 <main class="page-shell page-shell--simple">
   <div class="content-panel">
     <header class="content-header">
@@ -10,12 +9,10 @@
     <div class="post-content" data-pagefind-body>{{ . }}</div>
     {{ end }}
     <ul class="page-list">
-      {{ with $books }}
-        {{ range .Sections }}
-        <li>
-          <a href="{{ .RelPermalink }}"><strong>{{ .LinkTitle }}</strong></a>
-        </li>
-        {{ end }}
+      {{ range site.Home.Sections }}
+      <li>
+        <a href="{{ .RelPermalink }}"><strong>{{ .LinkTitle }}</strong></a>
+      </li>
       {{ end }}
     </ul>
   </div>

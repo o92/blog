@@ -43,7 +43,7 @@ data/glossary/<domain>.yaml     # 领域词库，文件名 = 领域 ID
 ```yaml
 goroutine:
   summary: "Go 里由 runtime 调度的轻量执行单元"   # 必填，短说明
-  source: "books/go-concurrency/01-intro.md#阅读方式"  # 可选：按标题摘录 content
+  source: "go-concurrency/01-intro.md#阅读方式"  # 可选：按标题摘录 content
   link: "https://go.dev/..."                       # 可选：仅外部链接
 ```
 

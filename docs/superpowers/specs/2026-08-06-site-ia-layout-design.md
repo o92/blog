@@ -44,21 +44,18 @@ categories:
 
 - 分类**不**出现在 `content/` 目录树里
 - 顶栏只读 `data/nav.yaml` 生成多层菜单
-- `books` 数组中的 id 对应 `content/books/<id>/`
+- `books` 数组中的 id 对应 `content/<id>/`（无 `content/books/` 中间层）
 
 ### 书与章节（content 多层）
 
 ```text
 content/
-  books/
-    <book-id>/
-      _index.md          # 书首页：title、book_id、可选 glossary
-      01-....md
-      02-section/
-        _index.md
-        01-....md        # 可继续嵌套
-  posts/
-    *.md                 # 随笔
+  <book-id>/
+    _index.md          # 书首页：title、可选 glossary
+    01-....md
+    02-section/
+      _index.md
+      01-....md        # 可继续嵌套
 ```
 
 - 左侧「本书目录」= 当前 book section 下的页面树（章/节/更小节）
@@ -67,7 +64,7 @@ content/
 ### 随笔
 
 - 「随笔」只是 `data/nav.yaml` 里的分类名，可挂 `books: [essays]`
-- 内容放在 `content/books/essays/`（或其它 book id），与技术书同一套三栏布局
+- 内容放在 `content/essays/`（或其它 book id），与技术书同一套三栏布局
 - 不再使用 `content/posts/` 或独立随笔排版
 
 ### 最终页（合并子文件）
@@ -135,9 +132,8 @@ final = true
 ```text
 layouts/
   _default/baseof.html      # 顶栏、主题脚本、总架
-  _default/single.html      # 随笔等
-  books/single.html         # 书内页三栏
-  books/list.html           # 书/_index 与中间层 list
+  _default/single.html      # 书内页三栏
+  _default/list.html        # 书/_index 与中间层 list
   partials/
     nav.html                # 读 data/nav.yaml
     book-toc.html           # 左栏
@@ -172,6 +168,6 @@ data/nav.yaml
 | 主题策略 | 方案 2：自建 layouts |
 | 站点类型 | 书为主 + 随笔 |
 | 分类 | `data/nav.yaml`，可多层，不进 content 树 |
-| 书/章 | `content/books/<id>/` 可多层嵌套 |
+| 书/章 | `content/<id>/` 可多层嵌套 |
 | 版式 | 顶栏 + 左书目 + 中正文 + 右章节 TOC |
 | 明暗 | 默认跟系统；按钮仅浅/深；sessionStorage（关浏览器失效） |
