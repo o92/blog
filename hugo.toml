@@ -1,11 +1,17 @@
-baseURL = 'https://example.org/'
-title = 'My Blog'
+# 本地默认；GitHub Pages 由 CI 的 HUGO_BASEURL 覆盖为 https://o92.github.io/blog/
+baseURL = 'http://localhost:1313/'
+title = '首页'
 languageCode = 'zh-cn'
 defaultContentLanguage = 'zh-cn'
 locale = 'zh-cn'
 
 # 分类导航用 data/nav.yaml，不需要 Hugo 内置 taxonomy / sitemap
 disableKinds = ['taxonomy', 'term', 'sitemap']
+
+[params.author]
+name = '胡'
+github = 'https://github.com/o92'
+email = 'huyuanjing1998@icloud.com'
 
 [markup.goldmark.renderer]
 unsafe = true

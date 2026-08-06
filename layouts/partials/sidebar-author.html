@@ -1,0 +1,20 @@
+{{/*
+  Compact author block for left book TOC footer.
+*/}}
+{{ with site.Params.author }}
+<footer class="book-toc-author" aria-label="作者">
+  <div class="book-toc-author__name">{{ .name }}</div>
+  <ul class="book-toc-author__meta">
+    {{ with .github }}
+    <li>
+      <a href="{{ . }}" target="_blank" rel="noopener" title="GitHub">GitHub</a>
+    </li>
+    {{ end }}
+    {{ with .email }}
+    <li>
+      <a href="mailto:{{ . }}" title="{{ . }}">邮箱</a>
+    </li>
+    {{ end }}
+  </ul>
+</footer>
+{{ end }}

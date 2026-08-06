@@ -1,0 +1,55 @@
+{{ $item := .item }}
+{{ $depth := or .depth 0 }}
+
+{{ $books := $item.books }}
+{{ if $books }}
+  {{ if not (reflect.IsSlice $books) }}
+    {{ $books = slice $books }}
+  {{ end }}
+{{ else }}
+  {{ $books = slice }}
+{{ end }}
+{{ with $item.book }}
+  {{ $books = $books | append . }}
+{{ end }}
+
+{{ $childCount := 0 }}
+{{ with $item.children }}{{ $childCount = len . }}{{ end }}
+{{ $bookCount := len $books }}
+{{ $isLeafBook := and (gt $depth 0) (eq $childCount 0) (eq $bookCount 1) }}
+{{ $hasKids := or (gt $childCount 0) (and (not $isLeafBook) (gt $bookCount 0)) }}
+
+<li class="home-catalog__node{{ if $hasKids }} home-catalog__node--branch{{ end }}">
+  {{ if $isLeafBook }}
+    {{ $bookId := index $books 0 }}
+    {{ $book := site.GetPage (printf "/%s" $bookId) }}
+    {{ if $book }}
+    <a class="home-catalog__link" href="{{ $book.RelPermalink }}">{{ $item.title }}</a>
+    {{ else }}
+    <span class="home-catalog__label muted">{{ $item.title }}（未找到）</span>
+    {{ end }}
+  {{ else if $hasKids }}
+    <details class="home-catalog__details" open>
+      <summary class="home-catalog__summary">{{ $item.title }}</summary>
+      <ul class="home-catalog__tree">
+        {{ range $item.children }}
+          {{ partial "home-catalog-item.html" (dict "item" . "depth" (add $depth 1)) }}
+        {{ end }}
+        {{ if not $isLeafBook }}
+          {{ range $books }}
+            {{ $book := site.GetPage (printf "/%s" .) }}
+            <li class="home-catalog__node">
+              {{ if $book }}
+              <a class="home-catalog__link" href="{{ $book.RelPermalink }}">{{ $book.LinkTitle }}</a>
+              {{ else }}
+              <span class="home-catalog__label muted">{{ . }}（未找到）</span>
+              {{ end }}
+            </li>
+          {{ end }}
+        {{ end }}
+      </ul>
+    </details>
+  {{ else }}
+    <span class="home-catalog__label">{{ $item.title }}</span>
+  {{ end }}
+</li>

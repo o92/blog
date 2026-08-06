@@ -1,0 +1,6 @@
+{{ $nav := hugo.Data.nav }}
+<ul class="home-catalog__tree">
+  {{ range $nav.categories }}
+    {{ partial "home-catalog-item.html" (dict "item" . "depth" 0) }}
+  {{ end }}
+</ul>

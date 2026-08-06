@@ -14,7 +14,10 @@
   <aside id="book-toc" class="book-toc-panel" aria-label="本书目录">
     {{ $panelTitle := "本书" }}{{ with $book }}{{ $panelTitle = .LinkTitle }}{{ end }}
     {{ partial "panel-head.html" (dict "title" $panelTitle "rail" "menu") }}
-    {{ partial "book-toc.html" (dict "book" $book "page" .) }}
+    <div class="book-toc-panel__scroll">
+      {{ partial "book-toc.html" (dict "book" $book "page" .) }}
+    </div>
+    {{ partial "sidebar-author.html" . }}
   </aside>
 
   <article class="content-panel">

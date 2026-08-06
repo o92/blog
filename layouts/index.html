@@ -1,20 +1,30 @@
-{{ define "body-class" }}layout-simple{{ end }}
+{{ define "body-class" }}layout-home{{ end }}
 {{ define "main" }}
-<main class="page-shell page-shell--simple">
-  <div class="content-panel">
-    <header class="content-header">
-      <h1>{{ .Title }}</h1>
-    </header>
-    {{ with .Content }}
-    <div class="post-content" data-pagefind-body>{{ . }}</div>
-    {{ end }}
-    <ul class="page-list">
-      {{ range site.Home.Sections }}
-      <li>
-        <a href="{{ .RelPermalink }}"><strong>{{ .LinkTitle }}</strong></a>
-      </li>
-      {{ end }}
-    </ul>
+{{ $author := site.Params.author }}
+<main class="page-shell page-shell--home">
+  <div class="home-panel">
+    <section class="home-author" aria-label="作者">
+      <h1 class="home-author__name">{{ with $author }}{{ .name }}{{ else }}{{ site.Title }}{{ end }}</h1>
+      <ul class="home-author__meta">
+        {{ with $author.github }}
+        <li>
+          <span class="home-author__label">GitHub</span>
+          <a href="{{ . }}" target="_blank" rel="noopener">{{ . }}</a>
+        </li>
+        {{ end }}
+        {{ with $author.email }}
+        <li>
+          <span class="home-author__label">邮箱</span>
+          <a href="mailto:{{ . }}">{{ . }}</a>
+        </li>
+        {{ end }}
+      </ul>
+    </section>
+
+    <section class="home-catalog" aria-label="网站书籍目录">
+      <h2 class="home-catalog__title">书籍目录</h2>
+      {{ partial "home-catalog.html" . }}
+    </section>
   </div>
 </main>
 {{ end }}

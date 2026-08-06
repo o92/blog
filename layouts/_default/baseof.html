@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ with .Title }}{{ . }} | {{ end }}{{ site.Title }}</title>
+  <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ with .Title }}{{ . }} | {{ end }}{{ site.Title }}{{ end }}</title>
   <script src="{{ "js/layout-widths.js" | relURL }}"></script>
   <script>
     (function () {
@@ -31,7 +31,7 @@
 <body class="{{ block "body-class" . }}{{ end }}">
   <header class="site-header">
     <div class="site-header__inner">
-      <a class="site-logo" href="{{ "/" | relURL }}">{{ site.Title }}</a>
+      <a class="site-logo" href="{{ site.Home.RelPermalink }}">首页</a>
       <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav">菜单</button>
       {{ partial "nav.html" . }}
       <div class="site-header__actions">
