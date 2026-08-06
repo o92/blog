@@ -2,6 +2,9 @@ baseURL = 'https://example.org/'
 locale = 'zh-cn'
 title = 'My Blog'
 
+# 分类导航用 data/nav.yaml，不需要 Hugo 内置 taxonomy / sitemap
+disableKinds = ['taxonomy', 'term', 'sitemap']
+
 [markup.goldmark.renderer]
 unsafe = true
 
@@ -11,6 +14,6 @@ endLevel = 3
 ordered = false
 
 [outputs]
-home = ['HTML', 'RSS']
-section = ['HTML', 'RSS']
+home = ['HTML']
+section = ['HTML']
 page = ['HTML']
