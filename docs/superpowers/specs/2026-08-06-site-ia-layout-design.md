@@ -29,22 +29,25 @@ categories:
   - id: tech
     title: 技术
     children:
+      # 非一级 + 无 children + 仅一本书 ⇒ 节点本身就是书（一点进入）
       - id: go
         title: Go
-        books: [go-concurrency]
+        book: go-concurrency          # 或 books: [go-concurrency]
       - id: distributed
         title: 分布式
-        books: [raft-notes]
+        books: [raft-notes, gossip]   # 多本 ⇒ 仍是目录，需展开
   - id: essays
     title: 随笔
-    # 无 books 时顶栏可链到 /posts/
+    books: []
 ```
 
 规则：
 
 - 分类**不**出现在 `content/` 目录树里
 - 顶栏只读 `data/nav.yaml` 生成多层菜单
-- `books` 数组中的 id 对应 `content/<id>/`（无 `content/books/` 中间层）
+- **一级分类**始终是目录（展开看 children / books）
+- **非一级**：无 `children` 且只有一本书（`book: id` 或 `books: [id]`）时，节点标题直接链到该书；有子分类或 ≥2 本书时才是可展开目录
+- `book` / `books` 中的 id 对应 `content/<id>/`（无 `content/books/` 中间层）
 
 ### 书与章节（content 多层）
 

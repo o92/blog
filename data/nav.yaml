@@ -2,12 +2,13 @@ categories:
   - id: software-engineering
     title: 软件工程
     children:
+      # 非一级：仅一本书时节点本身就是书，一点即进（也可用 books: [ddd]）
       - id: ddd
         title: 领域驱动设计(DDD)
-        books: [ddd]
+        book: ddd
       - id: essays
         title: 随笔
-        books: [essays]
+        book: essays
   - id: project-management
     title: 项目管理
     books: []
@@ -16,4 +17,5 @@ categories:
     children:
       - id: go
         title: Go
+        # 仅一本书 ⇒ 与 book: 相同，一点即进；多本或还有 children 才展开
         books: [go-concurrency]

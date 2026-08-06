@@ -10,6 +10,7 @@ alwaysApply: true
 ## 结构（勿改成「分类进 content 文件夹」）
 
 - 分类树：仅 `data/nav.yaml`；顶栏只读此文件
+- **一级分类**是目录；**非一级**无子分类且只有一本书时，节点本身就是书（`book: id` 或 `books: [id]`，一点进入）；多本或有 `children` 才展开
 - 书与章节：`content/<book-id>/`（无 `content/books/` 中间层）
 - 书阅读壳：`layouts/partials/book-shell.html`（`single` / `list` 共用）
 - 书根解析：`book-root.html`（按 Home 子 section；**不要**再加 `book_id` 字段）

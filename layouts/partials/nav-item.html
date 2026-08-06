@@ -1,12 +1,47 @@
-{{ $item := . }}
-{{ $hasChildren := or $item.children $item.books }}
-<li class="site-nav__item{{ if $hasChildren }} has-children{{ end }}">
-  {{ if and $item.href (not $hasChildren) }}
+{{ $item := .item }}
+{{ $depth := or .depth 0 }}
+
+{{ $books := $item.books }}
+{{ if $books }}
+  {{ if not (reflect.IsSlice $books) }}
+    {{ $books = slice $books }}
+  {{ end }}
+{{ else }}
+  {{ $books = slice }}
+{{ end }}
+{{ with $item.book }}
+  {{ $books = $books | append . }}
+{{ end }}
+
+{{ $childCount := 0 }}
+{{ with $item.children }}{{ $childCount = len . }}{{ end }}
+{{ $bookCount := len $books }}
+
+{{/* Non-top nodes: a single book and no children ⇒ this node IS the book (one click). */}}
+{{ $isLeafBook := and (gt $depth 0) (eq $childCount 0) (eq $bookCount 1) }}
+{{ $isFolder := and (not $isLeafBook) (or (gt $childCount 0) (gt $bookCount 0)) }}
+
+<li class="site-nav__item{{ if $isFolder }} has-children{{ end }}">
+  {{ if $isLeafBook }}
+    {{ $bookId := index $books 0 }}
+    {{ $book := site.GetPage (printf "/%s" $bookId) }}
+    {{ if $book }}
+    <a class="site-nav__hit" href="{{ $book.RelPermalink }}">
+      <span class="site-nav__label-text">{{ $item.title }}</span>
+      <span class="site-nav__trail" aria-hidden="true"></span>
+    </a>
+    {{ else }}
+    <span class="site-nav__hit site-nav__hit--static">
+      <span class="site-nav__label-text muted">{{ $item.title }}（未找到）</span>
+      <span class="site-nav__trail" aria-hidden="true"></span>
+    </span>
+    {{ end }}
+  {{ else if and $item.href (not $isFolder) }}
     <a class="site-nav__hit" href="{{ $item.href | relURL }}">
       <span class="site-nav__label-text">{{ $item.title }}</span>
       <span class="site-nav__trail" aria-hidden="true"></span>
     </a>
-  {{ else if not $hasChildren }}
+  {{ else if not $isFolder }}
     <span class="site-nav__hit site-nav__hit--static">
       <span class="site-nav__label-text">{{ $item.title }}</span>
       <span class="site-nav__trail" aria-hidden="true"></span>
@@ -22,17 +57,12 @@
     </button>
   {{ end }}
 
-  {{ if $hasChildren }}
+  {{ if $isFolder }}
   <ul class="site-nav__sub">
     {{ range $item.children }}
-      {{ partial "nav-item.html" . }}
+      {{ partial "nav-item.html" (dict "item" . "depth" (add $depth 1)) }}
     {{ end }}
-    {{ $books := $item.books }}
-    {{ if $books }}
-      {{ if not (reflect.IsSlice $books) }}
-        {{ $books = slice $books }}
-      {{ end }}
-      {{ range $books }}
+    {{ range $books }}
       {{ $book := site.GetPage (printf "/%s" .) }}
       <li class="site-nav__item">
         {{ if $book }}
@@ -47,7 +77,6 @@
         </span>
         {{ end }}
       </li>
-      {{ end }}
     {{ end }}
   </ul>
   {{ end }}
