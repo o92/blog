@@ -32,19 +32,8 @@
       {{ .Content }}
     </div>
     {{ if .IsSection }}
-      {{ if and $book (eq .RelPermalink $book.RelPermalink) }}
-        {{/* 书首页：自动列出整本书目录树 */}}
-        {{ partial "book-contents.html" (dict "book" $book "page" .) }}
-      {{ else }}
-    <ul class="page-list">
-      {{ range .Pages }}
-      <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
-      {{ end }}
-      {{ range .Sections }}
-      <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }} /</a></li>
-      {{ end }}
-    </ul>
-      {{ end }}
+      {{/* 任意 section 首页：自动列出本节点下的目录树 */}}
+      {{ partial "book-contents.html" (dict "book" . "page" .) }}
     {{ end }}
     {{ end }}
   </article>

@@ -1,10 +1,15 @@
-{{/* Full book outline for book-root pages (always expanded). */}}
-{{ $book := .book }}
+{{/* Outline for any section _index: subtree of .book, always expanded. */}}
+{{ $root := .book }}
 {{ $page := .page }}
-{{ if $book }}
-<nav class="book-contents" aria-label="本书目录">
+{{ if $root }}
+  {{ $items := slice }}
+  {{ range $root.Sections }}{{ $items = $items | append . }}{{ end }}
+  {{ range $root.RegularPages }}{{ $items = $items | append . }}{{ end }}
+  {{ if $items }}
+<nav class="book-contents" aria-label="目录">
   <ul class="book-contents__level">
-    {{ partial "book-contents-branch.html" (dict "section" $book "page" $page) }}
+    {{ partial "book-contents-branch.html" (dict "section" $root "page" $page) }}
   </ul>
 </nav>
+  {{ end }}
 {{ end }}
