@@ -50,8 +50,9 @@ jobs:
         env:
           HUGO_CACHEDIR: ${{ runner.temp }}/hugo_cache
           HUGO_ENVIRONMENT: production
+          # Hugo 以环境变量为准（会覆盖 CLI --baseURL）；勿再跑硬编码 baseURL 的 build:pages
           HUGO_BASEURL: ${{ steps.pages.outputs.base_url }}/
-        run: npm run build:pages
+        run: npm run build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:

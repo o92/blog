@@ -11,6 +11,7 @@
   var FAILSAFE_MS = 8000;
   var mermaidPromise = null;
   var running = false;
+  var queued = null; // null | true(initial) | false(rerender)
   var initialRevealDone = false;
   var failsafeTimer = 0;
 
@@ -102,7 +103,11 @@
       if (isInitial) reveal();
       return Promise.resolve();
     }
-    if (running) return Promise.resolve();
+    if (running) {
+      // Keep latest request; prefer keeping initial gate semantics if still pending
+      if (queued !== true) queued = !!isInitial;
+      return Promise.resolve();
+    }
     running = true;
     if (isInitial) armFailsafe();
     rememberSource(list);
@@ -147,6 +152,12 @@
       })
       .finally(function () {
         running = false;
+        var again = queued;
+        queued = null;
+        if (again !== null) {
+          renderAll(again);
+          return;
+        }
         if (isInitial) {
           requestAnimationFrame(function () {
             requestAnimationFrame(reveal);
@@ -156,6 +167,10 @@
   }
 
   function boot() {
+    // Client fallback: hide until render if diagrams exist but server missed the class
+    if (nodes().length && !needsGate() && !initialRevealDone) {
+      document.documentElement.classList.add("mermaid-pending");
+    }
     if (!nodes().length) {
       reveal();
       return;

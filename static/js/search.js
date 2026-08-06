@@ -17,7 +17,10 @@
     document.body.appendChild(dialog);
   }
 
-  var pagefindBase = (root && root.getAttribute("data-pagefind-base")) || "/pagefind/";
+  var pagefindBase =
+    (root && root.getAttribute("data-pagefind-base")) ||
+    (document.body && document.body.dataset && document.body.dataset.pagefindBase) ||
+    new URL("pagefind/", document.baseURI || window.location.href).pathname;
   if (pagefindBase.slice(-1) !== "/") pagefindBase += "/";
 
   var isApple =

@@ -49,8 +49,8 @@ flowchart TD
   PO --> PB
   PB --> SP
   SP --> SB
-  SB --> DoD
-  DoD --> INC
+  SB -->|"满足 DoD"| INC
+  DoD -.->|约束| INC
   INC --> SR
   SR --> SH
   SR -.-> PB
