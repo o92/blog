@@ -1,0 +1,85 @@
+# Scrum 领域术语（2020 Scrum Guide）
+
+Scrum:
+  summary: "帮助人与组织用自适应方案为复杂问题创造价值的轻量级框架"
+  source: "scrum/02-definition.md"
+
+Scrum Team:
+  summary: "Scrum 的基本单位：一名 Scrum Master、一名 Product Owner，以及 Developers"
+  source: "scrum/05-team.md"
+
+Scrum Master:
+  summary: "负责建立 Scrum，并提升 Scrum Team 有效性的服务型领导者"
+  source: "scrum/05-team.md#Scrum Master"
+
+Product Owner:
+  summary: "负责最大化产品价值，并有效管理 Product Backlog 的人"
+  source: "scrum/05-team.md#Product Owner"
+
+Developers:
+  summary: "Scrum Team 中致力于每个 Sprint 创建可用 Increment 的人"
+  source: "scrum/05-team.md#Developers"
+
+Sprint:
+  summary: "Scrum 的心跳；固定长度（一个月或更短）的容器事件，用于把想法转化为价值"
+  source: "scrum/06-events.md#Sprint"
+
+Sprint Planning:
+  summary: "启动 Sprint 的事件：协作制定 Sprint Goal、选出工作并规划如何完成"
+  source: "scrum/06-events.md#Sprint Planning"
+
+Daily Scrum:
+  summary: "Developers 的 15 分钟事件，检视朝向 Sprint Goal 的进展并调整计划"
+  source: "scrum/06-events.md#Daily Scrum"
+
+Sprint Review:
+  summary: "检视 Sprint 成果、讨论 Product Goal 进展，并决定未来调整的工作会议"
+  source: "scrum/06-events.md#Sprint Review"
+
+Sprint Retrospective:
+  summary: "规划提升质量与有效性的方法；结束 Sprint 的事件"
+  source: "scrum/06-events.md#Sprint Retrospective"
+
+Product Backlog:
+  summary: "改进产品所需事项的涌现、有序清单；Scrum Team 工作的唯一来源"
+  source: "scrum/07-artifacts.md#Product Backlog"
+
+Sprint Backlog:
+  summary: "由 Sprint Goal、所选 Product Backlog 条目与交付计划组成的 Developers 计划"
+  source: "scrum/07-artifacts.md#Sprint Backlog"
+
+Increment:
+  summary: "朝向 Product Goal 的可用踏脚石；须满足 Definition of Done"
+  source: "scrum/07-artifacts.md#Increment"
+
+Product Goal:
+  summary: "产品未来状态的描述；Product Backlog 的承诺，也是 Scrum Team 的长期目标"
+  source: "scrum/07-artifacts.md#承诺：Product Goal"
+
+Sprint Goal:
+  summary: "Sprint 的单一目标；Sprint Backlog 的承诺，提供聚焦与灵活性"
+  source: "scrum/07-artifacts.md#承诺：Sprint Goal"
+
+Definition of Done:
+  summary: "Increment 满足产品所需质量度量时的正式状态描述"
+  source: "scrum/07-artifacts.md#承诺：Definition of Done"
+
+Transparency:
+  summary: "经验主义支柱之一：过程与工作对执行者与接收者可见"
+  source: "scrum/03-theory.md#透明（Transparency）"
+
+Inspection:
+  summary: "经验主义支柱之一：频繁认真地检视工件与目标进展"
+  source: "scrum/03-theory.md#检视（Inspection）"
+
+Adaptation:
+  summary: "经验主义支柱之一：发现偏差后尽快调整过程或产出"
+  source: "scrum/03-theory.md#适应（Adaptation）"
+
+经验主义:
+  summary: "知识来自经验，并基于所观察到的事物做决策"
+  source: "scrum/03-theory.md"
+
+精益思维:
+  summary: "减少浪费，聚焦于本质"
+  source: "scrum/03-theory.md"

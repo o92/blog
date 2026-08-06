@@ -21,16 +21,16 @@
   box-sizing: border-box;
   width: max-content;
   min-width: min(20rem, calc(100vw - 2rem));
-  max-width: min(36rem, calc(100vw - 2rem));
+  max-width: min(28rem, calc(100vw - 2rem));
   max-height: calc(100dvh - 2rem);
   overflow: hidden;
   scrollbar-width: none;
-  padding: 1.15rem 1.35rem;
-  border-radius: 0.55rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: 0.45rem;
   background: var(--tip-bg, #2e3440);
   color: var(--tip-fg, #eceff4);
-  font-size: 1rem;
-  line-height: 1.6;
+  font-size: 0.8125rem;
+  line-height: 1.45;
   font-weight: 400;
   font-style: normal;
   text-decoration: none;
@@ -88,18 +88,18 @@
 .glossary-tip-block {
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
+  gap: 0.35rem;
 }
 
 .glossary-tip-block + .glossary-tip-block {
-  margin-top: 0.85rem;
-  padding-top: 0.85rem;
+  margin-top: 0.55rem;
+  padding-top: 0.55rem;
   border-top: 1px solid var(--tip-divider, rgba(236, 239, 244, 0.22));
 }
 
 .glossary-tip-domain {
   display: block;
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -109,20 +109,20 @@
 
 .glossary-tip-summary {
   display: block;
-  font-size: 1.05em;
+  font-size: 0.8125rem;
   font-weight: 500;
-  line-height: 1.55;
+  line-height: 1.45;
 }
 
 .glossary-tip-excerpt {
   display: block;
   margin: 0;
-  padding: 0.6rem 0.75rem;
-  border-radius: 0.4rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 0.3rem;
   background: rgba(255, 255, 255, 0.06);
   opacity: 0.92;
-  font-size: 0.9375rem;
-  line-height: 1.55;
+  font-size: 0.75rem;
+  line-height: 1.45;
   white-space: normal;
   overflow-wrap: anywhere;
 }
@@ -130,9 +130,9 @@
 .glossary-tip-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem 1rem;
-  margin-top: 0.15rem;
-  font-size: 0.875rem;
+  gap: 0.3rem 0.75rem;
+  margin-top: 0.1rem;
+  font-size: 0.75rem;
 }
 
 .glossary-tip a {

@@ -1,10 +1,25 @@
 categories:
+  - title: 计算机基础
+    children:
+      - title: 操作系统
+        book: operating-system
+      - title: 计算机网络
+        book: computer-network
   - title: 软件工程
     children:
       - title: 领域驱动设计(DDD)
         book: ddd
+      - title: 行为驱动开发(BDD)
+        book: bdd
+      - title: 测试驱动开发(TDD)
+        book: tdd
+      - title: 双环TDD
+        book: double-loop-tdd
   - title: 项目管理
-    books: []
+    children:
+      - title: Scrum
+        book: scrum
+      - title: LeSS
   - title: 技术架构
     children:
       - title: Go
