@@ -150,11 +150,11 @@ data/nav.yaml
 
 ## 视觉风格
 
-以 [Hugo Book](https://github.com/alex-shpak/hugo-book) 为参考（仍用自建 layouts，不引入该主题）：
+明暗色板参考 [Next.js Docs](https://nextjs.org/docs)（仍用自建 layouts）：
 
-- 阅读优先：正文限宽、行高舒适；侧栏同色背景、字号更小、弱化装饰
-- 浅色接近浏览器默认白底黑字；深色采用 Nord（`#2e3440` / `#eceff4`）
-- 系统字体栈；链接色 Book 默认蓝 / Nord 蓝灰
+- 浅色：白底 / `#171717` 正文；描边 `#eaeaea`；链接 `#0070f3`
+- 深色：黑底 / `#ededed` 正文；描边 `#333`；链接 `#3291ff`
+- 顶栏半透明模糊；正文限宽；侧栏弱化
 - 样式入口：`static/css/site.css`、`static/css/glossary.css`
 
 ## 给 AI 的规则落点

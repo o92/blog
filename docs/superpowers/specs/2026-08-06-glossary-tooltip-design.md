@@ -42,12 +42,15 @@ data/glossary/<domain>.yaml     # 领域词库，文件名 = 领域 ID
 
 ```yaml
 goroutine:
-  summary: "Go 里由 runtime 调度的轻量执行单元"
-  link: "/posts/go-concurrency/"   # 可选
+  summary: "Go 里由 runtime 调度的轻量执行单元"   # 必填，短说明
+  source: "books/go-concurrency/01-intro.md#阅读方式"  # 可选：按标题摘录 content
+  link: "https://go.dev/..."                       # 可选：仅外部链接
 ```
 
-- 必填：`summary`（气泡文案）
-- 可选：`link`（点击跳转）
+- 必填：`summary`
+- 可选：`source`（`路径.md` 或 `路径.md#标题`）；摘录长度由 `scripts/glossary.config.json` 的 `excerptMaxLength` 限制；自动生成「显示更多」跳到对应页/锚点
+- 可选：`link`（仅 `http(s)://` 外链）；站内跳转不要用 `link`，用 `source`
+- 气泡展示顺序：领域标签 → summary → 摘录（若有）→「显示更多」/「外部链接」
 
 ### 文章
 

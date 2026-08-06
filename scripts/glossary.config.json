@@ -3,5 +3,6 @@
   "contentDir": "content",
   "glossaryDir": "data/glossary",
   "contentSelectors": [".post-content", "article .content", "article", "main"],
-  "cssHref": "/css/glossary.css"
+  "cssHref": "/css/glossary.css",
+  "excerptMaxLength": 100
 }

@@ -28,32 +28,7 @@ const SKIP_TAGS = new Set([
 const config = JSON.parse(
   fs.readFileSync(path.join(__dirname, "glossary.config.json"), "utf8"),
 );
-
-function loadGlossaries() {
-  const dir = path.join(root, config.glossaryDir);
-  const files = fs.existsSync(dir)
-    ? fs.readdirSync(dir).filter((f) => f.endsWith(".yaml") || f.endsWith(".yml"))
-    : [];
-  /** @type {Record<string, Record<string, { summary: string, link?: string }>>} */
-  const byDomain = {};
-  for (const file of files) {
-    const domain = path.basename(file, path.extname(file));
-    const raw = fs.readFileSync(path.join(dir, file), "utf8");
-    const data = yaml.load(raw) || {};
-    byDomain[domain] = {};
-    for (const [term, value] of Object.entries(data)) {
-      if (!value || typeof value !== "object" || !value.summary) {
-        console.warn(`[glossary] skip invalid entry ${domain}/${term}`);
-        continue;
-      }
-      byDomain[domain][term] = {
-        summary: String(value.summary),
-        ...(value.link ? { link: String(value.link) } : {}),
-      };
-    }
-  }
-  return byDomain;
-}
+const EXCERPT_MAX = Number(config.excerptMaxLength) || 100;
 
 function parseFrontMatter(raw) {
   const engines = {
@@ -70,9 +45,182 @@ function parseFrontMatter(raw) {
   return matter(raw, { engines });
 }
 
+/** Approximate Hugo github-style anchorize */
+function anchorize(text) {
+  return String(text)
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^\p{L}\p{N}\-_]/gu, "");
+}
+
+function isExternalLink(href) {
+  return /^https?:\/\//i.test(href);
+}
+
+function resolveContentFile(rel) {
+  let p = rel.replace(/^\//, "").replace(/^content\//, "");
+  const abs = path.join(root, config.contentDir, p);
+  if (fs.existsSync(abs) && fs.statSync(abs).isFile()) return abs;
+  if (!p.endsWith(".md") && !p.endsWith(".markdown")) {
+    for (const ext of [".md", ".markdown"]) {
+      const cand = abs + ext;
+      if (fs.existsSync(cand)) return cand;
+    }
+  }
+  return null;
+}
+
+/** content-relative md path -> site pathname ending with / */
+function contentFileToPermalink(absFile) {
+  let rel = path.relative(path.join(root, config.contentDir), absFile);
+  rel = rel.split(path.sep).join("/");
+  if (
+    rel.endsWith("/_index.md") ||
+    rel.endsWith("/_index.markdown") ||
+    rel.endsWith("/index.md") ||
+    rel.endsWith("/index.markdown")
+  ) {
+    rel = rel.replace(/\/_?index\.md(arkdown)?$/, "");
+  } else {
+    rel = rel.replace(/\.md(arkdown)?$/, "");
+  }
+  return `/${rel}/`.replace(/\/+/g, "/");
+}
+
+/**
+ * Extract markdown body under a heading (same or higher level ends section).
+ * Returns { text, heading } or null.
+ */
+function extractHeadingSection(mdBody, headingTitle) {
+  const lines = mdBody.replace(/\r\n/g, "\n").split("\n");
+  const target = headingTitle.trim();
+  let start = -1;
+  let level = 0;
+  for (let i = 0; i < lines.length; i++) {
+    const m = /^(#{1,6})\s+(.+?)\s*$/.exec(lines[i]);
+    if (!m) continue;
+    const title = m[2].trim();
+    if (title === target || title.toLowerCase() === target.toLowerCase()) {
+      start = i + 1;
+      level = m[1].length;
+      break;
+    }
+  }
+  if (start < 0) return null;
+
+  const buf = [];
+  for (let i = start; i < lines.length; i++) {
+    const m = /^(#{1,6})\s+/.exec(lines[i]);
+    if (m && m[1].length <= level) break;
+    buf.push(lines[i]);
+  }
+  const text = buf
+    .join("\n")
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/`[^`]+`/g, " ")
+    .replace(/!\[[^\]]*\]\([^)]+\)/g, " ")
+    .replace(/\[[^\]]*\]\([^)]+\)/g, " ")
+    .replace(/[#>*_\-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  return { text, heading: target };
+}
+
+function truncateText(text, max) {
+  if (!text) return { text: "", truncated: false };
+  if (text.length <= max) return { text, truncated: false };
+  let cut = text.slice(0, max);
+  const sp = cut.lastIndexOf(" ");
+  if (sp > max * 0.6) cut = cut.slice(0, sp);
+  return { text: cut.replace(/[，,;；、.\s]+$/g, "") + "…", truncated: true };
+}
+
+function resolveSource(source) {
+  if (!source) return null;
+  const raw = String(source).trim();
+  const hash = raw.indexOf("#");
+  const filePart = hash >= 0 ? raw.slice(0, hash) : raw;
+  const heading = hash >= 0 ? decodeURIComponent(raw.slice(hash + 1)).trim() : "";
+  const abs = resolveContentFile(filePart);
+  if (!abs) {
+    console.warn(`[glossary] source file not found: ${filePart}`);
+    return null;
+  }
+  const rawMd = fs.readFileSync(abs, "utf8");
+  const { content } = parseFrontMatter(rawMd);
+  const permalink = contentFileToPermalink(abs);
+  let excerpt = "";
+  let truncated = false;
+  let moreHref = permalink;
+
+  if (heading) {
+    const sec = extractHeadingSection(content, heading);
+    if (!sec) {
+      console.warn(`[glossary] heading not found in ${filePart}: #${heading}`);
+    } else {
+      const t = truncateText(sec.text, EXCERPT_MAX);
+      excerpt = t.text;
+      truncated = t.truncated || sec.text.length > 0;
+      moreHref = `${permalink}#${anchorize(sec.heading)}`;
+    }
+  } else {
+    const plain = content
+      .replace(/```[\s\S]*?```/g, " ")
+      .replace(/[#>*_\-]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+    const t = truncateText(plain, EXCERPT_MAX);
+    excerpt = t.text;
+    truncated = t.truncated;
+    moreHref = permalink;
+  }
+
+  // Always offer 显示更多 when source is set
+  return { excerpt, moreHref, truncated };
+}
+
+function loadGlossaries() {
+  const dir = path.join(root, config.glossaryDir);
+  const files = fs.existsSync(dir)
+    ? fs.readdirSync(dir).filter((f) => f.endsWith(".yaml") || f.endsWith(".yml"))
+    : [];
+  /** @type {Record<string, Record<string, object>>} */
+  const byDomain = {};
+  for (const file of files) {
+    const domain = path.basename(file, path.extname(file));
+    const raw = fs.readFileSync(path.join(dir, file), "utf8");
+    const data = yaml.load(raw) || {};
+    byDomain[domain] = {};
+    for (const [term, value] of Object.entries(data)) {
+      if (!value || typeof value !== "object" || !value.summary) {
+        console.warn(`[glossary] skip invalid entry ${domain}/${term}`);
+        continue;
+      }
+      const entry = {
+        summary: String(value.summary),
+      };
+      if (value.source) {
+        const resolved = resolveSource(value.source);
+        if (resolved) {
+          entry.excerpt = resolved.excerpt;
+          entry.moreHref = resolved.moreHref;
+        }
+      }
+      if (value.link && isExternalLink(String(value.link))) {
+        entry.externalLink = String(value.link);
+      } else if (value.link) {
+        console.warn(
+          `[glossary] ignore non-external link for ${domain}/${term} (use source + 显示更多 for in-site)`,
+        );
+      }
+      byDomain[domain][term] = entry;
+    }
+  }
+  return byDomain;
+}
+
 function contentToPublicHtml(relPosix) {
-  // content/posts/foo.md -> public/posts/foo/index.html
-  // content/books/foo/_index.md -> public/books/foo/index.html
   let rel = relPosix.replace(/^content\//, "");
   if (
     rel.endsWith("/index.md") ||
@@ -112,13 +260,8 @@ function isAsciiTerm(term) {
   return /^[\x00-\x7F]+$/.test(term);
 }
 
-/**
- * Merge global + domains into term -> sources[]
- * @param {Record<string, Record<string, { summary: string, link?: string }>>} byDomain
- * @param {string[]} domains
- */
 function buildTermIndex(byDomain, domains) {
-  /** @type {Map<string, { term: string, sources: { domain: string, summary: string, link?: string }[] }>} */
+  /** @type {Map<string, { term: string, sources: object[] }>} */
   const index = new Map();
   const order = ["global", ...domains.filter((d) => d !== "global")];
 
@@ -135,13 +278,7 @@ function buildTermIndex(byDomain, domains) {
       if (!index.has(key)) {
         index.set(key, { term, sources: [] });
       }
-      const item = index.get(key);
-      // keep display term as first-seen casing from earliest domain in order
-      item.sources.push({
-        domain,
-        summary: meta.summary,
-        ...(meta.link ? { link: meta.link } : {}),
-      });
+      index.get(key).sources.push({ domain, ...meta });
     }
   }
   return index;
@@ -174,10 +311,32 @@ function lookupSources(termIndex, matched) {
 function tipHtml(sources) {
   const blocks = sources.map((s) => {
     const label = s.domain === "global" ? "通用" : s.domain;
-    const body = s.link
-      ? `${escapeHtml(s.summary)} <a href="${escapeAttr(s.link)}" target="_blank" rel="noopener">链接</a>`
-      : escapeHtml(s.summary);
-    return `<span class="glossary-tip-block"><strong>${escapeHtml(label)}</strong>：${body}</span>`;
+    const parts = [];
+    parts.push(
+      `<span class="glossary-tip-summary">${escapeHtml(s.summary)}</span>`,
+    );
+    if (s.excerpt) {
+      parts.push(
+        `<span class="glossary-tip-excerpt">${escapeHtml(s.excerpt)}</span>`,
+      );
+    }
+    const actions = [];
+    if (s.moreHref) {
+      actions.push(
+        `<a class="glossary-tip-more" href="${escapeAttr(s.moreHref)}">显示更多</a>`,
+      );
+    }
+    if (s.externalLink) {
+      actions.push(
+        `<a class="glossary-tip-ext" href="${escapeAttr(s.externalLink)}" target="_blank" rel="noopener">外部链接</a>`,
+      );
+    }
+    if (actions.length) {
+      parts.push(
+        `<span class="glossary-tip-actions">${actions.join(" · ")}</span>`,
+      );
+    }
+    return `<span class="glossary-tip-block"><strong>${escapeHtml(label)}</strong>：${parts.join("")}</span>`;
   });
   return blocks.join("");
 }
@@ -199,7 +358,10 @@ function shouldSkipTextNode(elem) {
   while (cur) {
     const name = cur.type === "tag" ? cur.name?.toLowerCase() : null;
     if (name && SKIP_TAGS.has(name)) return true;
-    if (name === "span" && cur.attribs?.class?.split(/\s+/).includes("glossary-term")) {
+    if (
+      name === "span" &&
+      cur.attribs?.class?.split(/\s+/).includes("glossary-term")
+    ) {
       return true;
     }
     cur = cur.parent;
@@ -207,7 +369,7 @@ function shouldSkipTextNode(elem) {
   return false;
 }
 
-function injectInRoot($, root, termIndex) {
+function injectInRoot($, rootEl, termIndex) {
   const re = buildMatcher(termIndex);
   if (!re) return 0;
   let count = 0;
@@ -241,7 +403,6 @@ function injectInRoot($, root, termIndex) {
       if (last < text.length) {
         frag.push($.parseHTML(escapeHtml(text.slice(last)))[0]);
       }
-      // filter undefined from empty parse
       const nodes = frag.filter(Boolean);
       if (nodes.length) {
         $(node).replaceWith(nodes);
@@ -251,7 +412,10 @@ function injectInRoot($, root, termIndex) {
     if (node.type === "tag") {
       const name = node.name?.toLowerCase();
       if (SKIP_TAGS.has(name)) return;
-      if (name === "span" && node.attribs?.class?.split(/\s+/).includes("glossary-term")) {
+      if (
+        name === "span" &&
+        node.attribs?.class?.split(/\s+/).includes("glossary-term")
+      ) {
         return;
       }
       const children = [...(node.children || [])];
@@ -259,15 +423,16 @@ function injectInRoot($, root, termIndex) {
     }
   };
 
-  const children = [...(root.children || [])];
+  const children = [...(rootEl.children || [])];
   for (const child of children) walk(child);
   return count;
 }
 
 function ensureStylesheet($) {
   const href = config.cssHref;
-  const exists = $(`link[rel="stylesheet"][href="${href}"]`).length > 0
-    || $(`link[rel="stylesheet"][href$="glossary.css"]`).length > 0;
+  const exists =
+    $(`link[rel="stylesheet"][href="${href}"]`).length > 0 ||
+    $(`link[rel="stylesheet"][href$="glossary.css"]`).length > 0;
   if (!exists) {
     $("head").append(`<link rel="stylesheet" href="${href}">`);
   }
@@ -284,13 +449,15 @@ function findContentRoot($) {
 function processFile(htmlPath, domains, byDomain) {
   const html = fs.readFileSync(htmlPath, "utf8");
   const $ = cheerio.load(html, { decodeEntities: false });
-  const root = findContentRoot($);
-  if (!root) {
-    console.warn(`[glossary] no content root in ${path.relative(root, htmlPath)}`);
+  const contentRoot = findContentRoot($);
+  if (!contentRoot) {
+    console.warn(
+      `[glossary] no content root in ${path.relative(root, htmlPath)}`,
+    );
     return 0;
   }
   const termIndex = buildTermIndex(byDomain, domains);
-  const n = injectInRoot($, root, termIndex);
+  const n = injectInRoot($, contentRoot, termIndex);
   ensureStylesheet($);
   fs.writeFileSync(htmlPath, $.html(), "utf8");
   return n;

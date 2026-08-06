@@ -28,10 +28,10 @@ alwaysApply: true
 - `html[data-theme]`；首屏前防闪烁脚本读 sessionStorage
 - 颜色一律走 CSS 变量；`glossary.css` 必须跟变量
 
-## 视觉（Hugo Book 取向）
+## 视觉（Next.js Docs 取向）
 
-- 阅读优先：正文限宽与舒适行高；侧栏弱化（同色背景、更小字号）
-- 浅色：白底黑字；深色：Nord；系统字体；少装饰
+- 明暗色板参考 https://nextjs.org/docs：浅色白底/`#171717` 字；深色黑底/`#ededed` 字；描边 `#eaeaea` / `#333`；链接蓝 `#0070f3` / `#3291ff`
+- 阅读优先：正文限宽与舒适行高；侧栏弱化
 - 改观感优先动 `static/css/site.css`，术语气泡跟 CSS 变量
 
 ## 与 glossary
