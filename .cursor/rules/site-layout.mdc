@@ -15,7 +15,7 @@ alwaysApply: true
 - 书与章节：`content/<book-id>/`（无 `content/books/` 中间层）
 - 书阅读壳：`layouts/partials/book-shell.html`（`single` / `list` 共用）
 - 书根解析：`book-root.html`（按 Home 子 section；**不要**再加 `book_id` 字段）
-- **最终页**：`final = true` + cascade `render: never`；子项进页内锚点
+- **最终页**：`final = true` 即可；子文合并进本页，直链子页会跳到 `#part-…`（无需手写 cascade）
 - 自建 `layouts/`，不引入 Docsy 等主体主题
 
 ## 版式

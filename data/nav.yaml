@@ -3,12 +3,9 @@ categories:
     children:
       - title: 领域驱动设计(DDD)
         book: ddd
-      - title: 随笔
-        book: essays
   - title: 项目管理
     books: []
   - title: 技术架构
     children:
       - title: Go
-        # 仅一本书 ⇒ 一点即进；多本或还有 children 才展开
         books: [go-concurrency]

@@ -68,25 +68,17 @@ content/
 
 ### 最终页（合并子文件）
 
-在 section 的 `_index.md` 上标记：
+在 section 的 `_index.md` 上只需：
 
 ```toml
 final = true
-
-[build]
-  render = 'always'
-
-[[cascade]]
-  [cascade.build]
-    list = 'local'
-    render = 'never'
 ```
 
-语义：
+语义（由布局自动处理，不必再写 `build` / `cascade`）：
 
-- 该页为**最终阅读页**（独立 URL）
-- 其下所有子 `.md` / 子 section **不单独成页**，正文合并进最终页
-- **左侧书目仍显示**子项，链接为 `最终页URL#part-<文件名>`
+- 该页为**最终阅读页**（独立 URL），子 `.md` 正文合并进本页
+- 子页若被直接打开，会跳转到 `本页#part-<文件名>`
+- **左侧书目仍显示**子项，链接为页内锚点
 - 右侧「本章」也会列出这些 part
 
 非最终页行为不变（一文件一页）。

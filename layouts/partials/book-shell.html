@@ -1,4 +1,28 @@
 {{/* Shared book reading chrome for single + list pages. */}}
+{{/* Under a final=true ancestor: jump to merged page#part (no cascade needed). */}}
+{{ $finalAncestor := false }}
+{{ if not .Params.final }}
+  {{ range .Ancestors }}
+    {{ if and (not $finalAncestor) .Params.final }}
+      {{ $finalAncestor = . }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+{{ if $finalAncestor }}
+  {{ $anchor := partial "final-anchor.html" . }}
+  {{ $href := printf "%s#%s" $finalAncestor.RelPermalink $anchor }}
+<main class="page-shell page-shell--simple" data-pagefind-ignore>
+  <div class="content-panel">
+    <p class="muted">此节已合并到「<a id="final-redirect" href="{{ $href }}">{{ $finalAncestor.LinkTitle }}</a>」。</p>
+  </div>
+</main>
+<script>
+  (function () {
+    var a = document.getElementById("final-redirect");
+    if (a) location.replace(a.href);
+  })();
+</script>
+{{ else }}
 {{ $book := partial "book-root.html" . }}
 {{ if not $book }}
   {{ if .IsPage }}
@@ -32,7 +56,6 @@
       {{ .Content }}
     </div>
     {{ if .IsSection }}
-      {{/* 任意 section 首页：自动列出本节点下的目录树 */}}
       {{ partial "book-contents.html" (dict "book" . "page" .) }}
     {{ end }}
     {{ end }}
@@ -44,3 +67,4 @@
   </aside>
 </main>
 <script src="{{ "js/sidebars.js" | relURL }}" defer></script>
+{{ end }}
