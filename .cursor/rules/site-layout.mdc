@@ -26,6 +26,12 @@ alwaysApply: true
 - `localStorage` 持久化；`html[data-theme]`；首屏前防闪烁脚本
 - 颜色一律走 CSS 变量；`glossary.css` 必须跟变量，禁止写死仅适浅色/仅适深色的色值（除非同时提供变量回退）
 
+## 视觉（Hugo Book 取向）
+
+- 阅读优先：正文限宽与舒适行高；侧栏弱化（同色背景、更小字号）
+- 浅色：白底黑字；深色：Nord；系统字体；少装饰
+- 改观感优先动 `static/css/site.css`，术语气泡跟 CSS 变量
+
 ## 与 glossary
 
 - 保持可配置正文选择器（默认 `.post-content`）

@@ -1,8 +1,8 @@
-/* Glossary term highlight + hover tooltip (uses site CSS variables) */
+/* Glossary tooltips — aligned with site (Hugo Book–like) CSS variables */
 
 .glossary-term {
   position: relative;
-  border-bottom: 1px dotted var(--accent, currentColor);
+  border-bottom: 1px dotted currentColor;
   cursor: help;
   color: inherit;
 }
@@ -13,20 +13,20 @@
   position: absolute;
   z-index: 50;
   left: 50%;
-  bottom: calc(100% + 0.45rem);
+  bottom: calc(100% + 0.4rem);
   transform: translateX(-50%);
-  min-width: 12rem;
-  max-width: min(22rem, 80vw);
-  padding: 0.55rem 0.7rem;
-  border-radius: 0.4rem;
-  background: var(--tip-bg, #1c1917);
-  color: var(--tip-text, #fafaf9);
-  font-size: 0.85rem;
+  min-width: 11rem;
+  max-width: min(20rem, 80vw);
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--radius, 0.25rem);
+  background: var(--tip-bg, #2e3440);
+  color: var(--tip-fg, #eceff4);
+  font-size: var(--font-size-sm, 0.875rem);
   line-height: 1.45;
-  font-weight: normal;
+  font-weight: 400;
   font-style: normal;
   text-decoration: none;
-  box-shadow: var(--shadow, 0 6px 20px rgba(0, 0, 0, 0.18));
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.18);
   transition: opacity 0.12s ease, visibility 0.12s ease;
   pointer-events: none;
 }
@@ -38,7 +38,7 @@
   left: 50%;
   transform: translateX(-50%);
   border: 6px solid transparent;
-  border-top-color: var(--tip-bg, #1c1917);
+  border-top-color: var(--tip-bg, #2e3440);
 }
 
 .glossary-term:hover > .glossary-tip,
@@ -49,11 +49,12 @@
 }
 
 .glossary-tip-block + .glossary-tip-block {
-  margin-top: 0.4rem;
-  padding-top: 0.4rem;
-  border-top: 1px solid var(--tip-divider, rgba(255, 255, 255, 0.2));
+  margin-top: 0.35rem;
+  padding-top: 0.35rem;
+  border-top: 1px solid var(--tip-divider, rgba(236, 239, 244, 0.2));
 }
 
 .glossary-tip a {
-  color: var(--tip-link, #93c5fd);
+  color: var(--tip-link, #88c0d0);
+  text-decoration: underline;
 }
