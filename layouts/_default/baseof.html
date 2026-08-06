@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="{{ or site.Language.Lang "zh-cn" }}">
+<html
+  lang="{{ or site.Language.Lang "zh-cn" }}"
+  {{- if and .RawContent (in .RawContent "```mermaid") }} class="mermaid-pending"{{- end -}}
+>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,6 +26,12 @@
       } catch (e) {}
     })();
   </script>
+  <style>
+    /* Hide body until Mermaid finishes (class set server-side when page has diagrams). */
+    html.mermaid-pending body {
+      visibility: hidden;
+    }
+  </style>
   <link rel="stylesheet" href="{{ "css/site.css" | relURL }}">
   <link rel="stylesheet" href="{{ "css/glossary.css" | relURL }}">
   <link rel="stylesheet" href="{{ "css/search.css" | relURL }}">

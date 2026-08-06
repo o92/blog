@@ -1237,20 +1237,41 @@ html.layout-anim .page-shell--book .content-panel {
 }
 
 .post-content pre.mermaid {
+  display: block;
+  width: 100%;
   overflow-x: auto;
-  padding: 1rem 0.5rem;
+  padding: 1rem 0.25rem;
   background: transparent;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  font-family: var(--font-sans);
-  font-size: 0.9rem;
-  line-height: 1.35;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
   text-align: center;
+  color: transparent;
+}
+
+html.mermaid-ready .post-content pre.mermaid {
+  color: inherit;
 }
 
 .post-content pre.mermaid svg {
+  display: block;
+  width: auto;
   max-width: 100%;
   height: auto;
+  margin: 0 auto;
+}
+
+/* Mermaid htmlLabels should match body type */
+.post-content pre.mermaid .nodeLabel,
+.post-content pre.mermaid .edgeLabel,
+.post-content pre.mermaid foreignObject,
+.post-content pre.mermaid foreignObject div,
+.post-content pre.mermaid foreignObject span {
+  font-family: inherit !important;
+  font-size: 1rem !important;
+  line-height: 1.45 !important;
 }
 
 .post-content :not(pre) > code {

@@ -1,65 +1,84 @@
-# Scrum 领域术语（流程笔记）
+# Scrum 领域术语（与「名词介绍」对齐；aliases = 中文别名）
 
 Scrum:
-  summary: "用固定节奏的 Sprint，把 Backlog 做成可用 Increment 的轻量框架"
-  source: "scrum/_index.md"
-
-Scrum Team:
-  summary: "PO + Scrum Master + Developers；跨职能、自我管理"
-  source: "scrum/01-roles.md"
-
-Scrum Master:
-  summary: "建立 Scrum、提升团队有效性；辅导、清障、促成事件"
-  source: "scrum/01-roles.md#角色速查"
-
-Product Owner:
-  summary: "最大化产品价值；对 Product Goal 与 Backlog 排序负责"
-  source: "scrum/01-roles.md#角色速查"
-
-Developers:
-  summary: "每个 Sprint 交付可用 Increment；自定如何完成工作"
-  source: "scrum/01-roles.md#角色速查"
+  summary: "用固定节奏交付可用增量的轻量框架"
+  source: "scrum/01-terms.md#Scrum"
 
 Sprint:
-  summary: "固定长度（≤1 月）的容器；内含 Planning / Daily / Review / Retro"
-  source: "scrum/03-events.md"
+  summary: "冲刺：固定时长（≤1 个月）的工作容器"
+  source: "scrum/01-terms.md#Sprint"
+  aliases: ["冲刺"]
+
+Scrum Team:
+  summary: "Scrum 团队：PO + Scrum Master + Developers；跨职能、自我管理"
+  source: "scrum/01-terms.md#Scrum Team"
+  aliases: ["Scrum 团队"]
+
+Product Owner:
+  summary: "产品负责人：最大化产品价值；对 Product Backlog 内容与排序负责"
+  source: "scrum/01-terms.md#Product Owner"
+  aliases: ["产品负责人"]
+
+Scrum Master:
+  summary: "建立 Scrum；辅导、清障、保证事件有效发生"
+  source: "scrum/01-terms.md#Scrum Master"
+
+Developers:
+  summary: "开发者们：每个 Sprint 做出可用 Increment；自己决定怎么做"
+  source: "scrum/01-terms.md#Developers"
+  aliases: ["开发者们"]
+
+Stakeholders:
+  summary: "利益相关者：关心产品的人；主要出现在 Sprint Review"
+  source: "scrum/01-terms.md#Stakeholders"
+  aliases: ["利益相关者"]
 
 Sprint Planning:
-  summary: "启动 Sprint：定 Sprint Goal、选条目、做计划 → 产出 Sprint Backlog"
-  source: "scrum/03-events.md#1. Sprint Planning"
+  summary: "Sprint 计划会：定 Sprint Goal、选条目、做计划 → Sprint Backlog"
+  source: "scrum/01-terms.md#Sprint Planning"
+  aliases: ["Sprint 计划会"]
 
 Daily Scrum:
-  summary: "Developers 每天 15 分钟：对齐 Sprint Goal，产出当日计划"
-  source: "scrum/03-events.md#2. Daily Scrum"
+  summary: "每日站会：Developers 每天 15 分钟，对齐 Sprint Goal"
+  source: "scrum/01-terms.md#Daily Scrum"
+  aliases: ["每日站会"]
 
 Sprint Review:
-  summary: "Team + 干系人检视 Increment，调整下一步与 Backlog"
-  source: "scrum/03-events.md#3. Sprint Review"
+  summary: "Sprint 评审：仍在 Sprint 内临近结束时举行；Team + Stakeholders 检视 Increment"
+  source: "scrum/01-terms.md#Sprint Review"
+  aliases: ["Sprint 评审"]
 
 Sprint Retrospective:
-  summary: "Team 复盘并产出改进项；结束本 Sprint"
-  source: "scrum/03-events.md#4. Sprint Retrospective"
+  summary: "Sprint 回顾：Team 复盘并产出改进项；本事件结束当前 Sprint"
+  source: "scrum/01-terms.md#Sprint Retrospective"
+  aliases: ["Sprint 回顾"]
 
 Product Backlog:
-  summary: "改进产品所需事项的有序清单；团队工作的唯一来源"
-  source: "scrum/04-artifacts.md#对照表"
-
-Sprint Backlog:
-  summary: "Sprint Goal + 选中条目 + 交付计划；Developers 的实时计划"
-  source: "scrum/04-artifacts.md#对照表"
-
-Increment:
-  summary: "满足 DoD 的可用增量；朝向 Product Goal 的踏脚石"
-  source: "scrum/04-artifacts.md#对照表"
+  summary: "产品待办列表：改进产品所需事项的有序清单；工作唯一来源"
+  source: "scrum/01-terms.md#Product Backlog"
+  aliases: ["产品待办列表"]
 
 Product Goal:
-  summary: "产品未来状态；Product Backlog 的承诺，一次一个"
-  source: "scrum/04-artifacts.md#对照表"
+  summary: "产品目标：Product Backlog 的承诺，产品未来状态（一次一个）"
+  source: "scrum/01-terms.md#Product Goal"
+  aliases: ["产品目标"]
+
+Sprint Backlog:
+  summary: "Sprint 待办列表：Sprint Goal + 选中条目 + 交付计划"
+  source: "scrum/01-terms.md#Sprint Backlog"
+  aliases: ["Sprint 待办列表"]
 
 Sprint Goal:
-  summary: "本 Sprint 的单一目标；Sprint Backlog 的承诺"
-  source: "scrum/04-artifacts.md#对照表"
+  summary: "Sprint 目标：本 Sprint 的单一目标；Sprint Backlog 的承诺"
+  source: "scrum/01-terms.md#Sprint Goal"
+  aliases: ["Sprint 目标"]
+
+Increment:
+  summary: "产品增量：满足 Definition of Done、可用的增量"
+  source: "scrum/01-terms.md#Increment"
+  aliases: ["产品增量"]
 
 Definition of Done:
-  summary: "Increment 质量完成标准；未满足则不可发布/当完成品展示"
-  source: "scrum/04-artifacts.md#质量闸门：Definition of Done"
+  summary: "完成的定义：Increment 质量完成标准；未满足则不算完成"
+  source: "scrum/01-terms.md#Definition of Done"
+  aliases: ["完成的定义"]

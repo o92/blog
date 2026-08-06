@@ -212,6 +212,19 @@ function loadGlossaries() {
         );
       }
       byDomain[domain][term] = entry;
+      const aliases = Array.isArray(value.aliases)
+        ? value.aliases.map(String).filter(Boolean)
+        : [];
+      for (const alias of aliases) {
+        if (alias === term) continue;
+        if (byDomain[domain][alias]) {
+          console.warn(
+            `[glossary] alias collision ${domain}/${alias} (from ${term})`,
+          );
+          continue;
+        }
+        byDomain[domain][alias] = { ...entry };
+      }
     }
   }
   return byDomain;
@@ -369,7 +382,12 @@ function lookupSources(termIndex, matched) {
 
 function tipHtml(sources) {
   const blocks = sources.map((s) => {
-    const label = s.domain === "global" ? "通用" : s.domain;
+    const label =
+      s.domain === "global"
+        ? "通用"
+        : s.domain === "scrum"
+          ? "Scrum"
+          : s.domain;
     const parts = [
       `<span class="glossary-tip-domain">${escapeHtml(label)}</span>`,
       `<span class="glossary-tip-summary">${escapeHtml(s.summary)}</span>`,
