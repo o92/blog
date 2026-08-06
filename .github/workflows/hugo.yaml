@@ -60,6 +60,8 @@ jobs:
             --baseURL "${{ steps.pages.outputs.base_url }}/"
       - name: Inject glossary terms
         run: node scripts/glossary-inject.mjs
+      - name: Build Pagefind index
+        run: npx pagefind --site public --force-language zh
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:

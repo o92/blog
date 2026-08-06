@@ -1,0 +1,55 @@
+<div
+  class="site-search"
+  data-pagefind-ignore
+  data-pagefind-base="{{ "pagefind/" | relURL }}"
+  id="site-search"
+>
+  <button
+    type="button"
+    class="site-search__open"
+    id="search-open"
+    aria-haspopup="dialog"
+    aria-controls="search-dialog"
+    aria-label="搜索"
+    title="搜索（⌘K / Ctrl+K）"
+  >
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+      <circle cx="11" cy="11" r="7"></circle>
+      <path d="M20 20l-3.5-3.5"></path>
+    </svg>
+  </button>
+
+  <div
+    class="site-search__dialog"
+    id="search-dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="search-title"
+    hidden
+  >
+    <div class="site-search__backdrop" data-search-close tabindex="-1"></div>
+    <div class="site-search__panel">
+      <h2 class="site-search__title" id="search-title">搜索</h2>
+      <div class="site-search__input-wrap">
+        <svg class="site-search__input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="M20 20l-3.5-3.5"></path>
+        </svg>
+        <input
+          type="search"
+          class="site-search__input"
+          id="search-input"
+          placeholder="搜索文章…"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+          enterkeyhint="search"
+        />
+        <kbd class="site-search__kbd">Esc</kbd>
+      </div>
+      <div class="site-search__status" id="search-status" role="status" aria-live="polite"></div>
+      <ul class="site-search__results" id="search-results" role="listbox" aria-label="搜索结果"></ul>
+    </div>
+  </div>
+</div>

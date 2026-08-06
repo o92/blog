@@ -11,9 +11,10 @@ alwaysApply: true
 
 1. `hugo` 生成 `public/`
 2. `node scripts/glossary-inject.mjs` 注入术语标记
-3. 再部署 / 预览产物
+3. `pagefind --site public` 建搜索索引
+4. 再部署 / 预览产物
 
-`hugo server` **不会**自动注入术语。改预览或 CI 时必须保留 inject 步骤。
+`hugo server` **不会**自动注入术语或建搜索索引。完整预览用 `npm run preview`。
 
 ## 词库
 

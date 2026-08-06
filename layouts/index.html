@@ -7,7 +7,7 @@
       <h1>{{ .Title }}</h1>
     </header>
     {{ with .Content }}
-    <div class="post-content">{{ . }}</div>
+    <div class="post-content" data-pagefind-body>{{ . }}</div>
     {{ end }}
     <ul class="page-list">
       {{ with $books }}

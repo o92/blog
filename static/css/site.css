@@ -311,8 +311,15 @@ a[href]:hover {
   opacity: 0.65;
 }
 
-.theme-toggle {
+.site-header__actions {
   margin-left: auto;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.theme-toggle {
   flex: 0 0 auto;
 }
 

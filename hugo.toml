@@ -1,6 +1,8 @@
 baseURL = 'https://example.org/'
-locale = 'zh-cn'
 title = 'My Blog'
+languageCode = 'zh-cn'
+defaultContentLanguage = 'zh-cn'
+locale = 'zh-cn'
 
 # 分类导航用 data/nav.yaml，不需要 Hugo 内置 taxonomy / sitemap
 disableKinds = ['taxonomy', 'term', 'sitemap']

@@ -17,8 +17,9 @@ alwaysApply: true
 
 ## 版式
 
-书内页：顶栏（含右上角主题切换）+ 左书目 + 中 `.post-content` + 右本章 TOC。  
-移动端：侧栏进抽屉，正文优先。
+书内页：顶栏（搜索 + 主题切换）+ 左书目 + 中 `.post-content` + 右本章 TOC。  
+移动端：侧栏进抽屉，正文优先。  
+搜索：Pagefind；顶栏按钮 + ⌘K/Ctrl+K；见 `docs/superpowers/specs/2026-08-06-search-pagefind-design.md`。
 
 ## 明暗主题
 
@@ -37,4 +38,5 @@ alwaysApply: true
 ## 与 glossary
 
 - 保持可配置正文选择器（默认 `.post-content`）
-- 构建仍为 `hugo` → `glossary-inject` → 部署
+- 构建仍为 `hugo` → `glossary-inject` → `pagefind` → 部署
+- 单独 `hugo server` 无术语注入、无搜索索引；完整预览用 `npm run preview`

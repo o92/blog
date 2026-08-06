@@ -9,7 +9,7 @@
       <h1>{{ .Title }}</h1>
     </header>
     {{ with .Content }}
-    <div class="post-content">{{ . }}</div>
+    <div class="post-content" data-pagefind-body>{{ . }}</div>
     {{ end }}
     <ul class="page-list">
       {{ range .Sections }}
@@ -37,7 +37,7 @@
     {{ if .Params.final }}
       {{ partial "final-page-body.html" . }}
     {{ else }}
-    <div class="post-content">
+    <div class="post-content" data-pagefind-body>
       {{ .Content }}
     </div>
     <ul class="page-list">
