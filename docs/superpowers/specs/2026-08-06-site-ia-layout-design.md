@@ -66,8 +66,9 @@ content/
 
 ### 随笔
 
-- 使用 `content/posts/`
-- 顶栏保留；左右栏可简化（无书目，可仅右 TOC 或双栏收起）
+- 「随笔」只是 `data/nav.yaml` 里的分类名，可挂 `books: [essays]`
+- 内容放在 `content/books/essays/`（或其它 book id），与技术书同一套三栏布局
+- 不再使用 `content/posts/` 或独立随笔排版
 
 ### 最终页（合并子文件）
 

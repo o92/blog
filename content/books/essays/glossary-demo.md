@@ -2,6 +2,7 @@
 title = "术语高亮演示"
 date = 2026-08-06T10:00:00+08:00
 draft = false
+weight = 1
 glossary = ["go"]
 +++
 

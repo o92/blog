@@ -12,7 +12,7 @@ alwaysApply: true
 - 分类树：仅 `data/nav.yaml`（可多层）；顶栏导航只读此文件
 - 书与章节：`content/books/<book-id>/`，可多层；左侧目录只含本书树
 - **最终页**：`final = true` 的 section；子文件 `build.render = never`（用 cascade），合并进该页；左侧仍显示子项为页内锚点
-- 随笔：`content/posts/`
+- 顶栏「随笔」等是 `data/nav.yaml` 分类，内容同样落在 `content/books/`，**无单独 posts 布局**
 - 自建 `layouts/`，不引入 Docsy 等作为主体主题
 
 ## 版式

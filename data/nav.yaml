@@ -10,4 +10,4 @@ categories:
         books: []
   - id: essays
     title: 随笔
-    href: /posts/
+    books: [essays]
