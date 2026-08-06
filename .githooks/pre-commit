@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Git pre-commit entry (used via: git config core.hooksPath .githooks)
+set -euo pipefail
+ROOT="$(git rev-parse --show-toplevel)"
+exec bash "$ROOT/scripts/git-pre-commit-audit.sh"

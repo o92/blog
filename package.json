@@ -7,7 +7,8 @@
     "pagefind": "pagefind --site public --force-language zh",
     "build": "hugo --gc --minify && node scripts/glossary-inject.mjs && npm run pagefind",
     "build:pages": "hugo --gc --minify --baseURL https://o92.github.io/blog/ && node scripts/glossary-inject.mjs && npm run pagefind",
-    "preview": "npm run build && npx --yes serve public -p 1313"
+    "preview": "npm run build && npx --yes serve public -p 1313",
+    "hooks:install": "git config core.hooksPath .githooks && chmod +x .githooks/pre-commit scripts/git-pre-commit-audit.sh && git config --get core.hooksPath"
   },
   "dependencies": {
     "@iarna/toml": "^2.2.5",

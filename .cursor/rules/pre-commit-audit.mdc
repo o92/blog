@@ -1,0 +1,36 @@
+---
+description: Git pre-commit 审计与二次确认（Cursor SCM Commit）
+alwaysApply: true
+---
+
+# 提交门禁（Git hook）
+
+本仓库用 **Cursor 源码管理 Commit**；门禁靠 Git `pre-commit`（会拦截面板 Commit）。
+
+## 启用（每个 clone 一次）
+
+```bash
+npm run hooks:install
+```
+
+等价于：`git config core.hooksPath .githooks`
+
+## 点 Commit 时会发生什么
+
+1. 扫描暂存区：可疑密钥文件名、冲突标记、`git diff --check`
+2. diff 内可疑密钥/私钥模式
+3. 若改了 `data/glossary/*.yaml`：校验 `source` 指向的 content 文件是否存在
+4. 写出报告：`.git/last-pre-commit-audit.txt`
+5. **macOS 弹窗二次确认** → 取消则中止 commit
+
+## 应急跳过
+
+```bash
+SKIP_COMMIT_AUDIT=1 git commit ...
+```
+
+Cursor 面板一般不能带该环境变量；应急可在终端提交，或临时 `git commit --no-verify`（不推荐）。
+
+## Agent 注意
+
+不要承诺「聊天里点 Commit 自动 AI 审计」。面板 Commit 只走上述 hook。
