@@ -1275,6 +1275,46 @@ html.layout-anim .page-shell--book .content-panel {
   margin: 0.3rem 0;
 }
 
+.book-contents {
+  margin: 1.5rem 0 0;
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.book-contents__level {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.book-contents__level .book-contents__level {
+  margin: 0.25rem 0 0.35rem;
+  padding-left: 1.1rem;
+  border-left: 1px solid var(--border);
+}
+
+.book-contents__item {
+  margin: 0.25rem 0;
+  line-height: 1.45;
+}
+
+.book-contents__item > a {
+  color: var(--link);
+  text-decoration: none;
+}
+
+.book-contents__item > a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+
+.book-contents__item.is-active > a {
+  font-weight: 600;
+  color: var(--body-fg);
+}
+
 .final-part {
   margin-top: 2.25rem;
   padding-top: 1.25rem;

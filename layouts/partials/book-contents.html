@@ -1,0 +1,10 @@
+{{/* Full book outline for book-root pages (always expanded). */}}
+{{ $book := .book }}
+{{ $page := .page }}
+{{ if $book }}
+<nav class="book-contents" aria-label="本书目录">
+  <ul class="book-contents__level">
+    {{ partial "book-contents-branch.html" (dict "section" $book "page" $page) }}
+  </ul>
+</nav>
+{{ end }}

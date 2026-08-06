@@ -1,0 +1,28 @@
+{{ $section := .section }}
+{{ $page := .page }}
+{{ $items := slice }}
+{{ range $section.Sections }}{{ $items = $items | append . }}{{ end }}
+{{ range $section.RegularPages }}{{ $items = $items | append . }}{{ end }}
+{{ $items = sort $items "Weight" "asc" }}
+{{ range $items }}
+  {{ $isActive := eq $page.RelPermalink .RelPermalink }}
+  {{ if .IsSection }}
+  <li class="book-contents__item{{ if $isActive }} is-active{{ end }}">
+    <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+    {{ if not .Params.final }}
+      {{ $kids := slice }}
+      {{ range .Sections }}{{ $kids = $kids | append . }}{{ end }}
+      {{ range .RegularPages }}{{ $kids = $kids | append . }}{{ end }}
+      {{ if $kids }}
+      <ul class="book-contents__level">
+        {{ partial "book-contents-branch.html" (dict "section" . "page" $page) }}
+      </ul>
+      {{ end }}
+    {{ end }}
+  </li>
+  {{ else }}
+  <li class="book-contents__item{{ if $isActive }} is-active{{ end }}">
+    <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+  </li>
+  {{ end }}
+{{ end }}
