@@ -26,34 +26,30 @@
 
 ```yaml
 categories:
-  - id: tech
-    title: 技术
+  - title: 技术
     children:
       # 非一级 + 无 children + 仅一本书 ⇒ 节点本身就是书（一点进入）
-      - id: go
-        title: Go
+      - title: Go
         book: go-concurrency          # 或 books: [go-concurrency]
-      - id: distributed
-        title: 分布式
+      - title: 分布式
         books: [raft-notes, gossip]   # 多本 ⇒ 仍是目录，需展开
-  - id: essays
-    title: 随笔
+  - title: 随笔
     books: []
 ```
 
 规则：
 
 - 分类**不**出现在 `content/` 目录树里
-- 顶栏只读 `data/nav.yaml` 生成多层菜单
+- 顶栏只读 `data/nav.yaml` 生成多层菜单（节点无需 `id` 字段）
 - **一级分类**始终是目录（展开看 children / books）
-- **非一级**：无 `children` 且只有一本书（`book: id` 或 `books: [id]`）时，节点标题直接链到该书；有子分类或 ≥2 本书时才是可展开目录
-- `book` / `books` 中的 id 对应 `content/<id>/`（无 `content/books/` 中间层）
+- **非一级**：无 `children` 且只有一本书（`book: <content目录名>` 或 `books: [<名>]`）时，节点标题直接链到该书；有子分类或 ≥2 本书时才是可展开目录
+- `book` / `books` 中的值对应 `content/<名>/`（无 `content/books/` 中间层）
 
 ### 书与章节（content 多层）
 
 ```text
 content/
-  <book-id>/
+  <书目录名>/
     _index.md          # 书首页：title、可选 glossary
     01-....md
     02-section/
@@ -67,7 +63,7 @@ content/
 ### 随笔
 
 - 「随笔」只是 `data/nav.yaml` 里的分类名，可挂 `books: [essays]`
-- 内容放在 `content/essays/`（或其它 book id），与技术书同一套三栏布局
+- 内容放在 `content/essays/`（或其它书目录），与技术书同一套三栏布局
 - 不再使用 `content/posts/` 或独立随笔排版
 
 ### 最终页（合并子文件）
@@ -175,6 +171,6 @@ data/nav.yaml
 | 主题策略 | 方案 2：自建 layouts |
 | 站点类型 | 书为主 + 随笔 |
 | 分类 | `data/nav.yaml`，可多层，不进 content 树 |
-| 书/章 | `content/<id>/` 可多层嵌套 |
+| 书/章 | `content/<书目录名>/` 可多层嵌套 |
 | 版式 | 顶栏 + 左书目 + 中正文 + 右章节 TOC |
 | 明暗 | 默认跟系统；按钮仅浅/深；sessionStorage（关浏览器失效） |
