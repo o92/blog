@@ -1236,6 +1236,23 @@ html.layout-anim .page-shell--book .content-panel {
   line-height: 1.5;
 }
 
+.post-content pre.mermaid {
+  overflow-x: auto;
+  padding: 1rem 0.5rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.post-content pre.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
 .post-content :not(pre) > code {
   padding: 0.1em 0.3em;
   border-radius: 0.2rem;

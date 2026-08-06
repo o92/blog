@@ -6,7 +6,7 @@
   const PAD = 16;
   const ARROW = 8;
   const HIDE_MS = 360;
-  const MAX_TIP_REM = 36;
+  const MAX_TIP_REM = 18;
   let activeTerm = null;
   let activeTip = null;
   let bridgeEl = null;
