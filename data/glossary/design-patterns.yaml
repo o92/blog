@@ -1,4 +1,4 @@
-# 设计模式术语（企业应用 / 领域逻辑）
+# 设计模式术语（Dive Into Design Patterns + PoEAA 领域逻辑）
 
 Rich Domain Model:
   summary: "充血模型：对象同时承载数据与行为；业务规则在模型内"
@@ -9,3 +9,243 @@ Anemic Domain Model:
   summary: "贫血模型：对象几乎只有数据，行为在外部 Service（反模式）"
   source: "design-patterns/01-terms.md#Anemic Domain Model"
   aliases: ["贫血模型"]
+
+Object:
+  summary: "对象：数据与相关行为的打包实例"
+  source: "design-patterns/02-oop-basics/01-terms.md#Object"
+  aliases: ["对象"]
+
+Class:
+  summary: "类：对象的蓝图，定义字段与方法"
+  source: "design-patterns/02-oop-basics/01-terms.md#Class"
+  aliases: ["类"]
+
+Superclass:
+  summary: "超类：继承层次中的父类"
+  source: "design-patterns/02-oop-basics/01-terms.md#Superclass"
+  aliases: ["超类"]
+
+Subclass:
+  summary: "子类：继承并扩展超类的类"
+  source: "design-patterns/02-oop-basics/01-terms.md#Subclass"
+  aliases: ["子类"]
+
+Abstraction:
+  summary: "抽象：在特定上下文中建模，保留相关、省略其余"
+  source: "design-patterns/02-oop-basics/01-terms.md#Abstraction"
+  aliases: ["抽象"]
+
+Encapsulation:
+  summary: "封装：隐藏内部，只暴露有限接口"
+  source: "design-patterns/02-oop-basics/01-terms.md#Encapsulation"
+  aliases: ["封装"]
+
+Inheritance:
+  summary: "继承：在已有类上构建新类以复用"
+  source: "design-patterns/02-oop-basics/01-terms.md#Inheritance"
+  aliases: ["继承"]
+
+Polymorphism:
+  summary: "多态：按实际类型调用实现，即使静态类型是父类型/接口"
+  source: "design-patterns/02-oop-basics/01-terms.md#Polymorphism"
+  aliases: ["多态"]
+
+Dependency:
+  summary: "依赖：一处变更可能迫使另一处修改的弱关系"
+  source: "design-patterns/02-oop-basics/01-terms.md#Dependency"
+  aliases: ["依赖"]
+
+Association:
+  summary: "关联：对象长期知道并使用另一对象"
+  source: "design-patterns/02-oop-basics/01-terms.md#Association"
+  aliases: ["关联"]
+
+Aggregation:
+  summary: "聚合：整体拥有部分集合；部分可独立存在"
+  source: "design-patterns/02-oop-basics/01-terms.md#Aggregation"
+  aliases: ["聚合"]
+
+Composition:
+  summary: "组合：部分生命周期由整体管理的强聚合"
+  source: "design-patterns/02-oop-basics/01-terms.md#Composition"
+  aliases: ["组合"]
+
+Interface（OOP）:
+  summary: "接口：对象的公开协作契约；语言 interface 类型通常只描述行为"
+  source: "design-patterns/02-oop-basics/01-terms.md#Interface（OOP）"
+  aliases: ["接口"]
+
+Design Pattern:
+  summary: "设计模式：常见设计问题的典型解法蓝图，非可粘贴代码"
+  source: "design-patterns/03-principles/01-terms.md#Design Pattern"
+  aliases: ["设计模式"]
+
+Gang of Four:
+  summary: "四人帮：GoF，1994 将模式引入 OO 软件的四位作者"
+  source: "design-patterns/03-principles/01-terms.md#Gang of Four"
+  aliases: ["GoF", "四人帮"]
+
+Creational Patterns:
+  summary: "创建型模式：更灵活可复用的对象创建机制"
+  source: "design-patterns/03-principles/01-terms.md#Creational Patterns"
+  aliases: ["创建型模式"]
+
+Structural Patterns:
+  summary: "结构型模式：组装类与对象并保持灵活高效"
+  source: "design-patterns/03-principles/01-terms.md#Structural Patterns"
+  aliases: ["结构型模式"]
+
+Behavioral Patterns:
+  summary: "行为型模式：职责分配与对象间通信"
+  source: "design-patterns/03-principles/01-terms.md#Behavioral Patterns"
+  aliases: ["行为型模式"]
+
+Encapsulate What Varies:
+  summary: "封装变化：隔离易变点，限制变更冲击"
+  source: "design-patterns/03-principles/01-terms.md#Encapsulate What Varies"
+  aliases: ["封装变化"]
+
+Program to an Interface:
+  summary: "面向接口编程：依赖抽象而非具体类"
+  source: "design-patterns/03-principles/01-terms.md#Program to an Interface"
+  aliases: ["面向接口编程"]
+
+Favor Composition Over Inheritance:
+  summary: "组合优于继承：优先对象组合而非继承树"
+  source: "design-patterns/03-principles/01-terms.md#Favor Composition Over Inheritance"
+  aliases: ["组合优于继承"]
+
+Single Responsibility Principle:
+  summary: "单一职责：一个类只有一个引起变化的理由"
+  source: "design-patterns/03-principles/01-terms.md#Single Responsibility Principle"
+  aliases: ["SRP", "单一职责原则"]
+
+Open/Closed Principle:
+  summary: "开闭原则：对扩展开放，对修改关闭"
+  source: "design-patterns/03-principles/01-terms.md#Open/Closed Principle"
+  aliases: ["OCP", "开闭原则"]
+
+Liskov Substitution Principle:
+  summary: "里氏替换：子类对象可替换父类而不破坏客户端"
+  source: "design-patterns/03-principles/01-terms.md#Liskov Substitution Principle"
+  aliases: ["LSP", "里氏替换原则"]
+
+Interface Segregation Principle:
+  summary: "接口隔离：不强迫依赖不用的方法"
+  source: "design-patterns/03-principles/01-terms.md#Interface Segregation Principle"
+  aliases: ["ISP", "接口隔离原则"]
+
+Dependency Inversion Principle:
+  summary: "依赖倒置：高层低层都依赖抽象"
+  source: "design-patterns/03-principles/01-terms.md#Dependency Inversion Principle"
+  aliases: ["DIP", "依赖倒置原则"]
+
+Factory Method:
+  summary: "工厂方法：超类定义创建接口，子类决定产品类型"
+  source: "design-patterns/04-creational/01-terms.md#Factory Method"
+  aliases: ["工厂方法"]
+
+Abstract Factory:
+  summary: "抽象工厂：创建相关产品族而无须指定具体类"
+  source: "design-patterns/04-creational/01-terms.md#Abstract Factory"
+  aliases: ["抽象工厂"]
+
+Builder:
+  summary: "生成器：分步构建复杂对象，同一过程多种表示"
+  source: "design-patterns/04-creational/01-terms.md#Builder"
+  aliases: ["生成器"]
+
+Prototype:
+  summary: "原型：复制已有对象而不依赖其具体类"
+  source: "design-patterns/04-creational/01-terms.md#Prototype"
+  aliases: ["原型"]
+
+Singleton:
+  summary: "单例：保证仅一个实例并提供全局访问点"
+  source: "design-patterns/04-creational/01-terms.md#Singleton"
+  aliases: ["单例"]
+
+Adapter:
+  summary: "适配器：让接口不兼容的对象协作"
+  source: "design-patterns/05-structural/01-terms.md#Adapter"
+  aliases: ["适配器"]
+
+Bridge:
+  summary: "桥接：拆分抽象与实现两套可独立演化的层次"
+  source: "design-patterns/05-structural/01-terms.md#Bridge"
+  aliases: ["桥接"]
+
+Composite:
+  summary: "组合：树结构中统一对待叶子与容器"
+  source: "design-patterns/05-structural/01-terms.md#Composite"
+  aliases: ["组合模式"]
+
+Decorator:
+  summary: "装饰器：用包装动态附加行为"
+  source: "design-patterns/05-structural/01-terms.md#Decorator"
+  aliases: ["装饰器"]
+
+Facade:
+  summary: "外观：为复杂子系统提供简化接口"
+  source: "design-patterns/05-structural/01-terms.md#Facade"
+  aliases: ["外观"]
+
+Flyweight:
+  summary: "享元：共享内在状态以支撑大量对象"
+  source: "design-patterns/05-structural/01-terms.md#Flyweight"
+  aliases: ["享元"]
+
+Proxy:
+  summary: "代理：替身控制对原对象的访问"
+  source: "design-patterns/05-structural/01-terms.md#Proxy"
+  aliases: ["代理"]
+
+Chain of Responsibility:
+  summary: "责任链：沿处理者链传递请求"
+  source: "design-patterns/06-behavioral/01-terms.md#Chain of Responsibility"
+  aliases: ["责任链"]
+
+Command:
+  summary: "命令：将请求封装为对象以便排队/撤销"
+  source: "design-patterns/06-behavioral/01-terms.md#Command"
+  aliases: ["命令"]
+
+Iterator:
+  summary: "迭代器：不暴露内部表示地遍历集合"
+  source: "design-patterns/06-behavioral/01-terms.md#Iterator"
+  aliases: ["迭代器"]
+
+Mediator:
+  summary: "中介者：通过中介协作以减少对象间混乱依赖"
+  source: "design-patterns/06-behavioral/01-terms.md#Mediator"
+  aliases: ["中介者"]
+
+Memento:
+  summary: "备忘录：不暴露细节地保存与恢复状态"
+  source: "design-patterns/06-behavioral/01-terms.md#Memento"
+  aliases: ["备忘录"]
+
+Observer:
+  summary: "观察者：订阅机制，事件发生时通知多方"
+  source: "design-patterns/06-behavioral/01-terms.md#Observer"
+  aliases: ["观察者"]
+
+State:
+  summary: "状态：内部状态改变时改变行为"
+  source: "design-patterns/06-behavioral/01-terms.md#State"
+  aliases: ["状态模式"]
+
+Strategy:
+  summary: "策略：封装可互换的算法族"
+  source: "design-patterns/06-behavioral/01-terms.md#Strategy"
+  aliases: ["策略"]
+
+Template Method:
+  summary: "模板方法：超类定骨架，子类重写若干步骤"
+  source: "design-patterns/06-behavioral/01-terms.md#Template Method"
+  aliases: ["模板方法"]
+
+Visitor:
+  summary: "访问者：将算法与对象结构分离"
+  source: "design-patterns/06-behavioral/01-terms.md#Visitor"
+  aliases: ["访问者"]
