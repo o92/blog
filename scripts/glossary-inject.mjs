@@ -30,6 +30,27 @@ const config = JSON.parse(
 );
 const EXCERPT_MAX = Number(config.excerptMaxLength) || 100;
 
+/** 允许审计写到临时目录：--public-dir=… 或 GLOSSARY_PUBLIC_DIR */
+(function applyPublicDirOverride() {
+  let fromArg = "";
+  for (const a of process.argv.slice(2)) {
+    if (a.startsWith("--public-dir=")) fromArg = a.slice("--public-dir=".length);
+  }
+  const raw = (fromArg || process.env.GLOSSARY_PUBLIC_DIR || "").trim();
+  if (!raw) return;
+  config.publicDir = path.isAbsolute(raw) ? raw : path.resolve(root, raw);
+})();
+
+function resolvedPublicDir() {
+  return path.isAbsolute(config.publicDir)
+    ? config.publicDir
+    : path.join(root, config.publicDir);
+}
+
+function inPublic(...parts) {
+  return path.join(resolvedPublicDir(), ...parts);
+}
+
 function parseFrontMatter(raw) {
   const engines = {
     yaml: (s) => yaml.load(s),
@@ -87,21 +108,24 @@ function normalizeBasePath(pathname) {
 
 /**
  * GitHub Pages often serves under a subpath (/blog/).
- * Prefer the already-built HTML (reflects hugo --baseURL / HUGO_BASEURL).
+ * HUGO_BASEURL / HUGO_BASE_URL 优先（审计与 CI 会显式设置）；
+ * 否则从已构建的 index.html 推断（兼容 minify 无引号属性）。
  */
 function detectBasePath() {
-  const indexHtml = path.join(root, config.publicDir, "index.html");
+  const env = process.env.HUGO_BASEURL || process.env.HUGO_BASE_URL;
+  if (env) return normalizeBasePath(env);
+
+  const indexHtml = inPublic("index.html");
   if (fs.existsSync(indexHtml)) {
     const html = fs.readFileSync(indexHtml, "utf8");
-    const m = html.match(/(?:href|src)="([^"]*css\/site\.css)"/i);
+    const m = html.match(
+      /(?:href|src)=["']?([^"'>\s]*css\/site\.css)/i,
+    );
     if (m) {
       const prefix = m[1].replace(/\/?css\/site\.css$/i, "");
       return normalizeBasePath(prefix || "/");
     }
   }
-
-  const env = process.env.HUGO_BASEURL || process.env.HUGO_BASE_URL;
-  if (env) return normalizeBasePath(env);
   return "";
 }
 
@@ -280,7 +304,7 @@ function contentToPublicHtml(relPosix) {
   } else {
     rel = rel.replace(/\.md(arkdown)?$/, "");
   }
-  return path.join(root, config.publicDir, rel, "index.html");
+  return inPublic(rel, "index.html");
 }
 
 function mergeDomains(...lists) {

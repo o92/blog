@@ -10,7 +10,8 @@ Cursor **Commit** → `.githooks/pre-commit` → `scripts/audit/run.sh`。
 审计对象是**磁盘上的完整工作区**（含未暂存）。目的：保证全库随时可构建、可发布。
 
 额外约束：若某文件**已暂存但仍有未暂存修改**，直接失败——防止「工作区审计通过、实际提交内容却不同」。
-`hugo --printPathWarnings` 写到临时目录，**不会冲掉**已 glossary-inject 的 `public/`。
+
+生产构建审计写到 **临时目录**（`$TMP/public-audit`），**不碰、不删本地 `public/`**，可与 `npm run dev` 并行。
 
 ## 布局
 
@@ -41,9 +42,9 @@ npm run audit          # 本地试跑（跳过 macOS 对话框需非 Darwin 或 
 5. 全库 JS/MJS `node --check`
 6. shellcheck（已安装时）
 7. Python：YAML/JSON、nav、glossary、mermaid、MD 站内链、大文件、front matter
-8. **`npm run build`**（Pages `HUGO_BASEURL`）+ glossary 错误即失败
-9. 构建后 HTML 审计
-10. `hugo --printPathWarnings`（path/ref/ERROR）
+8. **临时目录** hugo（Pages `HUGO_BASEURL`）+ glossary-inject（跳过 pagefind）
+9. 对该临时产物做 HTML 审计
+10. Hugo `--printPathWarnings`（并入步骤 8）
 11. macOS 二次确认
 
 报告：`.git/last-pre-commit-audit.txt`、`.git/last-pre-commit-build.log`
@@ -57,5 +58,5 @@ npm run audit          # 本地试跑（跳过 macOS 对话框需非 Darwin 或 
 - 推荐：`npm run dev`（固定 **1313**；启动前会清掉旧 dev/占用，避免 Hugo 自动换端口）
 - 换端口：`PORT=1314 npm run dev`
 - 不要裸跑 `hugo server`：重建会覆盖 `public/`，泡泡会全部消失
-- 生产：`npm run build`（含 inject）
-- 注意：pre-commit 审计会用 Pages 的 `/blog` baseURL 重建 `public/`；本地看样式请再跑一次 `npm run dev`
+- 生产：`npm run build`（含 inject + pagefind）
+- 提交审计与本地预览互不抢 `public/`

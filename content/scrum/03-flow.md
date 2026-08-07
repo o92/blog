@@ -7,7 +7,7 @@ weight = 3
 
 ## 主流程
 
-每个方框：**专名** + 谁参与 / 产出什么。  
+每个方框：**专名** + 谁参与 / 产出什么。
 **Sprint Review / Retrospective 都在 Sprint 内**（临近结束），不是 Sprint 结束之后。
 
 ```mermaid

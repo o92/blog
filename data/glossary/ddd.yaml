@@ -128,14 +128,24 @@ Active Record:
   aliases: ["活动记录"]
 
 Domain Model:
-  summary: "领域模型：对象同时承载数据与行为，表达复杂规则与不变量"
+  summary: "领域模型（充血）：对象同时承载数据与行为，表达复杂规则与不变量"
   source: "ddd/02-tactical-design/01-terms.md#Domain Model"
-  aliases: ["领域模型"]
+  aliases: ["领域模型", "充血模型"]
+
+Anemic Domain Model:
+  summary: "贫血模型：对象几乎只有数据，行为在外部 Service；不是 Domain Model 模式"
+  source: "ddd/02-tactical-design/01-terms.md#Domain Model"
+  aliases: ["贫血模型"]
 
 Value Object:
   summary: "值对象：由属性值整体标识、不可变；相等比的是值"
   source: "ddd/02-tactical-design/01-terms.md#Value Object"
   aliases: ["值对象", "VO"]
+
+Primitive Obsession:
+  summary: "原始类型偏执：滥用 string/int 表示有业务含义的概念，校验与意图分散"
+  source: "ddd/02-tactical-design/01-terms.md#Primitive Obsession"
+  aliases: ["原始类型偏执"]
 
 Entity:
   summary: "实体：显式身份；状态可随生命周期变化"
@@ -193,11 +203,12 @@ Outbox:
   aliases: ["发件箱", "发件箱模式"]
 
 Saga:
-  summary: "跨多个事务/组件的长流程编排"
+  summary: "跨聚合长流程：用事件→命令接力串起多个本地事务，路径大致线性"
   source: "ddd/02-tactical-design/01-terms.md#Saga"
   aliases: ["长流程编排"]
+
 Process Manager:
-  summary: "过程管理器：维护流程状态并决定下一步；适合分支策略"
+  summary: "过程管理器：持有流程状态，按规则决定跨事务的下一步（适合分支）"
   source: "ddd/02-tactical-design/01-terms.md#Process Manager"
   aliases: ["过程管理器"]
 

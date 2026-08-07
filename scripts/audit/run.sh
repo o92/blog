@@ -234,66 +234,55 @@ if ! python3 "$AUDIT_HOME/deep.py" --root "$ROOT"; then
   FAIL=1
 fi
 
-# —— 8 完整生产构建 ——
-step "8/11 完整构建 hugo + glossary-inject + pagefind"
+# —— 8 完整生产构建（临时目录，不动本地 public/） ——
+step "8/11 完整构建 hugo + glossary-inject（临时目录）"
 if [[ ! -d "$ROOT/node_modules" ]]; then
   log "npm ci（缺少 node_modules）…"
   npm ci --ignore-scripts
 fi
-log "清理 public/（避免旧产物污染）…"
-rm -rf "$ROOT/public"
+AUDIT_PUBLIC="$SCAN_TMP/public-audit"
+rm -rf "$AUDIT_PUBLIC"
+log "构建到临时目录（不触碰本地 public/）：$AUDIT_PUBLIC"
 set +e
 (
+  set -e
   export HUGO_ENVIRONMENT=production
   export HUGO_BASEURL="$PAGES_BASEURL"
-  npm run build
+  # 单次 hugo：产出 + path 告警；跳过 pagefind（审计不需要搜索索引）
+  hugo --gc --minify --printPathWarnings --cleanDestinationDir -d "$AUDIT_PUBLIC"
+  export GLOSSARY_PUBLIC_DIR="$AUDIT_PUBLIC"
+  node "$ROOT/scripts/glossary-inject.mjs" --public-dir="$AUDIT_PUBLIC"
 ) >"$BUILD_LOG" 2>&1
 br=$?
 set -e
 tail -n 40 "$BUILD_LOG" || true
 if [[ $br -ne 0 ]]; then
-  crit "npm run build 失败"
+  crit "临时目录构建 / glossary-inject 失败"
 fi
 if grep -Eq '\[glossary\] source file not found|\[glossary\] heading not found|\[glossary\] skip invalid entry|\[glossary\] alias collision|\[glossary\] unexpected no content root' "$BUILD_LOG"; then
   crit "glossary-inject 报告错误"
   grep -E '\[glossary\] (source file not found|heading not found|skip invalid entry|alias collision|unexpected no content root)' "$BUILD_LOG" >&2 || true
+fi
+if grep -Eqi 'ERROR|fatal' "$BUILD_LOG" 2>/dev/null \
+  || grep -Eqi 'WARN.*(Ref|ref\.|link|page not found|Path Warning)' "$BUILD_LOG" 2>/dev/null; then
+  crit "Hugo path/link 告警"
+  grep -Ei 'ERROR|fatal|WARN.*(Ref|ref\.|link|page not found|Path Warning)' "$BUILD_LOG" | head -40 >&2 || true
 fi
 
 # —— 9 HTML 产物审计 ——
 step "9/11 构建产物 HTML 审计"
 if [[ $br -eq 0 ]]; then
   # 必须显式传 base-path（含空字符串），避免 html.mjs 误用默认 /blog
-  if ! node "$AUDIT_HOME/html.mjs" "$ROOT/public" --base-path="$PAGES_BASEPATH"; then
+  if ! node "$AUDIT_HOME/html.mjs" "$AUDIT_PUBLIC" --base-path="$PAGES_BASEPATH" --skip-pagefind; then
     FAIL=1
   fi
 else
   log "跳过 HTML 审计（构建未成功）"
 fi
 
-# —— 10 Hugo path warnings（写到临时目录，禁止覆盖已 inject 的 public/） ——
-step "10/11 Hugo printPathWarnings（独立 destination）"
-if [[ $br -eq 0 ]]; then
-  PATHWARN_DEST="$SCAN_TMP/hugo-pathwarn-out"
-  mkdir -p "$PATHWARN_DEST"
-  set +e
-  (
-    export HUGO_ENVIRONMENT=production
-    export HUGO_BASEURL="$PAGES_BASEURL"
-    hugo --gc --minify --printPathWarnings --cleanDestinationDir -d "$PATHWARN_DEST" \
-      >"$SCAN_TMP/hugo-pathwarn" 2>&1
-  )
-  hw=$?
-  set -e
-  if [[ $hw -ne 0 ]]; then
-    crit "hugo --printPathWarnings 失败"
-    tail -40 "$SCAN_TMP/hugo-pathwarn" >&2 || true
-  fi
-  if grep -Eqi 'ERROR|fatal' "$SCAN_TMP/hugo-pathwarn" 2>/dev/null \
-    || grep -Eqi 'WARN.*(Ref|ref\.|link|page not found|Path Warning)' "$SCAN_TMP/hugo-pathwarn" 2>/dev/null; then
-    crit "Hugo path/link 告警"
-    grep -Ei 'ERROR|fatal|WARN.*(Ref|ref\.|link|page not found|Path Warning)' "$SCAN_TMP/hugo-pathwarn" | head -40 >&2 || true
-  fi
-fi
+# —— 10 path warnings 已并入步骤 8 ——
+step "10/11 Hugo printPathWarnings（已并入步骤 8 临时构建）"
+log "跳过重复 hugo（步骤 8 已带 --printPathWarnings）"
 
 # —— 11 报告 ——
 step "11/11 写报告"
@@ -301,7 +290,7 @@ REPORT="$ROOT/.git/last-pre-commit-audit.txt"
 {
   echo "time: $(date '+%Y-%m-%d %H:%M:%S')"
   echo "branch: $(git rev-parse --abbrev-ref HEAD)"
-  echo "scope: full worktree + npm run build + html audit"
+  echo "scope: full worktree + hugo(temp public-audit) + glossary-inject + html audit"
   echo "baseURL: $PAGES_BASEURL"
   echo "basePath: ${PAGES_BASEPATH:-"(root)"}"
   echo "tracked_files: $TRACKED_COUNT"

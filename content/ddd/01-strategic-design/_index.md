@@ -21,9 +21,3 @@ flowchart TD
   UL --> BC
   BC --> CM
 ```
-
-1. [名词介绍]({{< ref "ddd/01-strategic-design/01-terms.md" >}})
-2. [分析业务域]({{< ref "ddd/01-strategic-design/02-analyzing-business-domains.md" >}})
-3. [发现领域知识]({{< ref "ddd/01-strategic-design/03-discovering-domain-knowledge.md" >}})
-4. [管理领域复杂度]({{< ref "ddd/01-strategic-design/04-managing-domain-complexity.md" >}})
-5. [集成限界上下文]({{< ref "ddd/01-strategic-design/05-integrating-bounded-contexts.md" >}})

@@ -31,5 +31,3 @@ flowchart TD
   SR -.->|调整 Backlog| PB
   Retro -.->|改进实践| SP
 ```
-
-阅读顺序：[名词介绍]({{< ref "scrum/01-terms.md" >}}) → 角色 → 需求流 → 事件 → 工件。

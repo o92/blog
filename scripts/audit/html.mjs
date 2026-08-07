@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * 构建后 HTML 全站审计。
- * Usage: node scripts/audit/html.mjs [publicDir] [--base-path=/blog]
+ * Usage: node scripts/audit/html.mjs [publicDir] [--base-path=/blog] [--skip-pagefind]
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -24,10 +24,13 @@ let publicDir = path.resolve(process.cwd(), "public");
 // 默认空：站点挂在域名根。Pages 子路径须由调用方显式传入 --base-path=/blog
 let basePath = "";
 let basePathSet = false;
+let skipPagefind = false;
 for (const a of args) {
   if (a.startsWith("--base-path=")) {
     basePath = a.slice("--base-path=".length) || "";
     basePathSet = true;
+  } else if (a === "--skip-pagefind") {
+    skipPagefind = true;
   } else if (!a.startsWith("--")) publicDir = path.resolve(a);
 }
 basePath = basePath.replace(/\/$/, "");
@@ -50,7 +53,7 @@ if (htmlFiles.length === 0) {
   process.exit(1);
 }
 
-if (!fs.existsSync(path.join(publicDir, "pagefind"))) {
+if (!skipPagefind && !fs.existsSync(path.join(publicDir, "pagefind"))) {
   err("缺少 public/pagefind（pagefind 未运行或失败）");
 }
 
