@@ -128,14 +128,9 @@ Active Record:
   aliases: ["活动记录"]
 
 Domain Model:
-  summary: "领域模型（充血）：对象同时承载数据与行为，表达复杂规则与不变量"
+  summary: "领域模型：对象同时承载数据与行为，表达复杂规则与不变量（DDD 战术）"
   source: "ddd/02-tactical-design/01-terms.md#Domain Model"
-  aliases: ["领域模型", "充血模型"]
-
-Anemic Domain Model:
-  summary: "贫血模型：对象几乎只有数据，行为在外部 Service；不是 Domain Model 模式"
-  source: "ddd/02-tactical-design/01-terms.md#Domain Model"
-  aliases: ["贫血模型"]
+  aliases: ["领域模型"]
 
 Value Object:
   summary: "值对象：由属性值整体标识、不可变；相等比的是值"

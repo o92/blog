@@ -7,9 +7,11 @@ categories:
       - title: 软件设计
         ka: Software Design
         children:
+          - title: 设计模式
+            book: design-patterns
           - title: 领域驱动设计(DDD)
             book: ddd
-      # 预留二级（暂无书不挂空节点）：软件架构、软件需求、软件测试…
+      # 预留二级（暂无笔记不挂空节点）：软件架构、软件需求、软件测试…
   - title: 项目管理
     bok: PMBOK
     children:

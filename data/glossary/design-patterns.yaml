@@ -1,0 +1,11 @@
+# 设计模式术语（企业应用 / 领域逻辑）
+
+Rich Domain Model:
+  summary: "充血模型：对象同时承载数据与行为；业务规则在模型内"
+  source: "design-patterns/01-terms.md#Rich Domain Model"
+  aliases: ["充血模型"]
+
+Anemic Domain Model:
+  summary: "贫血模型：对象几乎只有数据，行为在外部 Service（反模式）"
+  source: "design-patterns/01-terms.md#Anemic Domain Model"
+  aliases: ["贫血模型"]
