@@ -93,8 +93,6 @@ html {
   font-size: var(--font-size);
   scroll-behavior: smooth;
   overflow-y: auto;
-  /* sticky 顶栏：锚点滚动时标题不被盖住（左右目录 / URL hash） */
-  scroll-padding-top: calc(var(--header-h) + 0.75rem);
 }
 
 body {
@@ -1216,8 +1214,7 @@ html.layout-anim .page-shell--book .content-panel {
 .post-content h2,
 .post-content h3,
 .post-content h4 {
-  /* 锚点偏移由 html scroll-padding-top 统一处理，这里只留一点呼吸 */
-  scroll-margin-top: 0.25rem;
+  scroll-margin-top: var(--header-h);
 }
 
 .post-content a {
@@ -1362,13 +1359,13 @@ html.mermaid-ready .post-content pre.mermaid {
   margin-top: 2.25rem;
   padding-top: 1.25rem;
   border-top: 1px solid var(--border);
-  /* #part-… 落在 section 上；顶栏避让靠 html scroll-padding-top */
-  scroll-margin-top: 0.25rem;
+  /* #part-… 锚在 section 上；配合 anchor-offset.js */
+  scroll-margin-top: var(--header-h);
 }
 
 .final-part__title {
   margin-top: 0;
-  scroll-margin-top: 0.25rem;
+  scroll-margin-top: var(--header-h);
 }
 
 .final-part__body > *:first-child {
