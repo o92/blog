@@ -17,7 +17,7 @@ weight = 6
 
 ### Coaching Stakeholders / Briefings
 
-干系人不会自动懂赋能；需要简报与持续教练，否则会把试点重新拉回功能清单。
+干系人不会自动懂赋能；需要简报与持续辅导，否则会把试点重新拉回功能清单。
 
 ### Managing Existing Commitments
 

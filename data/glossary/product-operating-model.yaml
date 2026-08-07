@@ -51,7 +51,7 @@ Fake Agile:
   aliases: ["假敏捷"]
 
 Product Manager:
-  summary: "产品经理：扛价值与合宜性风险，对 outcomes 问责"
+  summary: "产品经理：扛价值与商业可行性风险，对 outcomes 问责"
   source: "product-operating-model/03-competencies/01-terms.md#Product Manager"
   aliases: ["产品经理", "PM"]
 

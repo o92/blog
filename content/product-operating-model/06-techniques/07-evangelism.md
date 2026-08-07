@@ -1,5 +1,5 @@
 +++
-title = "转型布道"
+title = "转型宣导"
 weight = 7
 +++
 

@@ -5,7 +5,7 @@ weight = 8
 
 ### Managers as Coaches
 
-第一教练力量应是一线经理；外脑无法替代日常教练。
+日常辅导的主力应是一线经理；外脑无法替代日常辅导。
 
 ### In-House / External Product Coaches
 

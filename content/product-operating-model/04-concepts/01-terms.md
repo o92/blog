@@ -25,5 +25,5 @@ weight = 1
 
 ### Value / Usability / Feasibility / Viability Risk
 
-- **中文**：价值 / 可用性 / 可行性 / 合宜性风险
+- **中文**：价值 / 可用性 / 技术可行性 / 商业可行性风险
 - Discovery 要分别评估：客户是否觉得够好、用户是否用得来、工程是否做得出、公司约束下是否可经营。

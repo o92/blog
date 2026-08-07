@@ -256,6 +256,7 @@ a[href]:hover {
   text-decoration: none;
   box-sizing: border-box;
   transition: background 0.15s ease;
+  white-space: nowrap;
 }
 
 .site-nav__hit--static {
@@ -265,6 +266,7 @@ a[href]:hover {
 .site-nav__label-text {
   line-height: 1.2;
   color: inherit;
+  white-space: nowrap;
 }
 
 /* Kill global link blue / visited blue / hover blue inside nav */
@@ -326,7 +328,8 @@ a[href]:hover {
   position: absolute;
   top: 100%;
   left: 0;
-  min-width: 12rem;
+  min-width: max(12rem, max-content);
+  width: max-content;
   margin: 0;
   padding: 0.35rem;
   list-style: none;
@@ -370,8 +373,9 @@ a[href]:hover {
 }
 
 .site-nav__sub .site-nav__label-text {
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   min-width: 0;
+  white-space: nowrap;
 }
 
 .site-nav__sub .site-nav__trail {

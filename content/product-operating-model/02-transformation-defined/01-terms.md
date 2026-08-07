@@ -11,7 +11,7 @@ weight = 1
 ### Changing How You Solve Problems
 
 - **中文**：改变如何解题
-- 从功能路线图交给 Feature Team，转向给赋能产品团队**问题与期望结果**，由团队发现有价值/可用/可行/合宜的方案。
+- 从功能路线图交给 Feature Team，转向给赋能产品团队**问题与期望结果**，由团队发现有价值、可用、技术可行、且对公司可行的方案。
 
 ### Changing How You Decide Which Problems to Solve
 
@@ -31,7 +31,7 @@ weight = 1
 ### Product Discovery
 
 - **中文**：产品发现
-- 用远低于正式构建成本的方式（多为原型）快速检验想法，找到值得构建的方案；核心优化 **time to money**（出结果），而非只拼 time to market。
+- 用远低于正式构建成本的方式（多为原型）快速检验想法，找到值得构建的方案；核心优化 **time to money**（达成业务结果的时间），而非只拼 time to market。
 
 ### Fake Agile
 
