@@ -1,0 +1,62 @@
+---
+description: 阅读笔记须对照 sources/ 原书 EPUB；不上站、不外链
+globs: content/**/*.md,sources/**
+alwaysApply: false
+---
+
+# 原书 EPUB（AI 使用约定）
+
+仓库根目录 `sources/` 存放各阅读笔记对应的 **EPUB 原书**，仅供 AI / 本地校对。**不得**发布到网站。
+
+## 何时使用
+
+编辑、扩写、校对、补术语、改译名，或用户问「原书怎么说」时：
+
+1. 打开 `sources/manifest.yaml`，用笔记 slug（`content/<slug>/`）找到 `files`。
+2. 若 `sources/<path>` **文件存在**：**先读 EPUB**，再改 `content/` / `data/glossary/`。
+3. 若路径已登记但文件不存在，或 `files` 为空：用已有笔记与公开知识继续，并在回复里说明「本机尚无 EPUB」。
+
+不要靠记忆编造章节名、专有名词拼写或「书中原话」。
+
+## 如何读 EPUB
+
+EPUB 是 zip。需要原文时用 shell，例如：
+
+```bash
+# 列目录
+unzip -l sources/<slug>/<file>.epub | head -80
+
+# 解到临时目录再读章节 xhtml/html（勿把解压结果提交进 git）
+rm -rf /tmp/blog-epub && mkdir -p /tmp/blog-epub
+unzip -q -o sources/<slug>/<file>.epub -d /tmp/blog-epub
+# 常见正文在 OEBPS/、EPUB/、ops/ 下的 .xhtml /.html
+rg -n "关键词" /tmp/blog-epub --glob '*.{xhtml,html,xml}' | head
+```
+
+优先读导航/`toc`/spine 对应章节，再摘与当前笔记相关的段落。
+
+## 硬性禁止
+
+- 不要把 EPUB（或解压出的全书）放进 `content/`、`static/`、`assets/`、`public/`。
+- 不要在 `data/nav.yaml`、正文、glossary、`layouts/` 中链接或嵌入原书文件。
+- 不要把大段受版权保护的原文贴进站点；笔记保持**摘记 / 转述 / 术语对齐**，引用保持短句级。
+- 不要在用户可见文案里写「仓库里有 epub 下载」。
+
+## 与笔记的对应
+
+| 动作 | 要求 |
+|--|--|
+| 新开笔记 `content/<slug>/` | 建 `sources/<slug>/`，并登记 `manifest.yaml` |
+| 新增/重命名 EPUB | 更新 `manifest.yaml` 的 `path`（有无书看文件是否存在） |
+| 名词与译名 | 以 EPUB 英文专名为准；中文旁注与 glossary 一致 |
+| 章节结构 | 可按原书 PART/章组织，但仍遵守 `chapter-terms-first.mdc` |
+
+## 写作时的默认提示（内化执行）
+
+> 你在维护 Hugo 阅读笔记。权威来源是 `sources/manifest.yaml` 指向的 EPUB，其次才是已有 `content/` 摘记。先查原书再改笔记与 glossary；输出是中文摘记站点，不是原文镜像；原书文件永远不上站。
+
+## 用户可能说的话 → 你怎么做
+
+- 「按原书补这一章」→ 解压 EPUB 对章，按摘记粒度写入 `content/`，补 `01-terms` + glossary。
+- 「这个词原书英文是什么」→ 在 EPUB 里搜，改正文与 `data/glossary/*.yaml`。
+- 「简介/某段看不懂」→ 对照 EPUB 上下文改写成更直白的中文摘记，不整段粘贴原文。

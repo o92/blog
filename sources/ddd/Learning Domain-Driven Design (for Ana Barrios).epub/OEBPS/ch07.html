@@ -1,0 +1,851 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xml:lang="en"
+lang="en"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title>Learning Domain-Driven Design</title>
+<link rel="stylesheet" type="text/css" href="override_v1.css"/>
+<link rel="stylesheet" type="text/css" href="epub.css"/>
+</head>
+<body>
+<div id="book-content">
+<div id="sbo-rt-content"><section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 7. Modeling the Dimension of Time"><div class="chapter" id="modeling_the_dimension_of_time">
+<h1><span class="label">Chapter 7. </span>Modeling the Dimension of Time</h1>
+
+<p>In the previous chapter, you learned about the domain model pattern: its building blocks,<a contenteditable="false" data-type="indexterm" data-primary="modeling business domain" data-secondary="time modeled" data-see="event-sourced domain model" id="id1023"></a><a contenteditable="false" data-type="indexterm" data-primary="time modeled via event sourcing" data-secondary="about" id="id1024"></a><a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="about" id="id1025"></a><a contenteditable="false" data-type="indexterm" data-primary="dimension of time" data-see="time modeled" id="id1026"></a><a contenteditable="false" data-type="indexterm" data-primary="domain model for business logic" data-secondary="time modeled" data-see="event-sourced domain model" id="id1027"></a><a contenteditable="false" data-type="indexterm" data-primary="domain model for business logic" data-secondary="event-sourced domain model versus" id="id1028"></a><a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="domain model versus" id="id1029"></a> purpose, and application context. The event-sourced domain model pattern is based on the same premise as the domain model pattern. Again, the business logic is complex and belongs to a core subdomain. Moreover, it uses the same tactical patterns as the domain model: value objects, aggregates, and domain events.</p>
+
+<p>The difference between these implementation patterns lies in the way<a contenteditable="false" data-type="indexterm" data-primary="aggregates" data-secondary="state persisted versus event sourcing" data-seealso="domain model; event-sourced domain model" id="id1030"></a> the aggregates’ state is persisted. The event-sourced domain model uses the event sourcing pattern to manage the aggregates’ states: instead of persisting an aggregate’s state, the model generates domain events describing each change and uses them as the source of truth for the aggregate’s data.</p>
+
+<p>This chapter starts by introducing the notion of event sourcing. Then it covers how event sourcing can be combined with the domain model pattern, making it an event-sourced domain model.</p>
+
+<section data-type="sect1" data-pdf-bookmark="Event Sourcing"><div class="sect1" id="event_sourcing">
+<h1>Event Sourcing</h1>
+<blockquote data-type="epigraph" epub:type="epigraph">
+
+<p>Show me your flowchart and conceal your tables, <a contenteditable="false" data-type="indexterm" data-primary="sales leads via event sourcing" id="ch07-esp3"></a><a contenteditable="false" data-type="indexterm" data-primary="time modeled via event sourcing" data-secondary="event sourcing pattern" id="ch07-esp2"></a><a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="event sourcing pattern" id="ch07-esp"></a><a contenteditable="false" data-type="indexterm" data-primary="Brooks, Fred" id="id1031"></a>and I shall continue to be mystified. Show me your tables, and I won’t usually need your flowchart; it’ll be obvious.</p>
+<p data-type="attribution">Fred Brooks<sup><a data-type="noteref" id="ch01fn29-marker" href="ch07.html#ch01fn29">1</a></sup></p>
+</blockquote>
+
+<p>Let’s use Fred Brooks’s reasoning to define the event sourcing pattern and understand how it differs from traditional modeling and persisting of data. Examine <a data-type="xref" href="#state_based_model">Table 7-1</a> and analyze what you can learn from this data about the system it belongs to.</p>
+
+<table id="state_based_model">
+    <caption><span class="label">Table 7-1. </span>State-based model</caption>
+    <thead>
+    <tr>
+        <th>lead-id</th>
+      <th>first-name</th>
+      <th>last-name</th>
+      <th>status</th>
+      <th>phone-number</th>
+      <th>followup-on</th>
+      <th>created-on</th>
+      <th>updated-on</th>
+    </tr>
+    </thead>
+    <tbody>
+  <tr>
+    <td>1</td>
+    <td>Sean</td> 
+    <td>Callahan</td>
+    <td>CONVERTED</td>
+    <td>555-1246</td>
+    <td></td>
+    <td>2019-​01-31​T​10:02:40.32Z</td>
+    <td>2019-​01-31​T​10:02:40.32Z</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>Sarah</td> 
+    <td>Estrada</td>
+    <td>CLOSED</td>
+    <td>555-4395</td>
+    <td></td>
+    <td>2019-​03-29​T​22:01:41.44Z</td>
+    <td>2019-​03-29​T​22:01:41.44Z</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>Stephanie</td> 
+    <td>Brown</td>
+    <td>CLOSED</td>
+    <td>555-1176</td>
+    <td></td>
+    <td>2019-​04-15​T​23:08:45.59Z</td>
+    <td>2019-​04-15​T​23:08:45.59Z</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>Sami</td> 
+    <td>Calhoun</td>
+    <td>CLOSED</td>
+    <td>555-1850</td>
+    <td></td>
+    <td>2019-​04-25​T​05:42:17.07Z</td>
+    <td>2019-​04-25​T​05:42:17.07Z</td>
+  </tr>
+  <tr>
+    <td>5</td>
+    <td>William</td> 
+    <td>Smith</td>
+    <td>CONVERTED</td>
+    <td>555-3013</td>
+    <td></td>
+    <td>2019-​05-14​T​04:43:57.51Z</td>
+    <td>2019-​05-14​T​04:43:57.51Z</td>
+  </tr>
+  <tr>
+    <td>6</td>
+    <td>Sabri</td> 
+    <td>Chan</td>
+    <td>NEW_LEAD</td>
+    <td>555-2900</td>
+    <td></td>
+    <td>2019-​06-19​T​15:01:49.68Z</td>
+    <td>2019-​06-19​T​15:01:49.68Z</td>
+  </tr>
+  <tr>
+    <td>7</td>
+    <td>Samantha</td> 
+    <td>Espinosa</td>
+    <td>NEW_LEAD</td>
+    <td>555-8861</td>
+    <td></td>
+    <td>2019-​07-17​T​13:09:59.32Z</td>
+    <td>2019-​07-17​T​13:09:59.32Z</td>
+  </tr>
+  <tr>
+    <td>8</td>
+    <td>Hani</td> 
+    <td>Cronin</td>
+    <td>CLOSED</td>
+    <td>555-3018</td>
+    <td></td>
+    <td>2019-​10-09​T​11:40:17.13Z</td>
+    <td>2019-​10-09​T​11:40:17.13Z</td>
+  </tr>
+  <tr>
+    <td>9</td>
+    <td>Sian</td> 
+    <td>Espinoza</td>
+    <td>FOLLOWUP_SET</td>
+    <td>555-6461</td>
+    <td>2019-​12-04​T​01:49:08.05Z</td>
+    <td>2019-​12-04​T​01:49:08.05Z</td>
+    <td>2019-​12-04​T​01:49:08.05Z</td>
+  </tr>
+  <tr>
+    <td>10</td>
+    <td>Sophia</td> 
+    <td>Escamilla</td>
+    <td>CLOSED</td>
+    <td>555-4090</td>
+    <td></td>
+    <td>2019-​12-06​T​09:12:32.56Z</td>
+    <td>2019-​12-06​T​09:12:32.56Z</td>
+  </tr>
+  <tr>
+    <td>11</td>
+    <td>William</td> 
+    <td>White</td>
+    <td>FOLLOWUP_SET</td>
+    <td>555-1187</td>
+    <td>2020-​01-23​T​00:33:13.88Z</td>
+    <td>2020-​01-23​T​00:33:13.88Z</td>
+    <td>2020-​01-23​T​00:33:13.88Z</td>
+  </tr>
+  <tr>
+    <td>12</td>
+    <td>Casey</td> 
+    <td>Davis</td>
+    <td>CONVERTED</td>
+    <td>555-8101</td>
+    <td></td>
+    <td>2020-​05-20​T​09:52:55.95Z</td>
+    <td>2020-​05-27​T​12:38:44.12Z</td>
+  </tr>
+  <tr>
+    <td>13</td>
+    <td>Walter</td> 
+    <td>Connor</td>
+    <td>NEW_LEAD</td>
+    <td>555-4753</td>
+    <td></td>
+    <td>2020-​04-20​T​06:52:55.95Z</td>
+    <td>2020-​04-20​T​06:52:55.95Z</td>
+  </tr>
+  <tr>
+    <td>14</td>
+    <td>Sophie</td> 
+    <td>Garcia</td>
+    <td>CONVERTED</td>
+    <td>555-1284</td>
+    <td></td>
+    <td>2020-​05-06​T​18:47:04.70Z</td>
+    <td>2020-​05-06​T​18:47:04.70Z</td>
+  </tr>
+  <tr>
+    <td>15</td>
+    <td>Sally</td> 
+    <td>Evans</td>
+    <td>PAYMENT_FAILED</td>
+    <td>555-3230</td>
+    <td></td>
+    <td>2020-​06-04​T​14:51:06.15Z</td>
+    <td>2020-​06-04​T​14:51:06.15Z</td>
+  </tr>
+  <tr>
+    <td>16</td>
+    <td>Scott</td> 
+    <td>Chatman</td>
+    <td>NEW_LEAD</td>
+    <td>555-6953</td>
+    <td></td>
+    <td>2020-​06-09​T​09:07:05.23Z</td>
+    <td>2020-​06-09​T​09:07:05.23Z</td>
+  </tr>
+  <tr>
+    <td>17</td>
+    <td>Stephen</td> 
+    <td>Pinkman</td>
+    <td>CONVERTED</td>
+    <td>555-2326</td>
+    <td></td>
+    <td>2020-​07-20​T​00:56:59.94Z</td>
+    <td>2020-​07-20​T​00:56:59.94Z</td>
+  </tr>
+  <tr>
+    <td>18</td>
+    <td>Sara</td> 
+    <td>Elliott</td>
+    <td>PENDING_PAYMENT</td>
+    <td>555-2620</td>
+    <td></td>
+    <td>2020-​08-12​T​17:39:43.25Z</td>
+    <td>2020-​08-12​T​17:39:43.25Z</td>
+  </tr>
+  <tr>
+    <td>19</td>
+    <td>Sadie</td> 
+    <td>Edwards</td>
+    <td>FOLLOWUP_SET</td>
+    <td>555-8163</td>
+    <td>2020-​10-22​T​12:40:03.98Z</td>
+    <td>2020-​10-22​T​12:40:03.98Z</td>
+    <td>2020-​10-22​T​12:40:03.98Z</td>
+  </tr>
+  <tr>
+    <td>20</td>
+    <td>William</td> 
+    <td>Smith</td>
+    <td>PENDING_PAYMENT</td>
+    <td>555-9273</td>
+    <td></td>
+    <td>2020-​11-13​T​08:14:07.17Z</td>
+    <td>2020-​11-13​T​08:14:07.17Z</td>
+  </tr>
+</tbody>
+</table>
+
+<p>It’s evident that the table is used to manage potential customers, or leads, in a telemarketing system. For each lead, you can see their ID, their first and last names, when the record was created and updated, their phone number, and the lead’s current status.</p>
+
+<p>By examining the various statuses, we can also assume the processing cycle each potential customer goes through:</p>
+<ul>
+<li>
+    <p>The sales flow starts with the potential customer in the <code>NEW_LEAD</code> status.</p></li>
+<li>
+    <p>A sales call can end with the person not being interested in the offer (the lead is <code>CLOSED</code>), scheduling a follow-up call (<code>FOLLOWUP_SET</code>), or accepting the offer (<span class="keep-together"><code>PENDING_PAYMENT</code></span>).</p></li>
+<li>
+    <p>If the payment is successful, the lead is <code>CONVERTED</code> into a customer. Conversely, the payment can fail—<code>PAYMENT_FAILED</code>.</p></li>
+</ul>
+
+<p>That’s quite a lot of information that we can gather just by analyzing a table’s schema and the data stored in it. We can even assume what ubiquitous language was used when modeling the data. But what information is missing from that table?</p>
+
+<p>The table’s data documents the leads’ current states, but it misses the story of how each lead got to their current state. We can’t analyze what was happening during the lifecycles of leads. We don’t know how many calls were made before a lead became <code>CONVERTED</code>. Was a purchase made right away, or was there a lengthy sales journey? Based on the historical data, is it worth trying to contact a person after multiple follow-ups, or is it more efficient to close the lead and move to a more promising prospect? None of that information is there. All we know are the leads’ current states.</p>
+
+<p>These questions reflect business concerns essential for optimizing the sales process. From a business standpoint, it’s crucial to analyze the data and optimize the process based on the experience. One of the ways to fill in the missing information is to use event sourcing.</p>
+
+<p>The event sourcing pattern introduces the dimension of time into the data model. Instead of the schema reflecting the aggregates’ current state, an event sourcing–based system persists events documenting every change in an aggregate’s lifecycle.</p>
+
+<p>Consider the <code>CONVERTED</code> customer on line 12 in <a data-type="xref" href="#state_based_model">Table 7-1</a>. The following listing demonstrates how the person’s data would be represented in an event-sourced <span class="keep-together">system</span>:</p>
+<pre data-code-language="json"><code class="p">{</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"lead-id"</code><code class="p">:</code><code class="w"> </code><code class="mi">12</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-id"</code><code class="p">:</code><code class="w"> </code><code class="mi">0</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-type"</code><code class="p">:</code><code class="w"> </code><code class="s2">"lead-initialized"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"first-name"</code><code class="p">:</code><code class="w"> </code><code class="s2">"Casey"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"last-name"</code><code class="p">:</code><code class="w"> </code><code class="s2">"David"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"phone-number"</code><code class="p">:</code><code class="w"> </code><code class="s2">"555-2951"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"timestamp"</code><code class="p">:</code><code class="w"> </code><code class="s2">"2020-05-20T09:52:55.95Z"</code><code class="w"></code>
+<code class="p">},</code><code class="w"></code>
+<code class="p">{</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"lead-id"</code><code class="p">:</code><code class="w"> </code><code class="mi">12</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-id"</code><code class="p">:</code><code class="w"> </code><code class="mi">1</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-type"</code><code class="p">:</code><code class="w"> </code><code class="s2">"contacted"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"timestamp"</code><code class="p">:</code><code class="w"> </code><code class="s2">"2020-05-20T12:32:08.24Z"</code><code class="w"></code>
+<code class="p">},</code><code class="w"></code>
+<code class="p">{</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"lead-id"</code><code class="p">:</code><code class="w"> </code><code class="mi">12</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-id"</code><code class="p">:</code><code class="w"> </code><code class="mi">2</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-type"</code><code class="p">:</code><code class="w"> </code><code class="s2">"followup-set"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"followup-on"</code><code class="p">:</code><code class="w"> </code><code class="s2">"2020-05-27T12:00:00.00Z"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"timestamp"</code><code class="p">:</code><code class="w"> </code><code class="s2">"2020-05-20T12:32:08.24Z"</code><code class="w"></code>
+<code class="p">},</code><code class="w"></code>
+<code class="p">{</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"lead-id"</code><code class="p">:</code><code class="w"> </code><code class="mi">12</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-id"</code><code class="p">:</code><code class="w"> </code><code class="mi">3</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-type"</code><code class="p">:</code><code class="w"> </code><code class="s2">"contact-details-updated"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"first-name"</code><code class="p">:</code><code class="w"> </code><code class="s2">"Casey"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"last-name"</code><code class="p">:</code><code class="w"> </code><code class="s2">"Davis"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"phone-number"</code><code class="p">:</code><code class="w"> </code><code class="s2">"555-8101"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"timestamp"</code><code class="p">:</code><code class="w"> </code><code class="s2">"2020-05-20T12:32:08.24Z"</code><code class="w"></code>
+<code class="p">},</code><code class="w"></code>
+<code class="p">{</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"lead-id"</code><code class="p">:</code><code class="w"> </code><code class="mi">12</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-id"</code><code class="p">:</code><code class="w"> </code><code class="mi">4</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-type"</code><code class="p">:</code><code class="w"> </code><code class="s2">"contacted"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"timestamp"</code><code class="p">:</code><code class="w"> </code><code class="s2">"2020-05-27T12:02:12.51Z"</code><code class="w"></code>
+<code class="p">},</code><code class="w"></code>
+<code class="p">{</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"lead-id"</code><code class="p">:</code><code class="w"> </code><code class="mi">12</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-id"</code><code class="p">:</code><code class="w"> </code><code class="mi">5</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-type"</code><code class="p">:</code><code class="w"> </code><code class="s2">"order-submitted"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"payment-deadline"</code><code class="p">:</code><code class="w"> </code><code class="s2">"2020-05-30T12:02:12.51Z"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"timestamp"</code><code class="p">:</code><code class="w"> </code><code class="s2">"2020-05-27T12:02:12.51Z"</code><code class="w"></code>
+<code class="p">},</code><code class="w"></code>
+<code class="p">{</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"lead-id"</code><code class="p">:</code><code class="w"> </code><code class="mi">12</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-id"</code><code class="p">:</code><code class="w"> </code><code class="mi">6</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-type"</code><code class="p">:</code><code class="w"> </code><code class="s2">"payment-confirmed"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"status"</code><code class="p">:</code><code class="w"> </code><code class="s2">"converted"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"timestamp"</code><code class="p">:</code><code class="w"> </code><code class="s2">"2020-05-27T12:38:44.12Z"</code><code class="w"></code>
+<code class="p">}</code><code class="w"></code></pre>
+
+<p>The events in the listing tell the customer’s story. The lead was created in the system (event 0) and was contacted by a sales agent about two hours later (event 1). During the call, it was agreed that the sales agent would call back a week later (event 2), but to a different phone number (event 3). The sales agent also fixed a typo in the last name (event 3). The lead was contacted on the agreed date and time (event 4) and submitted an order (event 5). The order was to be paid in three days (event 5), but the <span class="keep-together">payment</span> was received about half an hour later (event 6), and the lead was converted into a new customer.</p>
+
+<p>As we saw earlier, the customer’s state can easily be projected out from these domain events. All we have to do is apply simple transformation logic sequentially to each event:</p>
+<pre data-code-language="csharp"><code class="k">public</code> <code class="k">class</code> <code class="nc">LeadStateProjection</code>
+<code class="p">{</code>
+    <code class="k">public</code> <code class="kt">long</code> <code class="n">LeadId</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+    <code class="k">public</code> <code class="kt">string</code> <code class="n">FirstName</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+    <code class="k">public</code> <code class="kt">string</code> <code class="n">LastName</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+    <code class="k">public</code> <code class="n">LeadStatus</code> <code class="n">Status</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+    <code class="k">public</code> <code class="n">PhoneNumber</code> <code class="n">PhoneNumber</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+    <code class="k">public</code> <code class="n">DateTime</code><code class="p">?</code> <code class="n">FollowupOn</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+    <code class="k">public</code> <code class="n">DateTime</code> <code class="n">CreatedOn</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+    <code class="k">public</code> <code class="n">DateTime</code> <code class="n">UpdatedOn</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+    <code class="k">public</code> <code class="kt">int</code> <code class="n">Version</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+ 
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Apply</code><code class="p">(</code><code class="n">LeadInitialized</code> <code class="n">@event</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="n">LeadId</code> <code class="p">=</code> <code class="n">@event</code><code class="p">.</code><code class="n">LeadId</code><code class="p">;</code>
+        <code class="n">Status</code> <code class="p">=</code> <code class="n">LeadStatus</code><code class="p">.</code><code class="n">NEW_LEAD</code><code class="p">;</code>
+        <code class="n">FirstName</code> <code class="p">=</code> <code class="n">@event</code><code class="p">.</code><code class="n">FirstName</code><code class="p">;</code>
+        <code class="n">LastName</code> <code class="p">=</code> <code class="n">@event</code><code class="p">.</code><code class="n">LastName</code><code class="p">;</code>
+        <code class="n">PhoneNumber</code> <code class="p">=</code> <code class="n">@event</code><code class="p">.</code><code class="n">PhoneNumber</code><code class="p">;</code>            
+        <code class="n">CreatedOn</code> <code class="p">=</code> <code class="n">@event</code><code class="p">.</code><code class="n">Timestamp</code><code class="p">;</code>
+        <code class="n">UpdatedOn</code> <code class="p">=</code> <code class="n">@event</code><code class="p">.</code><code class="n">Timestamp</code><code class="p">;</code>            
+        <code class="n">FollowupOn</code> <code class="p">=</code> <code class="k">null</code><code class="p">;</code>
+        <code class="n">Version</code> <code class="p">=</code> <code class="m">0</code><code class="p">;</code>
+    <code class="p">}</code>
+ 
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Apply</code><code class="p">(</code><code class="n">Contacted</code> <code class="n">@event</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="n">UpdatedOn</code> <code class="p">=</code> <code class="n">@event</code><code class="p">.</code><code class="n">Timestamp</code><code class="p">;</code>
+        <code class="n">FollowupOn</code> <code class="p">=</code> <code class="k">null</code><code class="p">;</code>
+        <code class="n">Version</code> <code class="p">+=</code> <code class="m">1</code><code class="p">;</code>
+    <code class="p">}</code>
+ 
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Apply</code><code class="p">(</code><code class="n">FollowupSet</code> <code class="n">@event</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="n">UpdatedOn</code> <code class="p">=</code> <code class="n">@event</code><code class="p">.</code><code class="n">Timestamp</code><code class="p">;</code>
+        <code class="n">FollowupOn</code> <code class="p">=</code> <code class="n">@event</code><code class="p">.</code><code class="n">FollowupOn</code><code class="p">;</code>
+        <code class="n">Status</code> <code class="p">=</code> <code class="n">LeadStatus</code><code class="p">.</code><code class="n">FOLLOWUP_SET</code><code class="p">;</code>
+        <code class="n">Version</code> <code class="p">+=</code> <code class="m">1</code><code class="p">;</code>
+    <code class="p">}</code>
+ 
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Apply</code><code class="p">(</code><code class="n">ContactDetailsChanged</code> <code class="n">@event</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="n">FirstName</code> <code class="p">=</code> <code class="n">@event</code><code class="p">.</code><code class="n">FirstName</code><code class="p">;</code>
+        <code class="n">LastName</code> <code class="p">=</code> <code class="n">@event</code><code class="p">.</code><code class="n">LastName</code><code class="p">;</code>
+        <code class="n">PhoneNumber</code> <code class="p">=</code> <code class="n">@event</code><code class="p">.</code><code class="n">PhoneNumber</code><code class="p">;</code>
+        <code class="n">UpdatedOn</code> <code class="p">=</code> <code class="n">@event</code><code class="p">.</code><code class="n">Timestamp</code><code class="p">;</code>
+        <code class="n">Version</code> <code class="p">+=</code> <code class="m">1</code><code class="p">;</code>
+    <code class="p">}</code>
+ 
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Apply</code><code class="p">(</code><code class="n">OrderSubmitted</code> <code class="n">@event</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="n">UpdatedOn</code> <code class="p">=</code> <code class="n">@event</code><code class="p">.</code><code class="n">Timestamp</code><code class="p">;</code>
+        <code class="n">Status</code> <code class="p">=</code> <code class="n">LeadStatus</code><code class="p">.</code><code class="n">PENDING_PAYMENT</code><code class="p">;</code>
+        <code class="n">Version</code> <code class="p">+=</code> <code class="m">1</code><code class="p">;</code>
+    <code class="p">}</code>
+ 
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Apply</code><code class="p">(</code><code class="n">PaymentConfirmed</code> <code class="n">@event</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="n">UpdatedOn</code> <code class="p">=</code> <code class="n">@event</code><code class="p">.</code><code class="n">Timestamp</code><code class="p">;</code>
+        <code class="n">Status</code> <code class="p">=</code> <code class="n">LeadStatus</code><code class="p">.</code><code class="n">CONVERTED</code><code class="p">;</code>
+        <code class="n">Version</code> <code class="p">+=</code> <code class="m">1</code><code class="p">;</code>
+    <code class="p">}</code>
+<code class="p">}</code></pre>
+
+<p>Iterating an aggregate’s events and feeding them sequentially into the appropriate overrides of the <code>Apply</code> method will produce precisely the state representation modeled in the table in <a data-type="xref" href="#state_based_model">Table 7-1</a>.</p>
+
+<p>Pay attention to the <code>Version</code> field <a contenteditable="false" data-type="indexterm" data-primary="sales leads via event sourcing" data-secondary="version field for modification state" id="id1032"></a><a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="event sourcing pattern" data-tertiary="version field for modification state" id="id1033"></a><a contenteditable="false" data-type="indexterm" data-primary="historical perspectives via event sourcing" data-secondary="version field for modification state" id="id1034"></a><a contenteditable="false" data-type="indexterm" data-primary="time modeled via event sourcing" data-secondary="event sourcing pattern" data-tertiary="version field for modification state" id="id1035"></a><a contenteditable="false" data-type="indexterm" data-primary="time modeled via event sourcing" data-secondary="historical perspectives" data-tertiary="version field for modification state" id="id1036"></a>that is incremented after applying each event. Its value represents the total number of modifications made to the business entity. Moreover, suppose we apply a subset of events. In that case, we can “travel through time”: we can project the entity’s state at any point of its lifecycle by applying only the relevant events. For example, if we need the entity’s state in version 5, we can apply only the first five events.</p>
+
+<p>Finally, we are not limited to projecting only a single state representation of the events! Consider the following scenarios.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Search"><div class="sect2" id="search">
+<h2>Search</h2>
+
+<p>You have to implement a search. However, since a lead’s contact information<a contenteditable="false" data-type="indexterm" data-primary="sales leads via event sourcing" data-secondary="searching earlier information values" id="id1037"></a><a contenteditable="false" data-type="indexterm" data-primary="time modeled via event sourcing" data-secondary="event sourcing pattern" data-tertiary="searching earlier information values" id="id1038"></a><a contenteditable="false" data-type="indexterm" data-primary="historical perspectives via event sourcing" data-secondary="searching earlier information values" id="id1039"></a><a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="event sourcing pattern" data-tertiary="searching earlier information values" id="id1040"></a><a contenteditable="false" data-type="indexterm" data-primary="time modeled via event sourcing" data-secondary="historical perspectives" data-tertiary="searching earlier information values" id="id1041"></a><a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="historical perspectives" data-tertiary="searching earlier information values" id="id1042"></a> can be updated—first name, last name, and phone number—sales agents may not be aware of the changes applied by other agents and may want to locate leads using their contact information, including historical values. We can easily project the historical information:</p>
+<pre data-code-language="csharp"><code class="k">public</code> <code class="k">class</code> <code class="nc">LeadSearchModelProjection</code>
+<code class="p">{</code>
+    <code class="k">public</code> <code class="kt">long</code> <code class="n">LeadId</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+    <code class="k">public</code> <code class="n">HashSet</code><code class="p">&lt;</code><code class="kt">string</code><code class="p">&gt;</code> <code class="n">FirstNames</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+    <code class="k">public</code> <code class="n">HashSet</code><code class="p">&lt;</code><code class="kt">string</code><code class="p">&gt;</code> <code class="n">LastNames</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+    <code class="k">public</code> <code class="n">HashSet</code><code class="p">&lt;</code><code class="n">PhoneNumber</code><code class="p">&gt;</code> <code class="n">PhoneNumbers</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+    <code class="k">public</code> <code class="kt">int</code> <code class="n">Version</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Apply</code><code class="p">(</code><code class="n">LeadInitialized</code> <code class="n">@event</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="n">LeadId</code> <code class="p">=</code> <code class="n">@event</code><code class="p">.</code><code class="n">LeadId</code><code class="p">;</code>
+        <code class="n">FirstNames</code> <code class="p">=</code> <code class="k">new</code> <code class="n">HashSet</code><code class="p">&lt;</code><code class="kt">string</code><code class="p">&gt;();</code>
+        <code class="n">LastNames</code> <code class="p">=</code> <code class="k">new</code> <code class="n">HashSet</code><code class="p">&lt;</code><code class="kt">string</code><code class="p">&gt;();</code>
+        <code class="n">PhoneNumbers</code> <code class="p">=</code> <code class="k">new</code> <code class="n">HashSet</code><code class="p">&lt;</code><code class="n">PhoneNumber</code><code class="p">&gt;();</code>
+
+        <code class="n">FirstNames</code><code class="p">.</code><code class="n">Add</code><code class="p">(</code><code class="n">@event</code><code class="p">.</code><code class="n">FirstName</code><code class="p">);</code>
+        <code class="n">LastNames</code><code class="p">.</code><code class="n">Add</code><code class="p">(</code><code class="n">@event</code><code class="p">.</code><code class="n">LastName</code><code class="p">);</code>
+        <code class="n">PhoneNumbers</code><code class="p">.</code><code class="n">Add</code><code class="p">(</code><code class="n">@event</code><code class="p">.</code><code class="n">PhoneNumber</code><code class="p">);</code>
+
+        <code class="n">Version</code> <code class="p">=</code> <code class="m">0</code><code class="p">;</code>
+    <code class="p">}</code>
+
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Apply</code><code class="p">(</code><code class="n">ContactDetailsChanged</code> <code class="n">@event</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="n">FirstNames</code><code class="p">.</code><code class="n">Add</code><code class="p">(</code><code class="n">@event</code><code class="p">.</code><code class="n">FirstName</code><code class="p">);</code>
+        <code class="n">LastNames</code><code class="p">.</code><code class="n">Add</code><code class="p">(</code><code class="n">@event</code><code class="p">.</code><code class="n">LastName</code><code class="p">);</code>
+        <code class="n">PhoneNumbers</code><code class="p">.</code><code class="n">Add</code><code class="p">(</code><code class="n">@event</code><code class="p">.</code><code class="n">PhoneNumber</code><code class="p">);</code>
+
+        <code class="n">Version</code> <code class="p">+=</code> <code class="m">1</code><code class="p">;</code>
+    <code class="p">}</code>
+
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Apply</code><code class="p">(</code><code class="n">Contacted</code> <code class="n">@event</code><code class="p">)</code> <code class="p">{</code>
+        <code class="n">Version</code> <code class="p">+=</code> <code class="m">1</code><code class="p">;</code>
+    <code class="p">}</code>
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Apply</code><code class="p">(</code><code class="n">FollowupSet</code> <code class="n">@event</code><code class="p">)</code> <code class="p">{</code>
+        <code class="n">Version</code> <code class="p">+=</code> <code class="m">1</code><code class="p">;</code>
+    <code class="p">}</code>
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Apply</code><code class="p">(</code><code class="n">OrderSubmitted</code> <code class="n">@event</code><code class="p">)</code> <code class="p">{</code>
+        <code class="n">Version</code> <code class="p">+=</code> <code class="m">1</code><code class="p">;</code>
+    <code class="p">}</code>
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Apply</code><code class="p">(</code><code class="n">PaymentConfirmed</code> <code class="n">@event</code><code class="p">)</code> <code class="p">{</code>
+        <code class="n">Version</code> <code class="p">+=</code> <code class="m">1</code><code class="p">;</code>
+    <code class="p">}</code>
+<code class="p">}</code></pre>
+
+<p>The projection logic uses the <code>LeadInitialized</code> and <code>ContactDetailsChanged</code> events to populate the respective sets of the lead’s personal details. Other events are ignored since they do not affect the specific model’s state.</p>
+
+<p>Applying this projection logic to Casey Davis’s events from the earlier example will result in the following state:</p>
+<pre data-type="programlisting">LeadId: 12
+FirstNames: ['Casey']
+LastNames: ['David', 'Davis']
+PhoneNumbers: ['555-2951', '555-8101']
+Version: 6</pre>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Analysis"><div class="sect2" id="analysis">
+<h2>Analysis</h2>
+
+<p>Your business intelligence department asks you to provide a more<a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="event sourcing pattern" data-tertiary="analysis" id="id1043"></a><a contenteditable="false" data-type="indexterm" data-primary="time modeled via event sourcing" data-secondary="event sourcing pattern" data-tertiary="analysis" id="id1044"></a><a contenteditable="false" data-type="indexterm" data-primary="sales leads via event sourcing" data-secondary="analysis" id="id1045"></a> analysis-friendly representation of the leads data. For their current research, they want to get the number of follow-up calls scheduled for different leads. Later they will filter the converted and closed leads data and use the model to optimize the sales process. Let’s project the data they are asking for:</p>
+<pre data-code-language="csharp"><code class="k">public</code> <code class="k">class</code> <code class="nc">AnalysisModelProjection</code>
+<code class="p">{</code>
+    <code class="k">public</code> <code class="kt">long</code> <code class="n">LeadId</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+    <code class="k">public</code> <code class="kt">int</code> <code class="n">Followups</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+    <code class="k">public</code> <code class="n">LeadStatus</code> <code class="n">Status</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+    <code class="k">public</code> <code class="kt">int</code> <code class="n">Version</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Apply</code><code class="p">(</code><code class="n">LeadInitialized</code> <code class="n">@event</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="n">LeadId</code> <code class="p">=</code> <code class="n">@event</code><code class="p">.</code><code class="n">LeadId</code><code class="p">;</code>
+        <code class="n">Followups</code> <code class="p">=</code> <code class="m">0</code><code class="p">;</code>
+        <code class="n">Status</code> <code class="p">=</code> <code class="n">LeadStatus</code><code class="p">.</code><code class="n">NEW_LEAD</code><code class="p">;</code>
+        <code class="n">Version</code> <code class="p">=</code> <code class="m">0</code><code class="p">;</code>
+    <code class="p">}</code>
+
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Apply</code><code class="p">(</code><code class="n">Contacted</code> <code class="n">@event</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="n">Version</code> <code class="p">+=</code> <code class="m">1</code><code class="p">;</code>
+    <code class="p">}</code>
+
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Apply</code><code class="p">(</code><code class="n">FollowupSet</code> <code class="n">@event</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="n">Status</code> <code class="p">=</code> <code class="n">LeadStatus</code><code class="p">.</code><code class="n">FOLLOWUP_SET</code><code class="p">;</code>
+        <code class="n">Followups</code> <code class="p">+=</code> <code class="m">1</code><code class="p">;</code>
+        <code class="n">Version</code> <code class="p">+=</code> <code class="m">1</code><code class="p">;</code>
+    <code class="p">}</code>
+
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Apply</code><code class="p">(</code><code class="n">ContactDetailsChanged</code> <code class="n">@event</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="n">Version</code> <code class="p">+=</code> <code class="m">1</code><code class="p">;</code>
+    <code class="p">}</code>
+
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Apply</code><code class="p">(</code><code class="n">OrderSubmitted</code> <code class="n">@event</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="n">Status</code> <code class="p">=</code> <code class="n">LeadStatus</code><code class="p">.</code><code class="n">PENDING_PAYMENT</code><code class="p">;</code>
+        <code class="n">Version</code> <code class="p">+=</code> <code class="m">1</code><code class="p">;</code>
+    <code class="p">}</code>
+
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Apply</code><code class="p">(</code><code class="n">PaymentConfirmed</code> <code class="n">@event</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="n">Status</code> <code class="p">=</code> <code class="n">LeadStatus</code><code class="p">.</code><code class="n">CONVERTED</code><code class="p">;</code>
+        <code class="n">Version</code> <code class="p">+=</code> <code class="m">1</code><code class="p">;</code>
+    <code class="p">}</code>
+<code class="p">}</code></pre>
+
+<p>The preceding logic maintains a counter of the number of times follow-up events appeared in the lead’s events. If we were to apply this projection to the example of the aggregate’s events, it would generate the following state:</p>
+<pre data-type="programlisting">LeadId: 12
+Followups: 1
+Status: Converted
+Version: 6</pre>
+
+<p>The logic implemented in the preceding examples projects the search-optimized and analysis-optimized models in-memory. However, to actually implement the required functionality, we have to persist the projected models in a database. In <a data-type="xref" href="ch08.html#architectural_patterns-id000006">Chapter 8</a>, you will learn about a pattern that allows us to do that: command-query responsibility segregation (CQRS).</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Source of Truth"><div class="sect2" id="source_of_truth">
+<h2>Source of Truth</h2>
+
+<p>For the event sourcing pattern to work, all changes to an object’s state<a contenteditable="false" data-type="indexterm" data-primary="time modeled via event sourcing" data-secondary="event sourcing pattern" data-tertiary="source of truth" id="id1046"></a><a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="event sourcing pattern" data-tertiary="source of truth" id="id1047"></a> should be represented and persisted as events. These events become the system’s source of truth (hence the name of the pattern). This process is shown in <a data-type="xref" href="#event_sourced_aggregate">Figure 7-1</a>.</p>
+<figure><div id="event_sourced_aggregate" class="figure">
+<img src="assets/lddd_0701.png" alt="Event-sourced aggregate" width="600" height="186"/>
+<h6><span class="label">Figure 7-1. </span>Event-sourced aggregate</h6>
+</div></figure>
+
+<p>The database that stores the system’s events is the only strongly consistent storage: the system’s source of truth. The accepted name for the database that is used for persisting events is <em>event store</em>.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Event Store"><div class="sect2" id="event_store">
+<h2>Event Store</h2>
+
+<p>The event store should not allow modifying or deleting<a contenteditable="false" data-type="indexterm" data-primary="time modeled via event sourcing" data-secondary="event sourcing pattern" data-tertiary="event store" id="id1048"></a><a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="event sourcing pattern" data-tertiary="event store" id="id1049"></a> the events<sup><a data-type="noteref" id="ch01fn30-marker" href="ch07.html#ch01fn30">2</a></sup> since it’s append-only storage. To support implementation of the event sourcing pattern, at a minimum the event store has to support the following functionality: fetch all events belonging to a specific business entity and append the events. For example:</p>
+<pre data-code-language="csharp"><code class="k">interface</code> <code class="n">IEventStore</code>
+<code class="p">{</code>
+    <code class="n">IEnumerable</code><code class="p">&lt;</code><code class="n">Event</code><code class="p">&gt;</code> <code class="n">Fetch</code><code class="p">(</code><code class="n">Guid</code> <code class="n">instanceId</code><code class="p">);</code>
+    <code class="k">void</code> <code class="nf">Append</code><code class="p">(</code><code class="n">Guid</code> <code class="n">instanceId</code><code class="p">,</code> <code class="n">Event</code><code class="p">[]</code> <code class="n">newEvents</code><code class="p">,</code> <code class="kt">int</code> <code class="n">expectedVersion</code><code class="p">);</code>
+<code class="p">}</code></pre>
+
+<p>The <code>expectedVersion</code> argument in the <code>Append</code> method is needed to implement optimistic concurrency management: when you append new events, you also specify the version of the entity on which you are basing your decisions. If it’s <em>stale</em>, that is, new events were added after the expected version, the event store should raise a concurrency exception.</p>
+
+<p>In most systems, additional endpoints are needed for implementing the CQRS pattern, as we will discuss in the next chapter.</p>
+<div data-type="note" epub:type="note"><h6>Note</h6>
+
+<p>In essence, the event sourcing pattern is nothing new. The financial industry uses events to represent changes in a ledger. A ledger is an append-only log that documents transactions. A current state (e.g., account balance) can always be deduced by “projecting” the ledger’s records.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch07-esp" id="id1050"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch07-esp2" id="id1051"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch07-esp3" id="id1052"></a></p>
+</div>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Event-Sourced Domain Model"><div class="sect1" id="event_sourced_domain_model">
+<h1>Event-Sourced Domain Model</h1>
+
+<p>The original domain model maintains a state representation<a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="domain model versus" id="id1053"></a><a contenteditable="false" data-type="indexterm" data-primary="domain model for business logic" data-secondary="event-sourced domain model versus" id="id1054"></a><a contenteditable="false" data-type="indexterm" data-primary="aggregates" data-secondary="state persisted versus event sourcing" id="id1055"></a><a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" id="ch07-esdm"></a><a contenteditable="false" data-type="indexterm" data-primary="time modeled via event sourcing" data-secondary="event-sourced domain model" id="ch07-esdm2"></a><a contenteditable="false" data-type="indexterm" data-primary="help desk" data-secondary="event-sourced domain model" id="ch07-esdm3"></a> of its aggregates and emits select domain events. The event-sourced domain model uses domain events exclusively for modeling the aggregates’ lifecycles. All changes to an aggregate’s state have to be expressed as domain events.</p>
+
+<p>Each operation on an event-sourced aggregate follows this script:</p>
+<ul>
+<li>
+    <p>Load the aggregate’s domain events.</p></li>
+<li>
+    <p>Reconstitute a state representation—project the events into a state representation that can be used to make business decisions.</p></li>
+<li>
+    <p>Execute the aggregate’s command to execute the business logic, and consequently, produce new domain events.</p></li>
+<li>
+    <p>Commit the new domain events to the event store.</p></li>
+</ul>
+
+<p>Going back to the example of the <code>Ticket</code> aggregate <a contenteditable="false" data-type="indexterm" data-primary="Ticket aggregate" data-see="help desk" id="id1056"></a><a contenteditable="false" data-type="indexterm" data-primary="aggregates" data-secondary="Ticket aggregate" data-see="help desk" id="id1057"></a>from <a data-type="xref" href="ch06.html#tackling_complex_business_logic">Chapter 6</a>, let’s see how it would be implemented as an event-sourced aggregate.</p>
+
+<p>The application service follows the script described earlier: it loads the relevant ticket’s events, rehydrates the aggregate instance, calls the relevant command, and persists changes back to the database:</p>
+<pre data-code-language="csharp"><code class="m">01</code>  <code class="k">public</code> <code class="k">class</code> <code class="nc">TicketAPI</code>
+<code class="m">02</code>  <code class="p">{</code>
+<code class="m">03</code>      <code class="k">private</code> <code class="n">ITicketsRepository</code> <code class="n">_ticketsRepository</code><code class="p">;</code>
+<code class="m">04</code>      <code class="p">...</code>
+<code class="m">05</code> 
+<code class="m">06</code>      <code class="k">public</code> <code class="k">void</code> <code class="n">RequestEscalation</code><code class="p">(</code><code class="n">TicketId</code> <code class="n">id</code><code class="p">,</code> <code class="n">EscalationReason</code> <code class="n">reason</code><code class="p">)</code>
+<code class="m">07</code>      <code class="p">{</code>
+<code class="m">08</code>          <code class="kt">var</code> <code class="n">events</code> <code class="p">=</code> <code class="n">_ticketsRepository</code><code class="p">.</code><code class="n">LoadEvents</code><code class="p">(</code><code class="n">id</code><code class="p">);</code>
+<code class="m">09</code>          <code class="kt">var</code> <code class="n">ticket</code> <code class="p">=</code> <code class="k">new</code> <code class="n">Ticket</code><code class="p">(</code><code class="n">events</code><code class="p">);</code>
+<code class="m">10</code>          <code class="kt">var</code> <code class="n">originalVersion</code> <code class="p">=</code> <code class="n">ticket</code><code class="p">.</code><code class="n">Version</code><code class="p">;</code>
+<code class="m">11</code>          <code class="kt">var</code> <code class="n">cmd</code> <code class="p">=</code> <code class="k">new</code> <code class="n">RequestEscalation</code><code class="p">(</code><code class="n">reason</code><code class="p">);</code>
+<code class="m">12</code>          <code class="n">ticket</code><code class="p">.</code><code class="n">Execute</code><code class="p">(</code><code class="n">cmd</code><code class="p">);</code>
+<code class="m">13</code>          <code class="n">_ticketsRepository</code><code class="p">.</code><code class="n">CommitChanges</code><code class="p">(</code><code class="n">ticket</code><code class="p">,</code> <code class="n">originalVersion</code><code class="p">);</code>
+<code class="m">14</code>      <code class="p">}</code>
+<code class="m">15</code>
+<code class="m">16</code>      <code class="p">...</code>
+<code class="m">17</code>  <code class="p">}</code></pre>
+
+<p>The <code>Ticket</code> aggregate’s rehydration logic in the constructor (lines 27 through 31) instantiates an instance of the state projector class, <code>TicketState</code>, and sequentially calls its <code>AppendEvent</code> method for each of the ticket’s events:</p>
+<pre data-code-language="csharp"><code class="m">18</code>  <code class="k">public</code> <code class="k">class</code> <code class="nc">Ticket</code>
+<code class="m">19</code>  <code class="p">{</code>
+<code class="m">20</code>      <code class="p">...</code>
+<code class="m">21</code>      <code class="k">private</code> <code class="n">List</code><code class="p">&lt;</code><code class="n">DomainEvent</code><code class="p">&gt;</code> <code class="n">_domainEvents</code> <code class="p">=</code> <code class="k">new</code> <code class="n">List</code><code class="p">&lt;</code><code class="n">DomainEvent</code><code class="p">&gt;();</code>
+<code class="m">22</code>      <code class="k">private</code> <code class="n">TicketState</code> <code class="n">_state</code><code class="p">;</code>
+<code class="m">23</code>      <code class="p">...</code>
+<code class="m">24</code> 
+<code class="m">25</code>      <code class="k">public</code> <code class="n">Ticket</code><code class="p">(</code><code class="n">IEnumerable</code><code class="p">&lt;</code><code class="n">IDomainEvents</code><code class="p">&gt;</code> <code class="n">events</code><code class="p">)</code>
+<code class="m">26</code>      <code class="p">{</code>
+<code class="m">27</code>          <code class="n">_state</code> <code class="p">=</code> <code class="k">new</code> <code class="n">TicketState</code><code class="p">();</code>
+<code class="m">28</code>          <code class="k">foreach</code> <code class="p">(</code><code class="kt">var</code> <code class="n">e</code> <code class="k">in</code> <code class="n">events</code><code class="p">)</code>
+<code class="m">29</code>          <code class="p">{</code>
+<code class="m">30</code>              <code class="n">AppendEvent</code><code class="p">(</code><code class="n">e</code><code class="p">);</code>
+<code class="m">31</code>          <code class="p">}</code>
+<code class="m">32</code>      <code class="p">}</code></pre>
+
+<p>The <code>AppendEvent</code> passes the incoming events to the <code>TicketState</code> projection logic, thus generating the in-memory representation of the ticket’s current state:</p>
+<pre data-code-language="csharp"><code class="m">33</code>      <code class="k">private</code> <code class="k">void</code> <code class="n">AppendEvent</code><code class="p">(</code><code class="n">IDomainEvent</code> <code class="n">@event</code><code class="p">)</code>
+<code class="m">34</code>      <code class="p">{</code>
+<code class="m">35</code>          <code class="n">_domainEvents</code><code class="p">.</code><code class="n">Append</code><code class="p">(</code><code class="n">@event</code><code class="p">);</code>
+<code class="m">36</code>          <code class="c1">// Dynamically call the correct overload of the "Apply" method.</code>
+<code class="m">37</code>          <code class="p">((</code><code class="kt">dynamic</code><code class="p">)</code><code class="n">state</code><code class="p">).</code><code class="n">Apply</code><code class="p">((</code><code class="kt">dynamic</code><code class="p">)</code><code class="n">@event</code><code class="p">);</code>
+<code class="m">38</code>      <code class="p">}</code></pre>
+
+<p>Contrary to the implementation we saw in the previous chapter, the event-sourced aggregate’s <code>RequestEscalation</code> method doesn’t explicitly set the <code>IsEscalated</code> flag to <code>true</code>. Instead, it instantiates the appropriate event and passes it to the <code>AppendEvent</code> method (lines 43 and 44):</p>
+<pre data-code-language="csharp"><code class="m">39</code>      <code class="k">public</code> <code class="k">void</code> <code class="n">Execute</code><code class="p">(</code><code class="n">RequestEscalation</code> <code class="n">cmd</code><code class="p">)</code>
+<code class="m">40</code>      <code class="p">{</code>
+<code class="m">41</code>          <code class="k">if</code> <code class="p">(!</code><code class="n">_state</code><code class="p">.</code><code class="n">IsEscalated</code> <code class="p">&amp;&amp;</code> <code class="n">_state</code><code class="p">.</code><code class="n">RemainingTimePercentage</code> <code class="p">&lt;=</code> <code class="m">0</code><code class="p">)</code>
+<code class="m">42</code>          <code class="p">{</code>
+<code class="m">43</code>              <code class="kt">var</code> <code class="n">escalatedEvent</code> <code class="p">=</code> <code class="k">new</code> <code class="n">TicketEscalated</code><code class="p">(</code><code class="n">_id</code><code class="p">,</code> <code class="n">cmd</code><code class="p">.</code><code class="n">Reason</code><code class="p">);</code>
+<code class="m">44</code>              <code class="n">AppendEvent</code><code class="p">(</code><code class="n">escalatedEvent</code><code class="p">);</code>
+<code class="m">45</code>          <code class="p">}</code>
+<code class="m">46</code>      <code class="p">}</code>
+<code class="m">47</code>      
+<code class="m">48</code>      <code class="p">...</code>
+<code class="m">49</code>  <code class="p">}</code></pre>
+
+<p>All events added to the aggregate’s events collection are passed to the state projection logic in the <code>TicketState</code> class, where the relevant fields’ values are mutated according to the events’ data:</p>
+<pre data-code-language="csharp"><code class="m">50</code>  <code class="k">public</code> <code class="k">class</code> <code class="nc">TicketState</code>
+<code class="m">51</code>  <code class="p">{</code>
+<code class="m">52</code>      <code class="k">public</code> <code class="n">TicketId</code> <code class="n">Id</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+<code class="m">53</code>      <code class="k">public</code> <code class="kt">int</code> <code class="n">Version</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+<code class="m">54</code>      <code class="k">public</code> <code class="kt">bool</code> <code class="n">IsEscalated</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+<code class="m">55</code>      <code class="p">...</code>
+<code class="m">56</code>      <code class="k">public</code> <code class="k">void</code> <code class="n">Apply</code><code class="p">(</code><code class="n">TicketInitialized</code> <code class="n">@event</code><code class="p">)</code>
+<code class="m">57</code>      <code class="p">{</code>
+<code class="m">58</code>          <code class="n">Id</code> <code class="p">=</code> <code class="n">@event</code><code class="p">.</code><code class="n">Id</code><code class="p">;</code>
+<code class="m">59</code>          <code class="n">Version</code> <code class="p">=</code> <code class="m">0</code><code class="p">;</code>
+<code class="m">60</code>          <code class="n">IsEscalated</code> <code class="p">=</code> <code class="k">false</code><code class="p">;</code>
+<code class="m">61</code>          <code class="p">....</code>
+<code class="m">62</code>      <code class="p">}</code>
+<code class="m">63</code> 
+<code class="m">64</code>      <code class="k">public</code> <code class="k">void</code> <code class="n">Apply</code><code class="p">(</code><code class="n">TicketEscalated</code> <code class="n">@event</code><code class="p">)</code>
+<code class="m">65</code>      <code class="p">{</code>
+<code class="m">66</code>          <code class="n">IsEscalated</code> <code class="p">=</code> <code class="k">true</code><code class="p">;</code>
+<code class="m">67</code>          <code class="n">Version</code> <code class="p">+=</code> <code class="m">1</code><code class="p">;</code>
+<code class="m">68</code>      <code class="p">}</code>
+<code class="m">69</code>
+<code class="m">70</code>      <code class="p">...</code>
+<code class="m">71</code>  <code class="p">}</code></pre>
+
+<p>Now let’s look at some of the advantages of leveraging event sourcing when implementing complex business logic.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch07-esdm" id="id1058"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch07-esdm2" id="id1059"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch07-esdm3" id="id1060"></a></p>
+<aside data-type="sidebar" epub:type="sidebar"><div class="sidebar" id="why_quotation_markevent_sourced_domain">
+<h5>Why “Event-Sourced Domain Model”?</h5>
+
+<p>I feel obliged to explain why I use the term <em>event-sourced domain model</em> rather<a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="about" data-tertiary="name" id="id1061"></a> than just <em>event sourcing</em>. Using events to represent state transitions—the event sourcing pattern—is possible with or without the domain model’s building blocks. Therefore, I prefer the longer term to explicitly state that we are using event sourcing to represent changes in the lifecycles of the domain model’s <span class="keep-together">aggregates</span>.</p>
+</div></aside>
+
+<section data-type="sect2" data-pdf-bookmark="Advantages"><div class="sect2" id="advantages">
+<h2>Advantages</h2>
+
+<p>Compared to the more traditional model, in which the<a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="advantages" id="id1062"></a><a contenteditable="false" data-type="indexterm" data-primary="time modeled via event sourcing" data-secondary="event-sourced domain model" data-tertiary="advantages" id="id1063"></a> aggregates’ current states are persisted in a database, the event-sourced domain model requires more effort to model the aggregates. However, this approach brings significant advantages that make the pattern worth considering in many scenarios:</p>
+<dl>
+<dt>Time traveling</dt>
+<dd><p>Just as the domain events can be used to reconstitute an aggregate’s current state,<a contenteditable="false" data-type="indexterm" data-primary="historical perspectives via event sourcing" data-secondary="aggregate past states reconstituted" id="id1064"></a><a contenteditable="false" data-type="indexterm" data-primary="time modeled via event sourcing" data-secondary="historical perspectives" data-tertiary="aggregate past states reconstituted" id="id1065"></a><a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="historical perspectives" data-tertiary="aggregate past states reconstituted" id="id1066"></a> they can also be used to restore all past states of the aggregate. In other words, you can always reconstitute all the past states of an aggregate.</p>
+<p>This is often done when analyzing the system’s behavior, inspecting the system’s decisions, and optimizing the business logic.</p>
+<p>Another common use case for reconstituting past states is<a contenteditable="false" data-type="indexterm" data-primary="debugging" data-secondary="retroactive via event sourcing" id="id1067"></a><a contenteditable="false" data-type="indexterm" data-primary="historical perspectives via event sourcing" data-secondary="retroactive debugging" id="id1068"></a><a contenteditable="false" data-type="indexterm" data-primary="time modeled via event sourcing" data-secondary="historical perspectives" data-tertiary="retroactive debugging" id="id1069"></a><a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="historical perspectives" data-tertiary="retroactive debugging" id="id1070"></a> retroactive debugging: you can revert the aggregate to the exact state it was in when a bug was observed.</p></dd>
+<dt>Deep insight</dt>
+<dd>In <a data-type="xref" href="part01.html#strategic_design">Part I</a> of this book, we saw that <a contenteditable="false" data-type="indexterm" data-primary="strategic design" data-secondary="insights from event sourcing" id="id1071"></a><a contenteditable="false" data-type="indexterm" data-primary="core subdomains" data-secondary="insights from event sourcing" id="id1072"></a>optimizing core subdomains is strategically important for the business. Event sourcing provides deep insight into the system’s state and behavior. As you learned earlier in this chapter, event sourcing provides the flexible model that allows for transforming the events into different state representations—you can always add new projections that will leverage the existing events’ data to provide additional insights.</dd>
+<dt>Audit log</dt>
+<dd>
+<p>The persisted domain events represent a strongly consistent<a contenteditable="false" data-type="indexterm" data-primary="audit log" data-secondary="event sourcing for" id="id1073"></a> audit log of everything that has happened to the aggregates’ states. Laws oblige some business domains to implement such audit logs, and event sourcing provides this out of the box.</p>
+
+<p>This model is especially convenient for systems managing money or monetary transactions. It allows us to easily trace the system’s decisions and the flow of funds between accounts.</p></dd>
+<dt>Advanced optimistic concurrency management</dt>
+<dd><p>The classic optimistic concurrency model raises an exception<a contenteditable="false" data-type="indexterm" data-primary="optimistic concurrency and event sourcing" id="id1074"></a> when the read data becomes stale—overwritten by another process—while it is being written.</p>
+<p>When using event sourcing, we can gain deeper insight into exactly what has happened between reading the existing events and writing the new ones. You can query the exact events that were concurrently appended to the event store and make a business domain–driven decision as to whether the new events collide with the attempted operation or the additional events are irrelevant and it’s safe to proceed.</p></dd>
+</dl>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Disadvantages"><div class="sect2" id="disadvantages">
+<h2>Disadvantages</h2>
+
+<p>So far it may seem that the event-sourced domain model is<a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="disadvantages" id="id1075"></a><a contenteditable="false" data-type="indexterm" data-primary="time modeled via event sourcing" data-secondary="event-sourced domain model" data-tertiary="disadvantages" id="id1076"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="time dimension" data-see="event-sourced domain model" id="id1077"></a> the ultimate pattern for implementing business logic and thus should be used as often as possible. Of course, that would contradict the principle of letting the business domain’s needs drive the design decisions. So, let’s discuss some of the challenges presented by the pattern:</p>
+<dl>
+<dt>Learning curve</dt>
+<dd>The obvious disadvantage of the pattern is its sharp difference from the traditional techniques of managing data. Successful implementation of the pattern demands training of the team and time to get used to the new way of thinking. Unless the team already has experience implementing event-sourced systems, the learning curve has to be taken into account.</dd>
+<dt>Evolving the model</dt>
+<dd>Evolving an event-sourced model can be challenging. The strict definition of event sourcing says that events are<a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="event sourcing pattern" data-tertiary="adjusting event schema" id="id1078"></a><a contenteditable="false" data-type="indexterm" data-primary="time modeled via event sourcing" data-secondary="event sourcing pattern" data-tertiary="adjusting event schema" id="id1079"></a><a contenteditable="false" data-type="indexterm" data-primary="Young, Greg" id="id1080"></a><a contenteditable="false" data-type="indexterm" data-primary="Versioning in an Event Sourced System (Young)" id="id1081"></a> immutable. But what if you need to adjust the event’s schema? The process is not as simple as changing a table’s schema. In fact, a whole book was written on this subject alone: <a href="https://leanpub.com/esversioning"><em>Versioning in an Event Sourced System</em></a> by Greg Young.</dd>
+<dt>Architectural complexity</dt>
+<dd>Implementation of event sources introduces numerous architectural “moving parts,” making the overall design more complicated. This topic will be covered in more detail in the next chapter, when we discuss the CQRS architecture.</dd>
+</dl>
+
+<p>All of these challenges are even more acute if the task at hand doesn’t justify the use of the pattern and instead can be addressed by a simpler design. In <a data-type="xref" href="ch10.html#design_heuristics">Chapter 10</a>, you will learn simple rules of thumb that can help you decide which business logic implementation pattern to use.</p>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Frequently Asked Questions"><div class="sect1" id="frequently_asked_questions">
+<h1>Frequently Asked Questions</h1>
+
+<p>When engineers are introduced to the event sourcing pattern, they often ask several common questions, so I find it obligatory to address them in this chapter.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Performance"><div class="sect2" id="performance">
+<h2>Performance</h2>
+
+<dl>
+    <dt>Reconstituting an aggregate’s state from events will negatively<a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="frequently asked questions" data-tertiary="performance" id="id1082"></a><a contenteditable="false" data-type="indexterm" data-primary="time modeled via event sourcing" data-secondary="frequently asked questions" data-tertiary="performance" id="id1083"></a><a contenteditable="false" data-type="indexterm" data-primary="performance of event sourcing pattern" id="id1084"></a> affect the system’s performance. It will degrade as events are added. How can this even work?</dt>
+
+<dd><p>Projecting events into a state representation indeed requires compute power, and that need will grow as more events are added to an aggregate’s list.</p>
+
+    <p>It’s important to benchmark a projection’s impact on performance: the effect of working with hundreds or thousands of events. The results should be compared with the expected lifespan of an aggregate—the number of events expected to be recorded during an average lifespan.</p>
+
+    <p>In most systems, the performance hit will be noticeable only after 10,000+ events per aggregate. That said, in the vast majority of systems, an aggregate’s average lifespan won’t go over 100 events.</p>
+
+    <p>In the rare cases when projecting states does become a performance issue, <a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="snapshotting an aggregate’s events" id="id1085"></a><a contenteditable="false" data-type="indexterm" data-primary="snapshotting an aggregate’s events" id="id1086"></a><a contenteditable="false" data-type="indexterm" data-primary="time modeled via event sourcing" data-secondary="snapshotting an aggregate’s events" id="id1087"></a><a contenteditable="false" data-type="indexterm" data-primary="performance of event sourcing pattern" data-secondary="snapshotting an aggregate’s events" id="id1088"></a>another pattern can be implemented: snapshot. This pattern, shown in <a data-type="xref" href="#snapshotting_an_aggregateapostrophes_ev">Figure 7-2</a>, implements the following steps:</p>
+    <ul>
+    <li>
+        <p>A process continuously iterates new events in the event store, generates corresponding projections, and stores them in a cache.</p></li>
+    <li>
+        <p>An in-memory projection is needed to execute an action on the aggregate. In this case:</p>
+    <ul>
+    <li>
+        <p>The process fetches the current state projection from the cache.</p></li>
+    <li>
+        <p>The process fetches the events that came after the snapshot version from the event store.</p></li>
+    <li>
+        <p>The additional events are applied in-memory to the snapshot.</p></li>
+    </ul></li>
+    </ul>
+    <figure><div id="snapshotting_an_aggregateapostrophes_ev" class="figure">
+    <img src="assets/lddd_0702.png" alt="Snapshotting an aggregate’s events" width="600" height="461"/>
+    <h6><span class="label">Figure 7-2. </span>Snapshotting an aggregate’s events</h6>
+    </div></figure>
+
+    <p class="pagebreak-before">It’s worth reiterating that the snapshot pattern is an optimization that has to be justified. If the aggregates in your system won’t persist 10,000+ events, implementing the snapshot pattern is just an accidental complexity. But before you go ahead and implement the snapshot pattern, I recommend that you take a step back and double-check the aggregate’s boundaries.</p></dd>
+
+<dt>This model generates enormous amounts of data. Can it scale?</dt>
+
+    <dd><p>The event-sourced model is easy to scale. <a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="frequently asked questions" data-tertiary="scalability" id="id1089"></a><a contenteditable="false" data-type="indexterm" data-primary="scalability of event sourcing" id="id1090"></a><a contenteditable="false" data-type="indexterm" data-primary="time modeled via event sourcing" data-secondary="frequently asked questions" data-tertiary="scalability" id="id1091"></a>Since all aggregate-related operations are done in the context of a single aggregate, the event store can be sharded by aggregate IDs: all events belonging to an instance of an aggregate should reside in a single shard (see <a data-type="xref" href="#sharding_the_event_store">Figure 7-3</a>).</p>
+        <figure><div id="sharding_the_event_store" class="figure">
+        <img src="assets/lddd_0703.png" alt="Sharding the event store" width="600" height="333"/>
+        <h6><span class="label">Figure 7-3. </span>Sharding the event store</h6>
+        </div></figure></dd>
+    </dl>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Deleting Data"><div class="sect2" id="deleting_data">
+<h2>Deleting Data</h2>
+
+<dl>
+<dt>The event store is an append-only database,<a contenteditable="false" data-type="indexterm" data-primary="time modeled via event sourcing" data-secondary="frequently asked questions" data-tertiary="deleting data" id="id1092"></a><a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="frequently asked questions" data-tertiary="deleting data" id="id1093"></a><a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="event sourcing pattern" data-tertiary="event store" id="id1094"></a><a contenteditable="false" data-type="indexterm" data-primary="time modeled via event sourcing" data-secondary="event sourcing pattern" data-tertiary="event store" id="id1095"></a><a contenteditable="false" data-type="indexterm" data-primary="compliance with GDPR and data deletion" id="id1096"></a><a contenteditable="false" data-type="indexterm" data-primary="GDPR (General Data Protection Regulation) and data deletion" id="id1097"></a><a contenteditable="false" data-type="indexterm" data-primary="data protection regulation" data-secondary="deleting data" id="id1098"></a> but what if I do need to delete data physically; for example, to comply with GDPR?<sup><a data-type="noteref" id="ch01fn32-marker" href="ch07.html#ch01fn32">3</a></sup></dt>
+
+<dd><p>This need can be addressed with the forgettable payload pattern: <a contenteditable="false" data-type="indexterm" data-primary="forgettable payload pattern" id="id1099"></a><a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="forgettable payload pattern" id="id1100"></a><a contenteditable="false" data-type="indexterm" data-primary="time modeled via event sourcing" data-secondary="forgettable payload pattern" id="id1101"></a><a contenteditable="false" data-type="indexterm" data-primary="identification fields" data-secondary="forgettable payload pattern" id="id1102"></a><a contenteditable="false" data-type="indexterm" data-primary="encryption of sensitive information" id="id1103"></a><a contenteditable="false" data-type="indexterm" data-primary="aggregates" data-secondary="entities" data-tertiary="identification field" id="id1104"></a><a contenteditable="false" data-type="indexterm" data-primary="entities" data-secondary="identification fields" data-tertiary="aggregates" id="id1105"></a><a contenteditable="false" data-type="indexterm" data-primary="identification fields" data-secondary="entities" data-tertiary="aggregates" id="id1106"></a>all sensitive information is included in the events in encrypted form. The encryption key is stored in an external key–value store: the key storage, where the key is a specific aggregate’s ID and the value is the encryption key. When the sensitive data has to be deleted, the encryption key is deleted from the key storage. As a result, the sensitive information contained in the events is no longer accessible.</p></dd>
+</dl>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Why Can’t I Just…?"><div class="sect2" id="why_canapostrophet_i_just_mark">
+<h2>Why Can’t I Just…?</h2>
+<dl>
+<dt>Why can’t I just write logs to a text file and use it as an audit log?</dt>
+
+<dd><p>Writing data both to an operational database and to a logfile is an error-prone operation.<a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="frequently asked questions" data-tertiary="audit log from text file" id="id1107"></a><a contenteditable="false" data-type="indexterm" data-primary="time modeled via event sourcing" data-secondary="frequently asked questions" data-tertiary="audit log from text file" id="id1108"></a><a contenteditable="false" data-type="indexterm" data-primary="audit log" data-secondary="event sourcing for" data-tertiary="text file instead" id="id1109"></a> In its essence, it’s a transaction against two storage mechanisms: the database and the file. If the first one fails, the second one has to be rolled back. For example, if a database transaction fails, no one cares to delete the prior log messages. Hence, such logs are not consistent, but rather, eventually inconsistent.</p></dd>
+
+<dt>Why can’t I keep working with a state-based model, but in the same database transaction, append logs to a logs table?</dt>
+
+<dd><p>From an infrastructural perspective, this approach does provide<a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="frequently asked questions" data-tertiary="appending logs to log table" id="id1110"></a><a contenteditable="false" data-type="indexterm" data-primary="time modeled via event sourcing" data-secondary="frequently asked questions" data-tertiary="appending logs to log table" id="id1111"></a> consistent synchronization between the state and the log records. However, it is still error prone. What if the engineer who will be working on the codebase in the future forgets to append an appropriate log record?</p>
+
+<p>Furthermore, when the state-based representation is used as the source of truth,<a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="frequently asked questions" data-tertiary="state-based source of truth" id="id1112"></a><a contenteditable="false" data-type="indexterm" data-primary="time modeled via event sourcing" data-secondary="frequently asked questions" data-tertiary="state-based source of truth" id="id1113"></a><a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="event sourcing pattern" data-tertiary="source of truth" id="id1114"></a><a contenteditable="false" data-type="indexterm" data-primary="time modeled via event sourcing" data-secondary="event sourcing pattern" data-tertiary="source of truth" id="id1115"></a> the additional log table’s schema usually degrades into chaos quickly. There is no way to enforce that all required information is written and that it is written in the correct format.</p>
+</dd>
+
+<dt>Why can’t I just keep working with a state-based model but add a database trigger that will take a snapshot of the record and copy it into a dedicated “history” table?</dt>
+
+<dd><p>This approach overcomes the previous one’s drawback: no explicit manual calls are needed to append records to the log table. That said, the resultant history only includes the dry facts: what fields were changed. It misses the business contexts: why the fields were changed. The lack of “why” drastically limits the ability to project additional models.</p></dd>
+</dl>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Conclusion"><div class="sect1" id="conclusion-id000031">
+<h1>Conclusion</h1>
+
+<p>This chapter explained the event sourcing pattern and its application for modeling the dimension of time in the domain model’s aggregates.</p>
+
+<p>In an event-sourced domain model, all changes to an aggregate’s state are expressed as a series of domain events. That’s in contrast to the more traditional approaches in which a state change just updates a record in the databases. The resultant domain events can be used to project the aggregate’s current state. Moreover, the event-based model gives us the flexibility to project the events into multiple representation models, each optimized for a specific task.</p>
+
+<p>This pattern fits cases in which it’s crucial to have deep insight into the system’s data, whether for analysis and optimization or because an audit log is required by law.</p>
+
+<p>This chapter completes our exploration of the different ways to model and implement business logic. In the next chapter, we will shift our attention to patterns belonging to a higher scope: architectural patterns.</p>
+</div></section>
+
+<section class="pagebreak-before" data-type="sect1" data-pdf-bookmark="Exercises"><div class="sect1" id="exercises-id000076">
+<h1 class="less_space">Exercises</h1>
+
+
+ <ol>
+          <li>
+            <p>Which of the following statements is correct regarding the relationship between domain events and value objects?</p>
+            <ol type="a">
+              <li>
+                <p>Domain events use value objects to describe what has happened in the business domain.</p>
+              </li>
+              <li>
+                <p>When implementing an event-sourced domain model, value objects should be refactored into event-sourced aggregates.</p>
+              </li>
+              <li>
+                <p>Value objects are relevant for the domain model pattern, and are replaced by domain events in the event-sourced domain model.</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Which of the following statements is correct regarding the options of projecting state from a series of events?</p>
+            <ol type="a">
+              <li>
+                <p>A single state representation can be projected from an aggregate’s events.</p>
+              </li>
+              <li>
+                <p>Multiple state representations can be projected, but the domain events have to be modeled in a way that supports multiple projections.</p>
+              </li>
+              <li>
+                <p>Multiple state representations can be projected and you can always add additional projections in the future.</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Which of the following statements is correct regarding the difference between state-based and event-sourced aggregates? Select all that apply.</p>
+            <ol type="a">
+              <li>
+                <p>An event-sourced aggregate can produce domain events, while a state-based aggregate cannot produce domain events.</p>
+              </li>
+              <li>
+                <p>Both variants of the aggregate pattern produce domain events, but only event-sourced aggregates use domain events as the source of truth.</p>
+              </li>
+              <li>
+                <p>Event-sourced aggregates ensure that domain events are generated for every state transition.</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Going back to the WolfDesk company described in the book’s <a data-type="xref" href="preface01.html#preface">Preface</a>, which functionality of the system lends itself to be implemented as an event-sourced domain model?</p>
+            <ol type="a">
+              <li>
+                <p>The ticket lifecycle algorithm</p>
+              </li>
+              <li>
+                <p>Administration interface</p>
+              </li>
+              <li>
+                <p>Management of agents schedules</p>
+              </li>
+            </ol>
+          </li>
+        </ol>
+        
+</div></section>
+<div data-type="footnotes"><p data-type="footnote" id="ch01fn29"><sup><a href="ch07.html#ch01fn29-marker">1</a></sup> Brooks, F. P. Jr. (1974). <em>The Mythical Man-Month: Essays on Software Engineering</em>. Reading, MA: Addison-Wesley.</p><p data-type="footnote" id="ch01fn30"><sup><a href="ch07.html#ch01fn30-marker">2</a></sup> Except for exceptional cases, such as data migration.</p><p data-type="footnote" id="ch01fn32"><sup><a href="ch07.html#ch01fn32-marker">3</a></sup> General Data Protection Regulation. (n.d.) Retrieved June 14, 2021, from <a href="https://oreil.ly/08px7">Wikipedia</a>.</p></div></div></section></div>
+</div>
+</body>
+</html>

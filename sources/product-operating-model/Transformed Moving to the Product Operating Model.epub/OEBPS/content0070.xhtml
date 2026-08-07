@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" lang="en" xml:lang="en">
+  <head><title>Principle: Small, Frequent, Uncoupled Releases</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <style>.style0 {font-weight: bold} .style1 {color: rgb(0, 0, 255)} .style2 {color: rgb(0, 0, 255); font-style: italic} .style3 {font-style: italic; font-weight: bold} .style5 {font-style: italic} .style6 {color: rgb(52, 52, 52)} </style>
+    </head>
+  <body>
+    <br/>
+    <h2 class="style3">Principle: Small, Frequent, Uncoupled Releases</h2>
+    <br/>
+    <p class="style5">The core principle that is used to address these needs is the deployment of small, frequent, uncoupled releases.</p>
+    <br/>
+    <p class="style5">This means, at a minimum, each product team releases their new work no less than every other week. For strong product companies, this means releasing several times per day (referred to as CI/CD—continuous integration, continuous deployment).¹</p>
+    <br/>
+    <p class="style5">The reason you likely don't know this is happening with your favorite products is precisely because they are releasing a near-constant stream of very small releases.</p>
+    <br/>
+    <p>But ensuring reliability is somewhat more complicated than it may seem. In general, you work to test two main aspects of what you build—the first is straightforward and the second is less so.</p>
+    <br/>
+    <p>The first is that when you build a new capability, you need to test that the new capability will work as expected. Straightforward, although since you likely will want to test and retest this new capability thousands of times in the coming months and years, you will usually invest in some level of test automation.</p>
+    <br/>
+    <p class="style5">The second is to ensure that the changes made to enable the new capability do not unintentionally or inadvertently break anything else. This is referred to as regression testing. And when you realize that many technology-powered products and services today are the result of literally hundreds of engineers working for many years, creating tens of thousands of interactions, you can see that ensuring a complex product does not take a step backward when a new capability is introduced can be a significant undertaking.</p>
+    <br/>
+    <p>The main method product teams use to ensure that new capabilities work as advertised, and don't introduce regressions, is to deploy a series of very small changes.</p>
+    <br/>
+    <p>The smaller the release increment, the faster you can ensure the quality of the new capability, and the faster you can be confident you're not introducing regressions.</p>
+    <br/>
+    <p>And with these small, frequent releases, if a problem is introduced, it is much easier to identify the cause (since you only changed a small number of things).</p>
+    <br/>
+    <p>So, if you are serious about taking care of your customers, you will need to invest in your ability to deliver very frequent, very small releases.</p>
+    <br/>
+    <p class="style5">If this seems counterintuitive to you, and if you still believe that to ensure quality you need to release slowly and infrequently, then you owe it to yourself, your company, and especially your customers to examine the theory and the evidence on why frequent, smaller releases provide both more throughput (higher velocity) and higher quality at strong product companies.²</p>
+    <br/>
+    <p>Unfortunately, many companies have not yet achieved the ability to do these small, frequent releases.</p>
+    <br/>
+    <p>Instead, they make hundreds or even thousands of changes, and then, once a month, once a quarter, or even once a year, they will work to integrate all these changes together. They then try to test that all these new capabilities work as expected, and then they begin the grind of trying to identify and remove all the newly introduced problems (regressions).</p>
+    <br/>
+    <p class="style5">As we hope you are beginning to realize, this is why large releases (known as big-bang releases) are notorious for delays of weeks or even months, trying to get everything back to a reliable, releasable state.</p>
+    <br/>
+    <p class="style5">In fact, many products built this way never achieve a state of solid quality, and the customer is forced to deal with a constant stream of defects and issues, or else seek out a different solution provider.</p>
+    <br/>
+    <p>Moreover, even if the new release actually works as it's supposed to (a very big if), customers are forced to absorb hundreds or even thousands of product changes hitting them all at once. This likely requires retraining, recertification, reintegration, and otherwise significantly interrupts their own work to accommodate all the changes the company has forced upon them.</p>
+    <br/>
+    <p class="style5">In this case, it's common for customers to press your company to release less frequently, because they simply have no time to deal with this degree of change. As you can see by now, while it is completely understandable why customers would request fewer releases, doing so actually would be worse for the customer and worse for your company.</p>
+    <br/>
+    <p>However, rather than ignore or discount customers’ legitimate concerns, the responsibility is on you to design, test, and release your work so that customers do not have to deal with the impact of the changes. And while you have good reason to get your changes into the production environment as quickly as possible, you also have techniques to control when customers can see and access these new capabilities, which we'll describe in the principles that follow.</p>
+    <br/>
+    <div style="border-style: dashed; border-color: rgb(0, 0, 0); border-top-width: 1px;width: 0.0625"/>
+    <br/>
+    <p class="style0">High-Integrity Commitments</p>
+    <br/>
+    <p>In the product model, product teams are all about solving hard problems for your customers and your company, in ways that your customers love, yet work for the business.</p>
+    <br/>
+    <p class="style5">That said, the product model also realizes that sometimes you need to deliver a specific deliverable on a specific date. These are called high-integrity commitments.</p>
+    <br/>
+    <p>Perhaps there's a partnership involved, and the partner must be able to plan their work from their side. Or perhaps your company is planning a major marketing campaign or industry event, and so you need to commit to being ready.</p>
+    <br/>
+    <p>It is no secret that typical Agile teams have a terrible track record in terms of delivering on these types of promises.</p>
+    <br/>
+    <p>But strong product companies know how important this is to building and maintaining trust with customers, partners, and the rest of your company.</p>
+    <br/>
+    <p>If your customers or partners are depending on you for a specific deliverable, they need to know they can count on you to deliver when promised, and that the deliverable will provide the necessary value.</p>
+    <br/>
+    <p>In this case, you want both to solve the underlying problem and to determine with high confidence when you can commit to a deliverable on a specific date.</p>
+    <br/>
+    <p>Here's the key: So long as the product team responsible for making the high-integrity commitments is first allowed to do sufficient product discovery, such that they can reasonably address the product risks, then they can safely and responsibly commit to a deliverable on a date.</p>
+    <br/>
+    <p class="style5">If the engineers are experienced or have competent coaching, this almost always means the product team will first create a feasibility prototype before they commit to anything. This popular technique is described in the book INSPIRED.</p>
+    <br/>
+    <p class="style5">Further, it's absolutely essential that the people who provide the dates are the ones who will actually have to deliver the product. These dates should never come from project or program managers, product managers, architects, or anyone other than the people who will have to do the actual work.</p>
+    <br/>
+    <p>Moreover, since the CTO (head of engineering) is ultimately responsible for the commitments made by her engineering organization, best practice is that she should personally approve all high-integrity commitments.</p>
+    <br/>
+    <p>It's worth emphasizing that high-integrity commitments, when used appropriately and judiciously by the company's senior leadership³ and when handled professionally by the product team, can go a long way in building the necessary trust across the organization.</p>
+    <br/>
+    <div style="border-style: dashed; border-color: rgb(0, 0, 0); border-top-width: 1px;width: 0.0625"/>
+    <div style="page-break-before: always;"/>
+  </body>
+</html>

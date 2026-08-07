@@ -1,0 +1,34 @@
+# 阅读笔记 ↔ 原书 EPUB
+# slug = content/<slug>/ = sources/<slug>/
+# path 相对于 sources/；有无文件以磁盘为准，不必再标 status
+
+notes:
+  product-operating-model:
+    note: "content/product-operating-model"
+    primary_title: "Transformed: Moving to the Product Operating Model"
+    authors: ["Marty Cagan"]
+    files:
+      - path: product-operating-model/Cagan-Transformed.epub
+        role: primary
+
+  design-patterns:
+    note: "content/design-patterns"
+    primary_title: "Dive Into Design Patterns"
+    authors: ["Alexander Shvets"]
+    files:
+      - path: design-patterns/Shvets-Dive-Into-Design-Patterns.epub
+        role: primary
+
+  ddd:
+    note: "content/ddd"
+    primary_title: "Learning Domain-Driven Design"
+    authors: ["Vlad Khononov"]
+    files:
+      - path: ddd/Khononov-Learning-Domain-Driven-Design.epub
+        role: primary
+
+  scrum:
+    note: "content/scrum"
+    primary_title: ""   # 放入原书后补全
+    authors: []
+    files: []

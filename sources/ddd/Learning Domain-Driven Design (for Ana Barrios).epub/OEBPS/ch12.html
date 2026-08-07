@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xml:lang="en"
+lang="en"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title>Learning Domain-Driven Design</title>
+<link rel="stylesheet" type="text/css" href="override_v1.css"/>
+<link rel="stylesheet" type="text/css" href="epub.css"/>
+</head>
+<body>
+<div id="book-content">
+<div id="sbo-rt-content"><section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 12. EventStorming"><div class="chapter" id="event_storming-id000068">
+<h1><span class="label">Chapter 12. </span>EventStorming</h1>
+
+<p>In this chapter, we will take a break from discussing software design patterns and techniques. Instead, we will focus on a low-tech modeling process called <em>EventStorming</em>. This process brings together the core aspects of domain-driven design that we covered in the preceding chapters.</p>
+
+<p>You will learn the EventStorming process, how to facilitate an EventStorming workshop, and how to leverage EventStorming to effectively share domain knowledge and build a ubiquitous language.</p>
+
+<section data-type="sect1" data-pdf-bookmark="What Is EventStorming?"><div class="sect1" id="what_is_event_stormingquestion_mark">
+<h1>What Is EventStorming?</h1>
+
+<p>EventStorming is a low-tech activity for a group of people<a contenteditable="false" data-type="indexterm" data-primary="domain events" data-secondary="brainstorming business processes" data-seealso="EventStorming" id="id1396"></a><a contenteditable="false" data-type="indexterm" data-primary="EventStorming" data-secondary="about" id="id1397"></a><a contenteditable="false" data-type="indexterm" data-primary="modeling business domain" data-secondary="brainstorming" data-see="EventStorming" id="id1398"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="brainstorming" data-see="EventStorming" id="id1399"></a><a contenteditable="false" data-type="indexterm" data-primary="brainstorming" data-see="EventStorming" id="id1400"></a><a contenteditable="false" data-type="indexterm" data-primary="domain experts" data-secondary="business knowledge" data-tertiary="sharing via EventStorming" data-seealso="EventStorming" id="id1401"></a> to brainstorm and rapidly model a business process. In a sense, EventStorming is a tactical tool for sharing business domain knowledge.</p>
+
+<p>An EventStorming session has a <em>scope</em>: the business process<a contenteditable="false" data-type="indexterm" data-primary="EventStorming" data-secondary="scope" id="id1402"></a> that the group is interested in exploring. The participants are exploring the process as a series of domain events, represented by sticky notes, over a timeline. Step by step, the model is enhanced with additional concepts—actors, commands, external systems, and <span class="keep-together">others—</span>until all of its elements tell the story of how the business process works.</p>
+</div></section>
+
+<section class="pagebreak-before" data-type="sect1" data-pdf-bookmark="Who Should Participate in EventStorming?"><div class="sect1" id="who_should_participate_in_event_stormin">
+<h1 class="less_space">Who Should Participate in EventStorming?</h1>
+
+<blockquote data-type="epigraph" epub:type="epigraph">
+<p>Just keep in mind that the goal of the workshop is to learn as <a contenteditable="false" data-type="indexterm" data-primary="EventStorming" data-secondary="who should participate" id="id1403"></a><a contenteditable="false" data-type="indexterm" data-primary="Brandolini, Alberto" id="id1404"></a>much as possible in the shortest time possible. We invite key people to the workshop, and we don’t want to waste their valuable time.</p>
+<p data-type="attribution">Alberto Brandolini, creator of the <em>EventStorming</em> workshop</p>
+</blockquote>
+
+<p>Ideally, a diverse group of people should participate in the workshop. Indeed, anyone related to the business domain in question can participate: engineers, domain experts, product owners, testers, UI/UX designers, support personnel, and so on. As more people with different backgrounds are involved, more knowledge will be discovered.</p>
+
+<p>Take care not to make the group too big, however. Every participant should be able to contribute to the process, but this can be challenging for groups of more than 10 <span class="keep-together">participants</span>.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="What Do You Need for EventStorming?"><div class="sect1" id="what_do_you_need_for_event_stormingques">
+<h1>What Do You Need for EventStorming?</h1>
+
+<p>EventStorming is considered a low-tech workshop because it is done<a contenteditable="false" data-type="indexterm" data-primary="EventStorming" data-secondary="what is needed" id="id1405"></a> using a pen and paper—a lot of paper, actually. Let’s see what you need in order to facilitate an EventStorming session:</p>
+<dl>
+<dt>Modeling space</dt>
+<dd>First, you need a large modeling space. A whole wall covered<a contenteditable="false" data-type="indexterm" data-primary="space for modeling" id="id1406"></a> with butcher paper makes the best modeling space, as shown in <a data-type="xref" href="#modeling_space_for_event_storming">Figure 12-1</a>. A large whiteboard can fit the purpose as well, but it has to be as big as possible—you will need all the modeling space you can get.</dd>
+<dt>Sticky notes</dt>
+<dd>Next, you need lots of sticky notes of different colors. The notes will be used to represent different concepts of the business domain, and every participant should be able to add them freely, so make sure you have enough colors and enough for everyone. The colors that are traditionally used for EventStorming are described in the next section. It’s best to stick to these conventions, if possible, to be consistent with all of the currently available EventStorming books and trainings.</dd>
+<dt>Markers</dt>
+<dd>You’ll also need markers that you can use to write on the sticky notes. Again, supplies shouldn’t be a bottleneck for knowledge sharing—there should be enough markers for all participants.</dd>
+<dt>Snacks</dt>
+<dd>A typical EventStorming session lasts about two to four hours, so bring some healthy snacks for energy replenishment.</dd>
+<dt>Room</dt>
+<dd>Finally, you need a spacious room. Ensure there isn’t a huge table in the middle that will prevent participants from moving freely and observing the modeling space. Also, chairs are a big no-no for EventStorming sessions. You want people to participate and share knowledge, not sit in a corner and zone out. Therefore, if possible, take the chairs out of the room.<sup><a data-type="noteref" id="ch01fn44-marker" href="ch12.html#ch01fn44">1</a></sup></dd>
+</dl>
+<figure><div id="modeling_space_for_event_storming" class="figure">
+<img src="assets/lddd_1201.png" alt="Modeling space for EventStorming" width="600" height="340"/>
+<h6><span class="label">Figure 12-1. </span>Modeling space for EventStorming</h6>
+</div></figure>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="The EventStorming Process"><div class="sect1" id="the_event_storming_process">
+<h1>The EventStorming Process</h1>
+
+<p>An EventStorming workshop is usually conducted in 10 steps.<a contenteditable="false" data-type="indexterm" data-primary="EventStorming" data-secondary="process" id="ch12-proc"></a> During each step, the model is enriched with additional information and concepts.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Step 1: Unstructured Exploration"><div class="sect2" id="step_one_unstructured_exploration">
+<h2>Step 1: Unstructured Exploration</h2>
+
+<p>EventStorming starts with a brainstorm of the domain events<a contenteditable="false" data-type="indexterm" data-primary="EventStorming" data-secondary="process" data-tertiary="unstructured exploration" id="id1407"></a> related to the business domain being explored. A <em>domain event</em> is something interesting that has happened in the business. It’s important to formulate domain events in the past tense (see <a data-type="xref" href="#unstructured_exploration">Figure 12-2</a>)—they are describing things that have already happened.</p>
+<figure><div id="unstructured_exploration" class="figure">
+<img src="assets/lddd_1202.png" alt="Unstructured exploration " width="600" height="348"/>
+<h6><span class="label">Figure 12-2. </span>Unstructured exploration</h6>
+</div></figure>
+
+<p>During this step, all participants are grabbing a bunch of orange sticky notes, writing down whatever domain events come to mind, and sticking them to the modeling <span class="keep-together">surface</span>.</p>
+
+<p>At this early stage, there is no need to worry about ordering events, or even about redundancy. This step is all about brainstorming the possible things that can happen in the business domain.</p>
+
+<p>The group should continue generating domain events until the rate of adding new ones slows significantly.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Step 2: Timelines"><div class="sect2" id="step_two_timelines">
+<h2>Step 2: Timelines</h2>
+
+<p>Next, the participants go over the generated domain events and organize<a contenteditable="false" data-type="indexterm" data-primary="EventStorming" data-secondary="process" data-tertiary="timelines" id="id1408"></a> them in the order in which they occur in the business domain.</p>
+
+<p>The events should start with the “happy path scenario”: the flow that describes a successful business scenario.</p>
+
+<p>Once the “happy path” is done, alternative scenarios can be added—for example, paths where errors are encountered or different business decisions are taken. The flow branching can be expressed as two flows coming from the preceding event or with arrows drawn on the modeling surface, as shown in <a data-type="xref" href="#flows_of_events">Figure 12-3</a>.</p>
+<figure><div id="flows_of_events" class="figure">
+<img src="assets/lddd_1203.png" alt="Flows of events" width="600" height="152"/>
+<h6><span class="label">Figure 12-3. </span>Flows of events</h6>
+</div></figure>
+
+<p>This step is also the time to fix incorrect events, remove duplicates, and of course, add missing events if necessary.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Step 3: Pain Points"><div class="sect2" id="step_three_pain_points">
+<h2>Step 3: Pain Points</h2>
+
+<p>Once you have the events organized in a timeline, use this broad<a contenteditable="false" data-type="indexterm" data-primary="EventStorming" data-secondary="process" data-tertiary="pain points" id="id1409"></a> view to identify points in the process that require attention. These can be bottlenecks, manual steps that require automation, missing documentation, or missing domain knowledge.</p>
+
+<p>It’s important to make these inefficiencies explicit so that it will be easy to return to them as the EventStorming session progresses, or to address them afterward. The pain points are marked with rotated (diamond) pink sticky notes, as illustrated in <a data-type="xref" href="#a_diamond_shaped_pink_sticky_notecomma">Figure 12-4</a>.</p>
+<figure><div id="a_diamond_shaped_pink_sticky_notecomma" class="figure">
+<img src="assets/lddd_1204.png" alt="A diamond-shaped pink sticky note, which points to an aspect of the process that requires attention: missing domain knowledge about how the airfare prices are compared during the booking process" width="600" height="382"/>
+<h6><span class="label">Figure 12-4. </span>A diamond-shaped pink sticky note, which points to an aspect of the process that requires attention: missing domain knowledge about how the airfare prices are compared during the booking process</h6>
+</div></figure>
+
+<p>Of course, this step is not the only opportunity to track pain points. As a facilitator, be aware of the participants’ comments throughout the process. When an issue or a concern is raised, document it as a pain point.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Step 4: Pivotal Events"><div class="sect2" id="step_four_pivotal_events">
+<h2>Step 4: Pivotal Events</h2>
+
+<p>Once you have a timeline of events augmented with pain points,<a contenteditable="false" data-type="indexterm" data-primary="EventStorming" data-secondary="process" data-tertiary="pivotal events" id="id1410"></a> look for significant business events indicating a change in context or phase. These are called <em>pivotal events</em> and are marked with a vertical bar dividing the events before and after the pivotal event.</p>
+
+<p>For example, “shopping cart initialized,” “order initialized,” “order shipped,” “order delivered,” and “order returned” represent significant changes in the process of making an order, as shown in <a data-type="xref" href="#pivotal_events_denoting_context_changes">Figure 12-5</a>.</p>
+<figure><div id="pivotal_events_denoting_context_changes" class="figure">
+<img src="assets/lddd_1205.png" alt="Pivotal events denoting context changes in the flow of events" width="600" height="190"/>
+<h6><span class="label">Figure 12-5. </span>Pivotal events denoting context changes in the flow of events</h6>
+</div></figure>
+
+<p>Pivotal events are an indicator of potential bounded context boundaries.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Step 5: Commands"><div class="sect2" id="step_five_commands">
+<h2>Step 5: Commands</h2>
+
+<p>Whereas a domain event describes something that has already <a contenteditable="false" data-type="indexterm" data-primary="EventStorming" data-secondary="process" data-tertiary="commands" id="id1411"></a><a contenteditable="false" data-type="indexterm" data-primary="commands" data-secondary="EventStorming" id="id1412"></a>happened, a <em>command</em> describes what triggered the event or flow of events. Commands describe the system’s operations and, contrary to domain events, are formulated in the imperative. For example:</p>
+<ul>
+<li>
+	<p>Publish campaign</p></li>
+<li>
+	<p>Roll back transaction</p></li>
+<li>
+	<p>Submit order</p></li>
+</ul>
+
+<p class="pagebreak-before less_space">Commands are written on light blue sticky notes and placed on the modeling space before the events they can produce. If a particular command is executed by an actor in a specific role, the actor information is added to the command on a small yellow sticky note, as illustrated in <a data-type="xref" href="#the_quotation_marksubmit_orderquotation">Figure 12-6</a>. The actor represents a user persona within the business domain, such as customer, administrator, or editor.</p>
+
+<p>Naturally, not all commands will have an associated actor. Therefore, add the actor information only where it’s obvious. In the next step we will augment the model with additional entities that can trigger commands.</p>
+<figure><div id="the_quotation_marksubmit_orderquotation" class="figure">
+<img src="assets/lddd_1206.png" alt="The “Submit Order” command, executed by the customer (actor) and followed by the “Order initialized,” “Shipping cost calculated,” and “Order shipped” events" width="600" height="311"/>
+<h6><span class="label">Figure 12-6. </span>The “Submit Order” command, executed by the customer (actor) and followed by the “Order initialized,” “Shipping cost calculated,” and “Order shipped” events</h6>
+</div></figure>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Step 6: Policies"><div class="sect2" id="step_six_policies">
+<h2>Step 6: Policies</h2>
+
+<p>Almost always, some commands are added to the model but <a contenteditable="false" data-type="indexterm" data-primary="EventStorming" data-secondary="process" data-tertiary="policies" id="id1413"></a><a contenteditable="false" data-type="indexterm" data-primary="policies triggering command execution" id="id1414"></a>have no specific actor associated with them. During this step, you look for automation policies that might execute those commands.</p>
+
+<p>An <em>automation policy</em> is a scenario in which an event triggers the execution of a command. In other words, a command is automatically executed when a specific domain event occurs.</p>
+
+<p>On the modeling surface, policies are represented as purple sticky notes connecting events to commands, as shown by the “Policy” sticky note in <a data-type="xref" href="#an_automation_policy_that_triggers_the">Figure 12-7</a>.</p>
+<figure><div id="an_automation_policy_that_triggers_the" class="figure">
+<img src="assets/lddd_1207.png" alt="An automation policy that triggers the “Ship Order” command when the “Shipment Approved” event is observed" width="600" height="484"/>
+<h6><span class="label">Figure 12-7. </span>An automation policy that triggers the “Ship Order” command when the “Shipment Approved” event is observed</h6>
+</div></figure>
+
+<p>If the command in question should be triggered only if some decision criteria is met, you can specify the decision criteria explicitly on the policy sticky note. For example, if you need to trigger the <code>escalate</code> command after the “complaint received” event, but only if the complaint was received from a VIP customer, you can explicitly state the “only for VIP customers” condition on the policy sticky.</p>
+
+<p>If the events and commands are far apart, you can draw an arrow on the modeling surface to connect them.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Step 7: Read Models"><div class="sect2" id="step_seven_read_models">
+<h2>Step 7: Read Models</h2>
+
+<p>A read model is the view of data within the domain that the actor <a contenteditable="false" data-type="indexterm" data-primary="EventStorming" data-secondary="process" data-tertiary="read models" id="id1415"></a><a contenteditable="false" data-type="indexterm" data-primary="read models" data-secondary="EventStorming" id="id1416"></a>uses to make a decision to execute a command. This can be one of the system’s screens, a report, a notification, and so on.</p>
+
+<p>The read models are represented by green sticky notes (see the “Shopping cart” note in <a data-type="xref" href="#the_view_of_the_quotation_markshopping">Figure 12-8</a>) with a short description of the source of information needed to support the actor’s decision. Since a command is executed after the actor has viewed the read model, on the modeling surface the read models are positioned before the <span class="keep-together">commands</span>.</p>
+<figure><div id="the_view_of_the_quotation_markshopping" class="figure">
+<img src="assets/lddd_1208.png" alt="The view of the “Shopping cart” (read model) needed for the customer (actor) to make their decision to submit the order (command)" width="600" height="311"/>
+<h6><span class="label">Figure 12-8. </span>The view of the “Shopping cart” (read model) needed for the customer (actor) to make their decision to submit the order (command)</h6>
+</div></figure>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Step 8: External Systems"><div class="sect2" id="step_eight_external_systems">
+<h2>Step 8: External Systems</h2>
+
+<p>This step is about augmenting the model with external systems.<a contenteditable="false" data-type="indexterm" data-primary="EventStorming" data-secondary="process" data-tertiary="external systems" id="id1417"></a><a contenteditable="false" data-type="indexterm" data-primary="external systems" id="id1418"></a> An <em>external system</em> is defined as any system that is not a part of the domain being explored. It can execute commands (input) or can be notified about events (output).</p>
+
+<p>The external systems are represented by pink sticky notes. In <a data-type="xref" href="#external_system_triggering_execution_of">Figure 12-9</a>, the CRM (external system) triggers execution of the “Ship Order” command. When the shipment is approved (event), it is communicated to the CRM (external system) through a policy.</p>
+<figure><div id="external_system_triggering_execution_of" class="figure">
+<img src="assets/lddd_1209.png" alt="External system triggering execution of a  command (left) and approval of the event being communicated to the external system (right)" width="600" height="312"/>
+<h6><span class="label">Figure 12-9. </span>External system triggering execution of a  command (left) and approval of the event being communicated to the external system (right)</h6>
+</div></figure>
+
+<p>By the end of this step, all commands should either be executed by actors, triggered by policies, or called by external systems.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Step 9: Aggregates"><div class="sect2" id="step_nine_aggregates">
+<h2>Step 9: Aggregates</h2>
+
+<p>Once all the events and commands are represented, the participants<a contenteditable="false" data-type="indexterm" data-primary="EventStorming" data-secondary="process" data-tertiary="aggregates" id="id1419"></a><a contenteditable="false" data-type="indexterm" data-primary="aggregates" data-secondary="EventStorming" id="id1420"></a> can start thinking about organizing related concepts in aggregates. An <em>aggregate</em> receives commands and produces events.</p>
+
+<p>Aggregates are represented as large yellow sticky notes, with commands on the left and events on the right, as depicted in <a data-type="xref" href="#commands_and_domain_events_organized_in">Figure 12-10</a>.</p>
+<figure><div id="commands_and_domain_events_organized_in" class="figure">
+<img src="assets/lddd_1210.png" alt="Commands and domain events organized in an aggregate" width="600" height="312"/>
+<h6><span class="label">Figure 12-10. </span>Commands and domain events organized in an aggregate</h6>
+</div></figure>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Step 10: Bounded Contexts"><div class="sect2" id="step_onezero_bounded_contexts">
+<h2>Step 10: Bounded Contexts</h2>
+
+<p>The last step of an EventStorming session is to look for aggregates<a contenteditable="false" data-type="indexterm" data-primary="EventStorming" data-secondary="process" data-tertiary="bounded contexts" id="id1421"></a><a contenteditable="false" data-type="indexterm" data-primary="bounded contexts" data-secondary="EventStorming" id="id1422"></a> that are related to each other, either because they represent closely related functionality or because they’re coupled through policies. The groups of aggregates form natural candidates for bounded contexts’ boundaries, as shown in <a data-type="xref" href="#a_possible_decomposition_of_the_resulta">Figure 12-11</a>.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch12-proc" id="id1423"></a></p>
+<figure><div id="a_possible_decomposition_of_the_resulta" class="figure">
+<img src="assets/lddd_1211.png" alt="A possible decomposition of the resultant system into bounded contexts" width="600" height="320"/>
+<h6><span class="label">Figure 12-11. </span>A possible decomposition of the resultant system into bounded contexts</h6>
+</div></figure>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Variants"><div class="sect1" id="variants-id000182">
+<h1>Variants</h1>
+
+<p>Alberto Brandolini, the creator of the EventStorming workshop, <a contenteditable="false" data-type="indexterm" data-primary="Brandolini, Alberto" id="id1424"></a><a contenteditable="false" data-type="indexterm" data-primary="EventStorming" data-secondary="variants" id="id1425"></a>defines the EventStorming process as <em>guidance</em>, <em>not hard rules</em>. You are free to experiment with the process to find the “recipe” that works best for you.</p>
+
+<p>In my experience, when introducing EventStorming in an organization I prefer to start by exploring the big picture of the business domain by following steps 1 (chaotic exploration) through 4 (pivotal events). The resultant model covers a wide range of the company’s business domain, builds a strong foundation for ubiquitous languages, and outlines possible boundaries for bounded contexts.</p>
+
+<p>After gaining the big picture and identifying the different business processes, we continue to facilitate a dedicated EventStorming session for each relevant business process—this time, following all the steps to model the complete process.</p>
+
+<p>At the end of a full EventStorming session, you will have a model describing the business domain’s events, commands, aggregates, and even possible bounded contexts. However, all of these are just nice bonuses. The real value of an EventStorming session is the process itself—the sharing of knowledge among different stakeholders, alignment of their mental models of the business, discovery of conflicting models, and, last but not least, formulation of the ubiquitous language.</p>
+
+<p>The resultant model can be adopted as a basis for implementing an event-sourced domain model. The decision of whether to go that route or not depends on your business domain. If you decide to implement the event-sourced domain model, you have the bounded context boundaries, the aggregates, and of course, the blueprint of the required domain events.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="When to Use EventStorming"><div class="sect1" id="when_to_use_event_storming">
+<h1>When to Use EventStorming</h1>
+
+<p>The workshop can be facilitated for many reasons:<a contenteditable="false" data-type="indexterm" data-primary="EventStorming" data-secondary="when to use" id="id1426"></a><a contenteditable="false" data-type="indexterm" data-primary="EventStorming" data-secondary="process" data-tertiary="about how" id="id1427"></a></p>
+<dl>
+<dt>Build a ubiquitous language</dt>
+<dd>As the group cooperates in building the model of the<a contenteditable="false" data-type="indexterm" data-primary="ubiquitous language" data-secondary="EventStorming for" id="id1428"></a> business process, they instinctively synchronize the terminology and start using the same language.</dd>
+<dt>Model the business process</dt>
+<dd>An EventStorming session is an effective way to build a model of the business process. Since it is based on DDD-oriented building blocks, it is also an effective way to discover the boundaries of aggregates and bounded contexts.</dd>
+<dt>Explore new business requirements</dt>
+<dd>You can use EventStorming to ensure that all the participants are on the same page regarding the new functionality and reveal edge cases not covered by the business requirements.</dd>
+<dt>Recover domain knowledge</dt>
+<dd>Over time, domain knowledge can get lost. This is especially acute in legacy systems that require modernization. EventStorming is an effective way to merge the knowledge held by each participant into a single coherent picture.</dd>
+<dt>Explore ways to improve an existing business process</dt>
+<dd>Having an end-to-end view of a business process provides the perspective needed to notice inefficiencies and opportunities to improve the process.</dd>
+<dt>Onboard new team members</dt>
+<dd>Facilitating an EventStorming session together with new team members is a great way to expand their domain knowledge.</dd>
+</dl>
+
+<p>In addition to when to use EventStorming, it’s important to mention when not to use it. EventStorming will be less successful when the business process you’re exploring is simple or obvious, such as following a series of sequential steps without any interesting business logic or complexity.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Facilitation Tips"><div class="sect1" id="facilitation_tips">
+<h1>Facilitation Tips</h1>
+
+<p>When facilitating an EventStorming session with a group of people<a contenteditable="false" data-type="indexterm" data-primary="EventStorming" data-secondary="facilitation tips" id="id1429"></a> who have never done EventStorming before, I prefer to start with a quick overview of the process. I explain what we are about to do, the business process we are about to explore, and the modeling elements we will use in the workshop. As we go through the elements—domain events, commands, actors, and so on—I build a legend, depicted in <a data-type="xref" href="#legend_depicting_the_various_elements_o">Figure 12-12</a>, using the sticky notes we will use and labels to help the participants remember the color code. The legend should be visible to all participants during the workshop.</p>
+<figure><div id="legend_depicting_the_various_elements_o" class="figure">
+<img src="assets/lddd_1212.png" alt="Legend depicting the various elements of the EventStorming process written on the corresponding sticky notes" width="600" height="415"/>
+<h6><span class="label">Figure 12-12. </span>Legend depicting the various elements of the EventStorming process written on the corresponding sticky notes</h6>
+</div></figure>
+
+<section data-type="sect2" data-pdf-bookmark="Watch the Dynamics"><div class="sect2" id="watch_the_dynamics">
+<h2>Watch the Dynamics</h2>
+
+<p>As the workshop progresses, it’s important to track the energy of the group. If the dynamics are slowing down, see whether you can reignite the process by asking questions or whether it’s time to advance to the next stage of the workshop.</p>
+
+<p>Remember that EventStorming is a group activity, so ensure that it is handled as such. Make sure everyone has a chance to participate in the modeling and the discussion. If you notice that some participants are shying away from the group, try to involve them in the process by asking questions about the current state of the model.</p>
+
+<p>EventStorming is an intense activity, and at some point, the group will need a break. Don’t resume the session until all the participants are back in the room. Resume the process by going through the current state of the model to return the group to a collaborative modeling mood.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Remote EventStorming"><div class="sect2" id="remote_event_storming">
+<h2>Remote EventStorming</h2>
+
+<p>EventStorming was invented as a low-tech activity in which people<a contenteditable="false" data-type="indexterm" data-primary="EventStorming" data-secondary="remote EventStorming" id="id1430"></a><a contenteditable="false" data-type="indexterm" data-primary="Brandolini, Alberto" id="id1431"></a> interact and learn together in the same room. The creator of the workshop, Alberto Brandolini, has often objected to conducting EventStorming remotely because it’s impossible to <span class="keep-together">achieve</span> the same levels of participation, and hence, collaboration and knowledge sharing, when the group is not colocated.</p>
+
+<p>However, with the onset of the COVID-19 pandemic in 2020, it became impossible to have in-person meetings and do EventStorming as it was meant to be done. A number of tools attempted to enable collaboration and facilitation of remote EventStorming sessions. At the time of this writing, the most notable of them is <a href="http://miro.com">miro.com</a>. Be more patient when doing online EventStorming and take into account the less effective communication that results.</p>
+
+<p>In addition, my experience shows that remote EventStorming sessions are more effective with a smaller number of participants. While as many as 10 people can attend an in-person EventStorming session, I prefer to limit online sessions to five participants. When you need more participants to contribute their knowledge, you can facilitate multiple sessions, and afterward compare and merge the resultant models.</p>
+
+<p>When the situation allows, return to in-person EventStorming.</p>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Conclusion"><div class="sect1" id="conclusion-id000036">
+<h1>Conclusion</h1>
+
+<p>EventStorming is a collaboration-based workshop for modeling business processes. Apart from the resultant models, its primary benefit is knowledge sharing. By the end of the session, all the participants will synchronize their mental models of the business process and take the first steps toward using a ubiquitous language.</p>
+
+<p>EventStorming is like riding a bicycle. It’s much easier to learn by doing it than to read about it in a book. Nevertheless, the workshop is fun and easy to facilitate. You don’t need to be an EventStorming black belt to get started. Just facilitate the session, follow the steps, and learn during the process.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Exercises"><div class="sect1" id="exercises-id000081">
+<h1>Exercises</h1>
+ <ol>
+          <li>
+            <p>Who should be invited to an EventStorming session?</p>
+            <ol type="a">
+              <li>
+                <p>Software engineers</p>
+              </li>
+              <li>
+                <p>Domain experts</p>
+              </li>
+              <li>
+                <p>QA engineers</p>
+              </li>
+              <li>
+                <p>All stakeholders having knowledge of the business domain that you want to explore</p>
+              </li>
+            </ol>
+          </li>
+          <li class="pagebreak-before">
+            <p>When is it a good opportunity to facilitate an EventStorming session? Select all that apply. </p>
+            <ol type="a">
+              <li>
+                <p>To build a ubiquitous language.</p>
+              </li>
+              <li>
+                <p>To explore a new business domain.</p>
+              </li>
+              <li>
+                <p>To recover lost knowledge of a brownfield project.</p>
+              </li>
+              <li>
+                <p>To introduce new team members.</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>What outcomes can you expect from an EventStorming session (depending on the session’s purpose)? Select all that apply. </p>
+          <ol type="a">
+          <li>
+            <p>A better shared understanding of the business domain</p>
+          </li>
+          <li>
+            <p>A strong foundation for a ubiquitous language</p>
+          </li>
+          <li>
+            <p>Uncovered white spots in the understanding of the business domain</p>
+          </li>
+          <li>
+            <p>An event-based model that can be used to implement a domain model</p>
+          </li>
+        </ol></li></ol>
+</div></section>
+<div data-type="footnotes"><p data-type="footnote" id="ch01fn44"><sup><a href="ch12.html#ch01fn44-marker">1</a></sup> Of course, that’s not a hard rule. Leave a few chairs if some of the participants find it hard to be on their feet for so long.</p></div></div></section></div>
+</div>
+</body>
+</html>

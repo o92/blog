@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xml:lang="en"
+lang="en"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title>Learning Domain-Driven Design</title>
+<link rel="stylesheet" type="text/css" href="override_v1.css"/>
+<link rel="stylesheet" type="text/css" href="epub.css"/>
+</head>
+<body>
+<div id="book-content">
+<div id="sbo-rt-content"><section data-type="preface" epub:type="preface" data-pdf-bookmark="Preface"><div class="preface" id="preface">
+<h1>Preface</h1>
+
+<p>I vividly remember the day I started my first real software engineering job. I was both ecstatic and terrified. After hacking software for local businesses during my high school years, I was eager to become a “real programmer” and write some code for one of the country’s largest outsourcing companies.</p>
+
+<p>In my first days there, my new colleagues were showing me the ropes. After setting up the corporate email and going through the time-tracking system, we finally moved on to the interesting stuff: the company’s coding style and standards. I was told that “here, we always write well-designed code and use the<a contenteditable="false" data-type="indexterm" data-primary="layered architecture pattern" data-secondary="about" id="id565"></a><a contenteditable="false" data-type="indexterm" data-primary="business domains" data-secondary="business logic in layered architecture" id="id566"></a><a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="layered architecture pattern" data-tertiary="about" id="id567"></a> layered architecture.” We went through the definition of each of the three layers—the data access, business logic, and presentation layers—and then discussed the technologies and frameworks for addressing the layers’ needs. Back then, the accepted solution for storing data was Microsoft SQL Server 2000, and it was integrated using ADO.NET in the data access layer. The presentation layer rocked either WinForms for desktop applications or ASP.NET WebForms for the web. We spent quite some time on these two layers, so I was puzzled when the business logic layer didn’t get any attention:</p>
+
+<blockquote>
+<p>“But what about the business logic layer?”</p>
+
+<p>“That one is straightforward. Here is where you implement the business logic.”</p>
+
+<p>“But what is business logic?”</p>
+
+<p>“Oh, business logic is all the loops and ‘if-else’ statements you need in order to implement the requirements.”</p>
+</blockquote>
+
+<p>That day I began my journey to find out what exactly business logic is and how on earth it should be implemented in well-designed code. It took me more than three years to finally find the answer.</p>
+
+<p>The answer was in Eric Evans’s seminal book,<a contenteditable="false" data-type="indexterm" data-primary="Domain-Driven Design (Evans)" id="id568"></a><a contenteditable="false" data-type="indexterm" data-primary="Evans, Eric" id="id569"></a><a contenteditable="false" data-type="indexterm" data-primary="resources" data-secondary="Domain-Driven Design (Evans)" id="id570"></a> <em>Domain-Driven Design: Tackling Complexity in the Heart of Software</em>. It turned out that I wasn’t wrong. Business logic is indeed important: it is the heart of software! Unfortunately, however, it took me another three years to understand the wisdom Eric shared. The book is very advanced, and the fact that English is my third language didn’t help.</p>
+
+<p>Eventually, though, everything fell into place, and I made peace with the domain-driven design (DDD) methodology. I learned the principles and patterns of DDD, the intricacies of modeling and implementing the business logic, and how to tackle the complexity in the heart of the software that I was building. Despite the obstacles, it definitely was worth it. Getting into domain-driven design was a career-changing experience for me.</p>
+<section data-type="sect1" data-pdf-bookmark="Why I Wrote This Book"><div class="sect1" id="why_i_wrote_this_book">
+<h1>Why I Wrote This Book</h1>
+
+<p>Over the past 10 years, I have introduced domain-driven design to my colleagues at different companies, conducted in-person classes, and taught online courses. The teaching perspective not only helped me deepen my knowledge, but also allowed me to optimize the way I explain the principles and patterns of domain-driven design.</p>
+
+<p>As often happens, teaching is even more challenging than learning. I’m a huge fan of<a contenteditable="false" data-type="indexterm" data-primary="DDD" data-see="domain-driven design" id="id571"></a><a contenteditable="false" data-type="indexterm" data-primary="Goldratt, Eliyahu M." id="id572"></a> <a href="https://oreil.ly/ZZdXf">Eliyahu M. Goldratt’s</a> work and teachings. Eliyahu used to say that even the most complex systems are inherently simple when viewed from the right angle. During my years of teaching DDD, I was looking for a model of the methodology that would uncover the inherent simplicity of domain-driven design.</p>
+
+<p>This book is the result of my efforts. Its goal is to democratize domain-driven design; make it easier to understand and more accessible to employ. I believe that the DDD methodology is absolutely invaluable, especially when designing modern software systems. This book will give you just enough tools to start applying domain-driven design in your day-to-day work.</p>
+</div></section>
+<section data-type="sect1" data-pdf-bookmark="Who Should Read This Book"><div class="sect1" id="who_should_read_this_book">
+<h1>Who Should Read This Book</h1>
+
+<p>I believe that knowledge of domain-driven design principles and patterns will be useful for software engineers at all levels: junior, senior, staff, and principal. <a contenteditable="false" data-type="indexterm" data-primary="domain-driven design (DDD)" data-secondary="about" id="id573"></a><a contenteditable="false" data-type="indexterm" data-primary="business domains" data-secondary="about domain-driven design" id="id574"></a>Not only does DDD provide tools and techniques for modeling and effectively implementing software, it also illuminates an often-overlooked aspect of software engineering: the context. Equipped with the knowledge of the system’s business problem, you will be much more effective at choosing the appropriate solution. A solution that is not under- or over-engineered, but addresses business needs and goals.</p>
+
+<p>Domain-driven design is even more important for software<a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="about domain-driven design" id="id575"></a> architects, and even more so for aspiring software architects. Its strategic design decision tools will help you decompose a large system into components—services, microservices, or <span class="keep-together">subsystems—</span>and design how the components are integrated with one another to form a system.</p>
+
+<p>Ultimately, in this book we will discuss not only how to design software, but also how to co-evolve the design with changes in its business context. That crucial aspect of software engineering will help you keep the system’s design “in shape” over time and prevent its degradation into a big ball of mud.</p>
+</div></section>
+<section data-type="sect1" data-pdf-bookmark="Navigating the Book"><div class="sect1" id="navigating_the_book">
+<h1>Navigating the Book</h1>
+
+<p>This book is divided into four parts: strategic design, tactical design, DDD in practice, and DDD’s relationships to other methodologies and patterns. In <a data-type="xref" href="part01.html#strategic_design">Part I</a>, we cover tools and techniques for making large-scale software design decisions. In <a data-type="xref" href="part02.html#tactical_design">Part II</a>, we focus on the code: the different ways to implement a system’s business logic. <a data-type="xref" href="part03.html#applying_domain_driven_design_in_practi">Part III</a> discusses techniques and strategies for applying DDD in real-life projects. <a data-type="xref" href="part04.html#relationships_to_other_methodologies_an">Part IV</a> continues the discussion of domain-driven design, but this time in the context of other methodologies and patterns.</p>
+
+<p>Here is a short summary of what you will find in each chapter:</p>
+<ul>
+<li>
+  <p><a data-type="xref" href="ch01.html#analyzing_business_domains">Chapter 1</a> establishes the context of a software engineering project: the business domain, its goals, and how the software is intended to support them.</p></li>
+<li>
+  <p><a data-type="xref" href="ch02.html#discovering_domain_knowledge">Chapter 2</a> introduces the notion of a “ubiquitous language”: domain-driven design’s practice for effective communication and knowledge sharing.</p></li>
+<li>
+  <p><a data-type="xref" href="ch03.html#managing_domain_complexity">Chapter 3</a> discusses how to tackle the complexity of business domains and design the system’s high-level architectural components: bounded contexts.</p></li>
+<li>
+  <p><a data-type="xref" href="ch04.html#integrating_bounded_contexts">Chapter 4</a> explores the different patterns of organizing the communication and integration between the bounded contexts.</p></li>
+<li>
+  <p><a data-type="xref" href="ch05.html#implementing_simple_business_logic">Chapter 5</a> starts the discussion of business logic implementation patterns with two patterns addressing the cases of simple business logic.</p></li>
+<li>
+  <p><a data-type="xref" href="ch06.html#tackling_complex_business_logic">Chapter 6</a> advances from simple to complex business logic and introduces the domain model pattern for tackling its complexity.</p></li>
+<li>
+  <p><a data-type="xref" href="ch07.html#modeling_the_dimension_of_time">Chapter 7</a> adds the perspective of time and introduces an even more advanced way to model and implement business logic: the event-sourced domain model.</p></li>
+<li>
+  <p><a data-type="xref" href="ch08.html#architectural_patterns-id000006">Chapter 8</a> shifts the focus to a higher level and describes three architectural patterns for structuring components.</p></li>
+<li>
+  <p><a data-type="xref" href="ch09.html#communication_patterns">Chapter 9</a> provides the patterns needed to orchestrate the work of the system’s components.</p></li>
+<li>
+  <p><a data-type="xref" href="ch10.html#design_heuristics">Chapter 10</a> ties together the patterns discussed in the earlier chapters into a number of simple rules of thumb that streamline the process of making design <span class="keep-together">decisions</span>.</p></li>
+<li>
+  <p><a data-type="xref" href="ch11.html#evolving_design_decisions">Chapter 11</a> explores software design from the perspective of time and how it is supposed to change and evolve through its lifespan.</p></li>
+<li>
+  <p><a data-type="xref" href="ch12.html#event_storming-id000068">Chapter 12</a> introduces EventStorming: a low-tech workshop for effectively sharing knowledge, building shared understanding, and designing software.</p></li>
+<li>
+  <p><a data-type="xref" href="ch13.html#domain_driven_design_in_the_real_world">Chapter 13</a> addresses the difficulties you may face when introducing domain-driven design to brownfield projects.</p></li>
+<li>
+  <p><a data-type="xref" href="ch14.html#microservices">Chapter 14</a> discusses the relationship between the microservices architectural style and domain-driven design: where they differ and where they complement each other.</p></li>
+<li>
+  <p><a data-type="xref" href="ch15.html#event_driven_architectur">Chapter 15</a> explores domain-driven design patterns and tools in the context of the event-driven architecture.</p></li>
+<li>
+  <p><a data-type="xref" href="ch16.html#data_mesh-id000059">Chapter 16</a> shifts the discussion from operational systems to analytical data management systems and discusses the interplay between domain-driven design and the data mesh architecture.</p></li>
+</ul>
+
+<p>All of these chapters end with a number of exercise questions to reinforce the learning. <a contenteditable="false" data-type="indexterm" data-primary="WolfDesk overview" id="id576"></a><a contenteditable="false" data-type="indexterm" data-primary="help desk" data-secondary="WolfDesk overview" id="id577"></a>Some of the questions use the fictional company “WolfDesk” to demonstrate the various aspects of domain-driven design. Please read the following description of WolfDesk, and return to it when you answer relevant exercise questions.</p>
+</div></section>
+<section data-type="sect1" data-pdf-bookmark="Example Domain: WolfDesk"><div class="sect1" id="example_domain_wolfdesk">
+<h1>Example Domain: WolfDesk</h1>
+
+<p>WolfDesk provides a help desk tickets management system as a service. If your start-up company needs to provide support to your customers, with WolfDesk’s solution you can get up and running in no time.</p>
+
+<p>WolfDesk uses a different payment model than its competitors. Instead of charging a fee per user, it allows the tenants to set up as many users as needed, and the tenants are charged for the number of support tickets opened per charging period. There is no minimum fee, and there are automatic volume discounts for certain thresholds of monthly tickets: 10% for opening more than 500 tickets, 20% for opening more than 750 tickets, and 30% for opening more than 1,000 tickets per month.</p>
+
+<p>To prevent tenants from abusing the business model, WolfDesk’s ticket lifecycle algorithm ensures that inactive tickets are closed automatically, encouraging customers to open new tickets when further support is needed. Moreover, WolfDesk implements a fraud detection system that analyzes messages and detects cases of unrelated topics being discussed in the same ticket.</p>
+
+<p>To help its tenants streamline the support-related work, WolfDesk has implemented a “support autopilot” feature. The autopilot analyzes new tickets and tries to automatically find a matching solution from the tenant’s ticket history. The functionality allows for further reducing the tickets’ lifespans, encouraging customers to open new tickets for further questions.</p>
+
+<p>WolfDesk incorporates all the security standards and measures to authenticate and authorize its tenants’ users and also allows tenants to configure a single sign-on (SSO) with their existing user management systems.</p>
+
+<p>The administration interface allows tenants to configure the possible values for the tickets’ categories, as well as a list of the tenant’s products that it supports.</p>
+
+<p>To be able to route new tickets to the tenant’s support agents only during their working hours, WolfDesk allows the entry of each agent’s shift schedule.</p>
+
+<p>Since WolfDesk provides its service with no minimal fee, it has to optimize its infrastructure in a way that minimizes the costs of onboarding a new tenant. To do that, WolfDesk leverages serverless computing, which allows it to elastically scale its compute resources based on the operations on active tickets.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Conventions Used in This Book"><div class="sect1" id="_conventions_used_in_this_book">
+<h1>Conventions Used in This Book</h1>
+
+<p>The following typographical conventions are used in this book:</p>
+<dl>
+<dt><em>Italic</em></dt>
+<dd>
+
+<p>Indicates new terms, URLs, email addresses, filenames, and file extensions.</p>
+</dd>
+<dt><code>Constant width</code></dt>
+<dd>
+
+<p>Used for program listings, as well as within paragraphs to refer to program elements such as variable or function names, databases, data types, environment variables, statements, and keywords.</p>
+</dd>
+</dl>
+<div data-type="note" epub:type="note"><h6>Note</h6>
+
+<p>This element signifies a general note.</p>
+</div>
+</div></section>
+<section data-type="sect1" data-pdf-bookmark="Using Code Examples"><div class="sect1" id="_using_code_examples">
+<h1>Using Code Examples</h1>
+<!--PROD: Please reach out to author to find out if they will be uploading code examples to oreilly.com or their own site (e.g., GitHub). If there is no code download, delete this whole section. If there is, when you email digidist with the link, let them know what you filled in for title_title (should be as close to book title as possible, i.e., learning_python_2e). This info will determine where digidist loads the files.-->
+
+<p>Supplemental material (code examples, exercises, etc.) is available for download <a contenteditable="false" data-type="indexterm" data-primary="resources" data-secondary="book website" id="id578"></a><a contenteditable="false" data-type="indexterm" data-primary="book website" id="id579"></a>at <a href="https://learning-ddd.com"><em class="hyperlink">https://learning-ddd.com</em></a>.</p> 
+
+<p>All the code samples presented in the book are implemented in the C# language. <a contenteditable="false" data-type="indexterm" data-primary="resources" data-secondary="book source code" id="id580"></a><a contenteditable="false" data-type="indexterm" data-primary="book source code" id="id581"></a>Generally, the code samples you see in the chapters are excerpts demonstrating the discussed concepts.</p>
+
+<p>Of course, the concepts and techniques discussed in the book are not limited to the C# language or to the object-oriented programming approach. Everything is relevant for other languages and other programming paradigms. As a result, feel free to <span class="keep-together">implement</span> the book’s samples in your favorite language and share them with me. I’ll be happy to add them to the book’s website.</p>
+
+<p>If you have a technical question or a problem using the code examples, please email <a class="email" href="mailto:bookquestions@oreilly.com"><em>bookquestions@oreilly.com</em></a>.</p>
+  
+<p>This book is here to help you get your job done. In general, if example code is offered with this book, you may use it in your programs and documentation. You do not need to contact us for permission unless you’re reproducing a significant portion of the code. For example, writing a program that uses several chunks of code from this book does not require permission. Selling or distributing examples from O’Reilly books does require permission. Answering a question by citing this book and quoting example code does not require permission. Incorporating a significant amount of example code from this book into your product’s documentation does require <span class="keep-together">permission</span>.</p>
+
+<p>We appreciate, but generally do not require, attribution. An attribution usually includes the title, author, publisher, and ISBN. For example: “<em>Learning Domain-Driven Design</em> by Vlad Khononov (O’Reilly). Copyright 2022 Vladislav Khononov, 978-1-098-10013-1.”</p>
+
+<p>If you feel your use of code examples falls outside fair use or the permission given above, feel free to contact us at <a class="email" href="mailto:permissions@oreilly.com"><em>permissions@oreilly.com</em></a>.</p>
+</div></section>
+<section data-type="sect1" data-pdf-bookmark="O’Reilly Online Learning"><div class="sect1" id="_safari_books_online">
+<h1>O’Reilly Online Learning</h1>
+<div data-type="note" epub:type="note" class="ormenabled"><h6>Note</h6>
+
+<p>For more than 40 years, <a href="http://oreilly.com" class="orm:hideurl"><em class="hyperlink">O’Reilly Media</em></a> has provided technology and business training, knowledge, and insight to help companies succeed.</p>
+</div>
+
+<p>Our unique network of experts and innovators share their knowledge and expertise through books, articles, and our online learning platform. O’Reilly’s online learning platform gives you on-demand access to live training courses, in-depth learning paths, interactive coding environments, and a vast collection of text and video from O’Reilly and 200+ other publishers. For more information, visit <a href="http://oreilly.com" class="orm:hideurl"><em>http://oreilly.com</em></a>.</p>
+</div></section>
+<section class="pagebreak-before" data-type="sect1" data-pdf-bookmark="How to Contact Us"><div class="sect1" id="_how_to_contact_us">
+<h1 class="less_space">How to Contact Us</h1>
+
+<p>Please address comments and questions concerning this book to the publisher:</p>
+<ul class="simplelist">
+  <li>O’Reilly Media, Inc.</li>
+  <li>1005 Gravenstein Highway North</li>
+  <li>Sebastopol, CA 95472</li>
+  <li>800-889-8969 (in the United States or Canada)</li>
+  <li>707-827-7019 (international or local)</li>
+  <li>707-829-0104 (fax)</li>
+  <li><a class="email" href="mailto:support@oreilly.com"><em>support@oreilly.com</em></a></li>
+  <li><a href="https://www.oreilly.com/about/contact.html"><em>https://www.oreilly.com/about/contact.html</em></a></li>
+</ul>
+
+<p>We have a web page for this book, where we list errata, examples, and any additional information. You can access this page at <a href="https://oreil.ly/lddd"><em class="hyperlink">https://oreil.ly/lddd</em></a>.</p>
+<!--Don't forget to update the link above.-->
+
+<p>For news and information about our books and courses, visit <a href="https://oreilly.com"><em class="hyperlink">https://oreilly.com</em></a>.</p>
+<p>Find us on LinkedIn: <a href="https://linkedin.com/company/oreilly-media"><em class="hyperlink">https://linkedin.com/company/oreilly-media</em></a></p>
+<p>Watch us on YouTube: <a href="https://youtube.com/oreillymedia"><em class="hyperlink">https://youtube.com/oreillymedia</em></a></p>
+</div></section>
+<section data-type="sect1" data-pdf-bookmark="Acknowledgments"><div class="sect1" id="acknowledgments">
+<h1>Acknowledgments</h1>
+
+<p>Originally, this book was titled “What Is Domain-Driven Design?” and was published as a report in 2019. <em>Learning Domain-Driven Design</em> would not have seen the light of day without the report, and I’m obliged to thank those who made “What Is Domain-Driven Design?” possible: Chris Guzikowski, Ryan Shaw, and Alicia Young.<sup><a data-type="noteref" id="ch01fn1-marker" href="preface01.html#ch01fn1">1</a></sup></p>
+
+<p>This book also wouldn’t have been possible without O’Reilly’s Content Director and Diversity Talent Lead, Melissa Duffield, who championed the project and made it happen. Thank you, Melissa, for all your help!</p>
+
+<p>Jill Leonard was the book’s development editor, project manager, and head coach. Jill’s role in this work cannot be overstated. Jill, thank you so much for all your hard work and help! Extra thanks for keeping me motivated, even when I considered changing my name and hiding in a foreign country.</p>
+
+<p class="pagebreak-before less_space">A huge thanks to the production team for making the book not only writable but readable: Kristen Brown, Audrey Doyle, Kate Dullea, Robert Romano, and Katherine Tozer. For that matter, I want to thank the whole O’Reilly team for the great work you do. It’s a dream come true to be working with you!</p>
+
+<p>Thanks to all the people I interviewed and consulted with: Zsofia Herendi, Scott Hirleman, Trond Hjorteland, Mark Lisker, Chris Richardson, Vaughn Vernon, and Ivan Zakrevsky. Thank you for your wisdom and for being there when I needed help!</p>
+
+<p>Special thanks to the team of reviewers who read through the early drafts and helped me shape the final book: Julie Lerman, Ruth Malan, Diana Montalion, Andrew Padilla, Rodion Promyshlennikov, Viktor Pshenitsyn, Alexei Torunov, Nick Tune, Vasiliy Vasilyuk, and Rebecca Wirfs-Brock. Your support, feedback, and critique helped immensely. Thank you!</p>
+
+<p>I also want to thank Kenny Baas-Schwegler, Alberto Brandolini, Eric Evans, Marco Heimeshoff, Paul Rayner, Mathias Verraes, and the rest of the amazing domain-driven design community. You know who you are. You are my teachers and mentors. Thank you for sharing your knowledge on social media, blogs, and conferences!</p>
+
+<p>I’m most indebted to my dear wife, Vera, for always supporting me in my crazy projects and trying to guard me from things that could distract me from writing. I promise to finally declutter the basement. It is going to happen soon!</p>
+
+<p>Finally, I want to dedicate this book to our beloved Galina Ivanovna Tyumentseva, who supported me so much in this project and whom we sadly lost during the writing of this book. We will always remember you.</p>
+
+<p>#AdoptDontShop</p>
+</div></section>
+<div data-type="footnotes"><p data-type="footnote" id="ch01fn1"><sup><a href="preface01.html#ch01fn1-marker">1</a></sup> Whenever I mention a group of people, the list is in alphabetical order by last name.</p></div></div></section></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xml:lang="en"
+lang="en"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title>Learning Domain-Driven Design</title>
+<link rel="stylesheet" type="text/css" href="override_v1.css"/>
+<link rel="stylesheet" type="text/css" href="epub.css"/>
+</head>
+<body>
+<div id="book-content">
+<div id="sbo-rt-content"><section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 4. Integrating Bounded Contexts"><div class="chapter" id="integrating_bounded_contexts">
+<h1><span class="label">Chapter 4. </span>Integrating Bounded Contexts</h1>
+
+<p>Not only does the bounded context pattern protect the consistency of a ubiquitous language, it also enables modeling. <a contenteditable="false" data-type="indexterm" data-primary="collaboration patterns" data-secondary="about" id="id818"></a><a contenteditable="false" data-type="indexterm" data-primary="modeling business domain" data-secondary="bounded contexts" id="id819"></a><a contenteditable="false" data-type="indexterm" data-primary="bounded contexts" data-secondary="integrating" data-tertiary="about contracts" id="id820"></a><a contenteditable="false" data-type="indexterm" data-primary="business domains" data-secondary="bounded contexts integrated" data-tertiary="about contracts" id="id821"></a><a contenteditable="false" data-type="indexterm" data-primary="ubiquitous language" data-secondary="bounded contexts integrated" data-tertiary="about contracts" id="id822"></a><a contenteditable="false" data-type="indexterm" data-primary="modeling business domain" data-secondary="bounded contexts integrated" data-tertiary="about contracts" id="id823"></a><a contenteditable="false" data-type="indexterm" data-primary="contracts in bounded contexts" data-secondary="about" id="id824"></a><a contenteditable="false" data-type="indexterm" data-primary="boundaries" data-secondary="about" id="id825"></a>You cannot build a model without specifying its purpose—its boundary. The boundary divides the responsibility of languages. A language in one bounded context can model the business domain to solve a particular problem. Another bounded context can represent the same business entities but model them to solve a different problem.</p>
+
+<p>Moreover, models in different bounded contexts can be evolved and implemented independently. That said, bounded contexts themselves are not independent. Just as a system cannot be built out of independent components—the components have to interact with one another to achieve the system’s overarching goals—so, too, do the implementations in bounded contexts. Although they can evolve independently, they have to integrate with one another. As a result, there will always be touchpoints between bounded contexts. These are called <em>contracts</em>.</p>
+
+<p>The need for contracts results from differences in bounded contexts’ models and languages. Since each contract affects more than one party, they need to be defined and coordinated. Also, by definition, two bounded contexts are using different ubiquitous languages. Which language will be used for integration purposes? These integration concerns should be evaluated and addressed by the solution’s design.</p>
+
+<p>In this chapter, you will learn about domain-driven design patterns for defining relationships and integrations between bounded contexts. These patterns are driven by the nature of collaboration between teams working on bounded contexts. We will divide the patterns into three groups, each representing a type of team collaboration: cooperation, customer–supplier, and separate ways.</p>
+
+<section data-type="sect1" data-pdf-bookmark="Cooperation"><div class="sect1" id="cooperation">
+<h1>Cooperation</h1>
+
+<p>Cooperation patterns relate to bounded contexts implemented by teams with well-established communication.<a contenteditable="false" data-type="indexterm" data-primary="bounded contexts" data-secondary="integrating" data-tertiary="cooperation" id="ch04-coop"></a><a contenteditable="false" data-type="indexterm" data-primary="business domains" data-secondary="bounded contexts integrated" data-tertiary="cooperation" id="ch04-coop2"></a><a contenteditable="false" data-type="indexterm" data-primary="ubiquitous language" data-secondary="bounded contexts integrated" data-tertiary="cooperation" id="ch04-coop3"></a><a contenteditable="false" data-type="indexterm" data-primary="modeling business domain" data-secondary="bounded contexts integrated" data-tertiary="cooperation" id="ch04-coop4"></a><a contenteditable="false" data-type="indexterm" data-primary="contracts in bounded contexts" data-secondary="cooperation" id="ch04-coop5"></a><a contenteditable="false" data-type="indexterm" data-primary="cooperation pattern of bounded contexts" id="ch04-coop6"></a><a contenteditable="false" data-type="indexterm" data-primary="collaboration patterns" data-secondary="cooperation" id="ch04-coop7"></a></p>
+
+<p>In the simplest case, these are bounded contexts implemented by a single team. This also applies to teams with dependent goals, where one team’s success depends on the success of the other, and vice versa. Again, the main criterion here is the quality of the teams’ communication and collaboration.</p>
+
+<p>Let’s look at two DDD patterns suitable for cooperating teams: the partnership and shared kernel patterns.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Partnership"><div class="sect2" id="partnership">
+<h2>Partnership</h2>
+
+<p>In the partnership model, the integration between bounded<a contenteditable="false" data-type="indexterm" data-primary="contracts in bounded contexts" data-secondary="cooperation" data-tertiary="partnerships" id="id826"></a><a contenteditable="false" data-type="indexterm" data-primary="cooperation pattern of bounded contexts" data-secondary="partnerships" id="id827"></a><a contenteditable="false" data-type="indexterm" data-primary="collaboration patterns" data-secondary="cooperation" data-tertiary="partnerships" id="id828"></a><a contenteditable="false" data-type="indexterm" data-primary="partnerships in bounded contexts" id="id829"></a> contexts is coordinated in an ad hoc manner. One team can notify a second team about a change in the API, and the second team will cooperate and adapt—no drama or conflicts (see <a data-type="xref" href="#the_partnership_model">Figure 4-1</a>).</p>
+<figure><div id="the_partnership_model" class="figure">
+<img src="assets/lddd_0401.png" alt="The partnership model" width="600" height="157"/>
+<h6><span class="label">Figure 4-1. </span>The partnership model</h6>
+</div></figure>
+
+<p>The coordination of integration here is two-way. No one team dictates the language that is used for defining the contracts. The teams can work out the differences and choose the most appropriate solution. Also, both sides cooperate in solving any integration issues that might come up. Neither team is interested in blocking the other one.</p>
+
+<p>Well-established collaboration practices, high levels of commitment, and frequent synchronizations between teams are required for successful integration in this manner. From a technical perspective, continuous integration of the changes applied by both teams is needed to further minimize the integration feedback loop.</p>
+
+<p>This pattern might not be a good fit for geographically distributed teams since it may present synchronization and communication challenges.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Shared Kernel"><div class="sect2" id="shared_kerne">
+<h2>Shared Kernel</h2>
+
+<p>Despite bounded contexts being model boundaries, there still can be <a contenteditable="false" data-type="indexterm" data-primary="contracts in bounded contexts" data-secondary="cooperation" data-tertiary="shared kernel" id="ch04-sk"></a><a contenteditable="false" data-type="indexterm" data-primary="collaboration patterns" data-secondary="cooperation" data-tertiary="shared kernel" id="ch04-sk2"></a><a contenteditable="false" data-type="indexterm" data-primary="cooperation pattern of bounded contexts" data-secondary="shared kernel" id="ch04-sk3"></a><a contenteditable="false" data-type="indexterm" data-primary="shared kernel in bounded contexts" id="id830"></a>cases when the same model of a subdomain, or a part of it, will be implemented in multiple bounded contexts. It’s crucial to stress that the shared model is designed according to the needs of all of the bounded contexts. Moreover, the shared model has to be consistent across all of the bounded contexts that are using it.</p>
+
+<p>As an example, consider an enterprise system that uses a tailor-made model for managing users’ permissions. Each user can have their permissions granted directly or inherited from one of the organizational units they belong to. Moreover, each bounded context can modify the authorization model, and the changes each bounded context applies have to affect all the other bounded contexts using the model (see <a data-type="xref" href="#shared_kernel">Figure 4-2</a>).</p>
+<figure><div id="shared_kernel" class="figure">
+<img src="assets/lddd_0402.png" alt="Shared kernel" width="600" height="336"/>
+<h6><span class="label">Figure 4-2. </span>Shared kernel</h6>
+</div></figure>
+
+<section data-type="sect3" data-pdf-bookmark="Shared scope"><div class="sect3" id="shared_scope">
+<h3>Shared scope</h3>
+
+<p>The overlapping model couples the lifecycles of the participating<a contenteditable="false" data-type="indexterm" data-primary="shared kernel in bounded contexts" data-secondary="shared scope" id="id831"></a><a contenteditable="false" data-type="indexterm" data-primary="modeling business domain" data-secondary="bounded contexts" data-tertiary="scope of" id="id832"></a> bounded contexts. A change made to the shared model has an immediate effect on all the bounded contexts. Hence, to minimize the cascading effects of changes, the overlapping model should be limited, exposing only that part of the model that has to be implemented by both bounded contexts. Ideally, the shared kernel will consist only of integration contracts and data structures that are intended to be passed across the bounded contexts’ boundaries.</p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Implementation"><div class="sect3" id="implementation-id000101">
+<h3>Implementation</h3>
+
+<p>The shared kernel is implemented so that any modification to its source code is immediately reflected in all the bounded contexts using it.<a contenteditable="false" data-type="indexterm" data-primary="shared kernel in bounded contexts" data-secondary="implementation" id="id833"></a></p>
+
+<p>If the organization uses the mono-repository approach, these can be the same source files referenced by multiple bounded contexts. If using a shared repository is not possible, the shared kernel can be extracted into a dedicated project and referenced in the bounded contexts as a linked library. Either way, each change to the shared kernel must trigger integration tests for all the affected bounded contexts.</p>
+
+<p>The continuous integration of changes is required because the shared kernel belongs to multiple bounded contexts. Not propagating shared kernel changes to all related bounded contexts leads to inconsistencies in a model: bounded contexts may rely on stale implementations of the shared kernel, leading to data corruption and/or runtime issues.</p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="When to use shared kernel"><div class="sect3" id="when_to_use_shared_kernel">
+<h3>When to use shared kernel</h3>
+
+<p>The overarching applicability criterion for the shared kernel pattern<a contenteditable="false" data-type="indexterm" data-primary="shared kernel in bounded contexts" data-secondary="when to use" id="id834"></a> is the cost of duplication versus the cost of coordination. Since the pattern introduces a strong dependency between the participating bounded contexts, it should be applied only when the cost of duplication is higher than the cost of coordination—in other words, only when integrating changes applied to the shared model by both bounded contexts will require more effort than coordinating the changes in the shared codebase.</p>
+
+<p>The difference between the integration and duplication costs depends on the volatility of the model. The more frequently it changes, the higher the integration costs will be. Therefore, the shared kernel will naturally be applied for the subdomains that change the most: the core subdomains.</p>
+
+<p>In a sense, the shared kernel pattern contradicts the principles of bounded contexts introduced in the previous chapter. If the participating bounded contexts are not implemented by the same team, introducing a shared kernel contradicts the principle that a single team should own a bounded context. The overlapping model—the shared kernel—is, in effect, being developed by multiple teams.</p>
+
+<p>That’s the reason why the use of a shared kernel has to be justified. It’s a pragmatic exception that should be considered carefully. A common use case for implementing a shared kernel is when communication or collaboration issues prevent implementing the partnership pattern—for example, because of geographical constraints or organizational politics. Implementing a closely related functionality without proper coordination will result in integration issues, desynchronized models, and arguments about which model is better designed. Minimizing the shared kernel’s scope controls the scope of cascading changes, and triggering integration tests for each change is a way to enforce early detection of integration issues.</p>
+
+<p>Another common use case for applying the shared kernel pattern, albeit a temporary one, is the gradual modernization of a legacy system. In such a scenario, the shared codebase can be a pragmatic intermediate solution for gradually decomposing the system into bounded contexts.</p>
+
+<p>Finally, a shared kernel can be a good fit for integrating bounded contexts owned and implemented by the same team. In such a case, an ad hoc integration of the bounded contexts—a partnership—can “wash out” the contexts’ boundaries over time. A shared kernel can be used for explicitly defining the bounded contexts’ integration contracts.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch04-coop" id="id835"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch04-coop2" id="id836"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch04-coop3" id="id837"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch04-coop4" id="id838"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch04-coop5" id="id839"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch04-coop6" id="id840"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch04-coop7" id="id841"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch04-sk" id="id842"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch04-sk2" id="id843"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch04-sk3" id="id844"></a></p>
+</div></section>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Customer–Supplier"><div class="sect1" id="customerem_dashsupplier">
+<h1>Customer–Supplier</h1>
+
+<p>The second group of collaboration patterns we’ll examine<a contenteditable="false" data-type="indexterm" data-primary="collaboration patterns" data-secondary="customer–supplier" data-tertiary="about" id="id845"></a><a contenteditable="false" data-type="indexterm" data-primary="bounded contexts" data-secondary="integrating" data-tertiary="customer–supplier" id="ch04-cs"></a><a contenteditable="false" data-type="indexterm" data-primary="business domains" data-secondary="bounded contexts integrated" data-tertiary="customer–supplier" id="ch04-cs2"></a><a contenteditable="false" data-type="indexterm" data-primary="ubiquitous language" data-secondary="bounded contexts integrated" data-tertiary="customer–supplier" id="ch04-cs3"></a><a contenteditable="false" data-type="indexterm" data-primary="modeling business domain" data-secondary="bounded contexts integrated" data-tertiary="customer–supplier" id="ch04-cs4"></a><a contenteditable="false" data-type="indexterm" data-primary="contracts in bounded contexts" data-secondary="customer–supplier" id="ch04-cs5"></a><a contenteditable="false" data-type="indexterm" data-primary="customer–supplier collaboration pattern" data-secondary="about" id="id846"></a> is the customer–supplier patterns. As shown in <a data-type="xref" href="#customerem_dashsupplier_relationship">Figure 4-3</a>, one of the bounded contexts—the supplier—provides a service for its customers. The service provider is “upstream” and the customer or consumer is “downstream.”</p>
+<figure><div id="customerem_dashsupplier_relationship" class="figure">
+<img src="assets/lddd_0403.png" alt="Customer–supplier relationship" width="600" height="234"/>
+<h6><span class="label">Figure 4-3. </span>Customer–supplier relationship</h6>
+</div></figure>
+
+<p>Unlike in the cooperation case, both teams (upstream and downstream) can succeed independently. <a contenteditable="false" data-type="indexterm" data-primary="power differences in relationships" data-secondary="about" id="id847"></a>Consequently, in most cases we have an imbalance of power: either the upstream or the downstream team can dictate the integration contract.</p>
+
+<p>This section will discuss three patterns addressing such power differences: the conformist, anticorruption layer, and open-host service patterns.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Conformist"><div class="sect2" id="conformist">
+<h2>Conformist</h2>
+
+<p>In some cases, the balance of power favors the upstream team,<a contenteditable="false" data-type="indexterm" data-primary="power differences in relationships" data-secondary="conformist" id="id848"></a><a contenteditable="false" data-type="indexterm" data-primary="conformist relationship" id="id849"></a><a contenteditable="false" data-type="indexterm" data-primary="collaboration patterns" data-secondary="customer–supplier" data-tertiary="conformist" id="id850"></a><a contenteditable="false" data-type="indexterm" data-primary="customer–supplier collaboration pattern" data-secondary="conformist" id="id851"></a> which has no real motivation to support its clients’ needs. Instead, it just provides the integration contract, defined according to its own model—take it or leave it. Such power imbalances can be caused by integration with service providers that are external to the organization or simply by organizational politics.</p>
+
+<p>If the downstream team can accept the upstream team’s model, the bounded contexts’ relationship is called <em>conformist</em>. The downstream conforms to the upstream bounded context’s model, as shown in <a data-type="xref" href="#conformist_relationship">Figure 4-4</a>.</p>
+<figure><div id="conformist_relationship" class="figure">
+<img src="assets/lddd_0404.png" alt="Conformist relationship" width="600" height="144"/>
+<h6><span class="label">Figure 4-4. </span>Conformist relationship</h6>
+</div></figure>
+
+<p>The downstream team’s decision to give up some of its autonomy can be justified in multiple ways. For example, the contract exposed by the upstream team may be an industry-standard, well-established model, or it may just be good enough for the downstream team’s needs.</p>
+
+<p>The next pattern addresses the case in which a consumer is not willing to accept the supplier’s model.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Anticorruption Layer"><div class="sect2" id="anticorruption_layer-id000004">
+<h2>Anticorruption Layer</h2>
+
+<p>As in the conformist pattern, the balance of power in this relationship<a contenteditable="false" data-type="indexterm" data-primary="power differences in relationships" data-secondary="anticorruption layer" id="id852"></a><a contenteditable="false" data-type="indexterm" data-primary="customer–supplier collaboration pattern" data-secondary="anticorruption layer" id="id853"></a><a contenteditable="false" data-type="indexterm" data-primary="collaboration patterns" data-secondary="customer–supplier" data-tertiary="anticorruption layer" id="id854"></a><a contenteditable="false" data-type="indexterm" data-primary="anticorruption layer" id="id855"></a> is still skewed toward the upstream service. However, in this case, the downstream bounded context is not willing to conform. Instead, it can translate the upstream bounded context’s model into a model tailored to its own needs via an anticorruption layer, as shown in <a data-type="xref" href="#integration_through_an_anticorruption_l">Figure 4-5</a>.</p>
+<figure><div id="integration_through_an_anticorruption_l" class="figure">
+<img src="assets/lddd_0405.png" alt="Integration through an anticorruption layer" width="600" height="234"/>
+<h6><span class="label">Figure 4-5. </span>Integration through an anticorruption layer</h6>
+</div></figure>
+
+<p>The anticorruption layer pattern addresses scenarios in which it is not desirable or worth the effort to conform to the supplier’s model, such as the following:</p>
+<dl>
+<dt>When the downstream bounded context contains a core subdomain</dt>
+<dd>A core subdomain’s model requires extra attention, and adhering to the supplier’s model might impede the modeling of the problem domain.</dd>
+<dt>When the upstream model is inefficient or inconvenient for the consumer’s needs</dt>
+<dd>If a bounded context conforms to a mess, it risks becoming a mess itself. That is often the case when integrating with legacy systems.</dd>
+<dt>When the supplier’s contract changes often</dt>
+<dd>The consumer wants to protect its model from frequent changes. With an anticorruption layer, the changes in the supplier’s model only affect the translation mechanism.</dd>
+</dl>
+
+<p>From a modeling perspective, the translation of the supplier’s model isolates the downstream consumer from foreign concepts that are not relevant to its bounded context. Hence, it simplifies the consumer’s ubiquitous language and model.</p>
+
+<p>In <a data-type="xref" href="ch09.html#communication_patterns">Chapter 9</a>, we will explore the different ways to implement an anticorruption layer.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Open-Host Service"><div class="sect2" id="open_host_service-id000121">
+<h2>Open-Host Service</h2>
+
+<p>This pattern addresses cases in which the power is skewed toward<a contenteditable="false" data-type="indexterm" data-primary="power differences in relationships" data-secondary="open-host service" id="id856"></a><a contenteditable="false" data-type="indexterm" data-primary="open-host service" id="id857"></a><a contenteditable="false" data-type="indexterm" data-primary="collaboration patterns" data-secondary="customer–supplier" data-tertiary="open-host service" id="id858"></a><a contenteditable="false" data-type="indexterm" data-primary="customer–supplier collaboration pattern" data-secondary="open-host service" id="id859"></a> the consumers. The supplier is interested in protecting its consumers and providing the best service possible.</p>
+
+<p>To protect the consumers from changes in its implementation model, the upstream supplier decouples the implementation model from the public interface. This decoupling allows the supplier to evolve its implementation and public models at different rates, as shown in <a data-type="xref" href="#integration_through_an_open_host_servic">Figure 4-6</a>.</p>
+<figure><div id="integration_through_an_open_host_servic" class="figure">
+<img src="assets/lddd_0406.png" alt="Integration through an open-host service" width="600" height="234"/>
+<h6><span class="label">Figure 4-6. </span>Integration through an open-host service</h6>
+</div></figure>
+
+<p>The supplier’s public interface is not intended to conform to its ubiquitous language. <a contenteditable="false" data-type="indexterm" data-primary="published language public protocol" id="id860"></a><a contenteditable="false" data-type="indexterm" data-primary="protocols exposed for public" id="id861"></a><a contenteditable="false" data-type="indexterm" data-primary="ubiquitous language" data-secondary="published language public protocol" id="id862"></a>Instead, it is intended to expose a protocol convenient for the consumers, expressed in an integration-oriented language. As such, the public protocol is called the <em>published language</em>.</p>
+
+<p>In a sense, the open-host service pattern is a reversal of the anticorruption layer pattern: instead of the consumer, the supplier implements the translation of its internal model.</p>
+
+<p>Decoupling the bounded context’s implementation and integration models gives the upstream bounded context the freedom to evolve its implementation without affecting the downstream contexts. Of course, that’s only possible if the modified implementation model can be translated into the published language the consumers are already using.</p>
+
+<p>Furthermore, the integration model’s decoupling allows the upstream bounded context to simultaneously expose multiple versions of the published language, allowing the consumer to migrate to the new version gradually (see <a data-type="xref" href="#open_host_service_exposing_multiple_ver">Figure 4-7</a>).<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch04-cs" id="id863"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch04-cs2" id="id864"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch04-cs3" id="id865"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch04-cs4" id="id866"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch04-cs5" id="id867"></a></p>
+<figure><div id="open_host_service_exposing_multiple_ver" class="figure">
+<img src="assets/lddd_0407.png" alt="Open-host service exposing multiple versions of the published language" width="600" height="365"/>
+<h6><span class="label">Figure 4-7. </span>Open-host service exposing multiple versions of the published language</h6>
+</div></figure>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Separate Ways"><div class="sect1" id="separate_ways">
+<h1>Separate Ways</h1>
+
+<p>The last collaboration option is not to collaborate at all.<a contenteditable="false" data-type="indexterm" data-primary="separate ways no collaboration pattern" id="id868"></a><a contenteditable="false" data-type="indexterm" data-primary="bounded contexts" data-secondary="integrating" data-tertiary="separate ways no collaboration" id="id869"></a><a contenteditable="false" data-type="indexterm" data-primary="business domains" data-secondary="bounded contexts integrated" data-tertiary="separate ways no collaboration" id="id870"></a><a contenteditable="false" data-type="indexterm" data-primary="ubiquitous language" data-secondary="bounded contexts integrated" data-tertiary="no collaboration" id="id871"></a><a contenteditable="false" data-type="indexterm" data-primary="modeling business domain" data-secondary="bounded contexts integrated" data-tertiary="separate ways no collaboration" id="id872"></a><a contenteditable="false" data-type="indexterm" data-primary="contracts in bounded contexts" data-secondary="separate ways no collaboration" id="id873"></a><a contenteditable="false" data-type="indexterm" data-primary="collaboration patterns" data-secondary="separate ways no collaboration" id="id874"></a> This pattern can arise for different reasons, in cases where the teams are unwilling or unable to collaborate. We’ll look at a few of them here.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Communication Issues"><div class="sect2" id="communication_issues">
+<h2>Communication Issues</h2>
+
+<p>A common reason for avoiding collaboration is communication<a contenteditable="false" data-type="indexterm" data-primary="separate ways no collaboration pattern" data-secondary="communication issues" id="id875"></a><a contenteditable="false" data-type="indexterm" data-primary="collaboration patterns" data-secondary="separate ways no collaboration" data-tertiary="communication issues" id="id876"></a><a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="collaboration obstacle" id="id877"></a> difficulties driven by the organization’s size or internal politics. When teams have a hard time collaborating and agreeing, it may be more cost-effective to go their separate ways and duplicate functionality in multiple bounded contexts.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Generic Subdomains"><div class="sect2" id="generic_subdomains-id000092">
+<h2>Generic Subdomains</h2>
+
+<p>The nature of the duplicated subdomain can also be a reason for teams<a contenteditable="false" data-type="indexterm" data-primary="generic subdomains" data-secondary="duplication over cooperation" id="id878"></a><a contenteditable="false" data-type="indexterm" data-primary="collaboration patterns" data-secondary="separate ways no collaboration" data-tertiary="generic subdomains" id="id879"></a><a contenteditable="false" data-type="indexterm" data-primary="separate ways no collaboration pattern" data-secondary="generic subdomains" id="id880"></a> to go their separate ways. When the subdomain in question is generic, and if the generic solution is easy to integrate, it may be more cost-effective to integrate it locally in each bounded context. An example is a logging framework; it would make little sense for one of the bounded contexts to expose it as a service. The added complexity of integrating such a solution would outweigh the benefit of not duplicating the functionality in multiple contexts. Duplicating the functionality would be less expensive than <span class="keep-together">collaborating</span>.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Model Differences"><div class="sect2" id="model_differences">
+<h2>Model Differences</h2>
+
+<p>Differences in the bounded contexts’ models can also be a reason<a contenteditable="false" data-type="indexterm" data-primary="collaboration patterns" data-secondary="separate ways no collaboration" data-tertiary="model differences" id="id881"></a><a contenteditable="false" data-type="indexterm" data-primary="modeling business domain" data-secondary="bounded contexts integrated" data-tertiary="duplication over collaboration" id="id882"></a><a contenteditable="false" data-type="indexterm" data-primary="separate ways no collaboration pattern" data-secondary="model differences" id="id883"></a> to go with a separate ways collaboration. The models may be so different that a conformist relationship is impossible, and implementing an anticorruption layer would be more expensive than duplicating the functionality. In such a case, it is again more cost-effective for the teams to go their separate ways.</p>
+<div data-type="note" epub:type="note"><h6>Note</h6>
+
+<p>The separate ways pattern should be avoided when integrating core subdomains. Duplicating the implementation of such subdomains would defy the company’s strategy to implement them in the most effective and optimized way.</p>
+</div>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Context Map"><div class="sect1" id="context_map-id000046">
+<h1>Context Map</h1>
+
+<p>After analyzing the integration patterns between a system’s bounded contexts,<a contenteditable="false" data-type="indexterm" data-primary="bounded contexts" data-secondary="context map" id="ch04-cntx"></a><a contenteditable="false" data-type="indexterm" data-primary="visualization" data-secondary="context map of bounded contexts" id="ch04-cntx2"></a><a contenteditable="false" data-type="indexterm" data-primary="context map of bounded contexts" id="ch04-cntx3"></a> we can plot them on a context map, as shown in <a data-type="xref" href="#context_map-id000047">Figure 4-8</a>.</p>
+<figure><div id="context_map-id000047" class="figure">
+<img src="assets/lddd_0408.png" alt="Context map" width="600" height="343"/>
+<h6><span class="label">Figure 4-8. </span>Context map</h6>
+</div></figure>
+
+<p>The context map is a visual representation of the system’s bounded contexts and the integrations between them. This visual notation gives valuable strategic insight on multiple levels:</p>
+<dl>
+<dt>High-level design</dt>
+<dd>A context map provides an overview of the system’s components and the models they implement.</dd>
+<dt>Communication patterns</dt>
+<dd>A context map depicts the communication patterns among<a contenteditable="false" data-type="indexterm" data-primary="context map of bounded contexts" data-secondary="communication patterns" id="id884"></a><a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="context map for patterns" id="id885"></a> teams—for example, which teams are collaborating and which prefer “less intimate” integration patterns, such as the anticorruption layer and separate ways patterns.</dd>
+<dt>Organizational issues</dt>
+<dd>A context map can give insight into organizational issues. For example, what does it mean if a certain upstream team’s downstream consumers all resort to implementing an anticorruption layer, or if all implementations of the separate ways pattern are concentrated around the same team?</dd>
+</dl>
+
+<section data-type="sect2" data-pdf-bookmark="Maintenance "><div class="sect2" id="maintenance">
+<h2>Maintenance </h2>
+
+<p>Ideally, a context map should be introduced into a project<a contenteditable="false" data-type="indexterm" data-primary="context map of bounded contexts" data-secondary="maintenance" id="id886"></a><a contenteditable="false" data-type="indexterm" data-primary="bounded contexts" data-secondary="context map" data-tertiary="maintenance" id="id887"></a> right from the get-go, and be updated to reflect additions of new bounded contexts and modifications to the existing one.</p>
+
+<p>Since the context map potentially contains information originating from the work of multiple teams, it’s best to define the maintenance of the context map as a shared effort: each team is responsible for updating its own integrations with other bounded contexts.</p>
+
+<p>A context map can be managed and maintained as code, using a tool like <a href="https://contextmapper.org">Context Mapper</a>.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Limitations"><div class="sect2" id="limitations">
+<h2>Limitations</h2>
+
+<p>It’s important to note that charting a context map can be a<a contenteditable="false" data-type="indexterm" data-primary="context map of bounded contexts" data-secondary="limitations" id="id888"></a><a contenteditable="false" data-type="indexterm" data-primary="bounded contexts" data-secondary="context map" data-tertiary="limitations" id="id889"></a> challenging task. When a system’s bounded contexts encompass multiple subdomains, there can be multiple integration patterns at play. For example, in <a data-type="xref" href="#complicated_context_map">Figure 4-9</a>, you can see two bounded contexts with two integration patterns: partnership and anticorruption layer.</p>
+<figure><div id="complicated_context_map" class="figure">
+<img src="assets/lddd_0409.png" alt="Complicated context map" width="600" height="251"/>
+<h6><span class="label">Figure 4-9. </span>Complicated context map</h6>
+</div></figure>
+
+<p>Moreover, even if bounded contexts are limited to a single subdomain, there still can be multiple integration patterns at play—for example, if the subdomains’ modules require different integration strategies.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch04-cntx" id="id890"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch04-cntx2" id="id891"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch04-cntx3" id="id892"></a></p>
+</div></section>
+</div></section>
+
+<section class="pagebreak-before" data-type="sect1" data-pdf-bookmark="Conclusion"><div class="sect1" id="conclusion-id000029">
+<h1 class="less_space">Conclusion</h1>
+
+<p>Bounded contexts are not independent. They have to interact with one another. The following patterns define different ways bounded contexts can be integrated:</p>
+<dl>
+<dt>Partnership</dt>
+<dd>Bounded contexts are integrated in an ad hoc manner.</dd>
+<dt>Shared kernel</dt>
+<dd>Two or more bounded contexts are integrated by sharing a limited overlapping model that belongs to all participating bounded contexts.</dd>
+<dt>Conformist</dt>
+<dd>The consumer conforms to the service provider’s model.</dd>
+<dt>Anticorruption layer</dt>
+<dd>The consumer translates the service provider’s model into a model that fits the consumer’s needs.</dd>
+<dt>Open-host service</dt>
+<dd>The service provider implements a published language—a model optimized for its consumers’ needs.</dd>
+<dt>Separate ways</dt>
+<dd>It’s less expensive to duplicate particular functionality than to collaborate and integrate it.</dd>
+</dl>
+
+<p>The integrations among the bounded contexts can be plotted on a context map. This tool gives insight into the system’s high-level design, communication patterns, and organizational issues.</p>
+
+<p>Now that you have learned about the domain-driven design tools and techniques for analyzing and modeling business domains, we will shift our perspective from strategy to tactics. In <a data-type="xref" href="part02.html#tactical_design">Part II</a>, you’ll learn different ways to implement domain logic, organize high-level architecture, and coordinate communication between a system’s <span class="keep-together">components</span>.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Exercises"><div class="sect1" id="exercises-id000073">
+<h1>Exercises</h1>
+
+
+<ol>
+          <li>
+            <p>Which integration pattern should never be used for a core subdomain?</p>
+            <ol type="a">
+              <li>
+                <p>Shared kernel</p>
+              </li>
+              <li>
+                <p>Open-host service</p>
+              </li>
+              <li>
+                <p>Anticorruption layer</p>
+              </li>
+              <li>
+                <p>Separate ways</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Which downstream subdomain is more likely to implement an anticorruption layer?</p>
+            <ol type="a">
+              <li>
+                <p>Core subdomain</p>
+              </li>
+              <li>
+                <p>Supporting subdomain</p>
+              </li>
+              <li>
+                <p>Generic subdomain</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Which upstream subdomain is more likely to implement an open-host service? Select all that apply.</p>
+            <ol type="a">
+              <li>
+                <p>Core subdomain</p>
+              </li>
+              <li>
+                <p>Supporting subdomain</p>
+              </li>
+              <li>
+                <p>Generic subdomain</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Which integration pattern, in a sense, violates bounded contexts’ ownership boundaries?</p>
+            <ol type="a">
+              <li>
+                <p>Partnership.</p>
+              </li>
+              <li>
+                <p>Shared kernel.</p>
+              </li>
+              <li>
+                <p>Separate ways.</p>
+              </li>
+              <li>
+                <p>No integration pattern should ever break the bounded contexts’ ownership boundaries.</p>
+              </li>
+            </ol>
+          </li>
+        </ol>
+
+</div></section>
+</div></section></div>
+</div>
+</body>
+</html>

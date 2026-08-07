@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xml:lang="en"
+lang="en"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title>Learning Domain-Driven Design</title>
+<link rel="stylesheet" type="text/css" href="override_v1.css"/>
+<link rel="stylesheet" type="text/css" href="epub.css"/>
+</head>
+<body>
+<div id="book-content">
+<div id="sbo-rt-content"><section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 5. Implementing Simple Business Logic"><div class="chapter" id="implementing_simple_business_logic">
+<h1><span class="label">Chapter 5. </span>Implementing Simple Business Logic</h1>
+
+<p>Business logic is the most important part of software.<a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="about" id="id893"></a><a contenteditable="false" data-type="indexterm" data-primary="tactical design" data-secondary="business logic" data-see="business logic implementation" id="id894"></a> It’s the reason the software is being implemented in the first place. A system’s user interface can be sexy and its database can be blazing fast and scalable. But if the software is not useful for the business, it’s nothing but an expensive technology demo.</p>
+
+<p>As we saw in <a data-type="xref" href="ch02.html#discovering_domain_knowledge">Chapter 2</a>, not all business subdomains are created equal. Different subdomains have different levels of strategic importance and complexity. This chapter begins our exploration of the different ways to model and implement business logic code. We will start with two patterns suited for rather simple business logic: transaction script and active record.</p>
+
+<section data-type="sect1" data-pdf-bookmark="Transaction Script"><div class="sect1" id="transaction_script">
+<h1>Transaction Script</h1>
+
+<blockquote data-type="epigraph" epub:type="epigraph">
+<p>Organizes business logic by procedures where each procedure handles a single request from the presentation.<a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="transaction scripts" id="ch05-xsc"></a><a contenteditable="false" data-type="indexterm" data-primary="transaction scripts" id="ch05-xsc2"></a><a contenteditable="false" data-type="indexterm" data-primary="Fowler, Martin" id="id895"></a><a contenteditable="false" data-type="indexterm" data-primary="scripts for transactions" id="ch05-xsc3"></a></p>
+
+<p data-type="attribution">Martin Fowler<sup><a data-type="noteref" id="ch01fn18-marker" href="ch05.html#ch01fn18">1</a></sup></p>
+</blockquote>
+
+<p>A system’s public interface can be seen as a collection of business transactions that consumers can execute, as shown in <a data-type="xref" href="#transaction_script_interface">Figure 5-1</a>. These transactions can retrieve information managed by the system, modify it, or both. The pattern organizes the system’s business logic based on procedures, where each procedure implements an operation that is executed by the system’s consumer via its public interface. In effect, the system’s public operations are used as encapsulation boundaries.</p>
+<figure><div id="transaction_script_interface" class="figure">
+<img src="assets/lddd_0501.png" alt="Transaction script interface" width="600" height="180"/>
+<h6><span class="label">Figure 5-1. </span>Transaction script interface</h6>
+</div></figure>
+
+<section data-type="sect2" data-pdf-bookmark="Implementation"><div class="sect2" id="implementation-id000102">
+<h2>Implementation</h2>
+
+<p>Each procedure is implemented as a simple, straightforward procedural script.<a contenteditable="false" data-type="indexterm" data-primary="transaction scripts" data-secondary="implementation" id="id896"></a><a contenteditable="false" data-type="indexterm" data-primary="scripts for transactions" data-secondary="implementation" id="id897"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="transaction scripts" data-tertiary="implementation" id="id898"></a> It can use a thin abstraction layer for integrating with storage mechanisms, but it is also free to access the databases directly.</p>
+
+<p>The only requirement procedures have to fulfill is transactional behavior. <em>Each operation should either succeed or fail but can never result in an invalid state</em>. Even if execution of a transaction script fails at the most inconvenient moment, the system should remain consistent—either by rolling back any changes it has made up until the failure or by executing compensating actions. The transactional behavior is reflected in the pattern’s name: transaction script.</p>
+
+<p>Here is an example of a transaction script that converts batches of JSON files into XML files:</p>
+<pre data-code-language="csharp"><code class="n">DB</code><code class="p">.</code><code class="n">StartTransaction</code><code class="p">();</code>
+
+<code class="kt">var</code> <code class="n">job</code> <code class="p">=</code> <code class="n">DB</code><code class="p">.</code><code class="n">LoadNextJob</code><code class="p">();</code>
+<code class="kt">var</code> <code class="n">json</code> <code class="p">=</code> <code class="n">LoadFile</code><code class="p">(</code><code class="n">job</code><code class="p">.</code><code class="n">Source</code><code class="p">);</code>
+<code class="kt">var</code> <code class="n">xml</code> <code class="p">=</code> <code class="n">ConvertJsonToXml</code><code class="p">(</code><code class="n">json</code><code class="p">);</code>
+<code class="n">WriteFile</code><code class="p">(</code><code class="n">job</code><code class="p">.</code><code class="n">Destination</code><code class="p">,</code> <code class="n">xml</code><code class="p">.</code><code class="n">ToString</code><code class="p">();</code>
+<code class="n">DB</code><code class="p">.</code><code class="n">MarkJobAsCompleted</code><code class="p">(</code><code class="n">job</code><code class="p">);</code>
+
+<code class="n">DB</code><code class="p">.</code><code class="n">Commit</code><code class="p">()</code></pre>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="It’s Not That Easy!"><div class="sect2" id="itapostrophes_not_that_easyexclamation">
+<h2>It’s Not That Easy!</h2>
+
+<p>When I introduce the transaction script pattern in my domain-driven design classes, my students often raise their eyebrows, and some even ask, “Is it worth our time? Aren’t we here for the more advanced patterns and techniques?”</p>
+
+<p>The thing is, the transaction script pattern is a <em>foundation</em> for the more advanced business logic implementation patterns you will learn in the forthcoming chapters. <a contenteditable="false" data-type="indexterm" data-primary="scripts for transactions" data-secondary="debugging" id="ch05-dbg4"></a><a contenteditable="false" data-type="indexterm" data-primary="transaction scripts" data-secondary="debugging" id="ch05-dbg"></a><a contenteditable="false" data-type="indexterm" data-primary="data corruption" data-secondary="transaction script errors" id="ch05-dbg2"></a><a contenteditable="false" data-type="indexterm" data-primary="debugging" data-secondary="transaction script errors" id="ch05-dbg3"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="transaction scripts" data-tertiary="debugging" id="ch05-dbg5"></a>Furthermore, despite its apparent simplicity, it is the easiest pattern to get wrong. A considerable number of production issues I have helped to debug and fix, in one way or another, often boiled down to a misimplementation of the transactional behavior of the system’s business logic.</p>
+
+<p>Let’s take a look at three common, real-life examples of data corruption that results from failing to correctly implement a transaction script.</p>
+
+<section data-type="sect3" data-pdf-bookmark="Lack of transactional behavior"><div class="sect3" id="lack_of_transactional_behavior">
+<h3>Lack of transactional behavior</h3>
+
+<p>A trivial example of failing to implement transactional behavior is to issue multiple updates without an overarching transaction. Consider the following method that updates a record in the Users table and inserts a record into the VisitsLog table:</p>
+<pre data-code-language="csharp"><code class="m">01</code>  <code class="k">public</code> <code class="k">class</code> <code class="nc">LogVisit</code>
+<code class="m">02</code>  <code class="p">{</code>
+<code class="m">03</code>      <code class="p">...</code>
+<code class="m">04</code>
+<code class="m">05</code>      <code class="k">public</code> <code class="k">void</code> <code class="n">Execute</code><code class="p">(</code><code class="n">Guid</code> <code class="n">userId</code><code class="p">,</code> <code class="n">DataTime</code> <code class="n">visitedOn</code><code class="p">)</code>
+<code class="m">06</code>      <code class="p">{</code>
+<code class="m">07</code>          <code class="n">_db</code><code class="p">.</code><code class="n">Execute</code><code class="p">(</code><code class="s">"UPDATE Users SET last_visit=@p1 WHERE user_id=@p2"</code><code class="p">,</code>
+<code class="m">08</code>              <code class="n">visitedOn</code><code class="p">,</code> <code class="n">userId</code><code class="p">);</code>
+<code class="m">09</code>          <code class="n">_db</code><code class="p">.</code><code class="n">Execute</code><code class="p">(</code><code class="s">@"INSERT INTO VisitsLog(user_id, visit_date)</code>
+<code class="s">10                       VALUES(@p1, @p2)"</code><code class="p">,</code> <code class="n">userId</code><code class="p">,</code> <code class="n">visitedOn</code><code class="p">);</code>
+<code class="m">11</code>      <code class="p">}</code>
+<code class="m">12</code>  <code class="p">}</code></pre>
+
+<p>If any issue occurs after the record in the Users table was updated (line 7) but before appending the log record on line 9 succeeds, the system will end up in an inconsistent state. The Users table will be updated but no corresponding record will be written to the VisitsLog table. The issue can be due to anything from a network outage to a database timeout or deadlock, or even a crash of the server executing the process.</p>
+
+<p>This can be fixed by introducing a proper transaction encompassing both data changes:</p>
+<pre data-code-language="csharp"><code class="k">public</code> <code class="k">class</code> <code class="nc">LogVisit</code>
+<code class="p">{</code>
+    <code class="p">...</code>
+
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Execute</code><code class="p">(</code><code class="n">Guid</code> <code class="n">userId</code><code class="p">,</code> <code class="n">DataTime</code> <code class="n">visitedOn</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="k">try</code>
+        <code class="p">{</code>
+            <code class="n">_db</code><code class="p">.</code><code class="n">StartTransaction</code><code class="p">();</code>
+
+            <code class="n">_db</code><code class="p">.</code><code class="n">Execute</code><code class="p">(</code><code class="s">@"UPDATE Users SET last_visit=@p1</code>
+<code class="s">                       WHERE user_id=@p2"</code><code class="p">,</code>
+                       <code class="n">visitedOn</code><code class="p">,</code> <code class="n">userId</code><code class="p">);</code>
+
+            <code class="n">_db</code><code class="p">.</code><code class="n">Execute</code><code class="p">(</code><code class="s">@"INSERT INTO VisitsLog(user_id, visit_date)</code>
+<code class="s">                       VALUES(@p1, @p2)"</code><code class="p">,</code>
+                       <code class="n">userId</code><code class="p">,</code> <code class="n">visitedOn</code><code class="p">);</code>
+
+            <code class="n">_db</code><code class="p">.</code><code class="n">Commit</code><code class="p">();</code>
+        <code class="p">}</code> <code class="k">catch</code> <code class="p">{</code>
+            <code class="n">_db</code><code class="p">.</code><code class="n">Rollback</code><code class="p">();</code>
+            <code class="k">throw</code><code class="p">;</code>
+        <code class="p">}</code>
+    <code class="p">}</code>
+<code class="p">}</code></pre>
+
+<p>The fix is easy to implement due to relational databases’ native support of transactions spanning multiple records. Things get more complicated when you have to issue multiple updates in a database that doesn’t support multirecord transactions, or when you are working with multiple storage mechanisms that are impossible to unite in a distributed transaction. Let’s see an example of the latter case.</p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Distributed transactions"><div class="sect3" id="distributed_transactions">
+<h3>Distributed transactions</h3>
+
+<p>In modern distributed systems, it’s a common practice to make changes to the data in a database and then notify other components of the system about the changes by publishing messages into a message bus. Consider that in the previous example, instead of logging a visit in a table, we have to publish it to a message bus:</p>
+<pre data-code-language="csharp"><code class="m">01</code>  <code class="k">public</code> <code class="k">class</code> <code class="nc">LogVisit</code>
+<code class="m">02</code>  <code class="p">{</code>
+<code class="m">03</code>      <code class="p">...</code>
+<code class="m">04</code>
+<code class="m">05</code>      <code class="k">public</code> <code class="k">void</code> <code class="n">Execute</code><code class="p">(</code><code class="n">Guid</code> <code class="n">userId</code><code class="p">,</code> <code class="n">DataTime</code> <code class="n">visitedOn</code><code class="p">)</code>
+<code class="m">06</code>      <code class="p">{</code>
+<code class="m">07</code>          <code class="n">_db</code><code class="p">.</code><code class="n">Execute</code><code class="p">(</code><code class="s">"UPDATE Users SET last_visit=@p1 WHERE user_id=@p2"</code><code class="p">,</code>
+<code class="m">08</code>                     <code class="n">visitedOn</code><code class="p">,</code><code class="n">userId</code><code class="p">);</code>
+<code class="m">09</code>          <code class="n">_messageBus</code><code class="p">.</code><code class="n">Publish</code><code class="p">(</code><code class="s">"VISITS_TOPIC"</code><code class="p">,</code>
+<code class="m">10</code>                             <code class="k">new</code> <code class="p">{</code> <code class="n">UserId</code> <code class="p">=</code> <code class="n">userId</code><code class="p">,</code> <code class="n">VisitDate</code> <code class="p">=</code> <code class="n">visitedOn</code> <code class="p">});</code>
+<code class="m">11</code>      <code class="p">}</code>
+<code class="m">12</code>  <code class="p">}</code></pre>
+
+<p>As in the previous example, any failure occurring after line 7 but before line 9 succeeds will corrupt the system’s state. The Users table will be updated but the other components won’t be notified as publishing to the message bus has failed.</p>
+
+<p>Unfortunately, fixing the issue is not as easy as in the previous example. Distributed transactions spanning multiple storage mechanisms are complex, hard to scale, error prone, and therefore are usually avoided. In <a data-type="xref" href="ch08.html#architectural_patterns-id000006">Chapter 8</a>, you will learn how to use the CQRS architectural pattern to populate multiple storage mechanisms. In addition, <a data-type="xref" href="ch09.html#communication_patterns">Chapter 9</a> will introduce the outbox pattern, which enables reliable publishing of messages after committing changes to another database.</p>
+
+<p>Let’s see a more intricate example of improper implementation of transactional behavior.</p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Implicit distributed transactions"><div class="sect3" id="implicit_distributed_transactions">
+<h3>Implicit distributed transactions</h3>
+
+<p>Consider the following deceptively simple method:</p>
+<pre data-code-language="csharp"><code class="k">public</code> <code class="k">class</code> <code class="nc">LogVisit</code>
+<code class="p">{</code>
+    <code class="p">...</code>
+ 
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Execute</code><code class="p">(</code><code class="n">Guid</code> <code class="n">userId</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="n">_db</code><code class="p">.</code><code class="n">Execute</code><code class="p">(</code><code class="s">"UPDATE Users SET visits=visits+1 WHERE user_id=@p1"</code><code class="p">,</code>
+                    <code class="n">userId</code><code class="p">);</code>
+    <code class="p">}</code>
+<code class="p">}</code></pre>
+
+<p>Instead of tracking the last visit date as in the previous examples, this method maintains a counter of visits for each user. Calling the method increases the corresponding counter’s value by 1. All the method does is update one value, in one table, residing in one database. Yet this is still a distributed transaction that can potentially lead to inconsistent state.</p>
+
+<p>This example constitutes a distributed transaction because it communicates information to the databases and the external process that called the method, as demonstrated in <a data-type="xref" href="#the_logvisit_operation_updating_the_dat">Figure 5-2</a>.</p>
+<figure><div id="the_logvisit_operation_updating_the_dat" class="figure">
+<img src="assets/lddd_0502.png" alt="The LogVisit operation updating the data and notifying the caller of the operation’s success or failure" width="600" height="130"/>
+<h6><span class="label">Figure 5-2. </span>The <code>LogVisit</code> operation updating the data and notifying the caller of the operation’s success or failure</h6>
+</div></figure>
+
+<p>Although the <code>execute</code> method is of type <code>void</code>, that is, it doesn’t return any data, it still communicates whether the operation has succeeded or failed: if it failed, the caller will get an exception. <a contenteditable="false" data-type="indexterm" data-primary="methods" data-secondary="communication of result" id="id899"></a>What if the method succeeds, but the communication of the result to the caller fails? For example:</p>
+<ul>
+<li>
+	<p>If <code>LogVisit</code> is part of a REST service and there is a network outage; or</p></li>
+<li>
+	<p>If both <code>LogVisit</code> and the caller are running in the same process, but the process fails before the caller gets to track successful execution of the <code>LogVisit</code> action?</p></li>
+</ul>
+
+<p>In both cases, the consumer will assume failure and try calling <code>LogVisit</code> again. Executing the <code>LogVisit</code> logic again will result in an incorrect increase of the counter’s value. Overall, it will be increased by 2 instead of 1. As in the previous two examples, the code fails to implement the transaction script pattern correctly, and inadvertently leads to corrupting the system’s state.</p>
+
+<p>As in the previous example, there is no simple fix for this issue. It all depends on the business domain and its needs. In this specific example, one way to ensure transactional behavior is to make the operation <em>idempotent</em>: that is, leading to the same result even if the operation repeated multiple times.</p>
+
+<p>For example, we can ask the consumer to pass the value of the counter. To supply the counter’s value, the caller will have to read the current value first, increase it locally, and then provide the updated value as a parameter. Even if the operation will be executed multiple times, it won’t change the end result:</p>
+<pre data-code-language="csharp"><code class="k">public</code> <code class="k">class</code> <code class="nc">LogVisit</code>
+<code class="p">{</code>
+    <code class="p">...</code>
+      
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Execute</code><code class="p">(</code><code class="n">Guid</code> <code class="n">userId</code><code class="p">,</code> <code class="kt">long</code> <code class="n">visits</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="n">_db</code><code class="p">.</code><code class="n">Execute</code><code class="p">(</code><code class="s">"UPDATE Users SET visits = @p1 WHERE user_id=@p2"</code><code class="p">,</code>
+                   <code class="n">visits</code><code class="p">,</code> <code class="n">userId</code><code class="p">);</code>
+    <code class="p">}</code>
+<code class="p">}</code></pre>
+
+<p>Another way to address such an issue is to use optimistic concurrency control: prior to calling the <code>LogVisit</code> operation, the caller has read the counter’s current value and passed it to <code>LogVisit</code> as a parameter. <code>LogVisit</code> will update the counter’s value only if it equals the one initially read by the caller:</p>
+<pre data-code-language="csharp"><code class="k">public</code> <code class="k">class</code> <code class="nc">LogVisit</code>
+<code class="p">{</code>
+<code class="p">...</code>
+  
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Execute</code><code class="p">(</code><code class="n">Guid</code> <code class="n">userId</code><code class="p">,</code> <code class="kt">long</code> <code class="n">expectedVisits</code><code class="p">)</code>
+      <code class="p">{</code>
+        <code class="n">_db</code><code class="p">.</code><code class="n">Execute</code><code class="p">(</code><code class="s">@"UPDATE Users SET visits=visits+1</code>
+<code class="s">                      WHERE user_id=@p1 and visits = @p2"</code><code class="p">,</code>
+                      <code class="n">userId</code><code class="p">,</code> <code class="n">visits</code><code class="p">);</code>
+    <code class="p">}</code>
+<code class="p">}</code></pre>
+
+<p>Subsequent executions of <code>LogVisit</code> with the same input parameters won’t change the data, as the <code>WHERE...visits = @p2</code> condition won’t be fulfilled.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch05-dbg" id="id900"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch05-dbg2" id="id901"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch05-dbg3" id="id902"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch05-dbg4" id="id903"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch05-dbg5" id="id904"></a></p>
+</div></section>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="When to Use Transaction Script"><div class="sect2" id="when_to_use_transaction_script">
+<h2>When to Use Transaction Script</h2>
+
+<p>The transaction script pattern is well adapted to the most straightforward<a contenteditable="false" data-type="indexterm" data-primary="scripts for transactions" data-secondary="when to use" id="id905"></a><a contenteditable="false" data-type="indexterm" data-primary="transaction scripts" data-secondary="when to use" id="id906"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="transaction scripts" data-tertiary="when to use" id="id907"></a><a contenteditable="false" data-type="indexterm" data-primary="ETL (extract, transform, load)" data-secondary="transaction scripts" id="id908"></a><a contenteditable="false" data-type="indexterm" data-primary="extract-transform-load operations" data-see="ETL" id="id909"></a> problem domains in which the business logic resembles simple procedural operations. For example, in extract-transform-load (ETL) operations, each operation extracts data from a source, applies transformation logic to convert it into another form, and loads the result into the destination store. This process is shown in <a data-type="xref" href="#extract_transform_load_data_flow">Figure 5-3</a>.</p>
+<figure><div id="extract_transform_load_data_flow" class="figure">
+<img src="assets/lddd_0503.png" alt="Extract-transform-load data flow" width="600" height="145"/>
+<h6><span class="label">Figure 5-3. </span>Extract-transform-load data flow</h6>
+</div></figure>
+
+<p>The transaction script pattern naturally fits supporting subdomains where, by definition, the business logic is simple. It can also be used as an adapter for integration with external systems—for example, generic subdomains, or as a part of an anticorruption layer (more on that in <a data-type="xref" href="ch09.html#communication_patterns">Chapter 9</a>).</p>
+
+<p>The main advantage of the transaction script pattern is its simplicity. It introduces minimal abstractions and minimizes the overhead both in runtime performance and in understanding the business logic. That said, this simplicity is also the pattern’s disadvantage. The more complex the business logic gets, the more it’s prone to duplicate business logic across transactions, and consequently, to result in inconsistent behavior—when the duplicated code goes out of sync. As a result, transaction script should never be used for core subdomains, as this pattern won’t cope with the high complexity of a core subdomain’s business logic.</p>
+
+<p>This simplicity earned the transaction script a dubious reputation. Sometimes the pattern is even treated as an antipattern. After all, if complex business logic is implemented as a transaction script, sooner rather than later it’s going to turn into an unmaintainable, big ball of mud. It should be noted, however, that despite the simplicity, the transaction script pattern is ubiquitous in software development. All the business logic implementation patterns that we will discuss in this and the following chapters, in one way or another, are based on the transaction script pattern.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch05-xsc" id="id910"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch05-xsc2" id="id911"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch05-xsc3" id="id912"></a></p>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Active Record"><div class="sect1" id="active_record">
+<h1>Active Record</h1>
+<blockquote data-type="epigraph" epub:type="epigraph">
+<p>An object that wraps a row in a database table or view, encapsulates the database access, and adds domain logic on that data.<a contenteditable="false" data-type="indexterm" data-primary="Fowler, Martin" id="id913"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="active records" id="ch05-act"></a><a contenteditable="false" data-type="indexterm" data-primary="active records" id="ch05-act2"></a></p>
+
+<p data-type="attribution">Martin Fowler<sup><a data-type="noteref" id="ch01fn19-marker" href="ch05.html#ch01fn19">2</a></sup></p>
+</blockquote>
+
+<p>Like the transaction script pattern, active record supports cases where the business logic is simple. Here, however, the business logic may operate on more complex data structures. For example, instead of flat records, we can have more complicated object trees and hierarchies, as shown in <a data-type="xref" href="#a_more_complicated_data_model_with_one">Figure 5-4</a>.</p>
+<figure><div id="a_more_complicated_data_model_with_one" class="figure">
+<img src="assets/lddd_0504.png" alt="A more complicated data model with one-to-many and many-to-many relationships" width="600" height="265"/>
+<h6><span class="label">Figure 5-4. </span>A more complicated data model with one-to-many and many-to-many <span class="keep-together">relationships</span></h6>
+</div></figure>
+
+<p>Operating on such data structures via a simple transaction script would result in lots of repetitive code. The mapping of the data to an in-memory representation would be duplicated all over.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Implementation"><div class="sect2" id="implementation-id000103">
+<h2>Implementation</h2>
+
+<p>Consequently, this pattern uses dedicated objects, known as active records,<a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="active records" data-tertiary="implementation" id="id914"></a><a contenteditable="false" data-type="indexterm" data-primary="active records" data-secondary="implementation" id="id915"></a> to represent complicated data structures. <a contenteditable="false" data-type="indexterm" data-primary="methods" data-secondary="CRUD operations" id="id916"></a>Apart from the data structure, these objects also implement data access methods for creating, reading, updating, and deleting <span class="keep-together">records—</span>the so-called CRUD operations. As a result, the active record objects are coupled to an object-relational mapping (ORM) or some other data access framework. The pattern’s name is derived from the fact that each data structure is “active”; that is, it implements data access logic.</p>
+
+<p>As in the previous pattern, the system’s business logic is organized<a contenteditable="false" data-type="indexterm" data-primary="transaction scripts" data-secondary="active record manipulation" id="id917"></a> in a transaction script. The difference between the two patterns is that in this case, instead of accessing the database directly, the transaction script manipulates active record objects. When it completes, the operation has to either complete or fail as an atomic <span class="keep-together">transaction</span>:</p>
+<pre data-code-language="csharp"><code class="k">public</code> <code class="k">class</code> <code class="nc">CreateUser</code>
+<code class="p">{</code>
+    <code class="p">...</code>
+
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Execute</code><code class="p">(</code><code class="n">userDetails</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="k">try</code>
+        <code class="p">{</code>
+            <code class="n">_db</code><code class="p">.</code><code class="n">StartTransaction</code><code class="p">();</code>
+
+            <code class="kt">var</code> <code class="n">user</code> <code class="p">=</code> <code class="k">new</code> <code class="n">User</code><code class="p">();</code>
+            <code class="n">user</code><code class="p">.</code><code class="n">Name</code> <code class="p">=</code> <code class="n">userDetails</code><code class="p">.</code><code class="n">Name</code><code class="p">;</code>
+            <code class="n">user</code><code class="p">.</code><code class="n">Email</code> <code class="p">=</code> <code class="n">userDetails</code><code class="p">.</code><code class="n">Email</code><code class="p">;</code>
+            <code class="n">user</code><code class="p">.</code><code class="n">Save</code><code class="p">();</code>
+
+            <code class="n">_db</code><code class="p">.</code><code class="n">Commit</code><code class="p">();</code>
+        <code class="p">}</code> <code class="k">catch</code> <code class="p">{</code>
+            <code class="n">_db</code><code class="p">.</code><code class="n">Rollback</code><code class="p">();</code>
+            <code class="k">throw</code><code class="p">;</code>
+        <code class="p">}</code>
+    <code class="p">}</code>
+<code class="p">}</code></pre>
+
+<p>The pattern’s goal is to encapsulate the complexity of mapping the in-memory object to the database’s schema. In addition to being responsible for persistence, the active record objects can contain business logic; for example, validating new values assigned to the fields, or even implementing business-related procedures that manipulate an object’s data. That said, the distinctive feature of an active record object is the separation of data structures and behavior (business logic). Usually, an active record’s fields have public getters and setters that allow external procedures to modify its state.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="When to Use Active Record"><div class="sect2" id="when_to_use_active_record">
+<h2>When to Use Active Record</h2>
+
+<p>Because an active record is essentially a transaction script that <a contenteditable="false" data-type="indexterm" data-primary="active records" data-secondary="when to use" id="id918"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="active records" data-tertiary="when to use" id="id919"></a>optimizes access to databases, this pattern can only support relatively simple business logic, such as CRUD operations, which, at most, validate the user’s input.</p>
+
+<p>Accordingly, as in the case of the transaction script pattern, the active record pattern lends itself to supporting subdomains, integration of external solutions for generic subdomains, or model transformation tasks. The difference between the patterns is that active record addresses the complexity of mapping complicated data structures to a database’s schema.</p>
+
+<p>The active record pattern is also known as<a contenteditable="false" data-type="indexterm" data-primary="anemic domain model antipattern" data-seealso="active records" id="id920"></a><a contenteditable="false" data-type="indexterm" data-primary="domain model for business logic" data-secondary="anemic domain model antipattern" id="id921"></a> an <em>anemic domain model antipattern</em>; in other words, an improperly designed domain model. I prefer to restrain from the negative connotation of the words <em>anemic</em> and <em>antipattern</em>. This pattern is a tool. Like any tool, it can solve problems, but it can potentially introduce more harm than good when applied in the wrong context. There is nothing wrong with using active records when the business logic is simple. Furthermore, using a more elaborate pattern when implementing simple business logic will also result in harm by introducing accidental complexity. In the next chapter, you will learn what a domain model is and how it differs from an active record pattern.</p>
+<div data-type="note" epub:type="note"><h6>Note</h6>
+
+<p>It’s important to stress that in this context, <em>active record</em> refers to the design pattern, not the Active Record framework. <a contenteditable="false" data-type="indexterm" data-primary="Patterns of Enterprise Application Architecture (Fowler)" id="id922"></a><a contenteditable="false" data-type="indexterm" data-primary="Fowler, Martin" id="id923"></a><a contenteditable="false" data-type="indexterm" data-primary="resources" data-secondary="Patterns of Enterprise Application Architecture (Fowler)" id="id924"></a><a contenteditable="false" data-type="indexterm" data-primary="active records" data-secondary="Fowler naming" id="id925"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="active records" data-tertiary="Fowler naming" id="id926"></a>The pattern name was coined in <em>Patterns of Enterprise Application Architecture</em> by Martin Fowler. The framework came later as one way to implement the pattern. In our context, we are talking about the design pattern and the concepts behind it, not a specific implementation.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch05-act" id="id927"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch05-act2" id="id928"></a></p>
+</div>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Be Pragmatic"><div class="sect1" id="be_pragmatic">
+<h1>Be Pragmatic</h1>
+
+<p>Although business data is important and the code we design<a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="pragmatic approach" id="id929"></a> and build should protect its integrity, there are cases in which a pragmatic approach is more desirable.</p>
+
+<p>Especially at high levels of scale, there are cases when data consistency guarantees can be relaxed. <a contenteditable="false" data-type="indexterm" data-primary="data corruption" data-secondary="pragmatic approach" id="id930"></a>Check whether corrupting the state of one record out of 1 million is really a showstopper for the business and whether it can negatively affect the performance and profitability of the business. For example, let’s assume you are building a system that ingests billions of events per day from IoT devices. Is it a big deal if 0.001% of the events will be duplicated or lost?</p>
+
+<p>As always, there are no universal laws. It all depends on the business domain you are working in. It’s OK to “cut corners” where possible; just make sure you evaluate the risks and business implications.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Conclusion"><div class="sect1" id="conclusion-id000030">
+<h1>Conclusion</h1>
+
+<p>In this chapter, we covered two patterns for implementing business logic:</p>
+<dl>
+<dt>Transaction script</dt>
+<dd>This pattern organizes the system’s operations as simple, straightforward procedural scripts. The procedures ensure that each operation is transactional—either it succeeds or it fails. The transaction script pattern lends itself to supporting subdomains, with business logic resembling simple, ETL-like operations.</dd>
+<dt>Active record</dt>
+<dd>When the business logic is simple but operates on complicated data structures, you can implement those data structures as active records. An active record object is a data structure that provides simple CRUD data access methods.</dd>
+</dl>
+
+<p>The two patterns discussed in this chapter are oriented toward cases of rather simple business logic. In the next chapter, we will turn to more complex business logic and discuss how to tackle the complexity using the domain model pattern.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Exercises"><div class="sect1" id="exercises-id000074">
+<h1>Exercises</h1>
+
+ <ol>
+          <li>
+            <p>Which of the discussed patterns should be used for implementing a core subdomain’s business logic?</p>
+            <ol type="a">
+              <li>
+                <p>Transaction script</p>
+              </li>
+              <li>
+                <p>Active record</p>
+              </li>
+              <li>
+                <p>Neither the transcription script nor the active record can be used to implement a core subdomain.</p>
+              </li>
+              <li>
+                <p>Both the transaction script and the active record can be used to implement a core subdomain.</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Which of the discussed patterns should be used for implementing a support subdomain’s business logic?</p>
+            <ol type="a">
+              <li>
+                <p>Transaction script.</p>
+              </li>
+              <li>
+                <p>Active record.</p>
+              </li>
+              <li>
+                <p>Neither the transaction script nor the active record can be used to implement a core subdomain.</p>
+              </li>
+              <li>
+                <p>Both the transaction script and the active record can be used to implement a supporting subdomain.</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Consider the following code:</p>
+          
+        
+          <pre data-type="programlisting" data-code-language="csharp"><code class="m">01.</code> <code class="k">public</code> <code class="k">void</code> <code class="n">CreateTicket</code><code class="p">(</code><code class="n">TicketData</code> <code class="n">data</code><code class="p">)</code>
+<code class="m">02.</code> <code class="p">{</code>
+<code class="m">03.</code>     <code class="kt">var</code> <code class="n">agent</code> <code class="p">=</code> <code class="n">FindLeastBusyAgent</code><code class="p">();</code>
+<code class="m">04.</code>  
+<code class="m">05.</code>     <code class="n">agent</code><code class="p">.</code><code class="n">ActiveTickets</code> <code class="p">=</code> <code class="n">agent</code><code class="p">.</code><code class="n">ActiveTickets</code> <code class="p">+</code> <code class="m">1</code><code class="p">;</code>
+<code class="m">06.</code>     <code class="n">agent</code><code class="p">.</code><code class="n">Save</code><code class="p">();</code>
+<code class="m">07.</code>  
+<code class="m">08.</code>     <code class="kt">var</code> <code class="n">ticket</code> <code class="p">=</code> <code class="k">new</code> <code class="n">Ticket</code><code class="p">();</code>
+<code class="m">09.</code>     <code class="n">ticket</code><code class="p">.</code><code class="n">Id</code> <code class="p">=</code> <code class="n">Guid</code><code class="p">.</code><code class="n">New</code><code class="p">();</code>
+<code class="m">10.</code>     <code class="n">ticket</code><code class="p">.</code><code class="n">Data</code> <code class="p">=</code> <code class="n">data</code><code class="p">;</code>
+<code class="m">11.</code>     <code class="n">ticket</code><code class="p">.</code><code class="n">AssignedAgent</code> <code class="p">=</code> <code class="n">agent</code><code class="p">;</code>
+<code class="m">12.</code>     <code class="n">ticket</code><code class="p">.</code><code class="n">Save</code><code class="p">();</code>
+<code class="m">13.</code>  
+<code class="m">14.</code>     <code class="n">_alerts</code><code class="p">.</code><code class="n">Send</code><code class="p">(</code><code class="n">agent</code><code class="p">,</code> <code class="s">"You have a new ticket!"</code><code class="p">);</code>
+<code class="m">15.</code> <code class="p">}</code></pre>
+        
+        <p>Assuming there is no high-level transaction mechanism, what potential data consistency issues can you spot here? Select all that apply.</p>
+        <ol type="a">
+          <li>
+            <p>On receiving a new ticket, the assigned agent’s counter of active tickets can be increased by more than 1.</p>
+          </li>
+          <li>
+            <p>An agent’s counter of active tickets can be increased by 1 but the agent won’t get assigned any new tickets.</p>
+          </li>
+          <li>
+            <p>An agent can get a new ticket but won’t be notified about it.</p>
+          </li>
+          <li>
+            <p>All of the above issues are possible.</p>
+          </li>
+        </ol></li>
+        
+        
+          <li>
+            <p>Consider the following code:</p>
+        
+        
+          <pre data-type="programlisting" data-code-language="csharp"><code class="m">01.</code> <code class="k">public</code> <code class="k">void</code> <code class="n">CreateTicket</code><code class="p">(</code><code class="n">TicketData</code> <code class="n">data</code><code class="p">)</code>
+<code class="m">02.</code> <code class="p">{</code>
+<code class="m">03.</code>     <code class="kt">var</code> <code class="n">agent</code> <code class="p">=</code> <code class="n">FindLeastBusyAgent</code><code class="p">();</code>
+<code class="m">04.</code>  
+<code class="m">05.</code>     <code class="n">agent</code><code class="p">.</code><code class="n">ActiveTickets</code> <code class="p">=</code> <code class="n">agent</code><code class="p">.</code><code class="n">ActiveTickets</code> <code class="p">+</code> <code class="m">1</code><code class="p">;</code>
+<code class="m">06.</code>     <code class="n">agent</code><code class="p">.</code><code class="n">Save</code><code class="p">();</code>
+<code class="m">07.</code>  
+<code class="m">08.</code>     <code class="kt">var</code> <code class="n">ticket</code> <code class="p">=</code> <code class="k">new</code> <code class="n">Ticket</code><code class="p">();</code>
+<code class="m">09.</code>     <code class="n">ticket</code><code class="p">.</code><code class="n">Id</code> <code class="p">=</code> <code class="n">Guid</code><code class="p">.</code><code class="n">New</code><code class="p">();</code>
+<code class="m">10.</code>     <code class="n">ticket</code><code class="p">.</code><code class="n">Data</code> <code class="p">=</code> <code class="n">data</code><code class="p">;</code>
+<code class="m">11.</code>     <code class="n">ticket</code><code class="p">.</code><code class="n">AssignedAgent</code> <code class="p">=</code> <code class="n">agent</code><code class="p">;</code>
+<code class="m">12.</code>     <code class="n">ticket</code><code class="p">.</code><code class="n">Save</code><code class="p">();</code>
+<code class="m">13.</code>  
+<code class="m">14.</code>     <code class="n">_alerts</code><code class="p">.</code><code class="n">Send</code><code class="p">(</code><code class="n">agent</code><code class="p">,</code> <code class="s">"You have a new ticket!"</code><code class="p">);</code>
+<code class="m">15.</code> <code class="p">}</code></pre>
+       
+        <p>Is there at least one more possible edge case that can corrupt the system’s state?</p>
+        <ol type="a">
+          <li>
+            <p>No</p>
+          </li>
+          <li>
+            <p>Yes</p>
+          </li>
+        </ol>  </li></ol>
+        
+
+</div></section>
+<div data-type="footnotes"><p data-type="footnote" id="ch01fn18"><sup><a href="ch05.html#ch01fn18-marker">1</a></sup> Fowler, M. (2002). <em>Patterns of Enterprise Application Architecture</em>. Boston: Addison-Wesley.</p><p data-type="footnote" id="ch01fn19"><sup><a href="ch05.html#ch01fn19-marker">2</a></sup> Fowler, M. (2002). <em>Patterns of Enterprise Application Architecture</em>. Boston: Addison-Wesley.</p></div></div></section></div>
+</div>
+</body>
+</html>

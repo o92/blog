@@ -1,0 +1,613 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xml:lang="en"
+lang="en"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title>Learning Domain-Driven Design</title>
+<link rel="stylesheet" type="text/css" href="override_v1.css"/>
+<link rel="stylesheet" type="text/css" href="epub.css"/>
+</head>
+<body>
+<div id="book-content">
+<div id="sbo-rt-content"><section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 8. Architectural Patterns"><div class="chapter" id="architectural_patterns-id000006">
+<h1><span class="label">Chapter 8. </span>Architectural Patterns</h1>
+
+<p>The tactical patterns discussed up to this point in the book defined the different ways to model and implement business logic. In this chapter, we will explore tactical design decisions in a broader context: the different ways to orchestrate the interactions and dependencies between a system’s components.</p>
+
+<section data-type="sect1" data-pdf-bookmark="Business Logic Versus Architectural Patterns"><div class="sect1" id="business_logic_versus_architectural_pat">
+<h1>Business Logic Versus Architectural Patterns</h1>
+
+<p>Business logic is the most important part of software; however,<a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="business logic versus" id="id1116"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="software architecture" data-tertiary="business logic versus" id="id1117"></a><a contenteditable="false" data-type="indexterm" data-primary="architecture" data-see="software architecture" id="id1118"></a> it is not the only part of a software system. To implement functional and nonfunctional requirements, the codebase has to fulfill more responsibilities. It has to interact with users to gather input and provide output, and it has to use different storage mechanisms to persist state and integrate with external systems and information providers.</p>
+
+<p>The variety of concerns that a codebase has to take care of<a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="about patterns" id="id1119"></a> makes it easy for its business logic to become diffused among the different components: that is, for some of the logic to be implemented in the user interface or database, or be duplicated in different components. Lacking strict organization in implementation concerns makes the codebase hard to change. When the business logic has to change, it may not be evident what parts of the codebase have to be affected by the change. The change may have unexpected effects on seemingly unrelated parts of the system. Conversely, it may be easy to miss code that has to be modified. All of these issues dramatically increase the cost of maintaining the codebase.</p>
+
+<p>Architectural patterns introduce organizational principles for the different aspects of a codebase and present clear boundaries between them: how the business logic is wired to the system’s input, output, and other infrastructural components. This affects how these components interact with each other: what knowledge they share and how the components reference each other.</p>
+
+<p>Choosing the appropriate way to organize the codebase, or the correct architectural pattern, is crucial to support implementation of the business logic in the short term and alleviate maintenance in the long term. Let’s explore three predominant application architecture patterns and their use cases: layered architecture, ports &amp; adapters, and CQRS.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Layered Architecture"><div class="sect1" id="layered_architecture-id000110">
+<h1>Layered Architecture</h1>
+
+<p>Layered architecture is one of the most common architectural patterns.<a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="layered architecture pattern" id="id1120"></a><a contenteditable="false" data-type="indexterm" data-primary="layered architecture pattern" id="id1121"></a> It organizes the codebase into horizontal layers, with each layer addressing one of the following technical concerns: interaction with the consumers, implementing business logic, and persisting the data. You can see this represented in <a data-type="xref" href="#layered_architecture-id000111">Figure 8-1</a>.</p>
+<figure><div id="layered_architecture-id000111" class="figure">
+<img src="assets/lddd_0801.png" alt="Layered architecture" width="600" height="392"/>
+<h6><span class="label">Figure 8-1. </span>Layered architecture</h6>
+</div></figure>
+
+<p>In its classic form, the layered architecture consists of three layers: the presentation layer (PL), the business logic layer (BLL), and the data access layer (DAL).</p>
+
+<section data-type="sect2" data-pdf-bookmark="Presentation Layer"><div class="sect2" id="presentation_layer-id000112">
+<h2>Presentation Layer</h2>
+
+<p>The presentation layer, shown in <a data-type="xref" href="#presentation_layer-id000113">Figure 8-2</a>, implements<a contenteditable="false" data-type="indexterm" data-primary="layered architecture pattern" data-secondary="presentation layer" id="id1122"></a><a contenteditable="false" data-type="indexterm" data-primary="presentation layer of layered architecture" id="id1123"></a><a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="layered architecture pattern" data-tertiary="presentation layer" id="id1124"></a> the program’s user interface for interactions with its consumers. In the pattern’s original form, this layer denotes a graphical interface, such as a web interface or a desktop application.</p>
+
+<p>In modern systems, however, the presentation layer has a broader scope: that is, all means for triggering the program’s behavior, both synchronous and asynchronous. For example:</p>
+<ul>
+<li>
+  <p>Graphical user interface (GUI)</p></li>
+<li>
+  <p>Command-line interface (CLI)</p></li>
+<li>
+  <p>API for programmatic integration with other systems</p></li>
+<li>
+  <p>Subscription to events in a message broker</p></li>
+<li>
+  <p>Message topics for publishing outgoing events</p></li>
+</ul>
+
+<p>All of these are the means for the system to receive requests from the external environment and communicate the output. Strictly speaking, the presentation layer is the program’s public interface.</p>
+<figure><div id="presentation_layer-id000113" class="figure">
+<img src="assets/lddd_0802.png" alt="Presentation layer" width="600" height="89"/>
+<h6><span class="label">Figure 8-2. </span>Presentation layer</h6>
+</div></figure>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Business Logic Layer"><div class="sect2" id="business_logic_layer-id000017">
+<h2>Business Logic Layer</h2>
+
+<p>As the name suggests, this layer is responsible for implementing<a contenteditable="false" data-type="indexterm" data-primary="business logic layer of layered architecture" id="id1125"></a><a contenteditable="false" data-type="indexterm" data-primary="layered architecture pattern" data-secondary="business logic layer" id="id1126"></a><a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="layered architecture pattern" data-tertiary="business logic layer" id="id1127"></a> and encapsulating the program’s business logic. This is the place where business decisions are implemented. As Eric Evans says,<sup><a data-type="noteref" id="ch01fn33-marker" href="ch08.html#ch01fn33">1</a></sup> this layer is the heart of software.</p>
+
+<p>This layer is where the business logic patterns described in Chapters <a data-xrefstyle="select:labelnumber" data-type="xref" href="ch05.html#implementing_simple_business_logic">5</a>–<a data-xrefstyle="select:labelnumber" data-type="xref" href="ch07.html#modeling_the_dimension_of_time">7</a> are implemented—for example, active records or a domain model (see <a data-type="xref" href="#business_logic_layer-id000018">Figure 8-3</a>).</p>
+<figure><div id="business_logic_layer-id000018" class="figure">
+<img src="assets/lddd_0803.png" alt="Business logic layer" width="600" height="89"/>
+<h6><span class="label">Figure 8-3. </span>Business logic layer</h6>
+</div></figure>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Data Access Layer"><div class="sect2" id="data_access_layer-id000054">
+<h2>Data Access Layer</h2>
+
+<p>The data access layer provides access to persistence mechanisms.<a contenteditable="false" data-type="indexterm" data-primary="layered architecture pattern" data-secondary="data access layer" id="id1128"></a><a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="layered architecture pattern" data-tertiary="data access layer" id="id1129"></a><a contenteditable="false" data-type="indexterm" data-primary="data access layer of layered architecture" id="id1130"></a> In the pattern’s original form, this referred to the system’s database. However, as in the case of the presentation layer, the layer’s responsibility is broader for modern systems.</p>
+
+<p>First, ever since the NoSQL revolution broke out, it is common for a system to work with multiple databases. For example, a document store can act as the operational database, a search index for dynamic queries, and an in-memory database for performance-optimized operations.</p>
+
+<p>Second, traditional databases are not the only medium for storing information. For example, cloud-based object storage<sup><a data-type="noteref" id="ch01fn34-marker" href="ch08.html#ch01fn34">2</a></sup> can be used to store the system’s files, or a message bus can be used to orchestrate communication between the program’s different functions.<sup><a data-type="noteref" id="ch01fn35-marker" href="ch08.html#ch01fn35">3</a></sup></p>
+
+<p>Finally, this layer also includes integration with the various external information providers needed to implement the program’s functionality: APIs provided by external systems, or cloud vendors’ managed services, such as language translation, stock market data, and audio transcription (see <a data-type="xref" href="#data_access_layer-id000055">Figure 8-4</a>).</p>
+<figure><div id="data_access_layer-id000055" class="figure">
+<img src="assets/lddd_0804.png" alt="Data access layer" width="600" height="89"/>
+<h6><span class="label">Figure 8-4. </span>Data access layer</h6>
+</div></figure>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Communication Between Layers"><div class="sect2" id="communication_between_layers">
+<h2>Communication Between Layers</h2>
+
+<p>The layers are integrated in a top-down communication model: <a contenteditable="false" data-type="indexterm" data-primary="layered architecture pattern" data-secondary="communication between layers" id="id1131"></a><a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="layered architecture pattern" data-tertiary="communication between layers" id="id1132"></a><a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="layers in layered architecture" id="id1133"></a>each layer can hold a dependency only on the layer directly beneath it, as shown in <a data-type="xref" href="#layered_architecture-id000112">Figure 8-5</a>. This enforces decoupling of implementation concerns and reduces the knowledge shared between the layers. In <a data-type="xref" href="#layered_architecture-id000112">Figure 8-5</a>, the presentation layer references only the business logic layer. It has no knowledge of the design decisions made in the data access layer.</p>
+<figure><div id="layered_architecture-id000112" class="figure">
+<img src="assets/lddd_0805.png" alt="" width="600" height="392"/>
+<h6><span class="label">Figure 8-5. </span>Layered architecture</h6>
+</div></figure>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Variation"><div class="sect2" id="variation">
+<h2>Variation</h2>
+
+<p>It’s common to see the layered architecture pattern extended with an additional layer: the service layer.</p>
+
+<section data-type="sect3" data-pdf-bookmark="Service layer"><div class="sect3" id="service_laye">
+<h3>Service layer</h3>
+<blockquote data-type="epigraph" epub:type="epigraph">
+
+<p>Defines an application’s boundary with a layer of services that<a contenteditable="false" data-type="indexterm" data-primary="layered architecture pattern" data-secondary="service layer" id="ch08-serv"></a><a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="layered architecture pattern" data-tertiary="service layer" id="ch08-serv2"></a><a contenteditable="false" data-type="indexterm" data-primary="service layer" id="ch08-serv3"></a><a contenteditable="false" data-type="indexterm" data-primary="Patterns of Enterprise Application Architecture (Fowler)" id="id1134"></a><a contenteditable="false" data-type="indexterm" data-primary="resources" data-secondary="Patterns of Enterprise Application Architecture (Fowler)" id="id1135"></a><a contenteditable="false" data-type="indexterm" data-primary="Fowler, Martin" id="id1136"></a> establishes a set of available operations and coordinates the application’s response in each operation.</p>
+
+<p>—<em>Patterns of Enterprise Application Architecture</em><sup><a data-type="noteref" id="ch01fn36-marker" href="ch08.html#ch01fn36">4</a></sup></p>
+</blockquote>
+
+<p>The service layer acts as an intermediary between the<a contenteditable="false" data-type="indexterm" data-primary="façade pattern abstraction layer" data-secondary="service layer for business logic layer" id="ch08-slbll"></a> program’s presentation and business logic layers. Consider the following code:</p>
+<pre data-code-language="csharp"><code class="k">namespace</code> <code class="nn">MvcApplication.Controllers</code>
+<code class="p">{</code>
+    <code class="k">public</code> <code class="k">class</code> <code class="nc">UserController</code><code class="p">:</code> <code class="n">Controller</code>
+    <code class="p">{</code>
+        <code class="p">...</code>
+
+<code class="na">        [AcceptVerbs(HttpVerbs.Post)]</code>
+        <code class="k">public</code> <code class="n">ActionResult</code> <code class="nf">Create</code><code class="p">(</code><code class="n">ContactDetails</code> <code class="n">contactDetails</code><code class="p">)</code>
+        <code class="p">{</code>
+            <code class="n">OperationResult</code> <code class="n">result</code> <code class="p">=</code> <code class="k">null</code><code class="p">;</code>
+
+            <code class="k">try</code>
+            <code class="p">{</code>
+                <code class="n">_db</code><code class="p">.</code><code class="n">StartTransaction</code><code class="p">();</code>
+                
+                <code class="kt">var</code> <code class="n">user</code> <code class="p">=</code> <code class="k">new</code> <code class="n">User</code><code class="p">();</code>
+                <code class="n">user</code><code class="p">.</code><code class="n">SetContactDetails</code><code class="p">(</code><code class="n">contactDetails</code><code class="p">);</code>
+                <code class="n">user</code><code class="p">.</code><code class="n">Save</code><code class="p">();</code>
+                
+                <code class="n">_db</code><code class="p">.</code><code class="n">Commit</code><code class="p">();</code>
+                <code class="n">result</code> <code class="p">=</code> <code class="n">OperationResult</code><code class="p">.</code><code class="n">Success</code><code class="p">;</code>
+            <code class="p">}</code> <code class="k">catch</code> <code class="p">(</code><code class="n">Exception</code> <code class="n">ex</code><code class="p">)</code> <code class="p">{</code>
+                <code class="n">_db</code><code class="p">.</code><code class="n">Rollback</code><code class="p">();</code>
+                <code class="n">result</code> <code class="p">=</code> <code class="n">OperationResult</code><code class="p">.</code><code class="n">Exception</code><code class="p">(</code><code class="n">ex</code><code class="p">);</code>
+            <code class="p">}</code>
+
+            <code class="k">return</code> <code class="nf">View</code><code class="p">(</code><code class="n">result</code><code class="p">);</code>
+        <code class="p">}</code>
+    <code class="p">}</code>
+<code class="p">}</code></pre>
+
+<p>The MVC controller in this example belongs to the presentation layer. It exposes an endpoint that creates a new user. The endpoint uses the User active record object to create a new instance and save it. Moreover, it orchestrates a database transaction to ensure that a proper response is generated in case of an error.</p>
+
+<p>To further decouple the presentation layer from the underlying business logic, such orchestration logic can be moved into a service layer, as shown in <a data-type="xref" href="#service_layer">Figure 8-6</a>.</p>
+<figure><div id="service_layer" class="figure">
+<img src="assets/lddd_0806.png" alt="Service layer" width="600" height="544"/>
+<h6><span class="label">Figure 8-6. </span>Service layer</h6>
+</div></figure>
+
+<p>It’s important to note that in the context of the architectural pattern, <a contenteditable="false" data-type="indexterm" data-primary="boundaries" data-secondary="logical boundaries" data-tertiary="service layer as" id="id1137"></a><a contenteditable="false" data-type="indexterm" data-primary="logical boundaries" data-secondary="service layer as" id="id1138"></a>the service layer is a logical boundary. It is not a physical service.</p>
+
+<p>The service layer acts as a façade for the <a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="software architecture" data-tertiary="service layer for business logic" id="id1139"></a><a contenteditable="false" data-type="indexterm" data-primary="service layer" data-secondary="business logic implementation" id="id1140"></a>business logic layer: it exposes an interface that corresponds with the public interface’s methods, encapsulating the required orchestration of the underlying layers. For example:</p>
+<pre data-code-language="csharp"><code class="k">interface</code> <code class="n">CampaignManagementService</code>
+<code class="p">{</code>
+  <code class="n">OperationResult</code> <code class="nf">CreateCampaign</code><code class="p">(</code><code class="n">CampaignDetails</code> <code class="n">details</code><code class="p">);</code>
+  <code class="n">OperationResult</code> <code class="nf">Publish</code><code class="p">(</code><code class="n">CampaignId</code> <code class="n">id</code><code class="p">,</code> <code class="n">PublishingSchedule</code> <code class="n">schedule</code><code class="p">);</code>
+  <code class="n">OperationResult</code> <code class="nf">Deactivate</code><code class="p">(</code><code class="n">CampaignId</code> <code class="n">id</code><code class="p">);</code>
+  <code class="n">OperationResult</code> <code class="nf">AddDisplayLocation</code><code class="p">(</code><code class="n">CampaignId</code> <code class="n">id</code><code class="p">,</code> <code class="n">DisplayLocation</code> <code class="n">newLocation</code><code class="p">);</code>  
+  <code class="p">...</code>
+<code class="p">}</code></pre>
+
+<p>All of the preceding methods correspond to the system’s public interface. However, they lack presentation-related implementation details. The presentation layer’s responsibility becomes limited to providing the required input to the service layer and communicating its responses back to the caller.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch08-slbll" id="id1141"></a></p>
+
+<p>Let’s refactor the preceding example and extract the orchestration logic into a service layer:</p>
+<pre data-code-language="csharp"><code class="k">namespace</code> <code class="nn">ServiceLayer</code>
+<code class="p">{</code>
+    <code class="k">public</code> <code class="k">class</code> <code class="nc">UserService</code>
+    <code class="p">{</code>
+        <code class="p">...</code>
+        
+        <code class="k">public</code> <code class="n">OperationResult</code> <code class="nf">Create</code><code class="p">(</code><code class="n">ContactDetails</code> <code class="n">contactDetails</code><code class="p">)</code>
+        <code class="p">{</code>
+            <code class="n">OperationResult</code> <code class="n">result</code> <code class="p">=</code> <code class="k">null</code><code class="p">;</code>
+
+            <code class="k">try</code>
+            <code class="p">{</code>
+                <code class="n">_db</code><code class="p">.</code><code class="n">StartTransaction</code><code class="p">();</code>
+                
+                <code class="kt">var</code> <code class="n">user</code> <code class="p">=</code> <code class="k">new</code> <code class="n">User</code><code class="p">();</code>
+                <code class="n">user</code><code class="p">.</code><code class="n">SetContactDetails</code><code class="p">(</code><code class="n">contactDetails</code><code class="p">);</code>
+                <code class="n">user</code><code class="p">.</code><code class="n">Save</code><code class="p">();</code>
+
+                <code class="n">_db</code><code class="p">.</code><code class="n">Commit</code><code class="p">();</code>
+                <code class="n">result</code> <code class="p">=</code> <code class="n">OperationResult</code><code class="p">.</code><code class="n">Success</code><code class="p">;</code>
+            <code class="p">}</code> <code class="k">catch</code> <code class="p">(</code><code class="n">Exception</code> <code class="n">ex</code><code class="p">)</code> <code class="p">{</code>
+                <code class="n">_db</code><code class="p">.</code><code class="n">Rollback</code><code class="p">();</code>
+                <code class="n">result</code> <code class="p">=</code> <code class="n">OperationResult</code><code class="p">.</code><code class="n">Exception</code><code class="p">(</code><code class="n">ex</code><code class="p">);</code>
+            <code class="p">}</code>
+
+            <code class="k">return</code> <code class="n">result</code><code class="p">;</code>
+        <code class="p">}</code>
+
+        <code class="p">...</code>
+    <code class="p">}</code>
+<code class="p">}</code>
+
+<code class="k">namespace</code> <code class="nn">MvcApplication.Controllers</code>
+<code class="p">{</code>
+    <code class="k">public</code> <code class="k">class</code> <code class="nc">UserController</code><code class="p">:</code> <code class="n">Controller</code>
+    <code class="p">{</code>
+        <code class="p">...</code>
+
+<code class="na">        [AcceptVerbs(HttpVerbs.Post)]</code>
+        <code class="k">public</code> <code class="n">ActionResult</code> <code class="nf">Create</code><code class="p">(</code><code class="n">ContactDetails</code> <code class="n">contactDetails</code><code class="p">)</code>
+        <code class="p">{</code>
+            <code class="kt">var</code> <code class="n">result</code> <code class="p">=</code> <code class="n">_userService</code><code class="p">.</code><code class="n">Create</code><code class="p">(</code><code class="n">contactDetails</code><code class="p">);</code>
+            <code class="k">return</code> <code class="nf">View</code><code class="p">(</code><code class="n">result</code><code class="p">);</code>
+        <code class="p">}</code>
+    <code class="p">}</code>
+<code class="p">}</code></pre>
+
+<p class="pagebreak-before less_space">Having an explicit service level has a number of advantages:</p>
+<ul>
+<li>
+  <p>We can reuse the same service layer to serve multiple public interfaces; for example, a graphical user interface and an API. No duplication of the orchestration logic is required.</p></li>
+<li>
+  <p>It improves modularity by gathering all related methods in one place.</p></li>
+<li>
+  <p>It further decouples the presentation and business logic layers.</p></li>
+<li>
+  <p>It makes it easier to test the business functionality.</p></li>
+</ul>
+
+<p>That said, a service layer is not always necessary. For example, when the business logic is implemented as a transaction script, it essentially is a service layer, as it already exposes a set of methods that form the system’s public interface. In such a case, the service layer’s API would just repeat the transaction scripts’ public interfaces, without abstracting or encapsulating any complexity. Hence, either a service layer or a business logic layer will suffice.</p>
+
+<p>On the other hand, the service layer is required if the business logic pattern requires external orchestration, as in the case of the active record pattern. In this case, the service layer implements the transaction script pattern, while the active records it operates on are located in the business logic layer.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch08-serv" id="id1142"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch08-serv2" id="id1143"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch08-serv3" id="id1144"></a></p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Terminology"><div class="sect3" id="terminolog">
+<h3>Terminology</h3>
+
+<p>Elsewhere, you may encounter other terms used for the layered architecture:<a contenteditable="false" data-type="indexterm" data-primary="layered architecture pattern" data-secondary="terminology" id="id1145"></a><a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="layered architecture pattern" data-tertiary="terminology" id="id1146"></a></p>
+<ul>
+<li>
+  <p>Presentation layer = user interface layer</p></li>
+<li>
+  <p>Service layer = application layer</p></li>
+<li>
+  <p>Business logic layer = domain layer = model layer</p></li>
+<li>
+  <p>Data access layer = infrastructure layer</p></li>
+</ul>
+
+<p>To eliminate confusion, I present the pattern using the original terminology. That said, I prefer “user interface layer” and “infrastructure layer” as these terms better reflect the responsibilities of modern systems and an application layer to avoid confusion with the physical boundaries of services.</p>
+</div></section>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="When to Use Layered Architecture"><div class="sect2" id="when_to_use_layered_architecture">
+<h2>When to Use Layered Architecture</h2>
+
+<p>The dependency between the business logic and the data<a contenteditable="false" data-type="indexterm" data-primary="layered architecture pattern" data-secondary="when to use" id="id1147"></a><a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="layered architecture pattern" data-tertiary="when to use" id="id1148"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="active records" data-tertiary="layered architecture" id="id1149"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="transaction scripts" data-tertiary="layered architecture" id="id1150"></a><a contenteditable="false" data-type="indexterm" data-primary="active records" data-secondary="layered architecture" id="id1151"></a><a contenteditable="false" data-type="indexterm" data-primary="transaction scripts" data-secondary="layered architecture" id="id1152"></a> access layers makes this architectural pattern a good fit for a system with its business logic implemented using the transaction script or active record pattern.</p>
+
+<p class="pagebreak-before less_space">However, the pattern makes it challenging to implement a domain model.<a contenteditable="false" data-type="indexterm" data-primary="domain model for business logic" data-secondary="layered architecture and" id="id1153"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="domain model pattern" data-tertiary="layered architecture and" id="id1154"></a> In a domain model, the business entities (aggregates and value objects) should have no dependency and no knowledge of the underlying infrastructure. The layered architecture’s top-down dependency requires jumping through some hoops to fulfill this requirement. It is still possible to implement a domain model in a layered architecture, but the pattern we will discuss next fits much better.</p>
+</div></section>
+
+<aside data-type="sidebar" epub:type="sidebar"><div class="sidebar" id="optional_layers_versus_tiers">
+<h5>Optional: Layers Versus Tiers</h5>
+
+<p>The layers architecture is often confused with the N-Tier architecture,<a contenteditable="false" data-type="indexterm" data-primary="tiers versus layers in architecture" id="id1155"></a><a contenteditable="false" data-type="indexterm" data-primary="layered architecture pattern" data-secondary="tiers versus layers" id="id1156"></a><a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="layered architecture pattern" data-tertiary="tiers versus layers" id="id1157"></a><a contenteditable="false" data-type="indexterm" data-primary="N-Tier architecture versus layered" id="id1158"></a><a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="N-Tier architecture" id="id1159"></a><a contenteditable="false" data-type="indexterm" data-primary="boundaries" data-secondary="logical boundaries" data-tertiary="layers in layered architecture" id="id1160"></a><a contenteditable="false" data-type="indexterm" data-primary="boundaries" data-secondary="physical boundaries" data-tertiary="tiers in N-Tier architecture" id="id1161"></a><a contenteditable="false" data-type="indexterm" data-primary="logical boundaries" data-secondary="layers in layered architecture" id="id1162"></a> and vice versa. Despite the similarities between the two patterns, layers and tiers are conceptually different: a layer is a logical boundary, whereas a tier is a physical boundary. All layers in the layered architecture are bound by the same lifecycle: they are implemented, evolved, and deployed as one single unit. On the other hand, a tier is an independently deployable service, server, or system. For example, consider the N-Tier system in <a data-type="xref" href="#n_tier_system">Figure 8-7</a>.</p>
+<figure><div id="n_tier_system" class="figure">
+<img src="assets/lddd_0807.png" alt="N-Tier system" width="600" height="78"/>
+<h6><span class="label">Figure 8-7. </span>N-Tier system</h6>
+</div></figure>
+
+<p>The system depicts the integration between physical services involved in a web-based system. The consumer uses a browser, which can run on a desktop computer or a mobile device. The browser interacts with a reverse proxy that forwards the requests to the actual web application. The web application runs on a web server and communicates with a database server. All of these components may run on the same physical server, such as containers, or be distributed among multiple servers. However, since each component can be deployed and managed independent of the rest, these are tiers and not layers.</p>
+
+<p>Layers, on the other hand, are logical boundaries inside the web application.</p>
+</div></aside>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Ports &amp; Adapters"><div class="sect1" id="ports_ampersand_adapters">
+<h1>Ports &amp; Adapters</h1>
+
+<p>The ports &amp; adapters architecture addresses the <a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="ports &amp; adapters architecture" data-tertiary="about" id="id1163"></a><a contenteditable="false" data-type="indexterm" data-primary="ports &amp; adapters architecture" data-secondary="about" id="id1164"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="software architecture" data-tertiary="ports &amp; adapters architecture" id="id1165"></a>shortcomings of the layered architecture and is a better fit for implementation of more complex business logic. Interestingly, both patterns are quite similar. Let’s “refactor” the layered architecture into ports &amp; adapters.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Terminology"><div class="sect2" id="terminology">
+<h2>Terminology</h2>
+
+<p>Essentially, both the presentation layer and data access layer represent<a contenteditable="false" data-type="indexterm" data-primary="presentation layer of layered architecture" data-secondary="infrastructure layer" id="id1166"></a><a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="layered architecture pattern" data-tertiary="infrastructure layer" id="id1167"></a><a contenteditable="false" data-type="indexterm" data-primary="data access layer of layered architecture" data-secondary="infrastructure layer" id="id1168"></a><a contenteditable="false" data-type="indexterm" data-primary="layered architecture pattern" data-secondary="presentation layer" data-tertiary="infrastructure layer" id="id1169"></a><a contenteditable="false" data-type="indexterm" data-primary="layered architecture pattern" data-secondary="data access layer" data-tertiary="infrastructure layer" id="id1170"></a><a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="ports &amp; adapters architecture" data-tertiary="terminology" id="id1171"></a><a contenteditable="false" data-type="indexterm" data-primary="ports &amp; adapters architecture" data-secondary="terminology" id="id1172"></a><a contenteditable="false" data-type="indexterm" data-primary="layered architecture pattern" data-secondary="infrastructure layer" id="id1173"></a><a contenteditable="false" data-type="indexterm" data-primary="infrastructure layer of layered architecture" id="id1174"></a> integration with external components: databases, external services, and user interface frameworks. These technical implementation details do not reflect the system’s business logic; so, let’s unify all such infrastructural concerns into a single “infrastructure layer,” as shown in <a data-type="xref" href="#presentation_and_data_access_layers_com">Figure 8-8</a>.</p>
+<figure><div id="presentation_and_data_access_layers_com" class="figure">
+<img src="assets/lddd_0808.png" alt="Presentation and data access layers combined into an infrastructure layer" width="600" height="89"/>
+<h6><span class="label">Figure 8-8. </span>Presentation and data access layers combined into an infrastructure layer</h6>
+</div></figure>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Dependency Inversion Principle"><div class="sect2" id="dependency_inversion_principle">
+<h2>Dependency Inversion Principle</h2>
+
+<p>The dependency inversion principle (DIP) states that<a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="layered architecture pattern" data-tertiary="dependency inversion principle" id="id1175"></a><a contenteditable="false" data-type="indexterm" data-primary="infrastructure layer of layered architecture" data-secondary="dependency inversion principle" id="id1176"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="software architecture" data-tertiary="dependency inversion principle" id="id1177"></a><a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="ports &amp; adapters architecture" data-tertiary="dependency inversion principle" id="id1178"></a><a contenteditable="false" data-type="indexterm" data-primary="ports &amp; adapters architecture" data-secondary="dependency inversion principle" id="id1179"></a><a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="dependency inversion principle" id="id1180"></a><a contenteditable="false" data-type="indexterm" data-primary="dependency inversion principle (DIP) " id="id1181"></a><a contenteditable="false" data-type="indexterm" data-primary="layered architecture pattern" data-secondary="dependency inversion principle" id="id1182"></a> high-level modules, which implement the business logic, should not depend on low-level modules. However, that’s precisely what happens in the traditional layered architecture. The business logic layer depends on the infrastructure layer. To conform with the DIP, let’s reverse the relationship, as shown in <a data-type="xref" href="#reversed_dependencies">Figure 8-9</a>.</p>
+<figure><div id="reversed_dependencies" class="figure">
+<img src="assets/lddd_0809.png" alt="Reversed dependencies" width="600" height="241"/>
+<h6><span class="label">Figure 8-9. </span>Reversed dependencies</h6>
+</div></figure>
+
+<p>Instead of being sandwiched between the technological concerns, now the business logic layer takes the central role. It doesn’t depend on any of the system’s infrastructural components.</p>
+
+<p>Finally, let’s add an application<sup><a data-type="noteref" id="ch01fn37-marker" href="ch08.html#ch01fn37">5</a></sup> layer as a façade for the <a contenteditable="false" data-type="indexterm" data-primary="application layer" id="id1183"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="software architecture" data-tertiary="service layer for business logic" id="id1184"></a><a contenteditable="false" data-type="indexterm" data-primary="service layer" data-secondary="business logic implementation" id="id1185"></a><a contenteditable="false" data-type="indexterm" data-primary="façade pattern abstraction layer" data-secondary="service layer for business logic layer" id="id1186"></a>system’s public interface. As the service layer in the layered architecture, it describes all the operations exposed by the system and orchestrates the system’s business logic for executing them. The resultant architecture is depicted in <a data-type="xref" href="#traditional_layers_of_the_ports_ampersa">Figure 8-10</a>.</p>
+<figure><div id="traditional_layers_of_the_ports_ampersa" class="figure">
+<img src="assets/lddd_0810.png" alt="Traditional layers of the ports &amp; adapters architecture" width="600" height="392"/>
+<h6><span class="label">Figure 8-10. </span>Traditional layers of the ports &amp; adapters architecture</h6>
+</div></figure>
+
+<p>The architecture depicted in <a data-type="xref" href="#traditional_layers_of_the_ports_ampersa">Figure 8-10</a> is the ports &amp; adapters architectural pattern. The business logic doesn’t depend on any of the underlying layers, as required for implementing the domain model and event-sourced domain model patterns.</p>
+
+<p>Why is this pattern called ports &amp; adapters? To answer this question, let’s see how the infrastructural components are integrated with the business logic.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Integration of Infrastructural Components"><div class="sect2" id="integration_of_infrastructural_componen">
+<h2>Integration of Infrastructural Components</h2>
+
+<p>The core goal of the ports &amp; adapters architecture is to decouple<a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="ports &amp; adapters architecture" data-tertiary="infrastructure integration" id="id1187"></a><a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="ports &amp; adapters architecture" data-tertiary="about" id="id1188"></a><a contenteditable="false" data-type="indexterm" data-primary="ports &amp; adapters architecture" data-secondary="about" id="id1189"></a><a contenteditable="false" data-type="indexterm" data-primary="ports &amp; adapters architecture" data-secondary="infrastructure integration" id="id1190"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="software architecture" data-tertiary="ports &amp; adapters architecture" id="id1191"></a><a contenteditable="false" data-type="indexterm" data-primary="infrastructure layer of layered architecture" data-secondary="ports &amp; adapters architecture" id="id1192"></a> the system’s business logic from its infrastructural components.</p>
+
+<p>Instead of referencing and calling the infrastructural components directly, the business logic layer defines “ports” that have to be implemented by the infrastructure layer. The infrastructure layer implements “adapters”: concrete implementations of the ports’ interfaces for working with different technologies (see <a data-type="xref" href="#ports_ampersand_adapters_architecture">Figure 8-11</a>).</p>
+<figure><div id="ports_ampersand_adapters_architecture" class="figure">
+<img src="assets/lddd_0811.png" alt="Ports &amp; adapters architecture" width="600" height="266"/>
+<h6><span class="label">Figure 8-11. </span>Ports &amp; adapters architecture</h6>
+</div></figure>
+
+<p>The abstract ports are resolved into concrete adapters in the infrastructure layer, either through dependency injection or by bootstrapping.</p>
+
+<p>For example, here is a possible port definition and a concrete adapter for a message bus:</p>
+<pre data-code-language="csharp"><code class="k">namespace</code> <code class="nn">App.BusinessLogicLayer</code>
+<code class="p">{</code>
+    <code class="k">public</code> <code class="k">interface</code> <code class="n">IMessaging</code>
+    <code class="p">{</code>
+        <code class="k">void</code> <code class="nf">Publish</code><code class="p">(</code><code class="n">Message</code> <code class="n">payload</code><code class="p">);</code>
+        <code class="k">void</code> <code class="nf">Subscribe</code><code class="p">(</code><code class="n">Message</code> <code class="n">type</code><code class="p">,</code> <code class="n">Action</code> <code class="n">callback</code><code class="p">);</code>
+    <code class="p">}</code>
+<code class="p">}</code>
+
+<code class="k">namespace</code> <code class="nn">App.Infrastructure.Adapters</code>
+<code class="p">{</code>
+    <code class="k">public</code> <code class="k">class</code> <code class="nc">SQSBus</code><code class="p">:</code> <code class="n">IMessaging</code> <code class="p">{</code> <code class="p">...</code> <code class="p">}</code>
+<code class="p">}</code></pre>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Variants"><div class="sect2" id="variants-id000180">
+<h2>Variants</h2>
+
+<p>The ports &amp; adapters architecture is also known as hexagonal architecture,<a contenteditable="false" data-type="indexterm" data-primary="ports &amp; adapters architecture" data-secondary="variants" id="id1193"></a><a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="ports &amp; adapters architecture" data-tertiary="variants" id="id1194"></a> onion architecture, and clean architecture. All of these patterns are based on the same design principles, have the same components, and have the same relationships between them, but as in the case of the layered architecture, the terminology may <span class="keep-together">differ</span>:</p>
+<ul>
+<li>
+  <p>Application layer = service layer = use case layer</p></li>
+<li>
+  <p>Business logic layer = domain layer = core layer</p></li>
+</ul>
+
+<p>Despite that, these patterns can be mistakenly treated as conceptually different. That’s just another example of the importance of a ubiquitous language.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="When to Use Ports &amp; Adapters"><div class="sect2" id="when_to_use_ports_ampersand_adapters">
+<h2>When to Use Ports &amp; Adapters</h2>
+
+<p>The decoupling of the business logic from all technological concerns<a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="ports &amp; adapters architecture" data-tertiary="when to use" id="id1195"></a><a contenteditable="false" data-type="indexterm" data-primary="ports &amp; adapters architecture" data-secondary="when to use" id="id1196"></a> makes the ports &amp; adapters architecture a perfect fit for business logic implemented with the domain model pattern.</p>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Command-Query Responsibility Segregation"><div class="sect1" id="command_query_responsibility_segregatio">
+<h1>Command-Query Responsibility Segregation</h1>
+
+<p>The command-query responsibility segregation (CQRS) pattern<a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="command-query responsibility segregation" id="ch08-cqrs"></a><a contenteditable="false" data-type="indexterm" data-primary="command-query responsibility segregation (CQRS)" id="ch08-cqrs2"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="software architecture" data-tertiary="command-query responsibility segregation" id="ch08-cqrs3"></a> is based on the same organizational principles for business logic and infrastructural concerns as ports &amp; adapters. It differs, however, in the way the system’s data is managed. This pattern enables representation of the system’s data in multiple persistent models.</p>
+
+<p>Let’s see why we might need such a solution and how to implement it.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Polyglot Modeling"><div class="sect2" id="polyglot_modeling">
+<h2>Polyglot Modeling</h2>
+
+<p>In many cases, it may be difficult, if not impossible, to use a single model<a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="command-query responsibility segregation" data-tertiary="polyglot modeling" id="id1197"></a><a contenteditable="false" data-type="indexterm" data-primary="modeling business domain" data-secondary="polyglot modeling" id="id1198"></a><a contenteditable="false" data-type="indexterm" data-primary="command-query responsibility segregation (CQRS)" data-secondary="polyglot modeling" id="id1199"></a><a contenteditable="false" data-type="indexterm" data-primary="polyglot modeling" id="id1200"></a><a contenteditable="false" data-type="indexterm" data-primary="data polyglot persistence model" id="id1201"></a> of the system’s business domain to address all of the system’s needs. For example, as discussed in <a data-type="xref" href="ch07.html#modeling_the_dimension_of_time">Chapter 7</a>, online transaction processing (OLTP) and online analytical processing (OLAP) may require different representations of the system’s data.</p>
+
+<p>Another reason for working with multiple models may have to do with the notion of polyglot persistence. There is no perfect database. <a contenteditable="false" data-type="indexterm" data-primary="Young, Greg" id="id1202"></a>Or, as Greg Young<sup><a data-type="noteref" id="ch01fn38-marker" href="ch08.html#ch01fn38">6</a></sup> says, all databases are flawed, each in its own way: we often have to balance the needs for scale, consistency, or supported querying models. <a contenteditable="false" data-type="indexterm" data-primary="polyglot modeling" data-secondary="polyglot persistence" id="id1203"></a>An alternative to finding a perfect database is the polyglot persistence model: using multiple databases to implement different data-related requirements. For example, a single system might use a document store as its operational database, a column store for analytics/reporting, and a search engine for implementing robust search capabilities.</p>
+
+<p>Finally, the CQRS pattern is closely related to event sourcing.<a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="command-query responsibility segregation pattern" id="id1204"></a> Originally, CQRS was defined to address the limited querying possibilities of an event-sourced model: it is only possible to query events of one aggregate instance at a time. The CQRS pattern provides the possibility of materializing projected models into physical databases that can be used for flexible querying options.</p>
+
+<p>That said, this chapter “decouples” CQRS from event sourcing. I intend to show that CQRS is useful even if the business logic is implemented using any of the other business logic implementation patterns.</p>
+
+<p>Let’s see how CQRS allows the use of multiple storage mechanisms for representing different models of the system’s data.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Implementation"><div class="sect2" id="implementation-id000105">
+<h2>Implementation</h2>
+
+<p>As the name suggests, the pattern segregates the responsibilities<a contenteditable="false" data-type="indexterm" data-primary="command-query responsibility segregation (CQRS)" data-secondary="implementation" id="id1205"></a><a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="command-query responsibility segregation" data-tertiary="implementation" id="id1206"></a> of the system’s models. There are two types of models: the command execution model and the read <span class="keep-together">models</span>.</p>
+
+<section data-type="sect3" data-pdf-bookmark="Command execution model"><div class="sect3" id="command_execution_model">
+<h3>Command execution model</h3>
+
+<p>CQRS devotes a single model to executing operations that modify the system’s state (system commands).<a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="command-query responsibility segregation" data-tertiary="command execution model" id="id1207"></a><a contenteditable="false" data-type="indexterm" data-primary="command-query responsibility segregation (CQRS)" data-secondary="implementation" data-tertiary="command execution model" id="id1208"></a><a contenteditable="false" data-type="indexterm" data-primary="modeling business domain" data-secondary="command-query responsibility segregation" id="id1209"></a> This model is used to implement the business logic, validate rules, and enforce invariants.</p>
+
+<p>The command execution model is also the only model representing strongly consistent data—the system’s source of truth. It should be possible to read the strongly consistent state of a business entity and have optimistic concurrency support when updating it.</p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Read models (projections)"><div class="sect3" id="read_models_left_parenthesisprojections">
+<h3>Read models (projections)</h3>
+
+<p>The system can define as many models as needed to present data to users or supply information to other systems.<a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="command-query responsibility segregation" data-tertiary="read models" id="id1210"></a><a contenteditable="false" data-type="indexterm" data-primary="command-query responsibility segregation (CQRS)" data-secondary="implementation" data-tertiary="read models" id="id1211"></a><a contenteditable="false" data-type="indexterm" data-primary="read models" data-secondary="command-query responsibility segregation" data-tertiary="implementation" id="id1212"></a></p>
+
+<p>A read model is a precached projection. It can reside in a durable database, flat file, or in-memory cache. Proper implementation of CQRS allows for wiping out all data of a projection and regenerating it from scratch. This also enables extending the system with additional projections in the future—models that couldn’t have been foreseen originally.</p>
+
+<p>Finally, read models are read-only. None of the system’s operations can directly modify the read models’ data.</p>
+</div></section>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Projecting Read Models"><div class="sect2" id="projecting_read_models">
+<h2>Projecting Read Models</h2>
+
+<p>For the read models to work, the system has to project changes<a contenteditable="false" data-type="indexterm" data-primary="read models" data-secondary="command-query responsibility segregation" data-tertiary="projecting" id="id1213"></a><a contenteditable="false" data-type="indexterm" data-primary="command-query responsibility segregation (CQRS)" data-secondary="projecting read models" id="id1214"></a><a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="command-query responsibility segregation" data-tertiary="projecting read models" id="ch08-pro"></a> from the command execution model to all its read models. This concept is illustrated in <a data-type="xref" href="#cqrs_architecture">Figure 8-12</a>.</p>
+<figure><div id="cqrs_architecture" class="figure">
+<img src="assets/lddd_0812.png" alt="CQRS architecture" width="600" height="244"/>
+<h6><span class="label">Figure 8-12. </span>CQRS architecture</h6>
+</div></figure>
+
+<p>The projection of read models is similar to the notion of a materialized view in relational databases: whenever source tables are updated, the changes have to be reflected in the precached views.</p>
+
+<p>Next, let’s see two ways to generate projections: synchronously and asynchronously.</p>
+
+<section data-type="sect3" data-pdf-bookmark="Synchronous projections"><div class="sect3" id="synchronous_projections">
+<h3>Synchronous projections</h3>
+
+<p>Synchronous projections fetch changes to the OLTP data through the catch-up subscription model:<a contenteditable="false" data-type="indexterm" data-primary="command-query responsibility segregation (CQRS)" data-secondary="projecting read models" data-tertiary="synchronous projections" id="id1215"></a><a contenteditable="false" data-type="indexterm" data-primary="read models" data-secondary="command-query responsibility segregation" data-tertiary="synchronous projections" id="id1216"></a></p>
+<ul>
+<li>
+  <p>The projection engine queries the OLTP database for added or updated records after the last processed checkpoint.</p></li>
+<li>
+  <p>The projection engine uses the updated data to regenerate/update the system’s read models.</p></li>
+<li>
+  <p>The projection engine stores the checkpoint of the last processed record. This value will be used during the next iteration for getting records added or modified after the last processed record.</p></li>
+</ul>
+
+<p>This process is illustrated in <a data-type="xref" href="#synchronous_projection_model">Figure 8-13</a> and shown as a sequence diagram in <a data-type="xref" href="#synchronous_projection_of_read_models_t">Figure 8-14</a>.</p>
+<figure><div id="synchronous_projection_model" class="figure">
+<img src="assets/lddd_0813.png" alt="Synchronous projection model" width="600" height="142"/>
+<h6><span class="label">Figure 8-13. </span>Synchronous projection model</h6>
+</div></figure>
+<figure><div id="synchronous_projection_of_read_models_t" class="figure">
+<img src="assets/lddd_0814.png" alt="Synchronous projection of read models through catch-up subscription" width="600" height="205"/>
+<h6><span class="label">Figure 8-14. </span>Synchronous projection of read models through catch-up subscription</h6>
+</div></figure>
+
+<p>For the catch-up subscription to work, the command execution model has to checkpoint all the appended or updated database records. The storage mechanism should also support the querying of records based on the checkpoint.</p>
+
+<p>The checkpoint can be implemented using the databases’ features. For example, SQL Server’s “rowversion” column can be used to generate unique, incrementing numbers upon inserting or updating a row, as illustrated in <a data-type="xref" href="#auto_generated_checkpoint_column_in_a_r">Figure 8-15</a>. In databases that lack such functionality, a custom solution can be implemented that increments a running counter and appends it to each modified record. It’s important to ensure that the checkpoint-based query returns consistent results. If the last returned record has a checkpoint value of 10, on the next execution no new requests should have values lower than 10. Otherwise, these records will be skipped by the projection engine, which will result in inconsistent models.</p>
+<figure><div id="auto_generated_checkpoint_column_in_a_r" class="figure">
+<img src="assets/lddd_0815.png" alt="Auto-generated checkpoint column in a relational database" width="600" height="220"/>
+<h6><span class="label">Figure 8-15. </span>Auto-generated checkpoint column in a relational database</h6>
+</div></figure>
+
+<p>The synchronous projection method makes it trivial to add new projections and regenerate existing ones from scratch. In the latter case, all you have to do is reset the checkpoint to 0; the projection engine will scan the records and rebuild the projections from the ground up.</p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Asynchronous projections"><div class="sect3" id="asynchronous_projections">
+<h3>Asynchronous projections</h3>
+
+<p>In the asynchronous projection scenario, the command execution<a contenteditable="false" data-type="indexterm" data-primary="read models" data-secondary="command-query responsibility segregation" data-tertiary="asynchronous projections" id="id1217"></a><a contenteditable="false" data-type="indexterm" data-primary="command-query responsibility segregation (CQRS)" data-secondary="projecting read models" data-tertiary="asynchronous projections" id="id1218"></a> model publishes all committed changes to a message bus. The system’s projection engines can subscribe to the published messages and use them to update the read models, as shown in <a data-type="xref" href="#asynchronous_projection_of_read_models">Figure 8-16</a>.</p>
+<figure><div id="asynchronous_projection_of_read_models" class="figure">
+<img src="assets/lddd_0816.png" alt="Asynchronous projection of read models" width="600" height="199"/>
+<h6><span class="label">Figure 8-16. </span>Asynchronous projection of read models</h6>
+</div></figure>
+</div></section>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Challenges"><div class="sect2" id="challenges-id000020">
+<h2>Challenges</h2>
+
+<p>Despite the apparent scaling and performance advantages of the<a contenteditable="false" data-type="indexterm" data-primary="read models" data-secondary="command-query responsibility segregation" data-tertiary="asynchronous projections challenges" id="id1219"></a><a contenteditable="false" data-type="indexterm" data-primary="command-query responsibility segregation (CQRS)" data-secondary="projecting read models" data-tertiary="challenges" id="id1220"></a><a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="command-query responsibility segregation" data-tertiary="challenges" id="id1221"></a> asynchronous projection method, it is more prone to the challenges of distributed computing. If the messages are processed out of order or duplicated, inconsistent data will be projected into the read models.</p>
+
+<p>This method also makes it more challenging to add new projections or regenerate existing ones.</p>
+
+<p>For these reasons, it’s advisable to always implement synchronous projection and, optionally, an additional asynchronous projection on top of it.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch08-pro" id="id1222"></a></p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Model Segregation"><div class="sect2" id="model_segregation">
+<h2>Model Segregation</h2>
+
+<p>In the CQRS architecture, the responsibilities of the system’s models<a contenteditable="false" data-type="indexterm" data-primary="command-query responsibility segregation (CQRS)" data-secondary="model segregation" id="id1223"></a><a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="command-query responsibility segregation" data-tertiary="model segregation" id="id1224"></a> are segregated according to their type. A command can only operate on the strongly consistent command execution model. A query cannot directly modify any of the system’s persisted state—neither the read models nor the command execution model.</p>
+
+<p>A common misconception about CQRS-based systems is that a command can only modify data, and data can be fetched for display only through a read model. In other words, the command executing the methods should never return any data. This is wrong. This approach produces accidental complexities and leads to a bad user <span class="keep-together">experience</span>.</p>
+
+<p>A command should always let the caller know whether it has succeeded or failed. If it has failed, why did it fail? Was there a validation or technical issue? The caller has to know how to fix the command. <em>Therefore, a command can—and in many cases <span class="keep-together">should—</span>return data;</em> for example, if the system’s user interface has to reflect the modifications resulting from the command. Not only does this make it easier for consumers to work with the system since they immediately receive feedback for their actions, but the returned values can be used further in the consumers’ workflows, eliminating the need for unnecessary data round trips.</p>
+
+<p>The only limitation here is that the returned data should originate from the strongly consistent model—the command execution model—as we cannot expect the projections, which will eventually be consistent, to be refreshed immediately.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="When to Use CQRS"><div class="sect2" id="when_to_use_cqrs">
+<h2>When to Use CQRS</h2>
+
+<p>The CQRS pattern can be useful for applications that need to work<a contenteditable="false" data-type="indexterm" data-primary="command-query responsibility segregation (CQRS)" data-secondary="when to use" id="id1225"></a><a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="command-query responsibility segregation" data-tertiary="when to use" id="id1226"></a> with the same data in multiple models, potentially stored in different kinds of databases. From an operational perspective, the pattern supports domain-driven design’s core value of working with the most effective models for the task at hand, and continuously improving the model of the business domain. From an infrastructural perspective, CQRS allows for leveraging the strength of the different kinds of databases; for example, using a relational database to store the command execution model, a search index for full text search, and prerendered flat files for fast data retrieval, with all the storage mechanisms reliably synchronized.</p>
+
+<p>Moreover, CQRS naturally lends itself to event-sourced domain models.<a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="command-query responsibility segregation pattern" id="id1227"></a> The event-sourcing model makes it impossible to query records based on the aggregates’ states, but CQRS enables this by projecting the states into queryable databases.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch08-cqrs" id="id1228"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch08-cqrs2" id="id1229"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch08-cqrs3" id="id1230"></a></p>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Scope"><div class="sect1" id="scope-id000126">
+<h1>Scope</h1>
+
+<p>The patterns we’ve discussed—layered architecture, ports &amp; adapters architecture,<a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="about domain-driven design" id="id1231"></a> and CQRS—should not be treated as systemwide organizational principles. These are not necessarily high-level architecture patterns for a whole bounded context either.</p>
+
+<p>Consider a bounded context encompassing multiple subdomains, as shown in <a data-type="xref" href="#bounded_contexts_spanning_multiple_subd">Figure 8-17</a>. The subdomains can be of different types: core, supporting, or generic. Even subdomains of the same type may require different business logic and architectural patterns (that’s the topic of <a data-type="xref" href="ch10.html#design_heuristics">Chapter 10</a>). Enforcing a single, bounded, contextwide architecture will inadvertently lead to accidental complexity.</p>
+<figure><div id="bounded_contexts_spanning_multiple_subd" class="figure">
+<img src="assets/lddd_0817.png" alt="Bounded contexts spanning multiple subdomains" width="600" height="173"/>
+<h6><span class="label">Figure 8-17. </span>Bounded contexts spanning multiple subdomains</h6>
+</div></figure>
+
+<p>Our goal is to drive design decisions according to the actual needs and business strategy. In addition to the layers that partition the system horizontally, we can introduce additional vertical partitioning. It’s crucial to define logical boundaries for modules encapsulating distinct business subdomains and use the appropriate tools for each, as demonstrated in <a data-type="xref" href="#architectural_slices">Figure 8-18</a>.</p>
+
+<p>Appropriate vertical boundaries make a monolithic bounded context a modular one and help to prevent it from becoming a big ball of mud. As we will discuss in <a data-type="xref" href="ch11.html#evolving_design_decisions">Chapter 11</a>, these logical boundaries can be refactored later into physical boundaries of finer-grained bounded contexts.</p>
+
+<figure><div id="architectural_slices" class="figure">
+<img src="assets/lddd_0818.png" alt="Architectural slices" width="600" height="306"/>
+<h6><span class="label">Figure 8-18. </span>Architectural slices</h6>
+</div></figure>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Conclusion"><div class="sect1" id="conclusion-id000032">
+<h1>Conclusion</h1>
+
+<p>The layered architecture decomposes the codebase based on its technological concerns. Since this pattern couples business logic with data access implementation, it’s a good fit for active record–based systems.</p>
+
+<p>The ports &amp; adapters architecture inverts the relationships: it puts the business logic at the center and decouples it from all infrastructural dependencies. This pattern is a good fit for business logic implemented with the domain model pattern.</p>
+
+<p>The CQRS pattern represents the same data in multiple models. Although this pattern is obligatory for systems based on the event-sourced domain model, it can also be used in any systems that need a way of working with multiple persistent models.</p>
+
+<p>The patterns we will discuss in the next chapter address architectural concerns from a different perspective: how to implement reliable interaction between different components of a system.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Exercises"><div class="sect1" id="exercises-id000077">
+<h1>Exercises</h1>
+<ol>
+          <li>
+            <p>Which architectural pattern can be used with business logic implemented as the active record pattern? Select all that apply.</p>
+            <ol type="a">
+              <li>
+                <p>Layered architecture</p>
+              </li>
+              <li>
+                <p>Ports and adapters</p>
+              </li>
+              <li>
+                <p>CQRS</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Which architectural pattern decouples the business logic from infrastructural concerns? Select all that apply.</p>
+            <ol type="a">
+              <li>
+                <p>Layered architecture</p>
+              </li>
+              <li>
+                <p>Ports and adapters</p>
+              </li>
+              <li>
+                <p>CQRS</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Assume you are implementing the ports and adapters pattern and need to integrate a cloud provider’s managed message bus. In which layer should the integration be implemented?</p>
+            <ol type="a">
+              <li>
+                <p>Business logic layer</p>
+              </li>
+              <li>
+                <p>Application layer</p>
+              </li>
+              <li>
+                <p>Infrastructure layer</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Which of the following statements is true regarding the CQRS pattern? Select all that apply.</p>
+            <ol type="a">
+              <li>
+                <p>Asynchronous projections are easier to scale.</p>
+              </li>
+              <li>
+                <p>Either synchronous or asynchronous projection can be used, but not both at the same time.</p>
+              </li>
+              <li>
+                <p>A command cannot return any information to the caller. The caller should always use the read models to get the results of the executed actions.</p>
+              </li>
+              <li>
+                <p>A command can return information as long as it originates from a strongly consistent model.</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>The CQRS pattern allows for representing the same business objects in multiple persistent models. As a result, it allows for working with multiple models in the same bounded context. Does it contradict the bounded context’s notion of being a model boundary?</p>
+            <ol type="a">
+              <li>
+                <p>Yes</p>
+              </li>
+              <li>
+                <p>No</p>
+              </li>
+            </ol>
+          </li>
+        </ol>
+</div></section>
+<div data-type="footnotes"><p data-type="footnote" id="ch01fn33"><sup><a href="ch08.html#ch01fn33-marker">1</a></sup> Evans, E. (2003). <em>Domain-Driven Design: Tackling Complexity in the Heart of Software</em>. Boston: Addison-Wesley.</p><p data-type="footnote" id="ch01fn34"><sup><a href="ch08.html#ch01fn34-marker">2</a></sup> Such as AWS S3 or Google Cloud Storage.</p><p data-type="footnote" id="ch01fn35"><sup><a href="ch08.html#ch01fn35-marker">3</a></sup> In this context, the message bus is used for the system’s internal needs. If it were exposed publicly, it would belong to the presentation layer.</p><p data-type="footnote" id="ch01fn36"><sup><a href="ch08.html#ch01fn36-marker">4</a></sup> Fowler, M. (2002). <em>Patterns of Enterprise Application Architecture</em>. Boston: Addison-Wesley.</p><p data-type="footnote" id="ch01fn37"><sup><a href="ch08.html#ch01fn37-marker">5</a></sup> Since we are not in the context of the layered architecture, I will take the freedom to use the term <em>application layer</em> instead of <em>service layer</em>, as it better reflects the purpose.</p><p data-type="footnote" id="ch01fn38"><sup><a href="ch08.html#ch01fn38-marker">6</a></sup> <em>Polyglot data by Greg Young</em>. (n.d.). Retrieved June 14, 2021, from <a href="https://oreil.ly/3CdMw">YouTube</a>.</p></div></div></section></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,795 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xml:lang="en"
+lang="en"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title>Learning Domain-Driven Design</title>
+<link rel="stylesheet" type="text/css" href="override_v1.css"/>
+<link rel="stylesheet" type="text/css" href="epub.css"/>
+</head>
+<body>
+<div id="book-content">
+<div id="sbo-rt-content"><section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 6. Tackling Complex Business Logic"><div class="chapter" id="tackling_complex_business_logic">
+<h1><span class="label">Chapter 6. </span>Tackling Complex Business Logic</h1>
+
+<p>The previous chapter discussed two patterns addressing cases of relatively simple business logic: transaction script and active record. This chapter continues the topic of implementing business logic and introduces a pattern oriented for complicated business logic: the domain model pattern.</p>
+
+<section data-type="sect1" data-pdf-bookmark="History"><div class="sect1" id="history">
+<h1>History</h1>
+
+<p>As with both the transaction script and active record patterns, the<a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="domain model pattern" data-tertiary="about history" id="id931"></a><a contenteditable="false" data-type="indexterm" data-primary="domain model for business logic" data-secondary="about history" id="id932"></a><a contenteditable="false" data-type="indexterm" data-primary="Fowler, Martin" id="id933"></a><a contenteditable="false" data-type="indexterm" data-primary="Patterns of Enterprise Application Architecture (Fowler)" id="id934"></a><a contenteditable="false" data-type="indexterm" data-primary="Evans, Eric" id="id935"></a><a contenteditable="false" data-type="indexterm" data-primary="Domain-Driven Design (Evans)" id="id936"></a><a contenteditable="false" data-type="indexterm" data-primary="resources" data-secondary="Domain-Driven Design (Evans)" id="id937"></a><a contenteditable="false" data-type="indexterm" data-primary="resources" data-secondary="Patterns of Enterprise Application Architecture (Fowler)" id="id938"></a> domain model pattern was introduced initially in Martin Fowler’s book <em>Patterns of Enterprise Application Architecture</em>. Fowler concluded his discussion of the pattern by saying, “Eric Evans is currently writing a book on building Domain Models.” The referenced book is Evans’s seminal work, <em>Domain-Driven Design: Tackling Complexity in the Heart of Software.</em></p>
+
+<p>In his book, Evans presents a set of patterns aimed at tightly relating the code to the underlying model of the business domain: aggregate, value objects, repositories, and others. These patterns closely follow where Fowler left off in his book and resemble an effective set of tools for implementing the domain model pattern.</p>
+
+<p>The patterns that Evans introduced are often referred to as <em>tactical domain-driven design</em>. To eliminate the confusion of thinking that implementing domain-driven design necessarily entails the use of these patterns to implement business logic, I prefer to stick with Fowler’s original terminology. The pattern is “domain model,” and the aggregates and value objects are its building blocks.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Domain Model"><div class="sect1" id="domain_model">
+<h1>Domain Model</h1>
+
+<p>The domain model pattern is intended to cope with cases of complex<a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="domain model pattern" data-tertiary="about" id="id939"></a><a contenteditable="false" data-type="indexterm" data-primary="domain model for business logic" data-secondary="about" id="id940"></a><a contenteditable="false" data-type="indexterm" data-primary="help desk" data-secondary="domain model of implementation" data-tertiary="about" id="id941"></a> business logic. Here, instead of CRUD interfaces, we deal with complicated state transitions, business rules, and invariants: rules that have to be protected at all times.</p>
+
+<p>Let’s assume we are implementing a help desk system. Consider the following excerpt from the requirements that describes the logic controlling the lifecycles of support tickets:</p>
+<ul>
+<li>
+  <p>Customers open support tickets describing issues they are facing.</p></li>
+<li>
+  <p>Both the customer and the support agent append messages, and all the correspondence is tracked by the support ticket.</p></li>
+<li>
+  <p>Each ticket has a priority: low, medium, high, or urgent.</p></li>
+<li>
+  <p>An agent should offer a solution within a set time limit (SLA) that is based on the ticket’s priority.</p></li>
+<li>
+  <p>If the agent doesn’t reply within the SLA, the customer can escalate the ticket to the agent’s manager.</p></li>
+<li>
+  <p>Escalation reduces the agent’s response time limit by 33%.</p></li>
+<li>
+  <p>If the agent didn’t open an escalated ticket within 50% of the response time limit, it is automatically reassigned to a different agent.</p></li>
+<li>
+  <p>Tickets are automatically closed if the customer doesn’t reply to the agent’s questions within seven days.</p></li>
+<li>
+  <p>Escalated tickets cannot be closed automatically or by the agent, only by the customer or the agent’s manager.</p></li>
+<li>
+  <p>A customer can reopen a closed ticket only if it was closed in the past seven days.</p></li>
+</ul>
+
+<p>These requirements form an entangled net of dependencies among the different rules, all affecting the support ticket’s lifecycle management logic. This is not a CRUD data entry screen, as we discussed in the previous chapter. Attempting to implement this logic using active record objects will make it easy to duplicate the logic and corrupt the system’s state by misimplementing some of the business rules.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Implementation"><div class="sect2" id="implementation-id000104">
+<h2>Implementation</h2>
+
+<p>A domain model is an object model of the domain that incorporates<a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="domain model pattern" data-tertiary="implementation" id="id942"></a><a contenteditable="false" data-type="indexterm" data-primary="domain model for business logic" data-secondary="implementation" id="id943"></a> both behavior and data.<sup><a data-type="noteref" id="ch01fn20-marker" href="ch06.html#ch01fn20">1</a></sup> DDD’s tactical patterns—aggregates, value objects, domain events, and domain services—are the building blocks of such an object model.<sup><a data-type="noteref" id="ch01fn21-marker" href="ch06.html#ch01fn21">2</a></sup></p>
+
+<p>All of these patterns share a common theme: they put the business logic first. Let’s see how the domain model addresses different design concerns.</p>
+
+<section data-type="sect3" data-pdf-bookmark="Complexity"><div class="sect3" id="complexity-id000024">
+<h3>Complexity</h3>
+
+<p>The domain’s business logic is already inherently complex, so the objects<a contenteditable="false" data-type="indexterm" data-primary="complexity" data-secondary="business logic domain model" id="id944"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="domain model pattern" data-tertiary="complexity management" id="id945"></a> used for modeling it should not introduce any additional accidental complexities. The model should be devoid of any infrastructural or technological concerns, such as implementing calls to databases or other external components of the system. This restriction requires the model’s objects to be <em>plain old objects</em>, objects implementing business logic without relying on or directly incorporating any infrastructural components or frameworks.<sup><a data-type="noteref" id="ch01fn22-marker" href="ch06.html#ch01fn22">3</a></sup></p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Ubiquitous language"><div class="sect3" id="ubiquitous_languag">
+<h3>Ubiquitous language</h3>
+
+<p>The emphasis on business logic instead of technical concerns makes<a contenteditable="false" data-type="indexterm" data-primary="ubiquitous language" data-secondary="modeling business domain" data-tertiary="domain model for business logic" id="id946"></a> it easier for the domain model’s objects to follow the terminology of the bounded context’s ubiquitous language. In other words, this pattern allows the code to “speak” the ubiquitous language and to follow the domain experts’ mental models.</p>
+</div></section>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Building Blocks"><div class="sect2" id="building_blocks">
+<h2>Building Blocks</h2>
+
+<p>Let’s look at the central domain model building blocks, or tactical patterns, offered by DDD: value objects, aggregates, and domain services.</p>
+
+<section data-type="sect3" data-pdf-bookmark="Value object"><div class="sect3" id="value_object">
+<h3>Value object</h3>
+
+<p>A value object is an object that can be identified by the composition of its values. For example, consider a color object:<a contenteditable="false" data-type="indexterm" data-primary="help desk" data-secondary="domain model of implementation" data-tertiary="value objects" id="ch06-valo"></a><a contenteditable="false" data-type="indexterm" data-primary="domain model for business logic" data-secondary="building blocks" data-tertiary="value objects" id="ch06-valo2"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="domain model pattern" data-tertiary="value objects" id="ch06-valo3"></a><a contenteditable="false" data-type="indexterm" data-primary="value objects" data-secondary="about" id="id947"></a></p>
+<pre data-code-language="csharp"><code class="k">class</code> <code class="nc">Color</code>
+<code class="p">{</code>
+    <code class="kt">int</code> <code class="n">_red</code><code class="p">;</code>
+    <code class="kt">int</code> <code class="n">_green</code><code class="p">;</code>
+    <code class="kt">int</code> <code class="n">_blue</code><code class="p">;</code>
+<code class="p">}</code></pre>
+
+<p>The composition of the values of the three fields red, green, and blue defines a color. Changing the value of one of the fields will result in a new color. No two colors can have the same values. Also, two instances of the same color must have the same values. Therefore, no explicit identification field is needed to identify colors.</p>
+
+<p>The <code>ColorId</code> field shown in <a data-type="xref" href="#redundant_colorid_fieldcomma_making_it">Figure 6-1</a> is not only redundant, but actually creates an opening for bugs. You could create two rows with the same values of <code>red</code>, <code>green</code>, and <code>blue</code>, but comparing the values of <code>ColorId</code> would not reflect that this is the same color.</p>
+<figure><div id="redundant_colorid_fieldcomma_making_it" class="figure">
+<img src="assets/lddd_0601.png" alt="Redundant ColorId field, making it possible to have two rows with the same values" width="600" height="278"/>
+<h6><span class="label">Figure 6-1. </span>Redundant <code>ColorId</code> field, making it possible to have two rows with the same values</h6>
+</div></figure>
+
+<section data-type="sect4" data-pdf-bookmark="Ubiquitous language"><div class="sect4" id="ubiquitous_languagedo">
+<h4>Ubiquitous language</h4>
+
+<p>Relying exclusively on the language’s standard library’s primitive<a contenteditable="false" data-type="indexterm" data-primary="value objects" data-secondary="ubiquitous language" id="ch06-ubval"></a><a contenteditable="false" data-type="indexterm" data-primary="ubiquitous language" data-secondary="value objects" id="ch06-ubval2"></a> data types—such as strings, integers, or dictionaries—to represent concepts of the business domain is known as the primitive obsession<sup><a data-type="noteref" id="ch01fn23-marker" href="ch06.html#ch01fn23">4</a></sup> code smell. For example, consider the following class:</p>
+<pre data-code-language="csharp"><code class="k">class</code> <code class="nc">Person</code>
+<code class="p">{</code>
+    <code class="k">private</code> <code class="kt">int</code>    <code class="n">_id</code><code class="p">;</code>
+    <code class="k">private</code> <code class="kt">string</code> <code class="n">_firstName</code><code class="p">;</code>
+    <code class="k">private</code> <code class="kt">string</code> <code class="n">_lastName</code><code class="p">;</code>
+    <code class="k">private</code> <code class="kt">string</code> <code class="n">_landlinePhone</code><code class="p">;</code>
+    <code class="k">private</code> <code class="kt">string</code> <code class="n">_mobilePhone</code><code class="p">;</code>
+    <code class="k">private</code> <code class="kt">string</code> <code class="n">_email</code><code class="p">;</code>
+    <code class="k">private</code> <code class="kt">int</code>    <code class="n">_heightMetric</code><code class="p">;</code>
+    <code class="k">private</code> <code class="kt">string</code> <code class="n">_countryCode</code><code class="p">;</code>
+
+    <code class="k">public</code> <code class="nf">Person</code><code class="p">(...)</code> <code class="p">{...}</code>
+<code class="p">}</code>
+
+<code class="k">static</code> <code class="k">void</code> <code class="nf">Main</code><code class="p">(</code><code class="kt">string</code><code class="p">[]</code> <code class="n">args</code><code class="p">)</code>
+<code class="p">{</code>
+    <code class="kt">var</code> <code class="n">dave</code> <code class="p">=</code> <code class="k">new</code> <code class="n">Person</code><code class="p">(</code>
+        <code class="n">id</code><code class="p">:</code> <code class="m">30217</code><code class="p">,</code>
+        <code class="n">firstName</code><code class="p">:</code> <code class="s">"Dave"</code><code class="p">,</code>
+        <code class="n">lastName</code><code class="p">:</code> <code class="s">"Ancelovici"</code><code class="p">,</code>
+        <code class="n">landlinePhone</code><code class="p">:</code> <code class="s">"023745001"</code><code class="p">,</code>
+        <code class="n">mobilePhone</code><code class="p">:</code> <code class="s">"0873712503"</code><code class="p">,</code>
+        <code class="n">email</code><code class="p">:</code> <code class="s">"dave@learning-ddd.com"</code><code class="p">,</code>
+        <code class="n">heightMetric</code><code class="p">:</code> <code class="m">180</code><code class="p">,</code>
+        <code class="n">countryCode</code><code class="p">:</code> <code class="s">"BG"</code><code class="p">);</code>
+<code class="p">}</code></pre>
+
+<p>In the preceding implementation of the <code>Person</code> class, most of the values are of type <code>String</code> and they are assigned based on convention. For example, the input to the <code>landlinePhone</code> should be a valid landline phone number, and the <code>countryCode</code> should be a valid, two-letter, uppercased country code. Of course, the system cannot trust the user to always supply correct values, and as a result, the class has to validate all input fields.</p>
+
+<p>This approach presents multiple design risks. First, the validation logic tends to be duplicated. Second, it’s hard to enforce calling the validation logic before the values are used. It will become even more challenging in the future, when the codebase will be evolved by other engineers.</p>
+
+<p>Compare the following alternative design of the same object, this time leveraging value objects:</p>
+<pre data-code-language="csharp"><code class="k">class</code> <code class="nc">Person</code> <code class="p">{</code>
+    <code class="k">private</code> <code class="n">PersonId</code>     <code class="n">_id</code><code class="p">;</code>
+    <code class="k">private</code> <code class="n">Name</code>         <code class="n">_name</code><code class="p">;</code>
+    <code class="k">private</code> <code class="n">PhoneNumber</code>  <code class="n">_landline</code><code class="p">;</code>
+    <code class="k">private</code> <code class="n">PhoneNumber</code>  <code class="n">_mobile</code><code class="p">;</code>
+    <code class="k">private</code> <code class="n">EmailAddress</code> <code class="n">_email</code><code class="p">;</code>
+    <code class="k">private</code> <code class="n">Height</code>       <code class="n">_height</code><code class="p">;</code>
+    <code class="k">private</code> <code class="n">CountryCode</code>  <code class="n">_country</code><code class="p">;</code>
+
+    <code class="k">public</code> <code class="nf">Person</code><code class="p">(...)</code> <code class="p">{</code> <code class="p">...</code> <code class="p">}</code>
+<code class="p">}</code>
+
+<code class="k">static</code> <code class="k">void</code> <code class="nf">Main</code><code class="p">(</code><code class="kt">string</code><code class="p">[]</code> <code class="n">args</code><code class="p">)</code>
+<code class="p">{</code>
+    <code class="kt">var</code> <code class="n">dave</code> <code class="p">=</code> <code class="k">new</code> <code class="n">Person</code><code class="p">(</code>
+        <code class="n">id</code><code class="p">:</code>       <code class="k">new</code> <code class="n">PersonId</code><code class="p">(</code><code class="m">30217</code><code class="p">),</code>
+        <code class="n">name</code><code class="p">:</code>     <code class="k">new</code> <code class="n">Name</code><code class="p">(</code><code class="s">"Dave"</code><code class="p">,</code> <code class="s">"Ancelovici"</code><code class="p">),</code>
+        <code class="n">landline</code><code class="p">:</code> <code class="n">PhoneNumber</code><code class="p">.</code><code class="n">Parse</code><code class="p">(</code><code class="s">"023745001"</code><code class="p">),</code>
+        <code class="n">mobile</code><code class="p">:</code>   <code class="n">PhoneNumber</code><code class="p">.</code><code class="n">Parse</code><code class="p">(</code><code class="s">"0873712503"</code><code class="p">),</code>
+        <code class="n">email</code><code class="p">:</code>    <code class="n">EmailAddress</code><code class="p">.</code><code class="n">Parse</code><code class="p">(</code><code class="s">"dave@learning-ddd.com”),</code>
+        <code class="n">height</code><code class="p">:</code>   <code class="n">Height</code><code class="p">.</code><code class="n">FromMetric</code><code class="p">(</code><code class="m">180</code><code class="p">),</code>
+        <code class="n">country</code><code class="p">:</code>  <code class="n">CountryCode</code><code class="p">.</code><code class="n">Parse</code><code class="p">(</code><code class="s">"BG"</code><code class="p">));</code>
+<code class="p">}</code></pre>
+
+<p>First, notice the increased clarity. Take, for example, the <code>country</code> variable. There is no need to elaborately call it “countryCode” to communicate the intent of it holding a country code and not, for example, a full country name. The value object makes the intent clear, even with shorter variable names.</p>
+
+<p>Second, there is no need to validate the values before the assignment, as the validation logic resides in the value objects themselves. However, a value object’s behavior is not limited to mere validation. Value objects shine brightest when they centralize the business logic that manipulates the values. The cohesive logic is implemented in one place and is easy to test. Most importantly, value objects express the business domain’s concepts: they make the code speak the ubiquitous language.</p>
+
+<p>Let’s see how representing the concepts of height, phone numbers, and colors as value objects makes the resultant type system rich and intuitive to use.</p>
+
+<p>Compared to an integer-based value, the <code>Height</code> value object both makes the intent clear and decouples the measurement from a specific measurement unit. For example, the <code>Height</code> value object can be initialized using both metric and imperial units, making it easy to convert from one unit to another, generating string representation, and comparing values of different units:</p>
+<pre data-code-language="csharp"><code class="kt">var</code> <code class="n">heightMetric</code> <code class="p">=</code> <code class="n">Height</code><code class="p">.</code><code class="n">Metric</code><code class="p">(</code><code class="m">180</code><code class="p">);</code>
+<code class="kt">var</code> <code class="n">heightImperial</code> <code class="p">=</code> <code class="n">Height</code><code class="p">.</code><code class="n">Imperial</code><code class="p">(</code><code class="m">5</code><code class="p">,</code> <code class="m">3</code><code class="p">);</code>
+
+<code class="kt">var</code> <code class="n">string1</code> <code class="p">=</code> <code class="n">heightMetric</code><code class="p">.</code><code class="n">ToString</code><code class="p">();</code>              <code class="c1">// "180cm"</code>
+<code class="kt">var</code> <code class="n">string2</code> <code class="p">=</code> <code class="n">heightImperial</code><code class="p">.</code><code class="n">ToString</code><code class="p">();</code>            <code class="c1">// "5 feet 3 inches"</code>
+<code class="kt">var</code> <code class="n">string3</code> <code class="p">=</code> <code class="n">heightMetric</code><code class="p">.</code><code class="n">ToImperial</code><code class="p">().</code><code class="n">ToString</code><code class="p">();</code> <code class="c1">// "5 feet 11 inches"</code>
+
+<code class="kt">var</code> <code class="n">firstIsHigher</code> <code class="p">=</code> <code class="n">heightMetric</code> <code class="p">&gt;</code> <code class="n">heightImperial</code><code class="p">;</code> <code class="c1">// true</code></pre>
+
+<p>The <code>PhoneNumber</code> value object can encapsulate the logic of parsing a string value, validating it, and extracting different attributes of the phone number; for example, the country it belongs to and the phone number’s type—landline or mobile:</p>
+<pre data-code-language="csharp"><code class="kt">var</code> <code class="n">phone</code> <code class="p">=</code> <code class="n">PhoneNumber</code><code class="p">.</code><code class="n">Parse</code><code class="p">(</code><code class="s">"+359877123503"</code><code class="p">);</code>
+<code class="kt">var</code> <code class="n">country</code> <code class="p">=</code> <code class="n">phone</code><code class="p">.</code><code class="n">Country</code><code class="p">;</code>                        <code class="c1">// "BG"</code>
+<code class="kt">var</code> <code class="n">phoneType</code> <code class="p">=</code> <code class="n">phone</code><code class="p">.</code><code class="n">PhoneType</code><code class="p">;</code>                    <code class="c1">// "MOBILE"</code>
+<code class="kt">var</code> <code class="n">isValid</code> <code class="p">=</code> <code class="n">PhoneNumber</code><code class="p">.</code><code class="n">IsValid</code><code class="p">(</code><code class="s">"+972120266680"</code><code class="p">);</code> <code class="c1">// false</code></pre>
+
+<p>The following example demonstrates the power of a value object when it encapsulates all of the business logic that manipulates the data and produces new instances of the value object:</p>
+<pre data-code-language="csharp"><code class="kt">var</code> <code class="n">red</code> <code class="p">=</code> <code class="n">Color</code><code class="p">.</code><code class="n">FromRGB</code><code class="p">(</code><code class="m">255</code><code class="p">,</code> <code class="m">0</code><code class="p">,</code> <code class="m">0</code><code class="p">);</code>
+<code class="kt">var</code> <code class="n">green</code> <code class="p">=</code> <code class="n">Color</code><code class="p">.</code><code class="n">Green</code><code class="p">;</code>
+<code class="kt">var</code> <code class="n">yellow</code> <code class="p">=</code> <code class="n">red</code><code class="p">.</code><code class="n">MixWith</code><code class="p">(</code><code class="n">green</code><code class="p">);</code>
+<code class="kt">var</code> <code class="n">yellowString</code> <code class="p">=</code> <code class="n">yellow</code><code class="p">.</code><code class="n">ToString</code><code class="p">();</code>                <code class="c1">// "#FFFF00"</code></pre>
+
+<p>As you can see in the preceding examples, value objects eliminate the need for conventions—for example, the need to keep in mind that this string is an email and the other string is a phone number—and instead makes using the object model less error prone and more intuitive.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch06-ubval" id="id948"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch06-ubval2" id="id949"></a></p>
+</div></section>
+
+<section data-type="sect4" data-pdf-bookmark="Implementation"><div class="sect4" id="implementationdot">
+<h4>Implementation</h4>
+
+<p>Since a change to any of the fields of a value object results in a <a contenteditable="false" data-type="indexterm" data-primary="value objects" data-secondary="implementation" id="id950"></a>different value, value objects are implemented as immutable objects. A change to one of the value object’s fields conceptually creates a different value—a different instance of a value object. Therefore, when an executed action results in a new value, as in the following case, which uses the <code>MixWith</code> method, it doesn’t modify the original instance but instantiates and returns a new one:</p>
+<pre data-code-language="csharp"><code class="k">public</code> <code class="k">class</code> <code class="nc">Color</code>
+<code class="p">{</code>
+    <code class="k">public</code> <code class="k">readonly</code> <code class="kt">byte</code> <code class="n">Red</code><code class="p">;</code>
+    <code class="k">public</code> <code class="k">readonly</code> <code class="kt">byte</code> <code class="n">Green</code><code class="p">;</code>
+    <code class="k">public</code> <code class="k">readonly</code> <code class="kt">byte</code> <code class="n">Blue</code><code class="p">;</code>
+
+    <code class="k">public</code> <code class="nf">Color</code><code class="p">(</code><code class="kt">byte</code> <code class="n">r</code><code class="p">,</code> <code class="kt">byte</code> <code class="n">g</code><code class="p">,</code> <code class="kt">byte</code> <code class="n">b</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="k">this</code><code class="p">.</code><code class="n">Red</code> <code class="p">=</code> <code class="n">r</code><code class="p">;</code>
+        <code class="k">this</code><code class="p">.</code><code class="n">Green</code> <code class="p">=</code> <code class="n">g</code><code class="p">;</code>
+        <code class="k">this</code><code class="p">.</code><code class="n">Blue</code> <code class="p">=</code> <code class="n">b</code><code class="p">;</code>
+    <code class="p">}</code>
+
+    <code class="k">public</code> <code class="n">Color</code> <code class="nf">MixWith</code><code class="p">(</code><code class="n">Color</code> <code class="n">other</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="k">return</code> <code class="k">new</code> <code class="nf">Color</code><code class="p">(</code>
+            <code class="n">r</code><code class="p">:</code> <code class="p">(</code><code class="kt">byte</code><code class="p">)</code> <code class="n">Math</code><code class="p">.</code><code class="n">Min</code><code class="p">(</code><code class="k">this</code><code class="p">.</code><code class="n">Red</code> <code class="p">+</code> <code class="n">other</code><code class="p">.</code><code class="n">Red</code><code class="p">,</code> <code class="m">255</code><code class="p">),</code>
+            <code class="n">g</code><code class="p">:</code> <code class="p">(</code><code class="kt">byte</code><code class="p">)</code> <code class="n">Math</code><code class="p">.</code><code class="n">Min</code><code class="p">(</code><code class="k">this</code><code class="p">.</code><code class="n">Green</code> <code class="p">+</code> <code class="n">other</code><code class="p">.</code><code class="n">Green</code><code class="p">,</code> <code class="m">255</code><code class="p">),</code>
+            <code class="n">b</code><code class="p">:</code> <code class="p">(</code><code class="kt">byte</code><code class="p">)</code> <code class="n">Math</code><code class="p">.</code><code class="n">Min</code><code class="p">(</code><code class="k">this</code><code class="p">.</code><code class="n">Blue</code> <code class="p">+</code> <code class="n">other</code><code class="p">.</code><code class="n">Blue</code><code class="p">,</code> <code class="m">255</code><code class="p">)</code>
+        <code class="p">);</code>
+    <code class="p">}</code>
+
+    <code class="p">...</code>
+<code class="p">}</code></pre>
+
+<p>Since the equality of value objects is based on their values rather than on an <code>id</code> field or reference, it’s important to override and properly implement the equality checks. For example, in C#:<sup><a data-type="noteref" id="ch01fn24-marker" href="ch06.html#ch01fn24">5</a></sup></p>
+<pre data-code-language="csharp"><code class="k">public</code> <code class="k">class</code> <code class="nc">Color</code>
+<code class="p">{</code>
+    <code class="p">...</code>
+
+    <code class="k">public</code> <code class="k">override</code> <code class="kt">bool</code> <code class="nf">Equals</code><code class="p">(</code><code class="kt">object</code> <code class="n">obj</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="kt">var</code> <code class="n">other</code> <code class="p">=</code> <code class="n">obj</code> <code class="k">as</code> <code class="n">Color</code><code class="p">;</code>
+        <code class="k">return</code> <code class="n">other</code> <code class="p">!=</code> <code class="k">null</code> <code class="p">&amp;&amp;</code>
+            <code class="k">this</code><code class="p">.</code><code class="n">Red</code> <code class="p">==</code> <code class="n">other</code><code class="p">.</code><code class="n">Red</code> <code class="p">&amp;&amp;</code>
+            <code class="k">this</code><code class="p">.</code><code class="n">Green</code> <code class="p">==</code> <code class="n">other</code><code class="p">.</code><code class="n">Green</code> <code class="p">&amp;&amp;</code>
+            <code class="k">this</code><code class="p">.</code><code class="n">Blue</code> <code class="p">==</code> <code class="n">other</code><code class="p">.</code><code class="n">Blue</code><code class="p">;</code>
+    <code class="p">}</code>
+
+    <code class="k">public</code> <code class="k">static</code> <code class="kt">bool</code> <code class="k">operator</code> <code class="p">==</code> <code class="p">(</code><code class="n">Color</code> <code class="n">lhs</code><code class="p">,</code> <code class="n">Color</code> <code class="n">rhs</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="k">if</code> <code class="p">(</code><code class="n">Object</code><code class="p">.</code><code class="n">ReferenceEquals</code><code class="p">(</code><code class="n">lhs</code><code class="p">,</code> <code class="k">null</code><code class="p">))</code> <code class="p">{</code>
+            <code class="k">return</code> <code class="n">Object</code><code class="p">.</code><code class="n">ReferenceEquals</code><code class="p">(</code><code class="n">rhs</code><code class="p">,</code> <code class="k">null</code><code class="p">);</code>
+        <code class="p">}</code>
+        <code class="k">return</code> <code class="n">lhs</code><code class="p">.</code><code class="n">Equals</code><code class="p">(</code><code class="n">rhs</code><code class="p">);</code>
+    <code class="p">}</code>
+
+    <code class="k">public</code> <code class="k">static</code> <code class="kt">bool</code> <code class="k">operator</code> <code class="p">!=</code> <code class="p">(</code><code class="n">Color</code> <code class="n">lhs</code><code class="p">,</code> <code class="n">Color</code> <code class="n">rhs</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="k">return</code> <code class="p">!(</code><code class="n">lhs</code> <code class="p">==</code> <code class="n">rhs</code><code class="p">);</code>
+    <code class="p">}</code>
+
+    <code class="k">public</code> <code class="k">override</code> <code class="kt">int</code> <code class="nf">GetHashCode</code><code class="p">()</code>
+    <code class="p">{</code>
+        <code class="k">return</code> <code class="nf">ToString</code><code class="p">().</code><code class="n">GetHashCode</code><code class="p">();</code>
+    <code class="p">}</code>
+    
+    <code class="p">...</code>
+<code class="p">}</code></pre>
+
+<p>Although using a core library’s <code>String</code>s to represent domain-specific values contradicts the notion of value objects, in .NET, Java, and other languages the string type is implemented exactly as a value object. Strings are immutable, as all operations result in a new instance. Moreover, the string type encapsulates a rich behavior that creates new instances by manipulating the values of one or more strings: trim, concatenate multiple strings, replace characters, substring, and other methods.</p>
+</div></section>
+
+<section data-type="sect4" data-pdf-bookmark="When to use value objects"><div class="sect4" id="when_to_use_value_objectsquestion_mark">
+<h4>When to use value objects</h4>
+
+<p>The simple answer is, whenever you can. Not only do value objects<a contenteditable="false" data-type="indexterm" data-primary="value objects" data-secondary="when to use" id="id951"></a> make the code more expressive and encapsulate business logic that tends to spread apart, but the pattern makes the code safer. Since value objects are immutable, the value objects’ behavior is free of side effects and is thread safe.</p>
+
+<p>From a business domain perspective, a useful rule of thumb is to use value objects for the domain’s elements that describe properties of other objects. This namely applies to properties of entities, which are discussed in the next section. The examples you saw earlier used value objects to describe a person, including their ID, name, phone numbers, email, and so on. Other examples of using value objects include various statuses, passwords, and more business domain–specific concepts that can be identified by their values and thus do not require an explicit identification field. An especially important opportunity to introduce a value object is when modeling money and other monetary values. Relying on primitive types to represent money not only limits your ability to encapsulate all money-related business logic in one place, but also often leads to dangerous bugs, such as rounding errors and other precision-related issues.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch06-valo" id="id952"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch06-valo2" id="id953"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch06-valo3" id="id954"></a></p>
+</div></section>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Entities"><div class="sect3" id="entities">
+<h3>Entities</h3>
+
+<p>An <em>entity</em> is the opposite of a value object. It<a contenteditable="false" data-type="indexterm" data-primary="help desk" data-secondary="domain model of implementation" data-tertiary="entities" id="id955"></a><a contenteditable="false" data-type="indexterm" data-primary="domain model for business logic" data-secondary="building blocks" data-tertiary="entities" id="id956"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="domain model pattern" data-tertiary="entities" id="id957"></a><a contenteditable="false" data-type="indexterm" data-primary="entities" id="id958"></a> requires an explicit identification field to distinguish between the different instances of the entity. A trivial example of an entity is a person. Consider the following class:</p>
+<pre data-code-language="csharp"><code class="k">class</code> <code class="nc">Person</code>
+<code class="p">{</code>
+    <code class="k">public</code> <code class="n">Name</code> <code class="n">Name</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+    
+    <code class="k">public</code> <code class="nf">Person</code><code class="p">(</code><code class="n">Name</code> <code class="n">name</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="k">this</code><code class="p">.</code><code class="n">Name</code> <code class="p">=</code> <code class="n">name</code><code class="p">;</code>
+    <code class="p">}</code>
+<code class="p">}</code></pre>
+
+<p>The class contains only one field: <code>name</code> (a value object). This design, however, is suboptimal because different people can be namesakes and can have exactly the same names. That, of course, doesn’t make them the same person. Hence, an identification field is needed to properly identify people:</p>
+<pre data-code-language="csharp"><code class="k">class</code> <code class="nc">Person</code>
+<code class="p">{</code>
+    <code class="k">public</code> <code class="k">readonly</code> <code class="n">PersonId</code> <code class="n">Id</code><code class="p">;</code>
+    <code class="k">public</code> <code class="n">Name</code> <code class="n">Name</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+    
+    <code class="k">public</code> <code class="nf">Person</code><code class="p">(</code><code class="n">PersonId</code> <code class="n">id</code><code class="p">,</code> <code class="n">Name</code> <code class="n">name</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="k">this</code><code class="p">.</code><code class="n">Id</code> <code class="p">=</code> <code class="n">id</code><code class="p">;</code>
+        <code class="k">this</code><code class="p">.</code><code class="n">Name</code> <code class="p">=</code> <code class="n">name</code><code class="p">;</code>
+    <code class="p">}</code>
+<code class="p">}</code></pre>
+
+<p>In the preceding code, we introduced the identification field<a contenteditable="false" data-type="indexterm" data-primary="identification fields" data-secondary="entities" id="id959"></a><a contenteditable="false" data-type="indexterm" data-primary="entities" data-secondary="identification fields" id="id960"></a> <code>Id</code> of type <code>PersonId</code>. <span class="keep-together"><code>PersonId</code></span> is a value object, and it can use any underlying data types that fit the business domain’s needs. For example, the <code>Id</code> can be a GUID, a number, a string, or a domain-specific value such as a Social Security number.</p>
+
+<p>The central requirement for the identification field is that it should be unique for each instance of the entity: for each person, in our case (<a data-type="xref" href="#introducing_an_explicit_identification">Figure 6-2</a>). Furthermore, except for very rare exceptions, the value of an entity’s identification field should remain immutable throughout the entity’s lifecycle. This brings us to the second conceptual difference between value objects and entities.</p>
+
+<figure><div id="introducing_an_explicit_identification" class="figure">
+<img src="assets/lddd_0602.png" alt="Introducing an explicit identification field, allowing differentiating instances of the object even if the values of all other fields are identical" width="600" height="249"/>
+<h6><span class="label">Figure 6-2. </span>Introducing an explicit identification field, allowing differentiating instances of the object even if the values of all other fields are identical</h6>
+</div></figure>
+
+<p>Contrary to value objects, entities are not immutable and are expected to change. <a contenteditable="false" data-type="indexterm" data-primary="properties described by value objects" id="id961"></a>Another difference between entities and value objects is that value objects describe an entity’s properties. Earlier in the chapter, you saw an example of the entity <code>Person</code> and it had two value objects describing each instance: <code>PersonId</code> and <code>Name</code>.</p>
+
+<p>Entities are an essential building block of any business domain. That said, you may have noticed that earlier in the chapter I didn’t include “entity” in the list of the domain model’s building blocks. That’s not a mistake. The reason “entity” was omitted is because we don’t implement entities independently, but only in the context of the aggregate pattern.</p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Aggregates"><div class="sect3" id="aggregates-id000001">
+<h3>Aggregates</h3>
+
+<p>An aggregate is an <em>entity</em>: it requires an explicit<a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="domain model pattern" data-tertiary="aggregates" id="ch06-agg"></a><a contenteditable="false" data-type="indexterm" data-primary="aggregates" id="ch06-agg2"></a><a contenteditable="false" data-type="indexterm" data-primary="help desk" data-secondary="domain model of implementation" data-tertiary="aggregates" id="ch06-agg3"></a><a contenteditable="false" data-type="indexterm" data-primary="entities" data-secondary="aggregates" id="ch06-agg4"></a><a contenteditable="false" data-type="indexterm" data-primary="domain model for business logic" data-secondary="building blocks" data-tertiary="aggregates" id="ch06-agg5"></a><a contenteditable="false" data-type="indexterm" data-primary="aggregates" data-secondary="entities" id="id962"></a><a contenteditable="false" data-type="indexterm" data-primary="aggregates" data-secondary="entities" data-tertiary="identification field" id="id963"></a><a contenteditable="false" data-type="indexterm" data-primary="identification fields" data-secondary="entities" data-tertiary="aggregates" id="id964"></a><a contenteditable="false" data-type="indexterm" data-primary="entities" data-secondary="identification fields" data-tertiary="aggregates" id="id965"></a> identification field and its state is expected to change during an instance’s lifecycle. However, it is much more than just an entity. The goal of the pattern is to protect the consistency of its data. Since an aggregate’s data is mutable, there are implications and challenges that the pattern has to address to keep its state consistent at all times.</p>
+
+<section data-type="sect4" data-pdf-bookmark="Consistency enforcement"><div class="sect4" id="consistency_enforcementdot">
+<h4>Consistency enforcement</h4>
+
+<p>Since an aggregate’s state can be mutated, it creates an opening<a contenteditable="false" data-type="indexterm" data-primary="entities" data-secondary="aggregates" data-tertiary="consistency enforcement" id="ch06-ce3"></a><a contenteditable="false" data-type="indexterm" data-primary="aggregates" data-secondary="consistency enforcement" id="ch06-ce"></a><a contenteditable="false" data-type="indexterm" data-primary="data corruption" data-secondary="aggregate consistency enforcement" id="ch06-ce2"></a> for multiple ways in which its data can become corrupted. To enforce consistency of the data, the aggregate pattern draws a clear boundary between the aggregate and its outer scope: the aggregate is a consistency enforcement boundary. The aggregate’s logic has to validate all incoming modifications and ensure that the changes do not contradict its business rules.</p>
+
+<p>From an implementation perspective, the consistency is enforced by allowing only the aggregate’s business logic to modify its state. All processes or objects external to the aggregate are only allowed to read the aggregate’s state. Its state can only be mutated by executing corresponding methods of the aggregate’s public interface.</p>
+
+<p class="pagebreak-before less_space">The state-modifying methods exposed as an aggregate’s public interface<a contenteditable="false" data-type="indexterm" data-primary="aggregates" data-secondary="commands" id="id966"></a><a contenteditable="false" data-type="indexterm" data-primary="entities" data-secondary="aggregates" data-tertiary="commands" id="id967"></a><a contenteditable="false" data-type="indexterm" data-primary="commands" data-secondary="aggregate state-modifying methods" id="id968"></a><a contenteditable="false" data-type="indexterm" data-primary="methods" data-secondary="commands of aggregates" id="id969"></a> are often referred to as <em>commands</em>, as in “a command to do something.” A command can be implemented in two ways. First, it can be implemented as a plain public method of the aggregate object:</p>
+<pre data-code-language="csharp"><code class="k">public</code> <code class="k">class</code> <code class="nc">Ticket</code>
+<code class="p">{</code>
+    <code class="p">...</code>
+
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">AddMessage</code><code class="p">(</code><code class="n">UserId</code> <code class="k">from</code><code class="p">,</code> <code class="kt">string</code> <code class="n">body</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="kt">var</code> <code class="n">message</code> <code class="p">=</code> <code class="k">new</code> <code class="n">Message</code><code class="p">(</code><code class="k">from</code><code class="p">,</code> <code class="n">body</code><code class="p">);</code>
+        <code class="n">_messages</code><code class="p">.</code><code class="n">Append</code><code class="p">(</code><code class="n">message</code><code class="p">);</code>
+    <code class="p">}</code>
+
+    <code class="p">...</code>
+<code class="p">}</code></pre>
+
+<p>Alternatively, a command can be represented as<a contenteditable="false" data-type="indexterm" data-primary="parameter objects" id="id970"></a> a <a href="https://oreil.ly/4hNtn">parameter object</a> that encapsulates all the input required for executing the command:</p>
+<pre data-code-language="csharp"><code class="k">public</code> <code class="k">class</code> <code class="nc">Ticket</code>
+<code class="p">{</code>
+    <code class="p">...</code>
+ 
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Execute</code><code class="p">(</code><code class="n">AddMessage</code> <code class="n">cmd</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="kt">var</code> <code class="n">message</code> <code class="p">=</code> <code class="k">new</code> <code class="n">Message</code><code class="p">(</code><code class="n">cmd</code><code class="p">.</code><code class="k">from</code><code class="p">,</code> <code class="n">cmd</code><code class="p">.</code><code class="n">body</code><code class="p">);</code>
+        <code class="n">_messages</code><code class="p">.</code><code class="n">Append</code><code class="p">(</code><code class="n">message</code><code class="p">);</code>
+    <code class="p">}</code>
+
+    <code class="p">...</code>
+<code class="p">}</code></pre>
+
+<p>How commands are expressed in an aggregate’s code is a matter of preference. I prefer the more explicit way of defining command structures and passing them polymorphically to the relevant <code>Execute</code> method.</p>
+
+<p>An aggregate’s public interface is responsible for validating the input and enforcing all of the relevant business rules and invariants. This strict boundary also ensures that all business logic related to the aggregate is implemented in one place: the aggregate itself.</p>
+
+<p>This makes the application layer<sup><a data-type="noteref" id="ch01fn26-marker" href="ch06.html#ch01fn26">6</a></sup> that orchestrates operations on aggregates rather simple:<sup><a data-type="noteref" id="ch01fn27-marker" href="ch06.html#ch01fn27">7</a></sup> all it has to do is load the aggregate’s current state, execute the required action, persist the modified state, and return the operation’s result to the caller:</p>
+<pre data-code-language="csharp"><code class="m">01</code>  <code class="k">public</code> <code class="n">ExecutionResult</code> <code class="n">Escalate</code><code class="p">(</code><code class="n">TicketId</code> <code class="n">id</code><code class="p">,</code> <code class="n">EscalationReason</code> <code class="n">reason</code><code class="p">)</code>
+<code class="m">02</code>  <code class="p">{</code>
+<code class="m">03</code>      <code class="k">try</code>
+<code class="m">04</code>      <code class="p">{</code>
+<code class="m">05</code>          <code class="kt">var</code> <code class="n">ticket</code> <code class="p">=</code> <code class="n">_ticketRepository</code><code class="p">.</code><code class="n">Load</code><code class="p">(</code><code class="n">id</code><code class="p">);</code>
+<code class="m">06</code>          <code class="kt">var</code> <code class="n">cmd</code> <code class="p">=</code> <code class="k">new</code> <code class="n">Escalate</code><code class="p">(</code><code class="n">reason</code><code class="p">);</code>
+<code class="m">07</code>          <code class="n">ticket</code><code class="p">.</code><code class="n">Execute</code><code class="p">(</code><code class="n">cmd</code><code class="p">);</code>
+<code class="m">08</code>          <code class="n">_ticketRepository</code><code class="p">.</code><code class="n">Save</code><code class="p">(</code><code class="n">ticket</code><code class="p">);</code>
+<code class="m">09</code>          <code class="k">return</code> <code class="n">ExecutionResult</code><code class="p">.</code><code class="n">Success</code><code class="p">();</code>
+<code class="m">10</code>      <code class="p">}</code>
+<code class="m">11</code>      <code class="k">catch</code> <code class="p">(</code><code class="n">ConcurrencyException</code> <code class="n">ex</code><code class="p">)</code>
+<code class="m">12</code>      <code class="p">{</code>
+<code class="m">13</code>          <code class="k">return</code> <code class="n">ExecutionResult</code><code class="p">.</code><code class="n">Error</code><code class="p">(</code><code class="n">ex</code><code class="p">);</code>
+<code class="m">14</code>      <code class="p">}</code>
+<code class="m">15</code>  <code class="p">}</code></pre>
+
+<p>Pay attention to the concurrency check in the preceding code (line 11). It’s vital to protect the consistency of an aggregate’s state.<sup><a data-type="noteref" id="ch01fn28-marker" href="ch06.html#ch01fn28">8</a></sup> If multiple processes are concurrently updating the same aggregate, we have to prevent the latter transaction from blindly overwriting the changes committed by the first one. In such a case, the second process has to be notified that the state on which it had based its decisions is out of date, and it has to retry the operation.</p>
+
+<p>Hence, the database used for storing aggregates has to support concurrency management. In its simplest form, an aggregate should hold a version field that will be incremented after each update:</p>
+<pre data-code-language="csharp"><code class="k">class</code> <code class="nc">Ticket</code>
+<code class="p">{</code>
+    <code class="n">TicketId</code> <code class="n">_id</code><code class="p">;</code>
+    <code class="kt">int</code>      <code class="n">_version</code><code class="p">;</code>
+
+    <code class="p">...</code>
+<code class="p">}</code></pre>
+
+<p>When committing a change to the database, we have to ensure that the version that is being overwritten matches the one that was originally read. For example, in SQL:</p>
+<pre data-code-language="sql"><code class="mi">01</code>  <code class="k">UPDATE</code> <code class="n">tickets</code>
+<code class="mi">02</code>  <code class="k">SET</code> <code class="n">ticket_status</code> <code class="o">=</code> <code class="o">@</code><code class="n">new_status</code><code class="p">,</code>
+<code class="mi">03</code>  <code class="n">agg_version</code> <code class="o">=</code> <code class="n">agg_version</code> <code class="o">+</code> <code class="mi">1</code>
+<code class="mi">04</code>  <code class="k">WHERE</code> <code class="n">ticket_id</code><code class="o">=@</code><code class="n">id</code> <code class="k">and</code> <code class="n">agg_version</code><code class="o">=@</code><code class="n">expected_version</code><code class="p">;</code></pre>
+
+<p>This SQL statement applies changes made to the aggregate instance’s state (line 2), and increases its version counter (line 3) but only if the current version equals the one that was read prior to applying changes to the aggregate’s state (line 4).</p>
+
+<p>Of course, concurrency management can be implemented elsewhere besides a relational database. Furthermore, document databases lend themselves more toward working with aggregates. That said, it’s crucial to ensure that the database used for storing an aggregate’s data supports concurrency management.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch06-ce" id="id971"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch06-ce2" id="id972"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch06-ce3" id="id973"></a></p>
+</div></section>
+
+<section data-type="sect4" data-pdf-bookmark="Transaction boundary"><div class="sect4" id="transaction_boundarydot">
+<h4>Transaction boundary</h4>
+
+<p>Since an aggregate’s state can only be modified by its own business logic,<a contenteditable="false" data-type="indexterm" data-primary="aggregates" data-secondary="transaction boundary" id="id974"></a><a contenteditable="false" data-type="indexterm" data-primary="entities" data-secondary="aggregates" data-tertiary="transaction boundary" id="id975"></a><a contenteditable="false" data-type="indexterm" data-primary="transaction boundary of aggregate" id="id976"></a> the aggregate also acts as a transactional boundary. All changes to the aggregate’s state should be committed transactionally as one atomic operation. If an aggregate’s state is modified, either all the changes are committed or none of them is.</p>
+
+<p>Furthermore, no system operation can assume a multi-aggregate transaction. A change to an aggregate’s state can only be committed individually, one aggregate per database transaction.</p>
+
+<p>The one aggregate instance per transaction forces us to carefully design an aggregate’s boundaries, ensuring that the design addresses the business domain’s invariants and rules. The need to commit changes in multiple aggregates signals a wrong transaction boundary, and hence, wrong aggregate boundaries.</p>
+
+<p>This seems to impose a modeling limitation. What if we need to modify multiple objects in the same transaction? Let’s see how the pattern addresses such situations.</p>
+</div></section>
+
+<section data-type="sect4" data-pdf-bookmark="Hierarchy of entities"><div class="sect4" id="hierarchy_of_entitiesdot">
+<h4>Hierarchy of entities</h4>
+
+<p>As we discussed earlier in the chapter, we don’t use entities as an independent pattern,<a contenteditable="false" data-type="indexterm" data-primary="aggregates" data-secondary="hierarchy of entities" id="ch06-hier"></a><a contenteditable="false" data-type="indexterm" data-primary="entities" data-secondary="aggregates" data-tertiary="hierarchy of entities" id="ch06-hier2"></a> only as part of an aggregate. Let’s see the fundamental difference between entities and aggregates, and why entities are a building block of an aggregate rather than of the overarching domain model.</p>
+
+<p>There are business scenarios in which multiple objects should share a transactional boundary; for example, when both can be modified simultaneously or the business rules of one object depend on the state of another object.</p>
+
+<p>DDD prescribes that a system’s design should be driven by its business domain. Aggregates are no exception. To support changes to multiple objects that have to be applied in one atomic transaction, the aggregate pattern resembles a hierarchy of entities, all sharing transactional consistency, as shown in <a data-type="xref" href="#aggregate_as_a_hierarchy_of_entities">Figure 6-3</a>.</p>
+<figure><div id="aggregate_as_a_hierarchy_of_entities" class="figure">
+<img src="assets/lddd_0603.png" alt="Aggregate as a hierarchy of entities" width="600" height="331"/>
+<h6><span class="label">Figure 6-3. </span>Aggregate as a hierarchy of entities</h6>
+</div></figure>
+
+<p>The hierarchy contains both entities and value objects, <a contenteditable="false" data-type="indexterm" data-primary="value objects" data-secondary="aggregates" id="id977"></a>and all of them belong to the same aggregate if they are bound by the domain’s business logic.</p>
+
+<p>That’s why the pattern is named “aggregate”: <a contenteditable="false" data-type="indexterm" data-primary="aggregates" data-secondary="about" id="id978"></a><a contenteditable="false" data-type="indexterm" data-primary="entities" data-secondary="aggregates" data-tertiary="about" id="id979"></a>it aggregates business entities and value objects that belong to the same transaction boundary.</p>
+
+<p>The following code sample demonstrates a business rule that spans multiple entities belonging to the aggregate’s boundary—“If an agent didn’t open an escalated ticket within 50% of the response time limit, it is automatically reassigned to a different agent”:</p>
+<pre data-code-language="csharp"><code class="m">01</code>  <code class="k">public</code> <code class="k">class</code> <code class="nc">Ticket</code>
+<code class="m">02</code>  <code class="p">{</code>
+<code class="m">03</code>      <code class="p">...</code>
+<code class="m">04</code>      <code class="n">List</code><code class="p">&lt;</code><code class="n">Message</code><code class="p">&gt;</code> <code class="n">_messages</code><code class="p">;</code>
+<code class="m">05</code>      <code class="p">...</code>
+<code class="m">06</code> 
+<code class="m">07</code>      <code class="k">public</code> <code class="k">void</code> <code class="n">Execute</code><code class="p">(</code><code class="n">EvaluateAutomaticActions</code> <code class="n">cmd</code><code class="p">)</code>
+<code class="m">08</code>      <code class="p">{</code>
+<code class="m">09</code>          <code class="k">if</code> <code class="p">(</code><code class="k">this</code><code class="p">.</code><code class="n">IsEscalated</code> <code class="p">&amp;&amp;</code> <code class="k">this</code><code class="p">.</code><code class="n">RemainingTimePercentage</code> <code class="p">&lt;</code> <code class="m">0.5</code> <code class="p">&amp;&amp;</code>
+<code class="m">10</code>              <code class="n">GetUnreadMessagesCount</code><code class="p">(</code><code class="k">for</code><code class="p">:</code> <code class="n">AssignedAgent</code><code class="p">)</code> <code class="p">&gt;</code> <code class="m">0</code><code class="p">)</code>
+<code class="m">11</code>          <code class="p">{</code>
+<code class="m">12</code>              <code class="n">_agent</code> <code class="p">=</code> <code class="n">AssignNewAgent</code><code class="p">();</code>
+<code class="m">13</code>          <code class="p">}</code>
+<code class="m">14</code>      <code class="p">}</code>
+<code class="m">15</code> 
+<code class="m">16</code>      <code class="k">public</code> <code class="kt">int</code> <code class="n">GetUnreadMessagesCount</code><code class="p">(</code><code class="n">UserId</code> <code class="n">id</code><code class="p">)</code>
+<code class="m">17</code>      <code class="p">{</code>
+<code class="m">18</code>          <code class="k">return</code> <code class="n">_messages</code><code class="p">.</code><code class="n">Where</code><code class="p">(</code><code class="n">x</code> <code class="p">=&gt;</code> <code class="n">x</code><code class="p">.</code><code class="n">To</code> <code class="p">==</code> <code class="n">id</code> <code class="p">&amp;&amp;</code> <code class="p">!</code><code class="n">x</code><code class="p">.</code><code class="n">WasRead</code><code class="p">).</code><code class="n">Count</code><code class="p">();</code>
+<code class="m">19</code>      <code class="p">}</code>
+<code class="m">20</code>
+<code class="m">21</code>      <code class="p">...</code>
+<code class="m">22</code>  <code class="p">}</code></pre>
+
+<p>The method checks the ticket’s values to see whether it is escalated and whether the remaining processing time is less than the defined threshold of 50% (line 9). Furthermore, it checks for messages that were not yet read by the current agent (line 10). If all conditions are met, the ticket is requested to be reassigned to a different agent.</p>
+
+<p>The aggregate ensures that all the conditions are checked against strongly consistent data, and it won’t change after the checks are completed by ensuring that all changes to the aggregate’s data are performed as one atomic transaction.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch06-hier" id="id980"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch06-hier2" id="id981"></a></p>
+</div></section>
+
+<section data-type="sect4" data-pdf-bookmark="Referencing other aggregates"><div class="sect4" id="referencing_other_aggregatesdot">
+<h4>Referencing other aggregates</h4>
+
+<p>Since all objects contained by an aggregate share the same<a contenteditable="false" data-type="indexterm" data-primary="aggregates" data-secondary="referencing other aggregates" id="id982"></a><a contenteditable="false" data-type="indexterm" data-primary="entities" data-secondary="aggregates" data-tertiary="referencing other aggregates" id="id983"></a> transactional boundary, performance and scalability issues may arise if an aggregate grows too large.</p>
+
+<p>The consistency of the data can be a convenient guiding principle for designing an aggregate’s boundaries. Only the information that is required by the aggregate’s business logic to be strongly consistent should be a part of the aggregate. All information that can be eventually consistent should reside outside of the aggregate’s boundary; for example, as a part of another aggregate, as shown in <a data-type="xref" href="#aggregate_as_consistency_boundary">Figure 6-4</a>.</p>
+<figure><div id="aggregate_as_consistency_boundary" class="figure">
+<img src="assets/lddd_0604.png" alt="Aggregate as consistency boundary" width="600" height="356"/>
+<h6><span class="label">Figure 6-4. </span>Aggregate as consistency boundary</h6>
+</div></figure>
+
+<p>The rule of thumb is to keep the aggregates as small as possible and include only objects that are required to be in a strongly consistent state by the aggregate’s business logic:</p>
+<pre data-code-language="csharp"><code class="k">public</code> <code class="k">class</code> <code class="nc">Ticket</code>
+<code class="p">{</code>
+    <code class="k">private</code> <code class="n">UserId</code>          <code class="n">_customer</code><code class="p">;</code>
+    <code class="k">private</code> <code class="n">List</code><code class="p">&lt;</code><code class="n">ProductId</code><code class="p">&gt;</code> <code class="n">_products</code><code class="p">;</code>
+    <code class="k">private</code> <code class="n">UserId</code>          <code class="n">_assignedAgent</code><code class="p">;</code>
+    <code class="k">private</code> <code class="n">List</code><code class="p">&lt;</code><code class="n">Message</code><code class="p">&gt;</code>   <code class="n">_messages</code><code class="p">;</code>
+
+    <code class="p">...</code>
+<code class="p">}</code></pre>
+
+<p>In the preceding example, the <code>Ticket</code> aggregate references a collection of messages, which belong to the aggregate’s boundary. On the other hand, the customer, the collection of products that are relevant to the ticket, and the assigned agent do not belong to the aggregate and therefore are referenced by its ID.</p>
+
+<p>The reasoning behind referencing external aggregates by ID is to reify that these objects do not belong to the aggregate’s boundary, and to ensure that each aggregate has its own transactional boundary.</p>
+
+<p>To decide whether an entity belongs to an aggregate or not, examine whether the aggregate contains business logic that can lead to an invalid system state if it will work on eventually consistent data. Let’s go back to the previous example of reassigning the ticket if the current agent didn’t read the new messages within 50% of the response time limit. What if the information about read/unread messages would be eventually consistent? In other words, it would be reasonable to receive reading acknowledgment after a certain delay. In that case, it’s safe to expect a considerable number of tickets to be unnecessarily reassigned. That, of course, would corrupt the system’s state. Therefore, the data in the messages belongs to the aggregate’s <span class="keep-together">boundary</span>.</p>
+</div></section>
+
+<section data-type="sect4" data-pdf-bookmark="The aggregate root"><div class="sect4" id="the_aggregate_rootdot">
+<h4>The aggregate root</h4>
+
+<p>We saw earlier that an aggregate’s state can only be modified<a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="aggregates" data-tertiary="aggregate root" id="id984"></a><a contenteditable="false" data-type="indexterm" data-primary="aggregates" data-secondary="communication" data-tertiary="aggregate root" id="id985"></a><a contenteditable="false" data-type="indexterm" data-primary="entities" data-secondary="aggregates" data-tertiary="aggregate root" id="id986"></a> by executing one of its commands. Since an aggregate represents a hierarchy of entities, only one of them should be designated as the aggregate’s public interface—the aggregate root, as shown in <a data-type="xref" href="#aggregate_root">Figure 6-5</a>.</p>
+<figure><div id="aggregate_root" class="figure">
+<img src="assets/lddd_0605.png" alt="Aggregate root" width="600" height="284"/>
+<h6><span class="label">Figure 6-5. </span>Aggregate root</h6>
+</div></figure>
+
+<p>Consider the following excerpt of the <code>Ticket</code> aggregate:</p>
+<pre data-code-language="csharp"><code class="k">public</code> <code class="k">class</code> <code class="nc">Ticket</code>
+<code class="p">{</code>
+   <code class="p">...</code>
+   <code class="n">List</code><code class="p">&lt;</code><code class="n">Message</code><code class="p">&gt;</code> <code class="n">_messages</code><code class="p">;</code>
+   <code class="p">...</code>
+
+   <code class="k">public</code> <code class="k">void</code> <code class="nf">Execute</code><code class="p">(</code><code class="n">AcknowledgeMessage</code> <code class="n">cmd</code><code class="p">)</code>
+   <code class="p">{</code>
+      <code class="kt">var</code> <code class="n">message</code> <code class="p">=</code> <code class="n">_messages</code><code class="p">.</code><code class="n">Where</code><code class="p">(</code><code class="n">x</code> <code class="p">=&gt;</code> <code class="n">x</code><code class="p">.</code><code class="n">Id</code> <code class="p">==</code> <code class="n">cmd</code><code class="p">.</code><code class="n">id</code><code class="p">).</code><code class="n">First</code><code class="p">();</code>
+      <code class="n">message</code><code class="p">.</code><code class="n">WasRead</code> <code class="p">=</code> <code class="k">true</code><code class="p">;</code>
+   <code class="p">}</code>
+   <code class="p">...</code>
+<code class="p">}</code></pre>
+
+<p>In this example, the aggregate exposes a command that allows marking a specific message as read. Although the operation modifies an instance of the <code>Message</code> entity, it is accessible only through its aggregate root: <code>Ticket</code>.</p>
+
+<p>In addition to the aggregate root’s public interface, there is another mechanism through which the outer world can communicate with aggregates: domain events.<a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="aggregates" data-tertiary="domain events" id="id987"></a><a contenteditable="false" data-type="indexterm" data-primary="aggregates" data-secondary="communication" data-tertiary="domain events" id="id988"></a><a contenteditable="false" data-type="indexterm" data-primary="domain events" data-secondary="aggregate communication" id="id989"></a></p>
+</div></section>
+
+<section data-type="sect4" data-pdf-bookmark="Domain events"><div class="sect4" id="domain_eventsdot">
+<h4>Domain events</h4>
+
+<p>A domain event is a message describing a significant event<a contenteditable="false" data-type="indexterm" data-primary="entities" data-secondary="aggregates" data-tertiary="domain events" id="id990"></a><a contenteditable="false" data-type="indexterm" data-primary="events" data-secondary="domain events" data-tertiary="aggregates" id="id991"></a> that has occurred in the business domain. For example:</p>
+<ul>
+<li>
+  <p>Ticket assigned</p></li>
+<li>
+  <p>Ticket escalated</p></li>
+<li>
+  <p>Message received</p></li>
+</ul>
+
+<p>Since domain events describe something that has already happened, their names should be formulated in the past tense.</p>
+
+<p>The goal of a domain event is to describe what has happened in the business domain and provide all the necessary data related to the event. For example, the following domain event communicates that the specific ticket was escalated, at what time, and for what reason:</p>
+<pre data-code-language="json"><code class="p">{</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"ticket-id"</code><code class="p">:</code><code class="w"> </code><code class="s2">"c9d286ff-3bca-4f57-94d4-4d4e490867d1"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-id"</code><code class="p">:</code><code class="w"> </code><code class="mi">146</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-type"</code><code class="p">:</code><code class="w"> </code><code class="s2">"ticket-escalated"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"escalation-reason"</code><code class="p">:</code><code class="w"> </code><code class="s2">"missed-sla"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"escalation-time"</code><code class="p">:</code><code class="w"> </code><code class="mi">1628970815</code><code class="w"></code>
+<code class="p">}</code><code class="w"></code></pre>
+
+<p>As with almost everything in software engineering, naming is important.<a contenteditable="false" data-type="indexterm" data-primary="names" data-secondary="domain events" id="id992"></a> Make sure the names of the domain events succinctly reflect exactly what has happened in the business domain.</p>
+
+<p>Domain events are part of an aggregate’s public interface. An aggregate publishes its domain events. Other processes, aggregates, or even external systems can subscribe to and execute their own logic in response to the domain events, as shown in <a data-type="xref" href="#domain_events_publishing_flow">Figure 6-6</a>.</p>
+<figure><div id="domain_events_publishing_flow" class="figure">
+<img src="assets/lddd_0606.png" alt="Domain events publishing flow" width="600" height="219"/>
+<h6><span class="label">Figure 6-6. </span>Domain events publishing flow</h6>
+</div></figure>
+
+<p>In the following excerpt from the <code>Ticket</code> aggregate, a new domain event is instantiated (line 12) and appended to the collection of the ticket’s domain events (line 13):</p>
+<pre data-code-language="csharp"><code class="m">01</code>  <code class="k">public</code> <code class="k">class</code> <code class="nc">Ticket</code>
+<code class="m">02</code>  <code class="p">{</code>
+<code class="m">03</code>      <code class="p">...</code>
+<code class="m">04</code>      <code class="k">private</code> <code class="n">List</code><code class="p">&lt;</code><code class="n">DomainEvent</code><code class="p">&gt;</code> <code class="n">_domainEvents</code><code class="p">;</code>
+<code class="m">05</code>      <code class="p">...</code>
+<code class="m">06</code> 
+<code class="m">07</code>      <code class="k">public</code> <code class="k">void</code> <code class="n">Execute</code><code class="p">(</code><code class="n">RequestEscalation</code> <code class="n">cmd</code><code class="p">)</code>
+<code class="m">08</code>      <code class="p">{</code>
+<code class="m">09</code>          <code class="k">if</code> <code class="p">(!</code><code class="k">this</code><code class="p">.</code><code class="n">IsEscalated</code> <code class="p">&amp;&amp;</code> <code class="k">this</code><code class="p">.</code><code class="n">RemainingTimePercentage</code> <code class="p">&lt;=</code> <code class="m">0</code><code class="p">)</code>
+<code class="m">10</code>          <code class="p">{</code>
+<code class="m">11</code>              <code class="k">this</code><code class="p">.</code><code class="n">IsEscalated</code> <code class="p">=</code> <code class="k">true</code><code class="p">;</code>
+<code class="m">12</code>              <code class="kt">var</code> <code class="n">escalatedEvent</code> <code class="p">=</code> <code class="k">new</code> <code class="n">TicketEscalated</code><code class="p">(</code><code class="n">_id</code><code class="p">,</code> <code class="n">cmd</code><code class="p">.</code><code class="n">Reason</code><code class="p">);</code>
+<code class="m">13</code>              <code class="n">_domainEvents</code><code class="p">.</code><code class="n">Append</code><code class="p">(</code><code class="n">escalatedEvent</code><code class="p">);</code>
+<code class="m">14</code>          <code class="p">}</code>
+<code class="m">15</code>      <code class="p">}</code>
+<code class="m">16</code>
+<code class="m">17</code>      <code class="p">...</code>
+<code class="m">18</code>  <code class="p">}</code></pre>
+
+<p>In <a data-type="xref" href="ch09.html#communication_patterns">Chapter 9</a>, we will discuss how domain events can be reliably published to interested subscribers.</p>
+</div></section>
+
+<section data-type="sect4" data-pdf-bookmark="Ubiquitous language"><div class="sect4" id="ubiquitous_languagedot">
+<h4>Ubiquitous language</h4>
+
+<p>Last but not least, aggregates should reflect the ubiquitous language.<a contenteditable="false" data-type="indexterm" data-primary="aggregates" data-secondary="ubiquitous language" id="id993"></a><a contenteditable="false" data-type="indexterm" data-primary="ubiquitous language" data-secondary="aggregates" id="id994"></a><a contenteditable="false" data-type="indexterm" data-primary="names" data-secondary="aggregates and data members" id="id995"></a> The terminology that is used for the aggregate’s name, its data members, its actions, and its domain events all should be formulated in the bounded context’s ubiquitous language. <a contenteditable="false" data-type="indexterm" data-primary="Evans, Eric" id="id996"></a>As Eric Evans put it, the code must be based on the same language the developers use when they speak with one another and with domain experts. This is especially important for implementing complex business logic.</p>
+
+<p>Now let’s take a look at the third and final building block of a domain model.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch06-agg" id="id997"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch06-agg2" id="id998"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch06-agg3" id="id999"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch06-agg4" id="id1000"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch06-agg5" id="id1001"></a></p>
+</div></section>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Domain services"><div class="sect3" id="domain_services">
+<h3>Domain services</h3>
+
+<p>Sooner or later, you may encounter business logic that either<a contenteditable="false" data-type="indexterm" data-primary="domain model for business logic" data-secondary="building blocks" data-tertiary="domain services" id="id1002"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="domain model pattern" data-tertiary="domain services" id="id1003"></a><a contenteditable="false" data-type="indexterm" data-primary="domain services as business logic building block" id="id1004"></a><a contenteditable="false" data-type="indexterm" data-primary="aggregates" data-secondary="domain services coordinating" id="id1005"></a> doesn’t belong to any aggregate or value object, or that seems to be relevant to multiple aggregates. In such cases, domain-driven design proposes to implement the logic as a <em>domain service</em>.</p>
+
+<p>A <em>domain service</em> is a stateless object that implements the business logic. In the vast majority of cases, such logic orchestrates calls to various components of the system to perform some calculation or analysis.</p>
+
+<p>Let’s go back to the example of the ticket aggregate. Recall that the assigned agent has a limited time frame in which to propose a solution to the customer. The time frame depends not only on the ticket’s data (its priority and escalation status), but also on the agent’s department policy regarding the SLAs for each priority and the agent’s work schedule (shifts)—we can’t expect the agent to respond during off-hours.</p>
+
+<p>The response time frame calculation logic requires information from multiple sources: the ticket, the assigned agent’s department, and the work schedule. That makes it an ideal candidate to be implemented as a domain service:</p>
+<pre data-code-language="csharp"><code class="k">public</code> <code class="k">class</code> <code class="nc">ResponseTimeFrameCalculationService</code>
+<code class="p">{</code>
+    <code class="p">...</code>
+
+    <code class="k">public</code> <code class="n">ResponseTimeframe</code> <code class="nf">CalculateAgentResponseDeadline</code><code class="p">(</code><code class="n">UserId</code> <code class="n">agentId</code><code class="p">,</code>
+        <code class="n">Priority</code> <code class="n">priority</code><code class="p">,</code> <code class="kt">bool</code> <code class="n">escalated</code><code class="p">,</code> <code class="n">DateTime</code> <code class="n">startTime</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="kt">var</code> <code class="n">policy</code> <code class="p">=</code> <code class="n">_departmentRepository</code><code class="p">.</code><code class="n">GetDepartmentPolicy</code><code class="p">(</code><code class="n">agentId</code><code class="p">);</code>
+        <code class="kt">var</code> <code class="n">maxProcTime</code> <code class="p">=</code> <code class="n">policy</code><code class="p">.</code><code class="n">GetMaxResponseTimeFor</code><code class="p">(</code><code class="n">priority</code><code class="p">);</code>
+
+        <code class="k">if</code> <code class="p">(</code><code class="n">escalated</code><code class="p">)</code> <code class="p">{</code>
+            <code class="n">maxProcTime</code> <code class="p">=</code> <code class="n">maxProcTime</code> <code class="p">*</code> <code class="n">policy</code><code class="p">.</code><code class="n">EscalationFactor</code><code class="p">;</code>
+        <code class="p">}</code>
+
+        <code class="kt">var</code> <code class="n">shifts</code> <code class="p">=</code> <code class="n">_departmentRepository</code><code class="p">.</code><code class="n">GetUpcomingShifts</code><code class="p">(</code><code class="n">agentId</code><code class="p">,</code>
+            <code class="n">startTime</code><code class="p">,</code> <code class="n">startTime</code><code class="p">.</code><code class="n">Add</code><code class="p">(</code><code class="n">policy</code><code class="p">.</code><code class="n">MaxAgentResponseTime</code><code class="p">));</code>
+        
+        <code class="k">return</code> <code class="nf">CalculateTargetTime</code><code class="p">(</code><code class="n">maxProcTime</code><code class="p">,</code> <code class="n">shifts</code><code class="p">);</code>
+    <code class="p">}</code>
+
+    <code class="p">...</code>
+<code class="p">}</code></pre>
+
+<p>Domain services make it easy to coordinate the work of multiple aggregates. <a contenteditable="false" data-type="indexterm" data-primary="aggregates" data-secondary="transaction boundary" data-tertiary="domain services and" id="id1006"></a><a contenteditable="false" data-type="indexterm" data-primary="transaction boundary of aggregate" data-secondary="domain services and" id="id1007"></a>However, it is important to always keep in mind the aggregate pattern’s limitation of modifying only one instance of an aggregate in one database transaction. Domain services are not a loophole around this limitation. The rule of one instance per transaction still holds true. Instead, domain services lend themselves to implementing calculation logic that requires <em>reading</em> the data of multiple aggregates.</p>
+
+<p>It is also important to point out that domain services have nothing to do with microservices, service-oriented architecture, or almost any other use of the word <em>service</em> in software engineering. It is just a stateless object used to host business logic.</p>
+</div></section>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Managing Complexity "><div class="sect2" id="managing_complexity">
+<h2>Managing Complexity </h2>
+
+<p>As noted in this chapter’s introduction, the aggregate and value object patterns were introduced as a means for tackling<a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="domain model pattern" data-tertiary="complexity management" id="id1008"></a><a contenteditable="false" data-type="indexterm" data-primary="complexity" data-secondary="business logic domain model" id="id1009"></a> complexity in the implementation of business logic. Let’s see the reasoning behind this.</p>
+
+<p>In his book <em>The Choice</em>, business management guru Eliyahu M. Goldratt <a contenteditable="false" data-type="indexterm" data-primary="Goldratt, Eliyahu M." id="id1010"></a><a contenteditable="false" data-type="indexterm" data-primary="The Choice (Goldratt)" data-primary-sortas="Choice (Goldratt)" id="id1011"></a><a contenteditable="false" data-type="indexterm" data-primary="complexity" data-secondary="system complexity" data-tertiary="definition" id="id1012"></a><a contenteditable="false" data-type="indexterm" data-primary="degrees of freedom and complexity" id="id1013"></a>outlines a succinct yet powerful definition of system complexity. According to Goldratt, when discussing the complexity of a system we are interested in evaluating the difficulty of controlling and predicting the system’s behavior. These two aspects are reflected by the system’s degrees of freedom.</p>
+
+<p>A system’s degrees of freedom are the data points needed to describe its state. Consider the following two classes:</p>
+<pre data-code-language="csharp"><code class="k">public</code> <code class="k">class</code> <code class="nc">ClassA</code>
+<code class="p">{</code>
+    <code class="k">public</code> <code class="kt">int</code> <code class="n">A</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+    <code class="k">public</code> <code class="kt">int</code> <code class="n">B</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+    <code class="k">public</code> <code class="kt">int</code> <code class="n">C</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+    <code class="k">public</code> <code class="kt">int</code> <code class="n">D</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+    <code class="k">public</code> <code class="kt">int</code> <code class="n">E</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+<code class="p">}</code>
+
+<code class="k">public</code> <code class="k">class</code> <code class="nc">ClassB</code>
+<code class="p">{</code>
+    <code class="k">private</code> <code class="kt">int</code> <code class="n">_a</code><code class="p">,</code> <code class="n">_d</code><code class="p">;</code>
+
+    <code class="k">public</code> <code class="kt">int</code> <code class="n">A</code>
+    <code class="p">{</code>
+        <code class="k">get</code> <code class="p">=&gt;</code> <code class="n">_a</code><code class="p">;</code>
+        <code class="k">set</code> <code class="p">{</code>
+            <code class="n">_a</code> <code class="p">=</code> <code class="k">value</code><code class="p">;</code>
+            <code class="n">B</code> <code class="p">=</code> <code class="k">value</code> <code class="p">/</code> <code class="m">2</code><code class="p">;</code>
+            <code class="n">C</code> <code class="p">=</code> <code class="k">value</code> <code class="p">/</code> <code class="m">3</code><code class="p">;</code>
+        <code class="p">}</code>
+    <code class="p">}</code>
+
+    <code class="k">public</code> <code class="kt">int</code> <code class="n">B</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+    
+    <code class="k">public</code> <code class="kt">int</code> <code class="n">C</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+    
+    <code class="k">public</code> <code class="kt">int</code> <code class="n">D</code>
+    <code class="p">{</code>
+        <code class="k">get</code> <code class="p">=&gt;</code> <code class="n">_d</code><code class="p">;</code>
+        <code class="k">set</code> <code class="p">{</code>
+            <code class="n">_d</code> <code class="p">=</code> <code class="k">value</code><code class="p">;</code>
+            <code class="n">E</code> <code class="p">=</code> <code class="k">value</code> <code class="p">*</code> <code class="m">2</code>
+        <code class="p">}</code>
+    <code class="p">}</code>
+
+    <code class="k">public</code> <code class="kt">int</code> <code class="n">E</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+<code class="p">}</code></pre>
+
+<p>At first glance, it seems that <code>ClassB</code> is much more complex than <code>ClassA</code>. It has the same number of variables, but on top of that, it implements additional calculations. Is it more complex than <code>ClassA</code>?</p>
+
+<p>Let’s analyze both classes from the degrees-of-freedom perspective. How many data elements do you need to describe the state of <code>ClassA</code>? The answer is five: its five variables. Hence, <code>ClassA</code> has five degrees of freedom.</p>
+
+<p>How many data elements do you need to describe the state of <code>ClassB</code>? If you look at the assignment logic for properties <code>A</code> and <code>D</code>, you will notice that the values of <code>B</code>, <code>C</code>, and <code>E</code> are functions of the values of <code>A</code> and <code>D</code>. If you know what <code>A</code> and <code>D</code> are, then you can deduce the values of the rest of the variables. Therefore, <code>ClassB</code> has only two degrees of freedom. You need only two values to describe its state.</p>
+
+<p>Going back to the original question, which class is more difficult in terms of controlling and predicting its behavior? The answer is the one with more degrees of freedom, or <code>ClassA</code>. The invariants introduced in <code>ClassB</code> reduce its complexity.<a contenteditable="false" data-type="indexterm" data-primary="aggregates" data-secondary="complexity reduction" id="id1014"></a><a contenteditable="false" data-type="indexterm" data-primary="value objects" data-secondary="complexity reduction" id="id1015"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="domain model pattern" data-tertiary="aggregates" id="id1016"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="domain model pattern" data-tertiary="value objects" id="id1017"></a><a contenteditable="false" data-type="indexterm" data-primary="domain model for business logic" data-secondary="building blocks" data-tertiary="aggregates" id="id1018"></a><a contenteditable="false" data-type="indexterm" data-primary="domain model for business logic" data-secondary="building blocks" data-tertiary="value objects" id="id1019"></a> That’s what both aggregate and value object patterns do: encapsulate invariants and thus reduce complexity.</p>
+
+<p>All the business logic related to the state of a value object is located in its boundaries. The same is true for aggregates. An aggregate can only be modified by its own methods. Its business logic encapsulates and protects business invariants, thus reducing the degrees of freedom.</p>
+
+<p>Since the domain model pattern is applied only for subdomains with complex business logic, it’s safe to assume that these are core subdomains—the heart of the <span class="keep-together">software</span>.</p>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Conclusion"><div class="sect1" id="conclusion-id000331">
+<h1>Conclusion</h1>
+
+<p>The domain model pattern is aimed at cases of complex business logic. It consists of three main building blocks:</p>
+<dl>
+<dt>Value objects</dt>
+<dd>
+  <p>Concepts of the business domain that can be identified exclusively by their values and thus do not require an explicit ID field. Since a change in one of the fields semantically creates a new value, value objects are immutable.</p>
+
+<p>Value objects model not only data, but behavior as well: methods manipulating the values and thus initializing new value objects.</p></dd>
+<dt>Aggregates</dt>
+<dd>
+  <p>A hierarchy of entities sharing a transactional boundary. All of the data included in an aggregate’s boundary has to be strongly consistent to implement its business logic.</p>
+
+<p>The state of the aggregate, and its internal objects, can only be modified through its public interface, by executing the aggregate’s commands. The data fields are read-only for external components for the sake of ensuring that all the business logic related to the aggregate resides in its boundaries.</p>
+
+<p>The aggregate acts as a transactional boundary. All of its data, including all of its internal objects, has to be committed to the database as one atomic transaction.</p>
+
+<p>An aggregate can communicate with external entities by publishing domain events—messages describing important business events in the aggregate’s lifecycle. Other components can subscribe to the events and use them to trigger the execution of business logic.</p></dd>
+<dt>Domain services</dt>
+<dd>A stateless object that hosts business logic that naturally doesn’t belong to any of the domain model’s aggregates or value objects.</dd>
+</dl>
+
+<p>The domain model’s building blocks tackle the complexity of the business logic by encapsulating it in the boundaries of value objects and aggregates. The inability to modify the objects’ state externally ensures that all the relevant business logic is implemented in the boundaries of aggregates and value objects and won’t be duplicated in the application layer.</p>
+
+<p>In the next chapter, you will learn the advanced way to implement the domain model pattern, this time making the dimension of time an inherent part of the model.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Exercises"><div class="sect1" id="exercises-id000075">
+<h1>Exercises</h1>
+
+ <ol>
+          <li>
+            <p>Which of the following statements is true?</p>
+            <ol type="a">
+              <li>
+                <p>Value objects can only contain data.</p>
+              </li>
+              <li>
+                <p>Value objects can only contain behavior.</p>
+              </li>
+              <li>
+                <p>Value objects are immutable.</p>
+              </li>
+              <li>
+                <p>Value objects’ state can change.</p>
+              </li>
+            </ol>
+          </li>
+          <li class="pagebreak-before">
+            <p>What is the general guiding principle for designing the boundary of an <span class="keep-together">aggregate</span>?</p>
+            <ol type="a">
+              <li>
+                <p>An aggregate can contain only one entity as only one instance of an aggregate can be included in a single database transaction.</p>
+              </li>
+              <li>
+                <p>Aggregates should be designed to be as small as possible, as long as the business domain’s data consistency requirements are intact.</p>
+              </li>
+              <li>
+                <p>An aggregate represents a hierarchy of entities. Therefore, to maximize the consistency of the system’s data, aggregates should be designed to be as wide as possible.</p>
+              </li>
+              <li>
+                <p>It depends: for some business domains, small aggregates are best, while in others it’s more efficient to work with aggregates that are as large as possible.</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Why can only one instance of an aggregate be committed per transaction?</p>
+            <ol type="a">
+              <li>
+                <p>To ensure that the model can perform under high load.</p>
+              </li>
+              <li>
+                <p>To ensure correct transactional boundaries.</p>
+              </li>
+              <li>
+                <p>There is no such requirement; it depends on the business domain.</p>
+              </li>
+              <li>
+                <p>To make it possible to work with databases that do not support multirecord transactions, such as key–value and document stores.</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Which of the following statements best describes the relationships between the building blocks of a domain model? Select all that apply.</p>
+            <ol type="a">
+              <li>
+                <p>Value objects describe entities’ properties.</p>
+              </li>
+              <li>
+                <p>Value objects can emit domain events.</p>
+              </li>
+              <li>
+                <p>An aggregate contains one or more entities.</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Which of the following statements is correct about differences between active records and aggregates?</p>
+            <ol type="a">
+              <li>
+                <p>Active records contain only data, whereas aggregates also contain behavior.</p>
+              </li>
+              <li>
+                <p>An aggregate encapsulates all of its business logic, but business logic manipulating an active record can be located outside of its boundary.</p>
+              </li>
+              <li>
+                <p>Aggregates contain only data, whereas active records contain both data and behavior.</p>
+              </li>
+              <li>
+                <p>An aggregate contains a set of active records.</p>
+              </li>
+            </ol>
+          </li>
+        </ol>
+
+</div></section>
+<div data-type="footnotes"><p data-type="footnote" id="ch01fn20"><sup><a href="ch06.html#ch01fn20-marker">1</a></sup> Fowler, M. (2002). <em>Patterns of Enterprise Application Architecture</em>. Boston: Addison-Wesley.</p><p data-type="footnote" id="ch01fn21"><sup><a href="ch06.html#ch01fn21-marker">2</a></sup> All the code samples in this chapter will use an object-oriented programming language. However, the discussed concepts are not limited to OOP and are as relevant for the functional programming paradigm.</p><p data-type="footnote" id="ch01fn22"><sup><a href="ch06.html#ch01fn22-marker">3</a></sup> POCOs in .NET, POJOs in Java, POPOs in Python, etc.</p><p data-type="footnote" id="ch01fn23"><sup><a href="ch06.html#ch01fn23-marker">4</a></sup> “Primitive Obsession.” (n.d.) Retrieved June 13, 2021, from <em class="hyperlink">https://wiki.c2.com/?PrimitiveObsession</em>.</p><p data-type="footnote" id="ch01fn24"><sup><a href="ch06.html#ch01fn24-marker">5</a></sup> In C# 9.0, the new type <code>record</code> implements value-based equality and thus doesn’t require overriding the equality operators.</p><p data-type="footnote" id="ch01fn26"><sup><a href="ch06.html#ch01fn26-marker">6</a></sup> Also<a contenteditable="false" data-type="indexterm" data-primary="application layer" data-seealso="service layer" id="id1020"></a><a contenteditable="false" data-type="indexterm" data-primary="APIs in application layer" id="id1021"></a><a contenteditable="false" data-type="indexterm" data-primary="service layer" data-secondary="public API actions to domain model" id="id1022"></a> known as a service layer, the part of the system that forwards public API actions to the domain model.</p><p data-type="footnote" id="ch01fn27"><sup><a href="ch06.html#ch01fn27-marker">7</a></sup> In essence, the application layer’s operations implement the transaction script pattern. It has to orchestrate the operation as an atomic transaction. The changes to the whole aggregate either succeed or fail, but never commit a partially updated state.</p><p data-type="footnote" id="ch01fn28"><sup><a href="ch06.html#ch01fn28-marker">8</a></sup> Recall that the application layer is a collection of transaction scripts, and as we discussed in <a data-type="xref" href="ch05.html#implementing_simple_business_logic">Chapter 5</a>, concurrency management is essential to prevent competing updates from corrupting the system’s data.</p></div></div></section></div>
+</div>
+</body>
+</html>

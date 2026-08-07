@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xml:lang="en"
+lang="en"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title>Learning Domain-Driven Design</title>
+<link rel="stylesheet" type="text/css" href="override_v1.css"/>
+<link rel="stylesheet" type="text/css" href="epub.css"/>
+</head>
+<body>
+<div id="book-content">
+<div id="sbo-rt-content"><section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 1. Analyzing Business Domains"><div class="chapter" id="analyzing_business_domains">
+<h1><span class="label">Chapter 1. </span>Analyzing Business Domains</h1>
+
+<p>If you are anything like me, you love writing code: solving complex problems, coming up with elegant solutions, and constructing whole new worlds by carefully crafting their rules, structures, and behavior. I believe that’s what interested you in domain-driven design (DDD): you want to be better at your craft. This chapter, however, has nothing to do with writing code. In this chapter, you will learn <a contenteditable="false" data-type="indexterm" data-primary="domain analysis" data-secondary="about business domains" data-tertiary="need to know" id="id590"></a><a contenteditable="false" data-type="indexterm" data-primary="business domains" data-secondary="about" data-tertiary="need to know" id="id591"></a><a contenteditable="false" data-type="indexterm" data-primary="business domains" data-secondary="analyzing" data-see="domain analysis" id="id592"></a>how companies work: why they exist, what goals they are pursuing, and their strategies for achieving their goals.</p>
+
+<p>When I teach this material in my domain-driven design classes, many students actually ask, “Do we need to know this material? We are writing software, not running businesses.” The answer to their question is a resounding “yes.” To design and build an effective solution, you have to understand the problem. The problem, in our context, is the software system we have to build. To understand the problem, you have to understand the context within which it exists—the organization’s business strategy, and what value it seeks to gain by building the software.</p>
+
+<p>In this chapter, you will learn domain-driven design tools for analyzing a company’s business domain and its structure: its core, supporting, and generic subdomains. This material is the groundwork for designing software. In the remaining chapters, you will learn the different ways these concepts affect software design.</p>
+
+<section data-type="sect1" data-pdf-bookmark="What Is a Business Domain?"><div class="sect1" id="what_is_a_business_domainquestion_mark">
+<h1>What Is a Business Domain?</h1>
+
+<p>A business domain defines a company’s main area of activity.<a contenteditable="false" data-type="indexterm" data-primary="business domains" data-secondary="about" id="id593"></a><a contenteditable="false" data-type="indexterm" data-primary="domain analysis" data-secondary="about business domains" id="id594"></a> Generally speaking, it’s the service the company provides to its clients. For example:</p>
+<ul>
+<li>
+	<p>FedEx provides courier delivery.</p></li>
+<li>
+	<p>Starbucks is best known for its coffee.</p></li>
+<li>
+	<p>Walmart is one of the most widely recognized retail establishments.</p></li>
+</ul>
+
+<p>A company can operate in multiple business domains. For example, Amazon provides both retail and cloud computing services. Uber is a rideshare company that also provides food delivery and bicycle-sharing services.</p>
+
+<p>It’s important to note that companies may change their business domains often. A canonical example of this is Nokia, which over the years has operated in fields as diverse as wood processing, rubber manufacturing, telecommunications, and mobile communications.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="What Is a Subdomain?"><div class="sect1" id="what_is_a_subdomainquestion_mark">
+<h1>What Is a Subdomain?</h1>
+
+<p>To achieve its business domain’s goals and targets, a company<a contenteditable="false" data-type="indexterm" data-primary="domain analysis" data-secondary="subdomain types" data-tertiary="about" id="id595"></a><a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="about" id="id596"></a> has to operate in multiple <em>subdomains</em>. A subdomain is a fine-grained area of business activity. All of a company’s subdomains form its business domain: the service it provides to its customers. Implementing a single subdomain is not enough for a company to succeed; it’s just one building block in the overarching system. The subdomains have to interact with each other to achieve the company’s goals in its business domain. For example, Starbucks may be most recognized for its coffee, but building a successful coffeehouse chain requires more than just knowing how to make great coffee. You also have to buy or rent real estate at effective locations, hire personnel, and manage finances, among other activities. None of these subdomains on its own will make a profitable company. All of them together are necessary for a company to be able to compete in its business domain(s).</p>
+
+<section data-type="sect2" data-pdf-bookmark="Types of Subdomains"><div class="sect2" id="types_of_subdomains">
+<h2>Types of Subdomains</h2>
+
+<p>Just as a software system comprises various architectural components—databases, frontend applications, backend services, and others—subdomains bear different strategic/business values. Domain-driven design distinguishes between three types of subdomains: core, generic, and supporting. Let’s see how they differ from a company strategy point of view.</p>
+
+<section data-type="sect3" data-pdf-bookmark="Core subdomains"><div class="sect3" id="core_subdomains-id000049">
+<h3>Core subdomains</h3>
+
+<p>A <em>core subdomain</em> is what a company does<a contenteditable="false" data-type="indexterm" data-primary="domain analysis" data-secondary="subdomain types" data-tertiary="core subdomains" id="id597"></a><a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="core subdomains" data-seealso="core subdomains" id="id598"></a><a contenteditable="false" data-type="indexterm" data-primary="core subdomains" id="id599"></a> differently from its competitors. This may involve inventing new products or services or reducing costs by optimizing existing processes.</p>
+
+<p>Let’s take Uber as an example. Initially, the company<a contenteditable="false" data-type="indexterm" data-primary="Uber subdomains" id="id600"></a> provided a novel form of transportation: ridesharing. As its competitors caught up, Uber found ways to optimize and evolve its core business: for example, reducing costs by matching riders heading in the same direction.</p>
+
+<p>Uber’s core subdomains affect its bottom line. This is how the company differentiates itself from its competitors. This is the company’s strategy for providing better service to its customers and/or maximizing its profitability. To maintain a competitive advantage, core subdomains involve inventions, smart optimizations, business know-how, or other intellectual property.</p>
+
+<p>Consider another example: Google Search’s ranking algorithm.<a contenteditable="false" data-type="indexterm" data-primary="Google Search domains" id="id601"></a> At the time of this writing, Google’s advertising platform accounts for the majority of its profits. That said, Google Ads is not a subdomain, but rather a separate business domain with subdomains comprising it, among its cloud computing service (Google Cloud Platform), productivity and collaboration tools (Google Workspaces), and other fields in which Alphabet, Google’s parent company, operates. But what about Google Search and its ranking algorithm? Although the search engine is not a paid service, it serves as the largest display platform for Google Ads. Its ability to provide excellent search results is what drives traffic, and subsequently, it is an important component of the Ads platform. Serving suboptimal search results due to a bug in the algorithm or a competitor coming up with an even better search service will hurt the ad business’s revenue. So, for Google, the ranking algorithm is a core subdomain.</p>
+
+<section data-type="sect4" data-pdf-bookmark="Complexity"><div class="sect4" id="complexitydot">
+<h4>Complexity</h4>
+
+<p>A core subdomain that is simple to implement can only provide<a contenteditable="false" data-type="indexterm" data-primary="strategic design" data-secondary="complexity" data-tertiary="core subdomains" id="id602"></a><a contenteditable="false" data-type="indexterm" data-primary="entry barriers of core subdomains" id="id603"></a><a contenteditable="false" data-type="indexterm" data-primary="complexity" data-secondary="core subdomains" id="id604"></a><a contenteditable="false" data-type="indexterm" data-primary="core subdomains" data-secondary="complexity" id="id605"></a> a short-lived competitive advantage. Therefore, core subdomains are naturally complex. <a contenteditable="false" data-type="indexterm" data-primary="Uber subdomains" data-secondary="complexity" id="id606"></a>Continuing with the Uber example, the company not only created a new marketspace with ridesharing, it disrupted a decades-old monolithic architecture, the taxi industry, through targeted use of technology. By understanding its business domain, Uber was able to design a more reliable and transparent method of transportation. There should be high entry barriers for a company’s core business; it should be hard for competitors to copy or imitate the company’s solution.</p>
+</div></section>
+
+<section data-type="sect4" data-pdf-bookmark="Sources of competitive advantage"><div class="sect4" id="sources_of_competitive_advantagedot">
+<h4>Sources of competitive advantage</h4>
+
+<p>It’s important to note that core subdomains are not necessarily technical.<a contenteditable="false" data-type="indexterm" data-primary="core subdomains" data-secondary="competitive advantage from" id="id607"></a><a contenteditable="false" data-type="indexterm" data-primary="competitive advantage" data-secondary="core subdomains providing" id="id608"></a><a contenteditable="false" data-type="indexterm" data-primary="strategic design" data-secondary="competitive advantage" data-tertiary="core subdomains providing" id="id609"></a> Not all business problems are solved through algorithms or other technical solutions. A company’s competitive advantage can come from various sources.</p>
+
+<p>Consider, for example, a jewelry maker selling its products online. The online shop is important, but it’s not a core subdomain. The jewelry design is. The company can use an existing off-the-shelf online shop engine, but it cannot outsource the design of its jewelry. The design is the reason customers buy the jewelry maker’s products and remember the brand.</p>
+
+<p>As a more intricate example, imagine a company that specializes in <em>manual</em> fraud detection. The company trains its analysts to go over questionable documents and flag potential fraud cases. You are building the software system the analysts are working with. Is it a core subdomain? No. The core subdomain is the work the analysts are doing. <a contenteditable="false" data-type="indexterm" data-primary="domain analysis" data-secondary="subdomain types" data-tertiary="supporting subdomains example" id="id610"></a><a contenteditable="false" data-type="indexterm" data-primary="supporting subdomains" data-secondary="example of" id="id611"></a>The system you are building has nothing to do with fraud analysis, it just displays the documents and tracks the analysts’ comments.</p>
+
+<aside data-type="sidebar" epub:type="sidebar"><div class="sidebar" id="core_subdomain_versus_core_domain">
+<h5>Core Subdomain Versus Core Domain</h5>
+
+<p>Core subdomains are also called core domains. <a contenteditable="false" data-type="indexterm" data-primary="core subdomains" data-secondary="core domains versus" id="id612"></a><a contenteditable="false" data-type="indexterm" data-primary="core domains versus core subdomains" id="id613"></a><a contenteditable="false" data-type="indexterm" data-primary="Evans, Eric" id="id614"></a><a contenteditable="false" data-type="indexterm" data-primary="Domain-Driven Design (Evans)" id="id615"></a><a contenteditable="false" data-type="indexterm" data-primary="resources" data-secondary="Domain-Driven Design (Evans)" id="id616"></a>For example, in the original domain-driven design book, Eric Evans uses “core subdomain” and “core domain” interchangeably. Although the term “core domain” is used often, I prefer to use “core subdomain” for a number of reasons. First, it is a <em>subdomain,</em> and I prefer to avoid confusion with <em>business domains</em>. Second, as you will learn in <a data-type="xref" href="ch11.html#evolving_design_decisions">Chapter 11</a>, it’s not uncommon for subdomains to evolve over time and change their types. For example, a core subdomain can turn into a generic subdomain. Hence, saying that “a <em>generic</em> subdomain has evolved into a <em>core</em> subdomain” is more straightforward than saying “a generic <em>subdomain</em> has evolved into a core <em>domain</em>.”</p>
+</div></aside>
+</div></section>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Generic subdomains"><div class="sect3" id="generic_subdomains-id000090">
+<h3>Generic subdomains</h3>
+
+<p><em>Generic subdomains</em> are business activities that<a contenteditable="false" data-type="indexterm" data-primary="domain analysis" data-secondary="subdomain types" data-tertiary="generic subdomains" id="id617"></a><a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="generic subdomains" data-seealso="generic subdomains" id="id618"></a><a contenteditable="false" data-type="indexterm" data-primary="generic subdomains" id="id619"></a><a contenteditable="false" data-type="indexterm" data-primary="competitive advantage" data-secondary="generic subdomains not providing" id="id620"></a><a contenteditable="false" data-type="indexterm" data-primary="complexity" data-secondary="generic subdomains" id="id621"></a><a contenteditable="false" data-type="indexterm" data-primary="generic subdomains" data-secondary="complexity" id="id622"></a><a contenteditable="false" data-type="indexterm" data-primary="strategic design" data-secondary="complexity" data-tertiary="generic subdomains" id="id623"></a><a contenteditable="false" data-type="indexterm" data-primary="generic subdomains" data-secondary="competitive advantage not provided" id="id624"></a> all companies are performing in the same way. Like core subdomains, generic subdomains are generally complex and hard to implement. However, generic subdomains do not provide any competitive edge for the company. There is no need for innovation or optimization here: battle-tested implementations are widely available, and all companies use them.</p>
+
+<p>For example, most systems need to authenticate and authorize their users. Instead of inventing a proprietary authentication mechanism, it makes more sense to use an existing solution. Such a solution is likely to be more reliable and secure since it has already been tested by many other companies that have the same needs.</p>
+
+<p>Going back to the example of a jewelry maker selling its products online, jewelry design is a core subdomain, but the online shop is a generic subdomain. Using the same online retail platform—the same generic solution—as its competitors would not impact the jewelry maker’s competitive advantage.</p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Supporting subdomains"><div class="sect3" id="supporting_subdomain">
+<h3>Supporting subdomains</h3>
+
+<p>As the name suggests, <em>supporting subdomains</em> support the company’s business.<a contenteditable="false" data-type="indexterm" data-primary="domain analysis" data-secondary="subdomain types" data-tertiary="supporting subdomains" id="id625"></a><a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="supporting subdomains" data-seealso="supporting subdomains" id="id626"></a><a contenteditable="false" data-type="indexterm" data-primary="supporting subdomains" id="id627"></a><a contenteditable="false" data-type="indexterm" data-primary="competitive advantage" data-secondary="supporting subdomains not providing" id="id628"></a><a contenteditable="false" data-type="indexterm" data-primary="supporting subdomains" data-secondary="competitive advantage not provided" id="id629"></a> However, contrary to core subdomains, supporting subdomains do not provide any competitive advantage.</p>
+
+<p>For example, consider an online advertising company whose core subdomains include matching ads to visitors, optimizing the ads’ effectiveness, and minimizing the cost of ad space. However, to achieve success in these areas, the company needs to catalog its creative materials. The way the company stores and indexes its physical creative materials, such as banners and landing pages, does not impact its profits. There is nothing to invent or optimize in that area. On the other hand, the creative catalog is essential for implementing the company’s advertising management and serving systems. That makes the content cataloging solution one of the company’s supporting subdomains.</p>
+
+<p>The distinctive characteristic of supporting subdomains is the complexity of the solution’s business logic. <a contenteditable="false" data-type="indexterm" data-primary="supporting subdomains" data-secondary="complexity absent" id="id630"></a>Supporting subdomains are simple. <a contenteditable="false" data-type="indexterm" data-primary="CRUD (create, read, update, and delete)" id="id631"></a>Their business logic resembles mostly data entry screens and ETL (extract, transform, load) operations; that is, the so-called CRUD (create, read, update, and delete) interfaces. These activity areas do not provide any competitive advantage for the company, and therefore do not require high entry barriers.</p>
+</div></section>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Comparing Subdomains"><div class="sect2" id="comparing_subdomains">
+<h2>Comparing Subdomains</h2>
+
+<p>Now that we have a greater understanding of the three types of business subdomains,<a contenteditable="false" data-type="indexterm" data-primary="domain analysis" data-secondary="subdomains compared" data-tertiary="about" id="id632"></a><a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="comparing" data-tertiary="about" id="id633"></a> let’s explore their differences from additional angles and see how they affect strategic software design decisions.</p>
+
+<section data-type="sect3" data-pdf-bookmark="Competitive advantage"><div class="sect3" id="competitive_advantage">
+<h3>Competitive advantage</h3>
+
+<p>Only core subdomains provide a competitive advantage to a company.<a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="comparing" data-tertiary="competitive advantage" id="id634"></a><a contenteditable="false" data-type="indexterm" data-primary="strategic design" data-secondary="competitive advantage" data-tertiary="subdomain comparisons" id="id635"></a><a contenteditable="false" data-type="indexterm" data-primary="competitive advantage" data-secondary="subdomain comparisons" id="id636"></a><a contenteditable="false" data-type="indexterm" data-primary="competitive advantage" data-secondary="core subdomains providing" id="id637"></a><a contenteditable="false" data-type="indexterm" data-primary="core subdomains" data-secondary="competitive advantage from" id="id638"></a><a contenteditable="false" data-type="indexterm" data-primary="strategic design" data-secondary="competitive advantage" data-tertiary="core subdomains providing" id="id639"></a><a contenteditable="false" data-type="indexterm" data-primary="domain analysis" data-secondary="subdomains compared" data-tertiary="competitive advantage" id="id640"></a> Core subdomains are the company’s strategy for differentiating itself from its competitors.</p>
+
+<p>Generic subdomains, by definition, cannot be a source for<a contenteditable="false" data-type="indexterm" data-primary="competitive advantage" data-secondary="generic subdomains not providing" id="id641"></a><a contenteditable="false" data-type="indexterm" data-primary="generic subdomains" data-secondary="competitive advantage not provided" id="id642"></a> any competitive advantage. These are generic solutions—the same solutions used by the company and its competitors.</p>
+
+<p>Supporting subdomains have low entry barriers and cannot<a contenteditable="false" data-type="indexterm" data-primary="competitive advantage" data-secondary="supporting subdomains not providing" id="id643"></a><a contenteditable="false" data-type="indexterm" data-primary="supporting subdomains" data-secondary="competitive advantage not provided" id="id644"></a> provide a competitive advantage either. Usually, a company wouldn’t mind its competitors copying its supporting subdomains—this won’t affect its competitiveness in the industry. On the contrary, strategically the company would prefer its supporting subdomains to be generic, ready-made solutions, thus eliminating the need to design and build their implementation. You will learn in detail about such cases of supporting subdomains turning into generic subdomains, as well as other possible permutations, in <a data-type="xref" href="ch11.html#evolving_design_decisions">Chapter 11</a>. A real-life case study of such a scenario will be outlined in <a data-type="xref" href="app01.html#a_applying_ddd_a_case_study">Appendix A</a>.</p>
+
+<p>The more complex the problems a company is able to tackle,<a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="comparing" data-tertiary="complexity" id="id645"></a><a contenteditable="false" data-type="indexterm" data-primary="complexity" data-secondary="about" id="id646"></a><a contenteditable="false" data-type="indexterm" data-primary="strategic design" data-secondary="complexity" data-tertiary="about" id="id647"></a><a contenteditable="false" data-type="indexterm" data-primary="domain analysis" data-secondary="subdomains compared" data-tertiary="complexity" id="id648"></a> the more business value it can provide. The complex problems are not limited to delivering services to consumers. A complex problem can be, for example, making the business more optimized and efficient. For example, providing the same level of service as competitors do, but at lower operational costs, is a competitive advantage as well.</p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Complexity"><div class="sect3" id="complexity-id000023">
+<h3>Complexity</h3>
+
+<p>From a more technical perspective, it’s important to identify<a contenteditable="false" data-type="indexterm" data-primary="strategic design" data-secondary="complexity" data-tertiary="subdomain comparisons" id="id649"></a><a contenteditable="false" data-type="indexterm" data-primary="complexity" data-secondary="subdomain comparisons" id="id650"></a> the organization’s subdomains, because the different types of subdomains have different levels of complexity. When designing software, we have to choose tools and techniques that accommodate the complexity of the business requirements. Therefore, identifying subdomains is essential for designing a sound software solution.</p>
+
+<p>Supporting subdomains’ business logic is simple. <a contenteditable="false" data-type="indexterm" data-primary="supporting subdomains" data-secondary="complexity absent" id="id651"></a>These are basic ETL operations and CRUD interfaces, and the business logic is obvious. Often, it doesn’t go beyond validating inputs or converting data from one structure to another.</p>
+
+<p>Generic subdomains are much more complicated. <a contenteditable="false" data-type="indexterm" data-primary="generic subdomains" data-secondary="complexity" id="id652"></a><a contenteditable="false" data-type="indexterm" data-primary="complexity" data-secondary="generic subdomains" id="id653"></a><a contenteditable="false" data-type="indexterm" data-primary="strategic design" data-secondary="complexity" data-tertiary="generic subdomains" id="id654"></a>There should be a good reason why others have already invested time and effort in solving these problems. These solutions are neither simple nor trivial. Consider, for example, encryption algorithms or authentication mechanisms.</p>
+
+<p>From a knowledge availability perspective, generic subdomains are “known unknowns.” These are the things that you know you don’t know. Furthermore, this knowledge is readily available. You can either use industry-accepted best practices or, if needed, hire a consultant specializing in the area to help design a custom solution.</p>
+
+<p>Core subdomains are complex. They should be as hard for<a contenteditable="false" data-type="indexterm" data-primary="strategic design" data-secondary="complexity" data-tertiary="core subdomains" id="id655"></a><a contenteditable="false" data-type="indexterm" data-primary="core subdomains" data-secondary="complexity" id="id656"></a><a contenteditable="false" data-type="indexterm" data-primary="complexity" data-secondary="core subdomains" id="id657"></a><a contenteditable="false" data-type="indexterm" data-primary="strategic design" data-secondary="complexity" data-tertiary="about" id="id658"></a><a contenteditable="false" data-type="indexterm" data-primary="complexity" data-secondary="about" id="id659"></a> competitors to copy as possible—the company’s profitability depends on it. That’s why strategically, companies are looking to solve complex problems as their core subdomains.</p>
+
+<p>At times it may be challenging to differentiate between core and supporting subdomains. Complexity is a useful guiding principle. Ask whether the subdomain in question can be turned into a side business. Would someone pay for it on its own? If so, this is a core subdomain. Similar reasoning applies for differentiating supporting and generic subdomains: would it be simpler and cheaper to hack your own implementation, rather than integrating an external one? If so, this is a supporting subdomain.</p>
+
+<p>From a more technical perspective, it’s important to identify the core subdomains<a contenteditable="false" data-type="indexterm" data-primary="complexity" data-secondary="core subdomains" data-tertiary="software design affected" id="id660"></a><a contenteditable="false" data-type="indexterm" data-primary="strategic design" data-secondary="complexity" data-tertiary="software design affected" id="id661"></a><a contenteditable="false" data-type="indexterm" data-primary="core subdomains" data-secondary="complexity" data-tertiary="software design affected" id="id662"></a> whose complexity will affect software design. As we discussed earlier, a core subdomain is not necessarily related to software. Another useful guiding principle for identifying software-related core subdomains is to evaluate the complexity of the business logic that you will have to model and implement in code. Does the business logic resemble CRUD interfaces for data entry, or do you have to implement complex algorithms or business processes orchestrated by complex business rules and invariants? In the former case, it’s a sign of a supporting subdomain, while the latter is a typical core subdomain.</p>
+
+<p>The chart in <a data-type="xref" href="#the_business_differentiation_and_busine">Figure 1-1</a> represents the interplay between the three types of subdomains in terms of business differentiation and business logic complexity. The intersection between the supporting and generic subdomains is a gray area: it can go either way. If a generic solution exists for a supporting subdomain’s functionality, the resultant subdomain type depends on whether it’s simpler and/or cheaper to integrate the generic solution than it is to implement the functionality from scratch.</p>
+<figure><div id="the_business_differentiation_and_busine" class="figure">
+<img src="assets/lddd_0101.png" alt="The business differentiation and business logic complexity of the three types of subdomains" width="600" height="426"/>
+<h6><span class="label">Figure 1-1. </span>The business differentiation and business logic complexity of the three types of subdomains</h6>
+</div></figure>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Volatility"><div class="sect3" id="volatility">
+<h3>Volatility</h3>
+
+<p>As mentioned previously, core subdomains can change often. If a <a contenteditable="false" data-type="indexterm" data-primary="domain analysis" data-secondary="subdomains compared" data-tertiary="volatility" id="id663"></a><a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="comparing" data-tertiary="volatility" id="id664"></a><a contenteditable="false" data-type="indexterm" data-primary="volatility of subdomains" id="id665"></a><a contenteditable="false" data-type="indexterm" data-primary="strategic design" data-secondary="volatility of subdomains" id="id666"></a><a contenteditable="false" data-type="indexterm" data-primary="core subdomains" data-secondary="evolving continuously" id="id667"></a>problem can be solved on the first attempt, it’s probably not a good competitive advantage—competitors will catch up fast. Consequently, solutions for core subdomains are emergent. Different implementations have to be tried out, refined, and optimized. Moreover, the work on core subdomains is never done. Companies continuously innovate and evolve core subdomains. The changes come in the form of adding new features or optimizing existing functionality. Either way, the constant evolution of its core subdomains is essential for a company to stay ahead of its competitors.</p>
+
+<p>Contrary to the core subdomains, supporting subdomains do not change often.<a contenteditable="false" data-type="indexterm" data-primary="supporting subdomains" data-secondary="change minimal" id="id668"></a> They do not provide any competitive advantage for the company, and therefore the evolution of a supporting subdomain provides a minuscule business value compared to the same effort invested in a core subdomain.</p>
+
+<p>Despite having existing solutions, generic subdomains can change over time. The changes can come in the form of security patches, bug fixes, or entirely new solutions to the generic problems.</p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Solution strategy"><div class="sect3" id="solution_strategy">
+<h3>Solution strategy</h3>
+
+<p>Core subdomains provide the company its ability to compete<a contenteditable="false" data-type="indexterm" data-primary="domain analysis" data-secondary="subdomains compared" data-tertiary="in-house versus outsource" id="id669"></a><a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="comparing" data-tertiary="in-house versus outsource" id="id670"></a><a contenteditable="false" data-type="indexterm" data-primary="core subdomains" data-secondary="in-house implementation" id="id671"></a><a contenteditable="false" data-type="indexterm" data-primary="implementation of subdomains" id="id672"></a><a contenteditable="false" data-type="indexterm" data-primary="strategic design" data-secondary="in-house versus outsource" id="id673"></a> with other players in the industry. That’s a business-critical responsibility, but does it mean that supporting and generic subdomains are not important? Of course not. All subdomains are required for the company to work in its business domain. The subdomains are like foundational building blocks: take one away and the whole structure may fall down. That said, we can leverage the inherent properties of the different types of subdomains to choose implementation strategies to implement each type of subdomain in the most efficient manner.</p>
+
+<p>Core subdomains have to be implemented in-house. <a contenteditable="false" data-type="indexterm" data-primary="core subdomains" data-secondary="competitive advantage from" data-tertiary="in-house implementation" id="id674"></a><a contenteditable="false" data-type="indexterm" data-primary="competitive advantage" data-secondary="core subdomains providing" data-tertiary="in-house implementation" id="id675"></a>They cannot be bought or adopted; that would undermine the notion of competitive advantage, as the company’s competitors would be able to do the same.</p>
+
+<p>It would also be unwise to outsource the implementation of a core subdomain. It is a strategic investment. Cutting corners on a core subdomain is not only risky in the short term but can have fatal consequences in the long run: for example, unmaintainable codebases that cannot support the company’s goals and objectives. The organization’s most skilled talent should be assigned to work on its core subdomains. Furthermore, implementing core subdomains in-house allows the company to make changes and evolve the solution more quickly, and therefore build the competitive advantage in less time.</p>
+
+<p>Since core subdomains’ requirements are<a contenteditable="false" data-type="indexterm" data-primary="core subdomains" data-secondary="evolving continuously" id="id676"></a><a contenteditable="false" data-type="indexterm" data-primary="volatility of subdomains" data-secondary="maintainability" id="id677"></a> expected to change often and continuously, the solution must be maintainable and easy to evolve. Thus, core subdomains require implementation of the most advanced engineering techniques.</p>
+
+<p>Since generic subdomains are hard but already solved<a contenteditable="false" data-type="indexterm" data-primary="generic subdomains" data-secondary="off-the-shelf or open source" id="id678"></a> problems, it’s more cost-effective to buy an off-the-shelf product or adopt an open source solution than invest time and effort into implementing a generic subdomain in-house.</p>
+
+<p>Lack of competitive advantage makes it reasonable to avoid implementing<a contenteditable="false" data-type="indexterm" data-primary="supporting subdomains" data-secondary="in-house implementation" id="id679"></a> supporting subdomains in-house. However, unlike generic subdomains, no ready-made solutions are available. So, a company has no choice but to implement supporting subdomains itself. That said, the simplicity of the business logic and infrequency of changes make it easy to cut corners.</p>
+
+<p>Supporting subdomains do not require elaborate design patterns or other advanced engineering techniques. A rapid application development framework will suffice to implement the business logic without introducing accidental complexities.</p>
+
+<p>From a staffing perspective, supporting subdomains do not require highly skilled technical aptitude and provide a great opportunity to train up-and-coming talent. Save the engineers on your team who are experienced in tackling complex challenges for the core subdomains. Finally, the simplicity of the business logic makes supporting subdomains a good candidate for outsourcing.</p>
+
+<p><a data-type="xref" href="#the_differences_between_the_three_types">Table 1-1</a> summarizes the aspects in which the three types of subdomains differ.<a contenteditable="false" data-type="indexterm" data-primary="domain analysis" data-secondary="subdomains compared" data-tertiary="about" id="id680"></a><a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="comparing" data-tertiary="about" id="id681"></a></p>
+<table class="border" id="the_differences_between_the_three_types">
+<caption><span class="label">Table 1-1. </span>The differences between the three types of subdomains</caption>
+<tbody>
+<tr>
+<td>Subdomain type</td>
+<td>Competitive advantage</td>
+<td>Complexity</td>
+<td>Volatility</td>
+<td>Implementation</td>
+<td>Problem</td>
+</tr>
+<tr>
+<td>Core</td>
+<td>Yes</td>
+<td>High</td>
+<td>High</td>
+<td>In-house</td>
+<td>Interesting</td>
+</tr>
+<tr>
+<td>Generic</td>
+<td>No</td>
+<td>High</td>
+<td>Low</td>
+<td>Buy/adopt</td>
+<td>Solved</td>
+</tr>
+<tr>
+<td>Supporting</td>
+<td>No</td>
+<td>Low</td>
+<td>Low</td>
+<td>In-house/outsource</td>
+<td>Obvious</td>
+</tr>
+</tbody>
+</table>
+</div></section>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Identifying Subdomain Boundaries"><div class="sect2" id="identifying_subdomain_boundaries">
+<h2>Identifying Subdomain Boundaries</h2>
+
+<p>As you can already see, identifying subdomains and their <a contenteditable="false" data-type="indexterm" data-primary="domain analysis" data-secondary="subdomain boundaries" data-tertiary="about" id="id682"></a><a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="boundaries identified" data-tertiary="about" id="id683"></a>types can help considerably in making different design decisions when building software solutions. In later <span class="keep-together">chapters</span>, you will learn even more ways to leverage subdomains to streamline the software design process. But how do we actually identify the subdomains and their <span class="keep-together">boundaries</span>?</p>
+
+<p>The subdomains and their types are defined by the company’s <a contenteditable="false" data-type="indexterm" data-primary="domain analysis" data-secondary="subdomain types" data-tertiary="about" id="id684"></a><a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="about" id="id685"></a>business strategy: its business domains and how it differentiates itself to compete with other companies in the same field. In the vast majority of software projects, in one way or another the subdomains are “already there.” That doesn’t mean, however, that it is always easy and straightforward to identify their boundaries. If you ask a CEO for a list of their company’s subdomains, you will probably receive a blank stare. They are not aware of this concept. Therefore, you’ll have to do the domain analysis yourself to identify and categorize the subdomains at play.</p>
+
+<p>A good starting point is the company’s departments and other organizational units. For example, an online retail shop might include warehouse, customer service, picking, shipping, quality control, and channel management departments, among others. These, however, are relatively coarse-grained areas of activity. Take, for example, the customer service department. It’s reasonable to assume that it would be a supporting, or even a generic subdomain, as this function is often outsourced to third-party vendors. But is this information enough for us to make sound software design decisions?</p>
+
+<section data-type="sect3" data-pdf-bookmark="Distilling subdomains"><div class="sect3" id="distilling_subdomains">
+<h3>Distilling subdomains</h3>
+
+<p>Coarse-grained subdomains are a good starting point, but the devil is in the details.<a contenteditable="false" data-type="indexterm" data-primary="domain analysis" data-secondary="subdomain boundaries" data-tertiary="details of business functions" id="id686"></a><a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="boundaries identified" data-tertiary="details of business functions" id="id687"></a> We have to make sure we are not missing important information hidden in the intricacies of the business function.</p>
+
+<p>Let’s go back to the example of the customer service department. If we investigate its inner workings, we will see that a typical customer service department is composed of finer-grained components, such as a help desk system, shift management and scheduling, telephone system, and so on. When viewed as individual subdomains, these activities can be of different types: while help desk and telephone systems are generic subdomains, shift management is a supporting one, while a company may develop its ingenious algorithm for routing incidents to agents having success with similar cases in the past. The routing algorithm requires analyzing incoming cases and identifying similarities in past experience—both of which are nontrivial tasks. Since the routing algorithm allows the company to provide a better customer experience than its competitors, the routing algorithm is a core subdomain. This example is demonstrated in <a data-type="xref" href="#analyzing_the_inner_workings_of_a_suspe">Figure 1-2</a>.</p>
+<figure><div id="analyzing_the_inner_workings_of_a_suspe" class="figure">
+<img src="assets/lddd_0102.png" alt="Analyzing the inner workings of a suspectedly generic subdomain to find the finer-grained core subdomain, supporting subdomain, and two generic subdomains" width="600" height="251"/>
+<h6><span class="label">Figure 1-2. </span>Analyzing the inner workings of a suspectedly generic subdomain to find the finer-grained core subdomain, supporting subdomain, and two generic subdomains</h6>
+</div></figure>
+
+<p>On the other hand, we cannot drill down indefinitely, looking for insights at lower and lower levels of granularity. When should you stop?</p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Subdomains as coherent use cases"><div class="sect3" id="subdomains_as_coherent_use_cases">
+<h3>Subdomains as coherent use cases</h3>
+
+<p>From a technical perspective, subdomains resemble sets of<a contenteditable="false" data-type="indexterm" data-primary="domain analysis" data-secondary="subdomain boundaries" data-tertiary="subdomains as use cases" id="id688"></a><a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="boundaries identified" data-tertiary="subdomains as use cases" id="id689"></a><a contenteditable="false" data-type="indexterm" data-primary="use cases for subdomain identification" id="id690"></a> interrelated, coherent use cases. Such sets of use cases usually involve the same actor, the business entities, and they all manipulate a closely related set of data.</p>
+
+<p>Consider the use case diagram for a credit card payment gateway shown in <a data-type="xref" href="#use_case_diagram_of_a_credit_card_payme">Figure 1-3</a>. The use cases are tightly bound by the data they are working with and the involved actors. Hence, all of the use cases form the credit card payment subdomain.</p>
+
+<p>We can use the definition of “subdomains as a set of coherent use cases” as a guiding principle for when to stop looking for finer-grained subdomains. <a contenteditable="false" data-type="indexterm" data-primary="core subdomains" data-secondary="boundaries" id="id691"></a><a contenteditable="false" data-type="indexterm" data-primary="supporting subdomains" data-secondary="boundaries" id="id692"></a><a contenteditable="false" data-type="indexterm" data-primary="generic subdomains" data-secondary="boundaries" id="id693"></a>These are the most precise boundaries of the subdomains.</p>
+
+<figure><div id="use_case_diagram_of_a_credit_card_payme" class="figure">
+<img src="assets/lddd_0103.png" alt="Use case diagram of a credit card payment subdomain" width="600" height="375"/>
+<h6><span class="label">Figure 1-3. </span>Use case diagram of a credit card payment subdomain</h6>
+</div></figure>
+
+<p>Should you always strive to identify such laser-focused subdomain boundaries? It is definitely necessary for core subdomains. Core subdomains are the most important, volatile, and complex. It’s essential that we distill them as much as possible since that will allow us to extract all generic and supporting functionalities and invest the effort on a much more focused functionality.</p>
+
+<p>The distillation can be somewhat relaxed for supporting and generic subdomains. If drilling down further doesn’t unveil any new insights that can help you make software design decisions, it can be a good place to stop. This can happen, for example, when all of the finer-grained subdomains are of the same type as the original subdomain.</p>
+
+<p>Consider the example in <a data-type="xref" href="#distilling_the_help_desk_system_subdoma">Figure 1-4</a>. Further distillation of the help desk system subdomain is less useful, as it doesn’t reveal any strategic information, and a coarse-grained, off-the-shelf tool will be used as the solution.</p>
+<figure><div id="distilling_the_help_desk_system_subdoma" class="figure">
+<img src="assets/lddd_0104.png" alt="Distilling the help desk system subdomain, revealing generic inner components " width="600" height="155"/>
+<h6><span class="label">Figure 1-4. </span>Distilling the help desk system subdomain, revealing generic inner <span class="keep-together">components</span></h6>
+</div></figure>
+
+<p>Another important question to consider when identifying the subdomains is whether we need all of them.</p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Focus on the essentials"><div class="sect3" id="focus_on_the_essentials">
+<h3>Focus on the essentials</h3>
+
+<p>Subdomains are a tool that alleviates the process of making<a contenteditable="false" data-type="indexterm" data-primary="domain analysis" data-secondary="subdomain boundaries" data-tertiary="essentials only" id="id694"></a><a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="boundaries identified" data-tertiary="essentials only" id="id695"></a> software design decisions. All organizations likely have quite a few business functionalities that drive their competitive advantage but have nothing to do with software. The jewelry maker we discussed earlier in this chapter is but one example.</p>
+
+<p>When looking for subdomains, it’s important to identify business functions that are not related to software, acknowledge them as such, and focus on aspects of the business that are relevant to the software system you are working on.</p>
+</div></section>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Domain Analysis Examples"><div class="sect1" id="domain_analysis_examples">
+<h1>Domain Analysis Examples</h1>
+
+<p>Let’s see how we can apply the notion of subdomains in practice<a contenteditable="false" data-type="indexterm" data-primary="analyzing business domains" data-see="domain analysis" id="id696"></a><a contenteditable="false" data-type="indexterm" data-primary="domain analysis" data-secondary="examples" data-tertiary="about" id="id697"></a><a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="domain analysis examples" data-tertiary="about" id="id698"></a><a contenteditable="false" data-type="indexterm" data-primary="strategic design" data-secondary="domain analysis" data-see="domain analysis" id="id699"></a> and use it for making a number of strategic design decisions. I’m going to describe two fictitious companies: Gigmaster and BusVNext. As an exercise, while you are reading, analyze the companies’ business domains. Try to identify the three types of subdomains for each company. Remember that, as in real life, some of the business requirements are implicit.</p>
+
+<p>Disclaimer: of course, we cannot identify all the subdomains involved in each business domain by reading such a short description. That said, it is enough to train you to identify and categorize the available subdomains.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Gigmaster"><div class="sect2" id="gigmaster">
+<h2>Gigmaster</h2>
+
+<p>Gigmaster is a ticket sales and distribution company. Its<a contenteditable="false" data-type="indexterm" data-primary="domain analysis" data-secondary="examples" data-tertiary="Gigmaster" id="ch01-gig"></a><a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="domain analysis examples" data-tertiary="Gigmaster" id="ch01-gig2"></a> mobile app analyzes users’ music libraries, streaming service accounts, and social media profiles to identify nearby shows that its users would be interested in attending.</p>
+
+<p>Gigmaster’s users are conscious of their privacy. Hence, all users’ personal information is encrypted. Moreover, to ensure that users’ guilty pleasures won’t leak out under any circumstances, the company’s recommendation algorithm works exclusively on anonymized data.</p>
+
+<p>To improve the app’s recommendations, a new module was implemented. It allows users to log gigs they attended in the past, even if the tickets weren’t purchased through Gigmaster.</p>
+
+<section data-type="sect3" data-pdf-bookmark="Business domain and subdomains"><div class="sect3" id="business_domain-id000014">
+<h3>Business domain and subdomains</h3>
+
+<p>Gigmaster’s business domain is ticket sales. That’s the service it provides to its <span class="keep-together">customers</span>.</p>
+
+<section class="pagebreak-before" data-type="sect4" data-pdf-bookmark="Core subdomains"><div class="sect4" id="core_subdomainsdot-id000051">
+<h4 class="less_space">Core subdomains</h4>
+
+<p>Gigmaster’s main competitive advantage is its recommendation engine. The company also takes its users’ privacy seriously and works only on anonymized data. Finally, although not mentioned explicitly, we can infer that the mobile app’s user experience is crucial as well. As such, Gigmaster’s core subdomains are:</p>
+<ul>
+<li>
+	<p>Recommendation engine</p></li>
+<li>
+	<p>Data anonymization</p></li>
+<li>
+	<p>Mobile app</p></li>
+</ul>
+</div></section>
+
+<section data-type="sect4" data-pdf-bookmark="Generic subdomains"><div class="sect4" id="generic_subdomainsdot">
+<h4>Generic subdomains</h4>
+
+<p>We can identify and infer the following generic subdomains:</p>
+<ul>
+<li>
+	<p>Encryption, for encrypting all data</p></li>
+<li>
+	<p>Accounting, since the company is in the sales business</p></li>
+<li>
+	<p>Clearing, for charging its customers</p></li>
+<li>
+	<p>Authentication and authorization, for identifying its users</p></li>
+</ul>
+</div></section>
+
+<section data-type="sect4" data-pdf-bookmark="Supporting subdomains"><div class="sect4" id="supporting_subdomainsdot">
+<h4>Supporting subdomains</h4>
+
+<p>Finally, the following are the supporting subdomains. Here the business logic is simple and resembles ETL processes or CRUD interfaces:</p>
+<ul>
+<li>
+	<p>Integration with music streaming services</p></li>
+<li>
+	<p>Integration with social networks</p></li>
+<li>
+	<p>Attended-gigs module</p></li>
+</ul>
+</div></section>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Design decisions"><div class="sect3" id="design_decisions-id000061">
+<h3>Design decisions</h3>
+
+<p>Knowing the subdomains at play and the differences between their types, we can already make several strategic design decisions:</p>
+<ul>
+<li>
+	<p>The recommendation engine, data anonymization, and mobile app have to be implemented in-house using the most advanced engineering tools and techniques. These modules are going to change the most often.</p></li>
+<li>
+	<p>Off-the-shelf or open source solutions should be used for data encryption, accounting, clearing, and authentication.</p></li>
+<li>
+	<p>Integration with streaming services and social networks, as well as the module for attended gigs, can be outsourced.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch01-gig" id="id700"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch01-gig2" id="id701"></a></p></li>
+</ul>
+</div></section>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="BusVNext"><div class="sect2" id="busvnext">
+<h2>BusVNext</h2>
+
+<p>BusVNext is a public transportation company. It aims to<a contenteditable="false" data-type="indexterm" data-primary="domain analysis" data-secondary="examples" data-tertiary="BusVNext" id="id702"></a><a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="domain analysis examples" data-tertiary="BusVNext" id="id703"></a> provide its customers with bus rides that are comfortable, like catching a cab. The company manages fleets of buses in major cities.</p>
+
+<p>A BusVNext customer can order a ride through the mobile app. At the scheduled departure time, a nearby bus’s route will be adjusted on the fly to pick up the customer at the specified departure time.</p>
+
+<p>The company’s major challenge was implementing the routing algorithm. Its requirements are a variant <a contenteditable="false" data-type="indexterm" data-primary="travelling salesman problem" id="id704"></a>of the <a href="https://oreil.ly/LLHij">“travelling salesman problem”</a>. The routing logic is continuously adjusted and optimized. For example, statistics show the primary reason for canceled rides is the long wait time for a bus to arrive. So, the company adjusted the routing algorithm to prioritize fast pickups, even if that means delayed drop-offs. To optimize the routing even more, BusVNext integrates with third-party providers for traffic conditions and real-time alerts.</p>
+
+<p>From time to time, BusVNext issues special discounts, both to attract new customers and to level the demand for rides over peak and off-peak hours.</p>
+
+<section data-type="sect3" data-pdf-bookmark="Business domain and subdomains"><div class="sect3" id="business_domain-id000015">
+<h3>Business domain and subdomains</h3>
+
+<p>BusVNext provides optimized bus rides to its customers. The business domain is public transportation.</p>
+
+<section data-type="sect4" data-pdf-bookmark="Core subdomains"><div class="sect4" id="core_subdomainsdot-id000052">
+<h4>Core subdomains</h4>
+
+<p>BusVNext’s primary competitive advantage is its routing algorithm that takes a stab at solving a complex problem (“travelling salesman”) while prioritizing different business goals: for example, decreasing pickup times, even if it will increase overall ride lengths.</p>
+
+<p>We also saw that the rides data is continuously analyzed for new insights into customers’ behaviors. These insights allow the company to increase its profits by optimizing the routing algorithm. Finally, BusVNext’s applications for its customers and its drivers have to be easy to use and provide a convenient user interface.</p>
+
+<p>Managing a fleet is not trivial. Buses may experience technical issues or require maintenance. Ignoring these may result in financial losses and a reduced level of service.</p>
+
+<p>Hence, BusVNext’s core subdomains are:</p>
+<ul>
+<li>
+	<p>Routing</p></li>
+<li>
+	<p>Analysis</p></li>
+<li>
+	<p>Mobile app user experience</p></li>
+<li>
+	<p>Fleet management</p></li>
+</ul>
+</div></section>
+
+<section data-type="sect4" data-pdf-bookmark="Generic subdomains"><div class="sect4" id="generic_subdomainsdo">
+<h4>Generic subdomains</h4>
+
+<p>The routing algorithm also uses traffic data and alerts provided by third-party companies—a generic subdomain. Moreover, BusVNext accepts payments from its customers, so it has to implement accounting and clearing functionalities. BusVNext’s generic subdomains are:</p>
+<ul>
+<li>
+	<p class="pagebreak-before less_space">Traffic conditions</p></li>
+<li>
+	<p>Accounting</p></li>
+<li>
+	<p>Billing</p></li>
+<li>
+	<p>Authorization</p></li>
+</ul>
+</div></section>
+
+<section data-type="sect4" data-pdf-bookmark="Supporting subdomains"><div class="sect4" id="supporting_subdomai">
+<h4>Supporting subdomains</h4>
+
+<p>The module for managing promos and discounts supports the company’s core business. That said, it’s not a core subdomain by itself. Its management interface resembles a simple CRUD interface for managing active coupon codes. Therefore, this is a typical supporting subdomain.</p>
+</div></section>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Design decisions"><div class="sect3" id="design_decisions-id000062">
+<h3>Design decisions</h3>
+
+<p>Knowing the subdomains at play and the differences between their types, we can already make a number of strategic design decisions:</p>
+<ul>
+<li>
+	<p>The routing algorithm, data analysis, fleet management, and app usability have to be implemented in-house using the most elaborate technical tools and patterns.</p></li>
+<li>
+	<p>Implementation of the promotions management module can be outsourced.</p></li>
+<li>
+	<p>Identifying traffic conditions, authorizing users, and managing financial records and transactions can be offloaded to external service providers.</p></li>
+</ul>
+</div></section>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Who Are the Domain Experts?"><div class="sect1" id="who_are_the_domain_expertsquestion_mark">
+<h1>Who Are the Domain Experts?</h1>
+
+<p>Now that we have a clear understanding of business domains and subdomains,<a contenteditable="false" data-type="indexterm" data-primary="business knowledge" data-secondary="domain experts" data-seealso="domain experts" id="id705"></a><a contenteditable="false" data-type="indexterm" data-primary="domain-driven design (DDD)" data-secondary="domain experts" data-seealso="domain experts" id="id706"></a><a contenteditable="false" data-type="indexterm" data-primary="domain experts" id="id707"></a><a contenteditable="false" data-type="indexterm" data-primary="domain analysis" data-secondary="domain experts" data-seealso="domain experts" id="id708"></a><a contenteditable="false" data-type="indexterm" data-primary="domain experts" data-secondary="business knowledge" data-tertiary="knowledge contribution" id="id709"></a> let’s take a look at another DDD term that we will use often in the following chapters: <em>domain experts</em>. Domain experts are subject matter experts who know all the intricacies of the business that we are going to model and implement in code. In other words, domain experts are knowledge authorities in the software’s business domain.</p>
+
+<p>The domain experts are neither the analysts gathering the requirements nor the engineers designing the system. Domain experts represent the business. They are the people who identified the business problem in the first place and from whom all business knowledge originates. Systems analysts and engineers are transforming their mental models of the business domain into software requirements and source code.</p>
+
+<p>As a rule of thumb, domain experts are either the people coming up with requirements or the software’s end users. The software is supposed to solve their problems.</p>
+
+<p>The domain experts’ expertise can have different scopes. Some subject matter experts will have a detailed understanding of how the entire business domain operates, while others will specialize in particular subdomains. For example, in an online advertising agency, the domain experts would be campaign managers, media buyers, analysts, and other business stakeholders.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Conclusion"><div class="sect1" id="conclusion-id000026">
+<h1>Conclusion</h1>
+
+<p>In this chapter, we covered domain-driven design tools for making sense of a company’s business activity. As you’ve seen, it all starts with the business domain: the area the business operates in and the service it provides to its clients.</p>
+
+<p>You also learned about the different building blocks required to achieve success in a business domain and differentiate the company from its competitors:</p>
+<dl>
+<dt>Core subdomains</dt>
+<dd>The interesting problems. These are the activities the company is performing differently from its competitors and from which it gains its competitive advantage.</dd>
+<dt>Generic subdomains</dt>
+<dd>The solved problems. These are the things all companies are doing in the same way. There is no room or need for innovation here; rather than creating in-house implementations, it’s more cost-effective to use existing solutions.</dd>
+<dt>Supporting subdomains</dt>
+<dd>The problems with obvious solutions. These are the activities the company likely has to implement in-house, but that do not provide any competitive advantage.</dd>
+</dl>
+
+<p>Finally, you learned that domain experts are the business’s subject matter experts. They have in-depth knowledge of the company’s business domain or one or more of its subdomains and are critical to a project’s success.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Exercises"><div class="sect1" id="exercises-id000070">
+<h1>Exercises</h1>
+
+ <ol>
+          <li>
+            <p>Which of the subdomains provide(s) no competitive advantage? Select all that apply. </p>
+          
+          <ol type="a">
+          <li>
+            <p>Core</p>
+          </li>
+          <li>
+            <p>Generic</p>
+          </li>
+          <li>
+            <p>Supporting</p>
+          </li>
+          <li>
+            <p>B and C</p>
+          </li>
+          <li>
+            <p>A and C</p>
+          </li>
+          </ol></li>
+          <li>
+            <p>For which subdomain might all competitors use the same solutions?</p>
+            <ol type="a">
+              <li>
+                <p>Core</p>
+              </li>
+              <li>
+                <p>Generic</p>
+              </li>
+              <li>
+                <p>Supporting</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Which subdomain is expected to change the most often?</p>
+            <ol type="a">
+              <li>
+                <p>Core</p>
+              </li>
+              <li>
+                <p>Generic</p>
+              </li>
+              <li>
+                <p>Supporting</p>
+              </li>
+              <li>
+                <p>There is no difference in volatility of the different subdomain types.</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Who are business domain experts?</p>
+            <ol type="a">
+              <li>
+                <p>Developers who specialize in a certain technology.</p>
+              </li>
+              <li>
+                <p>Managers who control the project resources.</p>
+              </li>
+              <li>
+                <p>Individual contributors who understand the business rules and processes.</p>
+              </li>
+              <li>
+                <p>The lead software architect of a project.</p>
+              </li>
+            </ol>
+          </li>
+        </ol>
+
+</div></section>
+</div></section></div>
+</div>
+</body>
+</html>

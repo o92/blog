@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xml:lang="en"
+lang="en"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title>Learning Domain-Driven Design</title>
+<link rel="stylesheet" type="text/css" href="override_v1.css"/>
+<link rel="stylesheet" type="text/css" href="epub.css"/>
+</head>
+<body>
+<div id="book-content">
+<div id="sbo-rt-content"><section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 10. Design Heuristics"><div class="chapter" id="design_heuristics">
+<h1><span class="label">Chapter 10. </span>Design Heuristics</h1>
+
+<p>“It depends” is the correct answer to almost any question in software engineering, but not really practical. In this chapter, we will explore what “it” depends on.</p>
+
+<p>In <a data-type="xref" href="part01.html#strategic_design">Part I</a> of the book, you learned domain-driven design tools for analyzing business domains and making strategic design decisions. In <a data-type="xref" href="part02.html#tactical_design">Part II</a>, we explored tactical design patterns: the different ways to implement business logic, organize system architecture, and establish communication between a system’s components. This chapter bridges Parts <a data-xrefstyle="select:labelnumber" data-type="xref" href="part01.html#strategic_design">I</a> and <a data-xrefstyle="select:labelnumber" data-type="xref" href="part02.html#tactical_design">II</a>. You will learn heuristics for applying analysis tools to drive various software design decisions: that is, (business) domain-driven (software) design.</p>
+
+<p>But first, since this chapter is about design heuristics, let’s start by defining the term <em>heuristic</em>.</p>
+
+<section data-type="sect1" data-pdf-bookmark="Heuristic"><div class="sect1" id="heuristic">
+<h1>Heuristic</h1>
+
+<p>A heuristic is not a hard rule that is guaranteed and mathematically<a contenteditable="false" data-type="indexterm" data-primary="design" data-secondary="heuristics" data-tertiary="about heuristics" id="id1268"></a><a contenteditable="false" data-type="indexterm" data-primary="heuristics defined" id="id1269"></a> proven to be correct in 100% of cases. Rather, it’s a rule of thumb: not guaranteed to be perfect, yet sufficient for one’s immediate goals. In other words, using heuristics is an effective problem-solving approach that ignores the noise inherent in many cues, focusing instead on the “swamping forces” reflected in the most important cues.<sup><a data-type="noteref" id="ch01fn41-marker" href="ch10.html#ch01fn41">1</a></sup></p>
+
+<p>The heuristics presented in this chapter focus on the essential properties of the different business domains and on the essence of the problems addressed by the various design decisions.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Bounded Contexts"><div class="sect1" id="bounded_contexts-id000009">
+<h1>Bounded Contexts</h1>
+
+<p>As you’ll recall from <a data-type="xref" href="ch03.html#managing_domain_complexity">Chapter 3</a>, both <a contenteditable="false" data-type="indexterm" data-primary="design" data-secondary="heuristics" data-tertiary="bounded contexts" id="id1270"></a><a contenteditable="false" data-type="indexterm" data-primary="bounded contexts" data-secondary="design heuristics" id="id1271"></a><a contenteditable="false" data-type="indexterm" data-primary="ubiquitous language" data-secondary="bounded contexts integrated" data-tertiary="optimal size" id="id1272"></a>wide and narrow boundaries could fit the definition of a valid bounded context encompassing a consistent ubiquitous language. But still, what is the optimal size of a bounded context? This question is especially important in light of the frequent equation of bounded contexts with microservices.<sup><a data-type="noteref" id="ch01fn42-marker" href="ch10.html#ch01fn42">2</a></sup></p>
+
+<p>Should we always strive for the smallest possible bounded contexts? <a contenteditable="false" data-type="indexterm" data-primary="Tune, Nick" id="id1273"></a>As my friend Nick Tune says:</p>
+<blockquote>
+
+<p>There are many useful and revealing heuristics for defining the boundaries of a service. Size is one of the least useful.</p>
+</blockquote>
+
+<p>Rather than making the model a function of the desired size—optimizing for small bounded contexts—it’s much more effective to do the opposite: treat the bounded context’s size as a function of the model it encompasses.</p>
+
+<p>Software changes affecting multiple bounded contexts are expensive and require lots of coordination, especially if the affected bounded contexts are implemented by different teams. Such changes that are not encapsulated in a single bounded context signal ineffective design of the contexts’ boundaries. Unfortunately, refactoring bounded context boundaries is an expensive undertaking, and in many cases, the ineffective boundaries remain unattended and end up accumulating technical debt (see <a data-type="xref" href="#a_change_affecting_multiple_bounded_con">Figure 10-1</a>).</p>
+<figure><div id="a_change_affecting_multiple_bounded_con" class="figure">
+<img src="assets/lddd_1001.png" alt="A change affecting multiple bounded contexts" width="600" height="275"/>
+<h6><span class="label">Figure 10-1. </span>A change affecting multiple bounded contexts</h6>
+</div></figure>
+
+<p>Changes that invalidate the bounded contexts’ boundaries typically occur when the business domain is not well known or the business requirements change frequently. As you learned in <a data-type="xref" href="ch01.html#analyzing_business_domains">Chapter 1</a>, both volatility and uncertainty are the properties of core subdomains, especially at the early stages of implementation. We can use it as a heuristic for designing bounded context boundaries.</p>
+
+<p>Broad bounded context boundaries, or those that encompass multiple subdomains, make it safer to be wrong about the boundaries or the models of the included subdomains. Refactoring logical boundaries is considerably less expensive than refactoring physical boundaries. Hence, when designing bounded contexts, start with wider boundaries. If required, decompose the wide boundaries into smaller ones as you gain domain knowledge.</p>
+
+<p>This heuristic applies mainly to bounded contexts encompassing core subdomains, as both generic and supporting subdomains are more formularized and much less volatile. When creating a bounded context that contains a core subdomain, you can protect yourself against unforeseen changes by including other subdomains that the core subdomain interacts with most often. This can be other core subdomains, or even supporting and generic subdomains, as shown in <a data-type="xref" href="#wide_bounded_context_boundaries">Figure 10-2</a>.</p>
+<figure><div id="wide_bounded_context_boundaries" class="figure">
+<img src="assets/lddd_1002.png" alt="Wide bounded context boundaries" width="600" height="386"/>
+<h6><span class="label">Figure 10-2. </span>Wide bounded context boundaries</h6>
+</div></figure>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Business Logic Implementation Patterns"><div class="sect1" id="business_logic_implementation_patterns">
+<h1>Business Logic Implementation Patterns</h1>
+
+<p>In Chapters <a data-xrefstyle="select:labelnumber" data-type="xref" href="ch05.html#implementing_simple_business_logic">5</a>–<a data-xrefstyle="select:labelnumber" data-type="xref" href="ch07.html#modeling_the_dimension_of_time">7</a>, where we discussed<a contenteditable="false" data-type="indexterm" data-primary="design" data-secondary="heuristics" data-tertiary="business logic implementation" id="ch10-busl"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="design heuristics" id="ch10-busl2"></a> business logic in detail, you learned four different ways to model business logic: the transaction script, active record, domain model, and event-sourced domain model patterns.</p>
+
+<p>Both the transaction script and active record patterns are better<a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="design heuristics" id="id1274"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="active records" data-tertiary="design heuristics" id="id1275"></a><a contenteditable="false" data-type="indexterm" data-primary="active records" data-secondary="design heuristics" id="id1276"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="transaction scripts" data-tertiary="design heuristics" id="id1277"></a><a contenteditable="false" data-type="indexterm" data-primary="transaction scripts" data-secondary="design heuristics" id="id1278"></a><a contenteditable="false" data-type="indexterm" data-primary="supporting subdomains" data-secondary="design heuristics" id="id1279"></a><a contenteditable="false" data-type="indexterm" data-primary="generic subdomains" data-secondary="design heuristics" id="id1280"></a> suited for subdomains with simple business logic: supporting subdomains or integrating a third-party solution for a generic subdomain, for example. The difference between the two patterns is the complexity of the data structures. The transaction script pattern can be used for simple data structures, while the active record pattern helps to encapsulate the mapping of complex data structures to the underlying database.</p>
+
+<p>The domain model and its variant, the event-sourced domain model, <a contenteditable="false" data-type="indexterm" data-primary="core subdomains" data-secondary="design heuristics" id="id1281"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="domain model pattern" data-tertiary="design heuristics" id="id1282"></a><a contenteditable="false" data-type="indexterm" data-primary="domain model for business logic" data-secondary="design heuristics" id="id1283"></a><a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="design heuristics" id="id1284"></a><a contenteditable="false" data-type="indexterm" data-primary="audit log" data-secondary="monetary transactions" id="id1285"></a><a contenteditable="false" data-type="indexterm" data-primary="data protection regulation" data-secondary="monetary transactions" id="id1286"></a>lend themselves to subdomains that have complex business logic: core subdomains. Core subdomains that deal with monetary transactions, are obligated by law to provide an audit log, or require deep analytics of the system’s behavior are better addressed by the event-sourced domain model.</p>
+
+<p>With all of this in mind, an effective heuristic for choosing the appropriate business logic implementation pattern is to ask the following questions:</p>
+<ul>
+<li>
+	<p>Does the subdomain track money or other monetary transactions or have to provide a consistent audit log, or is deep analysis of its behavior required by the business? If so, use the event-sourced domain model. Otherwise...</p></li>
+<li>
+	<p>Is the subdomain’s business logic complex? If so, implement a domain model. Otherwise...</p></li>
+<li>
+	<p>Does the subdomain include complex data structures? If so, use the active record pattern. Otherwise...</p></li>
+<li>
+	<p>Implement a transaction script.</p></li>
+</ul>
+
+<p>Since there is a strong relationship between a subdomain’s complexity and its type, we can visualize the heuristics using a domain-driven decision tree, as shown in <a data-type="xref" href="#decision_tree_for_business_logic_implem">Figure 10-3</a>.</p>
+<figure><div id="decision_tree_for_business_logic_implem" class="figure">
+<img src="assets/lddd_1003.png" alt="Decision tree for business logic implementation pattern" width="600" height="279"/>
+<h6><span class="label">Figure 10-3. </span>Decision tree for business logic implementation pattern</h6>
+</div></figure>
+
+<p>We can use another heuristic to define the difference between complex and simple business logic. The line between these two types of business logic is not terribly sharp, but it’s useful. In general, complex business logic includes complicated business rules, invariants, and algorithms. A simple approach mainly revolves around validating the inputs. Another heuristic for evaluating complexity concerns the complexity of the ubiquitous language itself. Is it mainly describing CRUD operations, or is it describing more complicated business processes and rules?</p>
+
+<p>Deciding on the business logic implementation pattern according to the complexity of the business logic and its data structures is a way to validate your assumptions about the subdomain type. Suppose you consider it to be a core subdomain, but the best pattern is active record or transaction script. Or suppose what you believe is a supporting subdomain requires a domain model or an event-sourced domain model; in this case, it’s an excellent opportunity to revisit your assumptions about the subdomain and business domain in general. Remember, a core subdomain’s competitive advantage is not necessarily technical.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch10-busl" id="id1287"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch10-busl2" id="id1288"></a></p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Architectural Patterns"><div class="sect1" id="architectural_patterns-id000007">
+<h1>Architectural Patterns</h1>
+
+<p>In <a data-type="xref" href="ch08.html#architectural_patterns-id000006">Chapter 8</a>, you learned<a contenteditable="false" data-type="indexterm" data-primary="design" data-secondary="heuristics" data-tertiary="architectural patterns" id="id1289"></a><a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="design heuristics" id="id1290"></a> about the three architectural patterns: layered architecture, ports &amp; adapters, and CQRS.</p>
+
+<p>Knowing the intended business logic implementation pattern makes choosing an architectural pattern straightforward:</p>
+<ul>
+<li>
+	<p>The event-sourced domain model requires CQRS.<a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="design heuristics" id="id1291"></a><a contenteditable="false" data-type="indexterm" data-primary="command-query responsibility segregation (CQRS)" data-secondary="when to use" data-tertiary="design heuristics" id="id1292"></a><a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="command-query responsibility segregation" data-tertiary="when to use" id="id1293"></a> Otherwise, the system will be extremely limited in its data querying options, fetching a single instance by its ID only.</p></li>
+<li>
+	<p>The domain model requires the ports &amp; adapters<a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="ports &amp; adapters architecture" data-tertiary="design heuristics" id="id1294"></a><a contenteditable="false" data-type="indexterm" data-primary="domain model for business logic" data-secondary="design heuristics" id="id1295"></a><a contenteditable="false" data-type="indexterm" data-primary="ports &amp; adapters architecture" data-secondary="design heuristics" id="id1296"></a> architecture.  Otherwise, the layered architecture makes it hard to make aggregates and value objects ignorant of persistence.</p></li>
+<li>
+	<p>The Active record pattern is best accompanied by a<a contenteditable="false" data-type="indexterm" data-primary="active records" data-secondary="design heuristics" id="id1297"></a> layered architecture with the additional application (service) layer. This is for the logic controlling the active records.</p></li>
+<li>
+	<p>The transaction script pattern can be implemented with a minimal layered architecture,<a contenteditable="false" data-type="indexterm" data-primary="transaction scripts" data-secondary="design heuristics" id="id1298"></a> consisting of only three layers.</p></li>
+</ul>
+
+<p>The only exception to the preceding heuristics is the CQRS pattern. CQRS can be beneficial not only for the event-sourced domain model, but also for any other pattern if the subdomain requires representing its data in multiple persistent models.</p>
+
+<p><a data-type="xref" href="#architectural_pattern_decision_tree">Figure 10-4</a> shows a decision tree for choosing an architectural pattern based on these heuristics.</p>
+<figure><div id="architectural_pattern_decision_tree" class="figure">
+<img src="assets/lddd_1004.png" alt="Architectural pattern decision tree" width="600" height="409"/>
+<h6><span class="label">Figure 10-4. </span>Architectural pattern decision tree</h6>
+</div></figure>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Testing Strategy"><div class="sect1" id="testing_strategy">
+<h1>Testing Strategy</h1>
+
+<p>The knowledge of both the business logic implementation<a contenteditable="false" data-type="indexterm" data-primary="design" data-secondary="heuristics" data-tertiary="testing strategy" id="id1299"></a><a contenteditable="false" data-type="indexterm" data-primary="testing strategies" data-secondary="about choosing" id="id1300"></a> pattern and the architectural pattern can be used as a heuristic for choosing a testing strategy for the codebase. Take a look at the three testing strategies shown in <a data-type="xref" href="#testing_strategies">Figure 10-5</a>.</p>
+<figure><div id="testing_strategies" class="figure">
+<img src="assets/lddd_1005.png" alt="Testing strategies" width="600" height="275"/>
+<h6><span class="label">Figure 10-5. </span>Testing strategies</h6>
+</div></figure>
+
+<p>The difference between the testing strategies in the figure is their emphasis on the different types of tests: unit, integration, and end-to-end. Let’s analyze each strategy and the context in which each pattern should be used.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Testing Pyramid"><div class="sect2" id="testing_pyramid">
+<h2>Testing Pyramid</h2>
+
+<p>The classic testing pyramid emphasizes unit tests, fewer integration tests,<a contenteditable="false" data-type="indexterm" data-primary="testing strategies" data-secondary="testing pyramid" id="id1301"></a> and even fewer end-to-end tests. Both variants of the domain model patterns are best addressed with the testing pyramid. Aggregates and value objects make perfect units for effectively testing the business logic.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Testing Diamond"><div class="sect2" id="testing_diamond">
+<h2>Testing Diamond</h2>
+
+<p>The testing diamond focuses the most on integration tests.<a contenteditable="false" data-type="indexterm" data-primary="testing strategies" data-secondary="testing diamond" id="id1302"></a> When the active record pattern is used, the system’s business logic is, by definition, spread across both the service and business logic layers. Therefore, to focus on integrating the two layers, the testing diamond is the more effective choice.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Reversed Testing Pyramid"><div class="sect2" id="reversed_testing_pyramid">
+<h2>Reversed Testing Pyramid</h2>
+
+<p>The reversed testing pyramid attributes the most attention to end-to-end tests: <a contenteditable="false" data-type="indexterm" data-primary="testing strategies" data-secondary="reversed testing pyramid" id="id1303"></a>verifying the application’s workflow from beginning to end. Such an approach best fits codebases implementing the transaction script pattern: the business logic is simple and the number of layers is minimal, making it more effective to verify the end-to-end flow of the system.</p>
+
+<p><a data-type="xref" href="#testing_strategy_decision_tree">Figure 10-6</a> shows the testing strategy decision tree.</p>
+<figure><div id="testing_strategy_decision_tree" class="figure">
+<img src="assets/lddd_1006.png" alt="Testing strategy decision tree" width="600" height="437"/>
+<h6><span class="label">Figure 10-6. </span>Testing strategy decision tree</h6>
+</div></figure>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Tactical Design Decision Tree"><div class="sect1" id="tactical_design_decision_tre">
+<h1>Tactical Design Decision Tree</h1>
+
+<p>The business logic patterns, architectural patterns, and<a contenteditable="false" data-type="indexterm" data-primary="design" data-secondary="heuristics" data-tertiary="decision tree" id="id1304"></a><a contenteditable="false" data-type="indexterm" data-primary="decision tree for tactical design" id="id1305"></a><a contenteditable="false" data-type="indexterm" data-primary="visualization" data-secondary="decision tree for tactical design" id="id1306"></a> testing strategy heuristics can be unified and summarized with a tactical design decision tree, as depicted in <a data-type="xref" href="#tactical_design_decision_tree">Figure 10-7</a>.</p>
+<figure><div id="tactical_design_decision_tree" class="figure">
+<img src="assets/lddd_1007.png" alt="Tactical design decision tree" width="600" height="592"/>
+<h6><span class="label">Figure 10-7. </span>Tactical design decision tree</h6>
+</div></figure>
+
+<p>As you can see, identifying subdomains types and following the decision tree gives you a solid starting point for making the essential design decisions. That said, it’s important to reiterate that these are heuristics, not hard rules. There is an exception to every rule, let alone heuristics, that by definition are not intended to be correct in 100% of the cases.</p>
+
+<p>The decision tree is based on my preference to use the simple tools, and resort to the advanced patterns—domain model, event-sourced domain model, CQRS, and so <span class="keep-together">on—</span>only when absolutely necessary. On the other hand, I’ve met teams that have a lot of experience implementing the event-sourced domain model and therefore use it for all their subdomains. For them it’s simpler than using different patterns. Can I recommend this approach to everyone? Of course not. In the companies I have worked for or consulted, the heuristics-based approach was more efficient than using the same solution for every problem.</p>
+
+<p>At the end of the day, it depends on your specific context. Use the decision tree illustrated in <a data-type="xref" href="#tactical_design_decision_tree">Figure 10-7</a>, and the design heuristics it is based on, as guiding principles, but not as a replacement for critical thinking. If you find that alternative heuristics fit you better, feel free to alter the guiding principles or build your own decision tree altogether.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Conclusion"><div class="sect1" id="conclusion-id000034">
+<h1>Conclusion</h1>
+
+<p>This chapter connected Parts <a data-xrefstyle="select:labelnumber" data-type="xref" href="part01.html#strategic_design">I</a> and <a data-xrefstyle="select:labelnumber" data-type="xref" href="part02.html#tactical_design">II</a> of the book to a heuristic-based decision framework. You learned how to apply the knowledge of the business domain and its subdomains to drive technical decisions: choosing safe bounded context boundaries, modeling the application’s business logic, and determining the architectural pattern needed to orchestrate the interactions of each bounded context’s internal components. Finally, we took a detour into a different topic that is often a subject of passionate arguments—what kind of test is more important—and used the same framework to prioritize the different tests according to the business domain.</p>
+
+<p>Making design decisions is important, but even more so is to verify the decisions’ validity over time. In the next chapter, we will shift our discussion to the next phase of the software design lifecycle: the evolution of design decisions.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Exercises"><div class="sect1" id="exercises-id000079">
+<h1>Exercises</h1>
+
+<ol>
+          <li>
+            <p>Assume you are implementing WolfDesk’s (see <a data-type="xref" href="preface01.html#preface">Preface</a>) ticket lifecycle management system. It’s a core subdomain that requires deep analysis of its behavior so that the algorithm can be further optimized over time. What would your initial strategy be for implementing the business logic and the component’s architecture? What would your testing strategy be?</p>
+            <ol type="a">
+              <li>
+                <p>Domain model, CQRS architecture, and testing strategy that focuses on unit tests. </p>
+              </li>
+              <li>
+                <p>Active records, layered architecture, and testing strategy that focuses on integration tests. </p>
+              </li>
+              <li>
+                <p>Domain model, ports and adapters, and testing strategy that focuses on unit tests. </p>
+              </li>
+              <li>
+                <p>Event-sourced domain model, CQRS architecture, and testing strategy that focuses on unit tests. </p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>What would your design decisions be for WolfDesk’s support agents’ shift management module (supporting subdomain)?</p>
+            <ol type="a">
+              <li>
+                <p>Active record, layered architecture, integration tests.</p>
+              </li>
+              <li>
+                <p>Domain model, ports and adapters, unit tests.</p>
+              </li>
+                  <li>
+                    <p> Domain model, CQRS, unit tests.</p>
+                  </li>
+                      <li>
+                        <p>Event sourced-domain model, CQRS, unit tests.</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>To ease the process of managing agents’ shifts, you want to use an external provider of public holidays for different geographical regions. The process works by periodically calling the external provider and fetching the dates and names of forthcoming public holidays. What business logic and architectural patterns would you use to implement the integration? How would you test it?</p>
+            <ol type="a">
+              <li>
+                <p>Domain model, ports and adapters, integration tests.</p>
+              </li>
+              <li>
+                <p>Domain model, CQRS, unit tests.</p>
+              </li>
+                  <li>
+                    <p>Event-sourced domain model, CQRS, unit tests.</p>
+                  </li>
+                      <li>
+                        <p>Transaction script, layered architecture, end-to-end tests.</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Based on your experience, what other aspects of the software development process can be included in the heuristics-based decision tree presented in this <span class="keep-together">chapter</span>?</p>
+          </li>
+        </ol>
+
+
+</div></section>
+<div data-type="footnotes"><p data-type="footnote" id="ch01fn41"><sup><a href="ch10.html#ch01fn41-marker">1</a></sup> Gigerenzer, G., Todd, P. M., &amp; ABC Research Group (Research Group, Max Planck Institute, Germany). (1999). <em>Simple Heuristics That Make Us Smart</em>. New York: Oxford University Press.</p><p data-type="footnote" id="ch01fn42"><sup><a href="ch10.html#ch01fn42-marker">2</a></sup> <a data-type="xref" href="ch11.html#evolving_design_decisions">Chapter 11</a> is dedicated to the interplay between bounded contexts and microservices.</p></div></div></section></div>
+</div>
+</body>
+</html>

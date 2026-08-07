@@ -58,7 +58,7 @@ Orphaned Feature:
 Product Discovery:
   summary: "产品发现：用原型等低成本方式快速验证，找到值得构建的方案"
   source: "product-operating-model/02-transformation-defined/01-terms.md#Product Discovery"
-  aliases: ["产品发现", "发现"]
+  aliases: ["产品发现"]
 
 Time to Money:
   summary: "出结果时间：从动手到达成必要业务结果要多久"
@@ -79,6 +79,11 @@ Big-Bang Release:
   summary: "大爆炸发布：大量变更捆成一次上线，难测难回滚"
   source: "product-operating-model/02-transformation-defined/01-terms.md#Big-Bang Release"
   aliases: ["大爆炸发布", "大爆炸"]
+
+Enabling Technology:
+  summary: "使能技术：让方案刚刚变得可能的技术能力；工程师最易从中看到新解"
+  source: "product-operating-model/02-transformation-defined/01-terms.md#Enabling Technology"
+  aliases: ["使能技术"]
 
 Product Manager:
   summary: "产品经理：承担价值与商业可行性风险，对业务结果问责"
@@ -118,7 +123,7 @@ Output:
 Outcome:
   summary: "结果：客户与业务是否真的变好（转化、收入、降本等）"
   source: "product-operating-model/04-concepts/01-terms.md#Outcome"
-  aliases: ["业务结果", "结果"]
+  aliases: ["业务结果"]
 
 Product Vision:
   summary: "产品愿景：客户中心的未来图景"

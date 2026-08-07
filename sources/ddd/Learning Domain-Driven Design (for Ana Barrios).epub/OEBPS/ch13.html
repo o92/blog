@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xml:lang="en"
+lang="en"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title>Learning Domain-Driven Design</title>
+<link rel="stylesheet" type="text/css" href="override_v1.css"/>
+<link rel="stylesheet" type="text/css" href="epub.css"/>
+</head>
+<body>
+<div id="book-content">
+<div id="sbo-rt-content"><section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 13. Domain-Driven Design in the Real World"><div class="chapter" id="domain_driven_design_in_the_real_world">
+<h1><span class="label">Chapter 13. </span>Domain-Driven Design in the Real World</h1>
+
+<p>We have covered domain-driven design tools for analyzing business domains,<a contenteditable="false" data-type="indexterm" data-primary="real-world domain-driven design" data-secondary="about" id="id1432"></a><a contenteditable="false" data-type="indexterm" data-primary="domain-driven design (DDD)" data-secondary="real-world DDD" data-seealso="real-world domain-driven design" id="id1433"></a> sharing knowledge, and making strategic and tactical design decisions. Just imagine how fun it will be to apply this knowledge in practice. Let’s consider a scenario in which you are working on a greenfield project. All of your coworkers have a strong grasp of domain-driven design, and right from the get-go all are doing their best to design effective models and, of course, are devotedly using the ubiquitous language. As the project advances, the bounded contexts’ boundaries are explicit and effective in protecting the business domain models. Finally, since all tactical design decisions are aligned with the business strategy, the codebase is always in great shape: it speaks the ubiquitous language and implements the design patterns that accommodate the model’s complexity. Now wake up.</p>
+
+<p>Your chances of experiencing the laboratory conditions I just described are about as good as winning the lottery. Of course, it’s possible, but not likely. <a contenteditable="false" data-type="indexterm" data-primary="brownfield DDD" data-seealso="real-world domain-driven design" id="id1434"></a>Unfortunately, many people mistakenly believe that domain-driven design can only be applied in greenfield projects and in ideal conditions in which everybody on the team is a DDD black belt. Ironically, the projects that can benefit from DDD the most are the brownfield projects: those that already proved their business viability and need a shake-up to fight accumulated technical debt and design entropy. Coincidentally, working on such brownfield, legacy, big-balls-of-mud codebases is where we spend most of our software engineering careers.</p>
+
+<p>Another common misconception about DDD is that it’s an all-or-nothing proposition—either you apply every tool the methodology has to offer, or it’s not domain-driven design. That’s not true. It might seem overwhelming to come to grips with all of these concepts, let alone implement them in practice. Luckily, you don’t have to apply all of the patterns and practices to gain value from domain-driven design. This is especially true for brownfield projects, where it’s practically impossible to introduce all the patterns and practices in a reasonable time frame.</p>
+
+<p>In this chapter, you will learn strategies for applying domain-driven design tools and patterns in the real world, including on brownfield projects and in less-than-ideal environments.</p>
+
+<section data-type="sect1" data-pdf-bookmark="Strategic Analysis"><div class="sect1" id="strategic_analysis">
+<h1>Strategic Analysis</h1>
+
+<p>Following the order of our exploration of domain-driven design patterns<a contenteditable="false" data-type="indexterm" data-primary="real-world domain-driven design" data-secondary="strategic analysis" data-tertiary="business domain knowledge" id="id1435"></a> and practices, the best starting point for introducing DDD in an organization is to invest time in understanding the organization’s business strategy and the current state of its systems’ architecture.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Understand the Business Domain"><div class="sect2" id="understand_the_business_domain">
+<h2>Understand the Business Domain</h2>
+
+<p>First, identify the company’s business domain:<a contenteditable="false" data-type="indexterm" data-primary="business knowledge" data-secondary="real-world DDD" id="id1436"></a><a contenteditable="false" data-type="indexterm" data-primary="business domains" data-secondary="bounded contexts in real life" data-tertiary="real-world DDD" id="id1437"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="real-world DDD" id="id1438"></a><a contenteditable="false" data-type="indexterm" data-primary="domain analysis" data-secondary="real-world DDD" id="id1439"></a></p>
+<ul>
+<li>
+	<p>What is the organization’s business domain(s)?</p></li>
+<li>
+	<p>Who are its customers?</p></li>
+<li>
+	<p>What service, or value, does the organization provide to customers?</p></li>
+<li>
+	<p>What companies or products is the organization competing with?</p></li>
+</ul>
+
+<p>Answering these questions will give you a bird’s-eye view of the company’s high-level goals. Next, “zoom in” to the domain and look for the business building blocks the organization employs to achieve its high-level goals: the subdomains.</p>
+
+<p>A good initial heuristic is the company’s org chart: its departments and other organizational units. Examine how these units cooperate to allow the company to compete in its business domain.</p>
+
+<p>Furthermore, look for the signs of specific types of subdomains.<a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="real-world DDD" id="id1440"></a></p>
+
+<section data-type="sect3" data-pdf-bookmark="Core subdomains"><div class="sect3" id="core_subdomains-id000050">
+<h3>Core subdomains</h3>
+
+<p>To identify the company’s core subdomains, look for what differentiates it from its competitors:<a contenteditable="false" data-type="indexterm" data-primary="core subdomains" data-secondary="real-world DDD" id="id1441"></a></p>
+<ul>
+<li>
+	<p>Does the company have a “secret sauce” that its competitors lack? For example, intellectual property, such as patents and algorithms designed in-house?</p></li>
+<li>
+	<p>Keep in mind that the competitive advantage, and thus the core subdomains, are not necessarily technical. Does the company possess a nontechnical competitive advantage? For example, the ability to hire top-level personnel, produce a unique artistic design, and so on?</p></li>
+</ul>
+
+<p>Another powerful yet unfortunate heuristic for core subdomains is identifying the worst-designed software components—those big balls of mud that all engineers hate but the business is unwilling to rewrite from scratch because of the accompanying business risk. The key here is that the legacy system cannot be replaced with a ready-made system—it would be a generic subdomain—and any modification to it entails business risks.</p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Generic subdomains"><div class="sect3" id="generic_subdomains-id000093">
+<h3>Generic subdomains</h3>
+
+<p>To identify generic subdomains, look for off-the-shelf solutions,<a contenteditable="false" data-type="indexterm" data-primary="generic subdomains" data-secondary="real-world DDD" id="id1442"></a> subscription services, or integration of open source software. As you learned in <a data-type="xref" href="ch01.html#analyzing_business_domains">Chapter 1</a>, the same ready-made solutions should be available to the competing companies, and those companies leveraging the same solution should have no business impact on your company.</p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Supporting subdomains"><div class="sect3" id="supporting_subdom">
+<h3>Supporting subdomains</h3>
+
+<p>For supporting subdomains, look for the remaining software components<a contenteditable="false" data-type="indexterm" data-primary="supporting subdomains" data-secondary="real-world DDD" id="id1443"></a> that cannot be replaced with ready-made solutions yet do not directly provide a competitive advantage. If the code is in rough shape, it triggers less emotional response from software engineers since it changes infrequently. Thus, the effects of the suboptimal software design are not as severe as for the core subdomains.</p>
+
+<p>You don’t have to identify all of the core subdomains. It won’t be practical or even possible to do so, even for a medium-sized company. Instead, identify the overall structure, but pay closer attention to the subdomains that are most relevant to the software systems you are working on.</p>
+</div></section>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Explore the Current Design"><div class="sect2" id="explore_the_current_design">
+<h2>Explore the Current Design</h2>
+
+<p>Once you are familiar with the problem domain, you can continue<a contenteditable="false" data-type="indexterm" data-primary="real-world domain-driven design" data-secondary="strategic analysis" data-tertiary="current system design" id="id1444"></a><a contenteditable="false" data-type="indexterm" data-primary="boundaries" data-secondary="real-world DDD" id="id1445"></a> to investigate the solution and its design decisions. First, start with the high-level components. These are not necessarily bounded contexts in the DDD sense, but rather boundaries used to decompose the business domain into subsystems.</p>
+
+<p>The characteristic property to look for is the components’ decoupled lifecycles. Even if the subsystems are managed in the same source control repository (mono-repo) or if all the components reside in a single monolithic codebase, check which can be evolved, tested, and deployed independently from the others.</p>
+
+<section data-type="sect3" data-pdf-bookmark="Evaluate the tactical design"><div class="sect3" id="evaluate_the_tactical_design">
+<h3>Evaluate the tactical design</h3>
+
+<p>For each high-level component, check which business subdomains<a contenteditable="false" data-type="indexterm" data-primary="tactical design" data-secondary="real-world DDD" id="id1446"></a><a contenteditable="false" data-type="indexterm" data-primary="design" data-secondary="strategic" data-see="strategic design" id="id1447"></a><a contenteditable="false" data-type="indexterm" data-primary="design" data-secondary="tactical" data-see="tactical design" id="id1448"></a> it contains and what technical design decisions were taken: what patterns are used to implement the business logic and define the component’s architecture?</p>
+
+<p>Does the solution fit the complexity of the problem? Are there areas where more elaborate design patterns are needed? Conversely, are there any subdomains where it’s possible to cut corners or use existing, off-the-shelf solutions? Use this information to make smarter strategic and tactical decisions.</p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Evaluate the strategic design"><div class="sect3" id="evaluate_the_strategic_design">
+<h3>Evaluate the strategic design</h3>
+
+<p>Use the knowledge of the high-level components to chart the current<a contenteditable="false" data-type="indexterm" data-primary="strategic design" data-secondary="real-world DDD" id="id1449"></a> design’s context map, as though these high-level components were bounded contexts. Identify and track the relationships between the components in terms of bounded context integration patterns.</p>
+
+<p>Finally, analyze the resultant context map and evaluate the architecture from a domain-driven design perspective. Are there suboptimal strategic design decisions? For example:</p>
+<ul>
+<li>
+	<p>Multiple teams working on the same high-level component</p></li>
+<li>
+	<p>Duplicate implementations of core subdomains</p></li>
+<li>
+	<p>Implementation of a core subdomain by an outsourced company</p></li>
+<li>
+	<p>Friction because of frequently failing integration</p></li>
+<li>
+	<p>Awkward models spreading from external services and legacy systems</p></li>
+</ul>
+
+<p>These insights are a good starting point for planning the design modernization strategy. But first, given this more in-depth knowledge of both the problem (business domain) and the solution (current design) spaces, look for <a contenteditable="false" data-type="indexterm" data-primary="domain experts" data-secondary="business knowledge" data-tertiary="knowledge lost" id="id1450"></a><a contenteditable="false" data-type="indexterm" data-primary="business knowledge" data-secondary="knowledge lost" id="id1451"></a>lost domain knowledge. As we discussed in <a data-type="xref" href="ch11.html#evolving_design_decisions">Chapter 11</a>, knowledge of the business domain can get lost for various reasons. The problem is widespread and acute in core subdomains, where the business logic is both complex and business critical. If you encounter such cases, facilitate EventStorming sessions to try to recover the knowledge. Also, use the EventStorming session as the foundation for cultivating a ubiquitous language.</p>
+</div></section>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Modernization Strategy"><div class="sect1" id="modernization_strategy">
+<h1>Modernization Strategy</h1>
+
+<p>The “big rewrite” endeavors, in which the engineers are trying<a contenteditable="false" data-type="indexterm" data-primary="real-world domain-driven design" data-secondary="modernization strategy" data-tertiary="about" id="id1452"></a><a contenteditable="false" data-type="indexterm" data-primary="modernization strategy" data-secondary="about" id="id1453"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="real-world DDD" data-tertiary="modernization strategy" id="ch13-blims"></a> to rewrite the system from scratch, this time designing and implementing the whole system correctly, are rarely successful. Even more rarely does management support such architectural makeovers.</p>
+
+<p>A safer approach to improving the design of existing systems is to think big but start small. <a contenteditable="false" data-type="indexterm" data-primary="Evans, Eric" id="id1454"></a>As Eric Evans says, not all of a large system will be well designed. That’s a fact we have to accept, and therefore we must strategically decide where to invest in terms of modernization efforts. <a contenteditable="false" data-type="indexterm" data-primary="boundaries" data-secondary="modernization strategy" id="id1455"></a><a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="boundaries identified" data-tertiary="modernization strategy" id="id1456"></a>A prerequisite for making this decision is to have boundaries dividing the system’s subdomains. The boundaries don’t have to be physical, making each subdomain a full-fledged bounded context. Instead, start by ensuring that at least the logical boundaries (namespace, modules, and packages, depending on the technology stack) are aligned with the subdomains’ boundaries, as shown in <a data-type="xref" href="#reorganizing_the_bounded_contextapostro">Figure 13-1</a>.</p>
+<figure><div id="reorganizing_the_bounded_contextapostro" class="figure">
+<img src="assets/lddd_1301.png" alt="Reorganizing the bounded context’s modules to reflect the business subdomains’ boundaries rather than technical implementation patterns" width="600" height="177"/>
+<h6><span class="label">Figure 13-1. </span>Reorganizing the bounded context’s modules to reflect the business subdomains’ boundaries rather than technical implementation patterns</h6>
+</div></figure>
+
+<p>Adjusting the system’s modules is a relatively safe form of refactoring. You are not modifying the business logic, just repositioning the types in a more well-organized structure. That said, ensure that references by full type names, such as the dynamic loading of libraries, reflection, and so on, are not breaking.</p>
+
+<p>In addition, keep track of the subdomains’ business logic implemented in different codebases; stored procedures in a database, serverless functions, and so on. Make sure to introduce the new boundaries in those platforms as well. For instance, if some of the logic is handled in the database’s stored procedures, either rename the procedures to reflect the module they belong to or introduce a dedicated database schema and relocate the stored procedures.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Strategic Modernization"><div class="sect2" id="strategic_modernization">
+<h2>Strategic Modernization</h2>
+
+<p>As we discussed in <a data-type="xref" href="ch10.html#design_heuristics">Chapter 10</a>, it can be risky<a contenteditable="false" data-type="indexterm" data-primary="real-world domain-driven design" data-secondary="modernization strategy" data-tertiary="strategic modernization" id="id1457"></a><a contenteditable="false" data-type="indexterm" data-primary="modernization strategy" data-secondary="strategic modernization" id="id1458"></a><a contenteditable="false" data-type="indexterm" data-primary="strategic design" data-secondary="real-world DDD" data-tertiary="modernization strategy" id="id1459"></a> to prematurely decompose the system into the smallest bounded contexts possible. We will discuss bounded contexts and microservices in more detail in the next chapter. For now, look for where the most value can be gained by turning the logical boundaries into physical boundaries. The process of extracting a bounded context(s) by turning a logical boundary into a physical one is shown in <a data-type="xref" href="#extracting_a_bounded_context_by_turning">Figure 13-2</a>.</p>
+
+<p class="pagebreak-before less_space">Questions to ask yourself:</p>
+<ul>
+<li>
+	<p>Are multiple teams working on the same codebase? If so, decouple the development lifecycles by defining bounded contexts for each team.</p></li>
+<li>
+	<p>Are conflicting models being used by the different components? If so, relocate the conflicting models into separate bounded contexts.</p></li>
+</ul>
+<figure><div id="extracting_a_bounded_context_by_turning" class="figure">
+<img src="assets/lddd_1302.png" alt="Extracting a bounded context by turning a logical boundary into a physical boundary" width="600" height="308"/>
+<h6><span class="label">Figure 13-2. </span>Extracting a bounded context by turning a logical boundary into a physical boundary</h6>
+</div></figure>
+
+<p>When the minimum required bounded contexts are in place, examine<a contenteditable="false" data-type="indexterm" data-primary="real-world domain-driven design" data-secondary="modernization strategy" data-tertiary="context map" id="id1460"></a><a contenteditable="false" data-type="indexterm" data-primary="modernization strategy" data-secondary="strategic modernization" data-tertiary="context map" id="id1461"></a><a contenteditable="false" data-type="indexterm" data-primary="visualization" data-secondary="context map of bounded contexts" id="id1462"></a><a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="context map for patterns" id="id1463"></a><a contenteditable="false" data-type="indexterm" data-primary="context map of bounded contexts" data-secondary="communication patterns" id="id1464"></a><a contenteditable="false" data-type="indexterm" data-primary="collaboration patterns" data-secondary="modernization strategy" id="id1465"></a> the relationships and integration patterns between them. See how the teams working on different bounded contexts communicate and collaborate. Especially when they are communicating through ad hoc or shared-kernel–like integration, do the teams have shared goals and adequate collaboration levels?</p>
+
+<p>Pay attention to problems that the context integration patterns can address:</p>
+<dl>
+<dt>Customer–supplier relationships</dt>
+<dd>As we discussed in <a data-type="xref" href="ch11.html#evolving_design_decisions">Chapter 11</a>, organizational <a contenteditable="false" data-type="indexterm" data-primary="customer–supplier collaboration pattern" data-secondary="modernization strategy" id="id1466"></a>growth can invalidate prior communication and collaboration patterns. Look for components designed for a <em>partnership</em> relationship of multiple engineering teams, but where the partnership is no longer sustainable. Refactor to the appropriate type of customer–supplier relationship (conformist, anticorruption layer, or open-host service).</dd>
+<dt>Anticorruption layer</dt>
+<dd>Anticorruption layers can be useful for protecting bounded<a contenteditable="false" data-type="indexterm" data-primary="anticorruption layer" data-secondary="modernization strategy" id="id1467"></a> contexts from legacy systems, especially, when legacy systems are using inefficient models that tend to spread into downstream components.</dd>
+<dd>Another common use case for implementing an anticorruption layer is to protect a bounded context from frequent changes in the public interfaces of an upstream service it uses.</dd>
+<dt>Open-host service</dt>
+<dd>If changes in the implementation details of one component often ripple<a contenteditable="false" data-type="indexterm" data-primary="open-host service" data-secondary="modernization strategy" id="id1468"></a> through the system and affect its consumers, consider making it an open-host service: decouple its implementation model from the public API it exposes.</dd>
+<dt>Separate ways</dt>
+<dd>Especially in large organizations, you may encounter friction <a contenteditable="false" data-type="indexterm" data-primary="separate ways no collaboration pattern" data-secondary="modernization strategy" id="id1469"></a>among engineering teams resulting from having to collaborate and co-evolve a shared functionality. If the “apple of discord” functionality is not business critical—that is, it’s not a core subdomain—the teams can go their <em>separate ways</em> and implement their own solutions, eliminating the source of friction.</dd>
+</dl>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Tactical Modernization"><div class="sect2" id="tactical_modernization">
+<h2>Tactical Modernization</h2>
+
+<p>First and foremost, from a tactical standpoint, look for the most “painful” mismatches<a contenteditable="false" data-type="indexterm" data-primary="modernization strategy" data-secondary="tactical modernization" id="id1470"></a><a contenteditable="false" data-type="indexterm" data-primary="tactical design" data-secondary="real-world DDD" data-tertiary="modernization strategy" id="id1471"></a><a contenteditable="false" data-type="indexterm" data-primary="real-world domain-driven design" data-secondary="modernization strategy" data-tertiary="tactical modernization" id="id1472"></a> in business value and implementation strategies, such as core subdomains implementing patterns that don’t match the complexity of the model—transaction script or active record. These system components that directly impact the success of the business have to change the most often, yet are painful to maintain and evolve due to poor design.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Cultivate a Ubiquitous Language"><div class="sect2" id="cultivate_a_ubiquitous_language">
+<h2>Cultivate a Ubiquitous Language</h2>
+
+<p>A prerequisite to the successful modernization of a design is the <a contenteditable="false" data-type="indexterm" data-primary="modernization strategy" data-secondary="ubiquitous language cultivated" id="id1473"></a><a contenteditable="false" data-type="indexterm" data-primary="modeling business domain" data-secondary="ubiquitous language" data-tertiary="modernization strategy" id="id1474"></a><a contenteditable="false" data-type="indexterm" data-primary="ubiquitous language" data-secondary="modernization strategy" id="id1475"></a><a contenteditable="false" data-type="indexterm" data-primary="business domains" data-secondary="ubiquitous language for" data-tertiary="modernization strategy" id="id1476"></a><a contenteditable="false" data-type="indexterm" data-primary="real-world domain-driven design" data-secondary="modernization strategy" data-tertiary="ubiquitous language cultivated" id="id1477"></a>domain knowledge and effective model of the business domain. As I have mentioned several times throughout this book, domain-driven design’s ubiquitous language is essential for achieving knowledge and building an effective solution model.</p>
+
+<p>Don’t forget domain-driven design’s shortcut for gathering domain knowledge: EventStorming.<a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="business knowledge" data-tertiary="EventStorming for" data-seealso="EventStorming" id="id1478"></a><a contenteditable="false" data-type="indexterm" data-primary="business knowledge" data-secondary="EventStorming for" data-seealso="EventStorming" id="id1479"></a><a contenteditable="false" data-type="indexterm" data-primary="business domains" data-secondary="EventStorming for knowledge" data-seealso="EventStorming" id="id1480"></a><a contenteditable="false" data-type="indexterm" data-primary="EventStorming" data-secondary="modernization strategy" id="id1481"></a><a contenteditable="false" data-type="indexterm" data-primary="ubiquitous language" data-secondary="EventStorming for" id="id1482"></a> Use EventStorming to build a ubiquitous language with the domain experts and explore the legacy codebase, especially if the codebase is an undocumented mess that no one truly understands. Gather everyone related to its functionality and explore the business domain. EventStorming is a fantastic tool for recovering domain knowledge.</p>
+
+<p>Once you are equipped with the domain knowledge and its model(s), decide which business logic implementation patterns best suit the business functionality in question. As a starting point, use the design heuristics described in <a data-type="xref" href="ch10.html#design_heuristics">Chapter 10</a>. The next decision you have to make concerns the <a contenteditable="false" data-type="indexterm" data-primary="real-world domain-driven design" data-secondary="modernization strategy" data-tertiary="strangler migration pattern" id="ch13-str"></a><a contenteditable="false" data-type="indexterm" data-primary="modernization strategy" data-secondary="strangler migration pattern" id="ch13-str2"></a><a contenteditable="false" data-type="indexterm" data-primary="strangler migration pattern" id="ch13-str3"></a><a contenteditable="false" data-type="indexterm" data-primary="bounded contexts" data-secondary="strangler migration pattern" id="ch13-str4"></a>modernization strategy: gradually replacing whole components of the system (the strangler pattern), or gradually refactoring the existing solution.</p>
+
+<section data-type="sect3" data-pdf-bookmark="Strangler pattern"><div class="sect3" id="strangler_pattern">
+<h3>Strangler pattern</h3>
+
+<p><em>Strangler fig</em>, shown in <a data-type="xref" href="#a_strangler_fig_growing_on_top_of_its_h">Figure 13-3</a>, is a family of tropical trees that share a peculiar growth pattern: stranglers grow over other trees—host trees. A strangler begins its life as a seed in the upper branches of the host tree. As the strangler grows, it makes its way down until it roots in the soil. Eventually, the strangler grows foliage that overshadows the host tree, leading to the host tree’s death.</p>
+<figure><div id="a_strangler_fig_growing_on_top_of_its_h" class="figure">
+<img src="assets/lddd_1303.png" alt="A strangler fig growing on top of its host tree" width="534" height="800"/>
+<h6><span class="label">Figure 13-3. </span>A strangler fig growing on top of its host tree (source: <em class="hyperlink">https://unsplash.com/photos/y_l5tep9wxI</em>)</h6>
+</div></figure>
+
+<p>The strangler migration pattern is based on the same growth dynamic as the tree the pattern is named after. The idea is to create a new bounded context—the strangler—use it to implement new requirements, and gradually migrate the legacy context’s functionality into it. At the same time, except for hotfixes and other emergencies, the evolution and development of the legacy bounded context stops. Eventually, all functionality is migrated to the new bounded context—the strangler— and following the analogy, leading to the death of the host—the legacy codebase.</p>
+
+<p>Usually, the strangler pattern is used in tandem with the façade pattern: <a contenteditable="false" data-type="indexterm" data-primary="façade pattern abstraction layer" data-secondary="strangler migration pattern and" id="id1483"></a>a thin abstraction layer that acts as the public interface and is in charge of forwarding the requests to processing either by the legacy or the modernized bounded context. When migration completes—that is, when the host dies—the façade is removed as it is no longer necessary (see <a data-type="xref" href="#the_fa_layer_forwarding_the_request_bas">Figure 13-4</a>).</p>
+<figure><div id="the_fa_layer_forwarding_the_request_bas" class="figure">
+<img src="assets/lddd_1304.png" alt="The façade layer forwarding the request based on the status of migrating the functionality from the legacy to the modernized system; once the migration is complete, both the façade and the legacy system are removed" width="600" height="270"/>
+<h6><span class="label">Figure 13-4. </span>The façade layer forwarding the request based on the status of migrating the functionality from the legacy to the modernized system; once the migration is complete, both the façade and the legacy system are removed</h6>
+</div></figure>
+
+<p>Contrary to the principle that each bounded context is a separate subsystem, and thus cannot share its database with other bounded contexts, the rule can be relaxed when implementing the strangler pattern. Both the modernized and the legacy contexts can use the same database for the sake of avoiding complex integration between the contexts, which in many cases can entail distributed transactions—both contexts have to work with the same data, as shown in <a data-type="xref" href="#both_the_legacy_and_the_modernized_syst">Figure 13-5</a>.</p>
+
+<p>The condition for bending the one-database-per-bounded-context rule is that eventually, and better sooner than later, the legacy context will be retired, and the database will be used exclusively by the new implementation.</p>
+<figure><div id="both_the_legacy_and_the_modernized_syst" class="figure">
+<img src="assets/lddd_1305.png" alt="Both the legacy and the modernized systems temporarily working with the same database " width="600" height="277"/>
+<h6><span class="label">Figure 13-5. </span>Both the legacy and the modernized systems temporarily working with the same database</h6>
+</div></figure>
+
+<p>An alternative to strangler-based migration is modernizing the legacy codebase in place, also called <em>refactoring</em>.<a contenteditable="false" data-type="indexterm" data-primary="real-world domain-driven design" data-secondary="modernization strategy" data-tertiary="refactoring" id="id1484"></a><a contenteditable="false" data-type="indexterm" data-primary="modernization strategy" data-secondary="refactoring" id="id1485"></a><a contenteditable="false" data-type="indexterm" data-primary="refactoring modernization strategy" id="id1486"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch13-str" id="id1487"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch13-str2" id="id1488"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch13-str3" id="id1489"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch13-str4" id="id1490"></a></p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Refactoring tactical design decisions"><div class="sect3" id="refactoring_tactical_design_decisions">
+<h3>Refactoring tactical design decisions</h3>
+
+<p>In <a data-type="xref" href="ch11.html#evolving_design_decisions">Chapter 11</a>, you learned the various aspects of migrating tactical design decisions. However, there are two nuances to be aware of when modernizing a legacy codebase.</p>
+
+<p>First, small incremental steps are safer than a big rewrite. Therefore, don’t refactor a transaction script or active record straight to an event-sourced domain model. Instead, take the intermediate step of designing state-based aggregates. Invest the effort in finding effective aggregate boundaries. Ensure that all related business logic resides within those boundaries. Going from state-based to event-sourced aggregates will be orders of magnitude safer than discovering wrong transactional boundaries in an event-sourced aggregate.</p>
+
+<p>Second, following the same reasoning of taking small incremental steps, refactoring to a domain model doesn’t have to be an atomic change. Instead, you can gradually introduce the elements of the domain model pattern.</p>
+
+<p>Start by looking for possible value objects. Immutable objects can significantly reduce the solution’s complexity, even if you are not using a full-blown domain model.</p>
+
+<p>As we discussed in <a data-type="xref" href="ch11.html#evolving_design_decisions">Chapter 11</a>, refactoring active records into aggregates doesn’t have to be done overnight. It can be done in gradual steps. Start by gathering the related business logic. Next, analyze the transactional boundaries. Are there decisions that require strong consistency but operate on eventually consistent data? Or conversely, does the solution enforce strong consistency where eventual consistency would suffice? When analyzing the codebase, don’t forget that these decisions are driven by business, not technology, concerns. Only after a thorough analysis of the transactional requirements should you design the aggregate’s boundaries.</p>
+
+<p>Finally, when necessary as you’re refactoring legacy systems, protect the new codebase from old models using an anticorruption layer, and protect the consumers from changes in the legacy codebase by implementing an open-host service and exposing a published language.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch13-blims" id="id1491"></a></p>
+</div></section>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Pragmatic Domain-Driven Design"><div class="sect1" id="pragmatic_domain_driven_design">
+<h1>Pragmatic Domain-Driven Design</h1>
+
+<p>As we discussed in this chapter’s introduction, applying domain-driven design<a contenteditable="false" data-type="indexterm" data-primary="real-world domain-driven design" data-secondary="pragmatic domain-driven design" id="id1492"></a><a contenteditable="false" data-type="indexterm" data-primary="pragmatic domain-driven design" id="id1493"></a> is not an all-or-nothing endeavor. You don’t have to apply every tool DDD has to offer. For example, for some reason, the tactical patterns might not work for you. Maybe you prefer to use other design patterns because they work better in your specific domain, or just because you find other patterns more effective. That’s totally fine!</p>
+
+<p>As long as you analyze your business domain and its strategy, look for effective models to solve particular problems, and most importantly, make design decisions based on the business domain’s needs: that’s domain-driven design!</p>
+
+<p>It’s worth reiterating that domain-driven design is not about aggregates or value objects. Domain-driven design is about letting your business <em>domain drive</em> software <em>design</em> decisions.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Selling Domain-Driven Design"><div class="sect1" id="selling_domain_driven_design">
+<h1>Selling Domain-Driven Design</h1>
+
+<p>When I present on this topic at technology conferences, there is one question<a contenteditable="false" data-type="indexterm" data-primary="domain-driven design (DDD)" data-secondary="selling to team and management" id="ch13-sell"></a><a contenteditable="false" data-type="indexterm" data-primary="real-world domain-driven design" data-secondary="selling domain-driven design" id="ch13-sell2"></a> that I’m asked almost every time: “That all sounds great, but how do I ‘sell’ domain-driven design to my team and management?” That’s an extremely important question.</p>
+
+<p>Selling is hard, and personally, I hate selling. That said, if you think about it, designing software is selling. We are selling our ideas to the team, to management, or to customers. However, a methodology that covers such a wide range of design decision aspects, and even reaches outside the engineering zone to involve other stakeholders, can be extremely hard to sell.</p>
+
+<p>Management support is essential for making any considerable changes in an organization. However, unless the top-level managers are already familiar with domain-driven design or are willing to invest time to learn the business value of the methodology, it’s not top of mind for them, especially because of a seemingly large shift in the engineering process that DDD entails. Fortunately, however, it doesn’t mean you can’t use domain-driven design.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Undercover Domain-Driven Design"><div class="sect2" id="undercover_domain_driven_design">
+<h2>Undercover Domain-Driven Design</h2>
+
+<p>Make domain-driven design a part of your professional toolbox,<a contenteditable="false" data-type="indexterm" data-primary="real-world domain-driven design" data-secondary="day-to-day DDD" id="ch13-sell3"></a> not an organizational strategy. DDD’s patterns and practices are engineering techniques, and since software engineering is your job, use them!</p>
+
+<p>Let’s see how to incorporate DDD into your day-to-day job without making much ado about it.</p>
+
+<section data-type="sect3" data-pdf-bookmark="Ubiquitous language"><div class="sect3" id="ubiquitous_language-id000161">
+<h3>Ubiquitous language</h3>
+
+<p>The use of a ubiquitous language is the cornerstone practice of domain-driven design. It is essential for domain knowledge discovery, communication, and effective solution modeling.</p>
+
+<p>Luckily, this practice is so trivial that it’s borderline common sense. Listen carefully to the language the stakeholders use when they speak about the business domain. Gently steer the terminology away from technical jargon and toward its business <span class="keep-together">meaning</span>.</p>
+
+<p>Look for inconsistent terms and ask for clarifications. For example, if there are multiple names for the same thing, look for the reason. Are those different models intertwined in the same solution? Look for contexts and make them explicit. If the meaning is the same, follow common sense and ask for one term to be used.</p>
+
+<p>Also, communicate with domain experts as much as possible. These efforts shouldn’t necessarily require formal meetings. Watercoolers and coffee breaks are great communication facilitators. Speak with the domain experts about the business domain. Try using their language. Look for difficulties in understanding and ask for clarifications. Don’t worry—domain experts are usually happy to collaborate with engineers who are sincerely interested in learning about the problem domain!</p>
+
+<p>Most importantly, use the ubiquitous language in your code and all project-related communication. Be patient. Changing the terminology that has been used in an organization for a while will take time, but eventually, it will catch on.</p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Bounded contexts"><div class="sect3" id="bounded_contexts-id000011">
+<h3>Bounded contexts</h3>
+
+<p>When exploring possible decomposition options, resolve to<a contenteditable="false" data-type="indexterm" data-primary="real-world domain-driven design" data-secondary="bounded contexts in real life" data-tertiary="day-to-day DDD" id="id1494"></a><a contenteditable="false" data-type="indexterm" data-primary="bounded contexts" data-secondary="real life" data-tertiary="day-to-day DDD" id="id1495"></a> the principles behind what the bounded context pattern is based on:</p>
+<ul>
+<li>
+	<p>Why is it better to design problem-oriented models instead of a single model for all use cases? Because “all-in-one” solutions are rarely effective for anything.</p></li>
+<li>
+	<p>Why can’t a bounded context host conflicting models? Because of the increased cognitive load and solution complexity.</p></li>
+<li>
+	<p>Why is it a bad idea for multiple teams to work on the same codebase? Because of friction and hindered collaboration between the teams.</p></li>
+</ul>
+
+<p>Use the same reasoning for bounded context integration patterns: make sure you understand the problem each pattern is supposed to solve.</p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Tactical design decisions"><div class="sect3" id="tactical_design_decisions">
+<h3>Tactical design decisions</h3>
+
+<p>When discussing tactical design patterns, don’t appeal to<a contenteditable="false" data-type="indexterm" data-primary="tactical design" data-secondary="day-to-day DDD" id="id1496"></a> authority: “Let’s use an aggregate here because the DDD book says so!” Instead, appeal to logic. For example:</p>
+<ul>
+<li>
+	<p>Why are explicit transactional boundaries important? To protect the consistency of the data.</p></li>
+<li>
+	<p>Why can’t a database transaction modify more than one instance of an aggregate? To ensure that the consistency boundaries are correct.</p></li>
+<li>
+	<p>Why can’t an aggregate’s state be modified directly by an external component? To ensure that all the related business logic is colocated and not duplicated.</p></li>
+<li>
+	<p>Why can’t we offload some of the aggregate’s functionality to a stored procedure? To make sure that no logic is duplicated. Duplicated logic, especially in logically and physically distant components of a system, tends to go out of sync and lead to data corruption.</p></li>
+<li>
+	<p>Why should we strive for small aggregate boundaries? Because wide transactional scope will both increase the complexity of the aggregate and negatively impact the performance.</p></li>
+<li>
+	<p>Why, instead of event sourcing, can’t we just write events to a logfile? Because there are no long-term data consistency guarantees.</p></li>
+</ul>
+
+<p>Speaking of event sourcing, when the solution calls for an event-sourced domain model, implementation of this pattern might be hard to sell. Let’s take a look at a Jedi mind trick that can help with this.</p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Event-sourced domain model"><div class="sect3" id="event_sourced_domain_model-id000067">
+<h3>Event-sourced domain model</h3>
+
+<p>Despite its many advantages, event sourcing sounds too radical for many people.<a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="selling domain-driven design" id="id1497"></a> As with everything we’ve discussed in this book, the solution is to let the business domain drive this decision.</p>
+
+<p>Talk to domain experts. Show them the state- and event-based models. Explain the differences and the advantages offered by event sourcing, especially with regard to the dimension of time. More often than not, they will be ecstatic with the level of insight it provides and will advocate event sourcing themselves.</p>
+
+<p>And while interacting with the domain experts, don’t forget to work on the ubiquitous language!<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch13-sell" id="id1498"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch13-sell2" id="id1499"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch13-sell3" id="id1500"></a></p>
+</div></section>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Conclusion"><div class="sect1" id="conclusion-id000037">
+<h1>Conclusion</h1>
+
+<p>In this chapter, you learned various techniques for leveraging domain-driven design tools in real-life scenarios: when working on brownfield projects and legacy codebases, and not necessarily with a team of DDD experts.</p>
+
+<p>As in greenfield projects, always start by analyzing the business domain. What are the company’s goals and its strategy for achieving them? Use the organizational structure and existing software design decisions to identify the organization’s subdomains and their types. With this knowledge, plan the modernization strategy. Look for pain points. Look to gain the most business value. Modernize legacy code either by refactoring or by replacing the relevant components. Either way, do it gradually. Big rewrites entail more risk than business value!</p>
+
+<p>Finally, you can use domain-driven design tools even if DDD is not widely adopted in your organization. Use the right tools, and when discussing them with colleagues, always use the logic and principles behind each pattern.</p>
+
+<p>This chapter concludes our discussion of domain-driven design on its own. In <a data-type="xref" href="part04.html#relationships_to_other_methodologies_an">Part IV</a>, you will learn about the interplay of DDD with other methodologies and <span class="keep-together">patterns</span>.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Exercises"><div class="sect1" id="exercises-id000082">
+<h1>Exercises</h1>
+<ol>
+          <li>
+            <p>Assume you want to introduce domain-driven design tools and practices to a brownfield project. What is going to be your first step?</p>
+            <ol type="a">
+              <li>
+                <p>Refactor all business logic to the event-sourced domain model.</p>
+              </li>
+              <li>
+                <p>Analyze the organization’s business domain and its strategy.</p>
+              </li>
+              <li>
+                <p>Improve the system’s components by ensuring that they follow the principles of proper bounded contexts.</p>
+              </li>
+              <li>
+                <p>It’s impossible to use domain-driven design in a brownfield project.</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>In what ways does the strangler pattern contradict some of the core principles of domain-driven design during the migration process? Select all that apply.</p>
+            <ol type="a">
+              <li>
+                <p>Multiple bounded contexts are using a shared database.</p>
+              </li>
+              <li>
+                <p>If the modernized bounded context is a core subdomain, its implementation gets duplicated in the old and the new implementations.</p>
+              </li>
+              <li>
+                <p>Multiple teams are working on the same bounded context.</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Why is it generally not a good idea to refactor active-record-based business logic straight into the event-sourced domain model? Select all that apply. </p>
+            <ol type="a">
+              <li>
+                <p>A state-based model makes it easier to refactor aggregates’ boundaries during the learning process.</p>
+              </li>
+              <li>
+                <p>It’s safer to introduce big changes gradually.</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>When you’re introducing the aggregate pattern, your colleague asks why the aggregate can’t just reference all the possible entities and thus make it possible to traverse the whole business domain from one place. How do you answer the question?</p>
+          </li>
+        </ol>
+</div></section>
+</div></section></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xml:lang="en"
+lang="en"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title>Learning Domain-Driven Design</title>
+<link rel="stylesheet" type="text/css" href="override_v1.css"/>
+<link rel="stylesheet" type="text/css" href="epub.css"/>
+</head>
+<body>
+<div id="book-content">
+<div id="sbo-rt-content"><section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 15. Event-Driven Architecture"><div class="chapter" id="event_driven_architectur">
+<h1><span class="label">Chapter 15. </span>Event-Driven Architecture</h1>
+
+<p>As microservices, event-driven architecture (EDA) is ubiquitous<a contenteditable="false" data-type="indexterm" data-primary="event-driven architecture (EDA)" data-secondary="about domain-driven design and" id="id1554"></a> in modern distributed systems. Many advise using event-driven communication as the default integration mechanism when designing loosely coupled, scalable, fault-tolerant distributed systems.</p>
+
+<p>Event-driven architecture is often linked to domain-driven design. After all, EDA is based on events, and events are prominent in DDD—we have domain events, and when needed, we even use events as the system’s source of truth. It may be tempting to leverage DDD’s events as the basis for using event-driven architecture. But is this a good idea?</p>
+
+<p>Events are not a kind of secret sauce that you can just pour over a legacy system and turn it into a loosely coupled distributed system. Quite the opposite: careless application of EDA can turn a modular monolith into a distributed big ball of mud.</p>
+
+<p>In this chapter, we will explore the interplay between EDA and DDD. You will learn the essential building blocks of event-driven architecture, common causes for failed EDA projects, and how you can leverage DDD’s tools to design effective, asynchronously integrated systems.</p>
+
+<section data-type="sect1" data-pdf-bookmark="Event-Driven Architecture"><div class="sect1" id="event_driven_architecture">
+<h1>Event-Driven Architecture</h1>
+
+<p>Stated simply, <em>event-driven architecture</em> is an architectural style<a contenteditable="false" data-type="indexterm" data-primary="event-driven architecture (EDA)" data-secondary="about event-driven architecture" id="id1555"></a> in which a system’s components communicate with one another asynchronously by exchanging event messages (see <a data-type="xref" href="#asynchronous_communication">Figure 15-1</a>). Instead of calling the services’ endpoints synchronously, the components publish events to notify other system elements of changes in the system’s domain. The components can subscribe to events raised in the system and react accordingly. A typical example of an event-driven execution flow is the saga pattern that was described in <a data-type="xref" href="ch09.html#communication_patterns">Chapter 9</a>.</p>
+<figure><div id="asynchronous_communication" class="figure">
+<img src="assets/lddd_1501.png" alt="Asynchronous communication" width="600" height="172"/>
+<h6><span class="label">Figure 15-1. </span>Asynchronous communication</h6>
+</div></figure>
+
+<p>It’s important to highlight the difference between<a contenteditable="false" data-type="indexterm" data-primary="event-driven architecture (EDA)" data-secondary="about event-driven architecture" data-tertiary="event sourcing versus" id="id1556"></a><a contenteditable="false" data-type="indexterm" data-primary="time modeled via event sourcing" data-secondary="event sourcing pattern" data-tertiary="event-driven architecture versus" id="id1557"></a><a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="event sourcing pattern" data-tertiary="event-driven architecture versus" id="id1558"></a><a contenteditable="false" data-type="indexterm" data-primary="events" data-secondary="event-driven architecture" data-tertiary="event sourcing versus" id="id1559"></a> event-driven architecture and event sourcing. As we discussed in <a data-type="xref" href="ch07.html#modeling_the_dimension_of_time">Chapter 7</a>, event sourcing is a method for capturing changes in state as a series of events.</p>
+
+<p>Although both event-driven architecture and event sourcing are based on events, the two patterns are conceptually different. <a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="event-driven architecture as" id="id1560"></a>EDA refers to the communication between services, while event sourcing happens inside a service. The events designed for event sourcing represent state transitions (of aggregates in an event-sourced domain model) implemented in the service. They are aimed at capturing the intricacies of the business domain and are not intended to integrate the service with other system <span class="keep-together">components</span>.</p>
+
+<p>As you will see later in this chapter, there are three types of events, and some are more suited for integration than others.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Events"><div class="sect1" id="events">
+<h1>Events</h1>
+
+<p>In an EDA system, the exchange of events is the key communication<a contenteditable="false" data-type="indexterm" data-primary="events" data-secondary="about" id="id1561"></a><a contenteditable="false" data-type="indexterm" data-primary="events" data-secondary="event-driven architecture" id="ch15-even"></a><a contenteditable="false" data-type="indexterm" data-primary="event-driven architecture (EDA)" data-secondary="events" id="ch15-even2"></a> mechanism for integrating the components and making them a system. Let’s take a look at  events in more detail and see how they differ from messages.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Events, Commands, and Messages"><div class="sect2" id="eventscomma_commandscomma_and_messages">
+<h2>Events, Commands, and Messages</h2>
+
+<p>So far, the definition of an event is similar to the definition of the message pattern.<sup><a data-type="noteref" id="ch01fn47-marker" href="ch15.html#ch01fn47">1</a></sup> However, the two are different. <a contenteditable="false" data-type="indexterm" data-primary="commands" data-secondary="events versus" id="id1562"></a>An event is a message, but a message is not necessarily an event. There are two types of messages:</p>
+<dl class="pagebreak-before less_space">
+<dt>Event</dt>
+<dd>A message describing a change that has already happened</dd>
+<dt>Command</dt>
+<dd>A message describing an operation that has to be carried out</dd>
+</dl>
+
+<p>An event is something that has already happened, whereas a command is an instruction to do something. Both events and commands can be communicated asynchronously as messages. However, a command can be rejected: the command’s target can refuse to execute the command, for example, if the command is invalid or if it contradicts the system’s business rules. A recipient of an event, on the other hand, cannot cancel the event. The event describes something that has already happened. The only thing that can be done to overturn an event is to issue a compensating action—a command, as it’s carried out in the saga pattern.</p>
+
+<p>Since an event describes something that has already happened, <a contenteditable="false" data-type="indexterm" data-primary="names" data-secondary="events as past tense" id="id1563"></a><a contenteditable="false" data-type="indexterm" data-primary="events" data-secondary="names of" id="id1564"></a>an event’s name should be formulated in the past tense: for example, DeliveryScheduled, ShipmentCompleted, or DeliveryConfirmed.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Structure"><div class="sect2" id="structure">
+<h2>Structure</h2>
+
+<p>An event is a data record that can be serialized and transmitted<a contenteditable="false" data-type="indexterm" data-primary="events" data-secondary="structure" id="id1565"></a> using the messaging platform of choice. A typical event schema includes the event’s metadata and its payload—the information communicated by the event:</p>
+<pre data-code-language="json"><code class="p">{</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"type"</code><code class="p">:</code><code class="w"> </code><code class="s2">"delivery-confirmed"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-id"</code><code class="p">:</code><code class="w"> </code><code class="s2">"14101928-4d79-4da6-9486-dbc4837bc612"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"correlation-id"</code><code class="p">:</code><code class="w"> </code><code class="s2">"08011958-6066-4815-8dbe-dee6d9e5ebac"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"delivery-id"</code><code class="p">:</code><code class="w"> </code><code class="s2">"05011927-a328-4860-a106-737b2929db4e"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"timestamp"</code><code class="p">:</code><code class="w"> </code><code class="mi">1615718833</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"payload"</code><code class="p">:</code><code class="w"> </code><code class="p">{</code><code class="w"></code>
+<code class="w">        </code><code class="nt">"confirmed-by"</code><code class="p">:</code><code class="w"> </code><code class="s2">"17bc9223-bdd6-4382-954d-f1410fd286bd"</code><code class="p">,</code><code class="w"></code>
+<code class="w">        </code><code class="nt">"delivery-time"</code><code class="p">:</code><code class="w"> </code><code class="mi">1615701406</code><code class="w"></code>
+<code class="w">    </code><code class="p">}</code><code class="w"></code>
+<code class="p">}</code><code class="w"></code></pre>
+
+<p>An event’s payload not only describes the information conveyed by the event, but also defines the event’s type. Let’s discuss the three types of events in detail and how they differ from one another.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Types of Events"><div class="sect2" id="types_of_events">
+<h2>Types of Events</h2>
+
+<p>Events can be categorized into <a contenteditable="false" data-type="indexterm" data-primary="events" data-secondary="about types of" id="id1566"></a>one of three types:<sup><a data-type="noteref" id="ch01fn48-marker" href="ch15.html#ch01fn48">2</a></sup> event notification, event-carried state transfer, or domain events.</p>
+
+<section data-type="sect3" data-pdf-bookmark="Event notification"><div class="sect3" id="event_notification">
+<h3>Event notification</h3>
+
+<p>An event notification is a message regarding a change in the business domain<a contenteditable="false" data-type="indexterm" data-primary="event notification" id="id1567"></a><a contenteditable="false" data-type="indexterm" data-primary="events" data-secondary="event notification" id="id1568"></a><a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="event-driven architecture as" data-tertiary="event notification" id="id1569"></a> that other components will react to. Examples include PaycheckGenerated and CampaignPublished, among others.</p>
+
+<p>The event notification should not be verbose: the goal is to notify the interested parties about the event, but the notification shouldn’t carry all the information needed for the subscribers to react to the event. For example:</p>
+<pre data-code-language="json"><code class="p">{</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"type"</code><code class="p">:</code><code class="w"> </code><code class="s2">"paycheck-generated"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-id"</code><code class="p">:</code><code class="w"> </code><code class="s2">"537ec7c2-d1a1-2005-8654-96aee1116b72"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"delivery-id"</code><code class="p">:</code><code class="w"> </code><code class="s2">"05011927-a328-4860-a106-737b2929db4e"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"timestamp"</code><code class="p">:</code><code class="w"> </code><code class="mi">1615726445</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"payload"</code><code class="p">:</code><code class="w"> </code><code class="p">{</code><code class="w"></code>
+<code class="w">        </code><code class="nt">"employee-id"</code><code class="p">:</code><code class="w"> </code><code class="s2">"456123"</code><code class="p">,</code><code class="w"></code>
+<code class="w">        </code><code class="nt">"link"</code><code class="p">:</code><code class="w"> </code><code class="s2">"/paychecks/456123/2021/01"</code><code class="w"></code>
+<code class="w">    </code><code class="p">}</code><code class="w"></code>
+<code class="p">}</code><code class="w"></code></pre>
+
+<p>In the preceding code, the event notifies the external components of a paycheck that was generated. It doesn’t carry all the information related to the paycheck. Instead, the receiver can use the link to fetch more detailed information. This notification flow is depicted in <a data-type="xref" href="#event_notification_flow">Figure 15-2</a>.</p>
+<figure><div id="event_notification_flow" class="figure">
+<img src="assets/lddd_1502.png" alt="Event notification flow" width="600" height="290"/>
+<h6><span class="label">Figure 15-2. </span>Event notification flow</h6>
+</div></figure>
+
+<p>In a sense, integration through event notification messages is similar to the Wireless Emergency Alert (WEA) system in the United States and EU-Alert in Europe (see <a data-type="xref" href="#emergency_alert_system">Figure 15-3</a>). The systems use cell towers to broadcast short messages, notifying citizens about public health concerns, safety threats, and other emergencies. The systems are limited to sending messages with a maximum length of 360 characters. This short message is enough to notify you about the emergency, but you have to proactively use other information sources to get more details.</p>
+<figure><div id="emergency_alert_system" class="figure">
+<img src="assets/lddd_1503.png" alt="Emergency alert system " width="600" height="337"/>
+<h6><span class="label">Figure 15-3. </span>Emergency alert system</h6>
+</div></figure>
+
+<p>Succinct event notifications can be preferable in multiple scenarios. Let’s take a closer look at two: security and concurrency.</p>
+
+<section data-type="sect4" data-pdf-bookmark="Security"><div class="sect4" id="securitydot">
+<h4>Security</h4>
+
+<p>Enforcing the recipient to explicitly query for the detailed information<a contenteditable="false" data-type="indexterm" data-primary="events" data-secondary="event notification" data-tertiary="security" id="id1570"></a><a contenteditable="false" data-type="indexterm" data-primary="event notification" data-secondary="security" id="id1571"></a> prevents sharing sensitive information over the messaging infrastructure and requires additional authorization of the subscribers to access the data.</p>
+</div></section>
+
+<section data-type="sect4" data-pdf-bookmark="Concurrency"><div class="sect4" id="concurrencydot">
+<h4>Concurrency</h4>
+
+<p>Due to the asynchronous nature of event-driven integration, the<a contenteditable="false" data-type="indexterm" data-primary="event notification" data-secondary="concurrency" id="id1572"></a><a contenteditable="false" data-type="indexterm" data-primary="events" data-secondary="event notification" data-tertiary="concurrency" id="id1573"></a> information can already be rendered stale when it reaches the subscribers. If the information’s nature is sensitive to race conditions, querying it explicitly allows getting the up-to-date state.</p>
+
+<p>Furthermore, in the case of concurrent consumers, where only one subscriber should process an event, the querying process can be integrated with pessimistic locking. This ensures the producer’s side that no other consumer will be able to process the message.</p>
+</div></section>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Event-carried state transfer"><div class="sect3" id="event_carried_state_transfer">
+<h3>Event-carried state transfer</h3>
+
+<p>Event-carried state transfer (ECST) messages notify subscribers<a contenteditable="false" data-type="indexterm" data-primary="event-carried state transfer (ECST)" id="id1574"></a><a contenteditable="false" data-type="indexterm" data-primary="events" data-secondary="event-carried state transfer" id="id1575"></a><a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="event-driven architecture as" data-tertiary="event-carried state transfer" id="id1576"></a> about changes in the producer’s internal state. Contrary to event notification messages, ECST messages include all the data reflecting the change in the state.</p>
+
+<p class="pagebreak-before less_space">ECST messages can come in two forms. The first is a complete snapshot of the modified entity’s state:</p>
+<pre data-code-language="json"><code class="p">{</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"type"</code><code class="p">:</code><code class="w"> </code><code class="s2">"customer-updated"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-id"</code><code class="p">:</code><code class="w"> </code><code class="s2">"6b7ce6c6-8587-4e4f-924a-cec028000ce6"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"customer-id"</code><code class="p">:</code><code class="w"> </code><code class="s2">"01b18d56-b79a-4873-ac99-3d9f767dbe61"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"timestamp"</code><code class="p">:</code><code class="w"> </code><code class="mi">1615728520</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"payload"</code><code class="p">:</code><code class="w"> </code><code class="p">{</code><code class="w"></code>
+<code class="w">        </code><code class="nt">"first-name"</code><code class="p">:</code><code class="w"> </code><code class="s2">"Carolyn"</code><code class="p">,</code><code class="w"></code>
+<code class="w">        </code><code class="nt">"last-name"</code><code class="p">:</code><code class="w"> </code><code class="s2">"Hayes"</code><code class="p">,</code><code class="w"></code>
+<code class="w">        </code><code class="nt">"phone"</code><code class="p">:</code><code class="w"> </code><code class="s2">"555-1022"</code><code class="p">,</code><code class="w"></code>
+<code class="w">        </code><code class="nt">"status"</code><code class="p">:</code><code class="w"> </code><code class="s2">"follow-up-set"</code><code class="p">,</code><code class="w"></code>
+<code class="w">        </code><code class="nt">"follow-up-date"</code><code class="p">:</code><code class="w"> </code><code class="s2">"2021/05/08"</code><code class="p">,</code><code class="w"></code>
+<code class="w">        </code><code class="nt">"birthday"</code><code class="p">:</code><code class="w"> </code><code class="s2">"1982/04/05"</code><code class="p">,</code><code class="w"></code>
+<code class="w">        </code><code class="nt">"version"</code><code class="p">:</code><code class="w"> </code><code class="mi">7</code><code class="w"></code>
+<code class="w">    </code><code class="p">}</code><code class="w"></code>
+<code class="p">}</code><code class="w"></code></pre>
+
+<p>The ECST message in the preceding example includes a complete snapshot of a customer’s updated state. When operating large data structures, it may be reasonable to include in the ECST message only the fields that were actually modified:</p>
+<pre data-code-language="json"><code class="p">{</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"type"</code><code class="p">:</code><code class="w"> </code><code class="s2">"customer-updated"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-id"</code><code class="p">:</code><code class="w"> </code><code class="s2">"6b7ce6c6-8587-4e4f-924a-cec028000ce6"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"customer-id"</code><code class="p">:</code><code class="w"> </code><code class="s2">"01b18d56-b79a-4873-ac99-3d9f767dbe61"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"timestamp"</code><code class="p">:</code><code class="w"> </code><code class="mi">1615728520</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"payload"</code><code class="p">:</code><code class="w"> </code><code class="p">{</code><code class="w"></code>
+<code class="w">        </code><code class="nt">"status"</code><code class="p">:</code><code class="w"> </code><code class="s2">"follow-up-set"</code><code class="p">,</code><code class="w"></code>
+<code class="w">        </code><code class="nt">"follow-up-date"</code><code class="p">:</code><code class="w"> </code><code class="s2">"2021/05/10"</code><code class="p">,</code><code class="w"></code>
+<code class="w">        </code><code class="nt">"version"</code><code class="p">:</code><code class="w"> </code><code class="mi">8</code><code class="w"></code>
+<code class="w">    </code><code class="p">}</code><code class="w"></code>
+<code class="p">}</code><code class="w"></code></pre>
+
+<p>Whether ECST messages include complete snapshots or only the updated fields, a stream of such events allows consumers to hold a local cache of the entities’ states and work with it. Conceptually, using event-carried state transfer messages is an asynchronous data replication mechanism. This approach makes the system more fault tolerant, meaning that the consumers can continue functioning even if the producer is not available. It is also a way to improve the performance of components that have to process data from multiple sources. Instead of querying the data sources each time the data is needed, all the data can be cached locally, as shown in <a data-type="xref" href="#backend_for_frontend">Figure 15-4</a>.</p>
+<figure><div id="backend_for_frontend" class="figure">
+<img src="assets/lddd_1504.png" alt="Backend for frontend" width="600" height="347"/>
+<h6><span class="label">Figure 15-4. </span>Backend for frontend</h6>
+</div></figure>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Domain event"><div class="sect3" id="domain_event">
+<h3>Domain event</h3>
+
+<p>The third type of event message is the domain event that we described<a contenteditable="false" data-type="indexterm" data-primary="events" data-secondary="domain events" id="id1577"></a><a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="event-driven architecture as" data-tertiary="domain events" id="id1578"></a><a contenteditable="false" data-type="indexterm" data-primary="domain events" data-secondary="event-driven architecture" id="id1579"></a> in <a data-type="xref" href="ch06.html#tackling_complex_business_logic">Chapter 6</a>. In a way, domain events are somewhere between event notification and ECST messages: they both describe a significant event in the business domain, and they contain all the data describing the event. Despite the similarities, these types of messages are conceptually different.</p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Domain events versus event notification"><div class="sect3" id="domain_events_vsdot_event_notification">
+<h3>Domain events versus event notification</h3>
+
+<p>Both domain events and event notifications describe<a contenteditable="false" data-type="indexterm" data-primary="events" data-secondary="domain events" data-tertiary="event notification versus" id="id1580"></a><a contenteditable="false" data-type="indexterm" data-primary="domain events" data-secondary="event-driven architecture" data-tertiary="event notification versus" id="id1581"></a><a contenteditable="false" data-type="indexterm" data-primary="events" data-secondary="event notification" data-tertiary="domain events versus" id="id1582"></a><a contenteditable="false" data-type="indexterm" data-primary="event notification" data-secondary="domain events versus" id="id1583"></a> changes in the producer’s business domain. That said, there are two conceptual differences.</p>
+
+<p>First, domain events include all the information describing the event.  The consumer does not need to take any further action to get the complete picture.</p>
+
+<p>Second, the modeling intent is different. Event notifications are designed with the intent to alleviate integration with other components. Domain events, on the other hand, are intended to model and describe the business domain. Domain events can be useful even if no external consumer is interested in them. That’s especially true in event-sourced systems, where domain events are used to model all possible state transitions. Having external consumers interested in all the available domain events would result in suboptimal design. We will discuss this in greater detail later in this chapter.</p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Domain events versus event-carried state transfer"><div class="sect3" id="domain_events_vsdot_event_carried_state">
+<h3>Domain events versus event-carried state transfer</h3>
+
+<p>The data contained in domain events is conceptually different<a contenteditable="false" data-type="indexterm" data-primary="event-carried state transfer (ECST)" data-secondary="domain events versus" id="id1584"></a><a contenteditable="false" data-type="indexterm" data-primary="events" data-secondary="domain events" data-tertiary="event-carried state transfer versus" id="id1585"></a><a contenteditable="false" data-type="indexterm" data-primary="events" data-secondary="event-carried state transfer" data-tertiary="domain events versus" id="id1586"></a><a contenteditable="false" data-type="indexterm" data-primary="domain events" data-secondary="event-driven architecture" data-tertiary="event-carried state transfer versus" id="id1587"></a> from the schema of a typical ECST message.</p>
+
+<p>An ECST message provides sufficient information to hold a local cache of the producer’s data. No single domain event is supposed to expose such a rich model. Even the data included in a specific domain event is not sufficient for caching the aggregate’s state, as other domain events that the consumer is not subscribed to may affect the same fields.</p>
+
+<p>Furthermore, as in the case of notification events, the modeling intent is different for the two types of messages. The data included in domain events is not intended to describe the aggregate’s state. Instead, it describes a business event that happened during its lifecycle.</p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Event types: Example"><div class="sect3" id="event_types_example">
+<h3>Event types: Example</h3>
+
+<p>Here is an example that demonstrates the differences between<a contenteditable="false" data-type="indexterm" data-primary="events" data-secondary="domain events" data-tertiary="example" id="id1588"></a><a contenteditable="false" data-type="indexterm" data-primary="domain events" data-secondary="example" id="id1589"></a><a contenteditable="false" data-type="indexterm" data-primary="events" data-secondary="event-carried state transfer" data-tertiary="example" id="id1590"></a><a contenteditable="false" data-type="indexterm" data-primary="event-carried state transfer (ECST)" data-secondary="example" id="id1591"></a><a contenteditable="false" data-type="indexterm" data-primary="events" data-secondary="about types of" data-tertiary="example" id="id1592"></a><a contenteditable="false" data-type="indexterm" data-primary="event notification" data-secondary="example" id="id1593"></a><a contenteditable="false" data-type="indexterm" data-primary="events" data-secondary="event notification" data-tertiary="example" id="id1594"></a> the three types of events. Consider the following three ways to represent the event of marriage:</p>
+<pre data-code-language="javascript"><code class="nx">eventNotification</code> <code class="o">=</code> <code class="p">{</code>
+    <code class="s2">"type"</code><code class="o">:</code> <code class="s2">"marriage-recorded"</code><code class="p">,</code>
+    <code class="s2">"person-id"</code><code class="o">:</code> <code class="s2">"01b9a761"</code><code class="p">,</code>
+    <code class="s2">"payload"</code><code class="o">:</code> <code class="p">{</code>
+        <code class="s2">"person-id"</code><code class="o">:</code> <code class="s2">"126a7b61"</code><code class="p">,</code>
+        <code class="s2">"details"</code><code class="o">:</code> <code class="s2">"/01b9a761/marriage-data"</code>
+    <code class="p">}</code>
+<code class="p">};</code>
+
+<code class="nx">ecst</code> <code class="o">=</code> <code class="p">{</code>
+    <code class="s2">"type"</code><code class="o">:</code> <code class="s2">"personal-details-changed"</code><code class="p">,</code>
+    <code class="s2">"person-id"</code><code class="o">:</code> <code class="s2">"01b9a761"</code><code class="p">,</code>
+    <code class="s2">"payload"</code><code class="o">:</code> <code class="p">{</code>
+        <code class="s2">"new-last-name"</code><code class="o">:</code> <code class="s2">"Williams"</code>
+    <code class="p">}</code>
+<code class="p">};</code>
+
+<code class="nx">domainEvent</code> <code class="o">=</code> <code class="p">{</code>
+    <code class="s2">"type"</code><code class="o">:</code> <code class="s2">"married"</code><code class="p">,</code>
+    <code class="s2">"person-id"</code><code class="o">:</code> <code class="s2">"01b9a761"</code><code class="p">,</code>
+    <code class="s2">"payload"</code><code class="o">:</code> <code class="p">{</code>
+        <code class="s2">"person-id"</code><code class="o">:</code> <code class="s2">"126a7b61"</code><code class="p">,</code>
+        <code class="s2">"assumed-partner-last-name"</code><code class="o">:</code> <code class="kc">true</code>
+    <code class="p">}</code>
+<code class="p">};</code></pre>
+
+<p class="pagebreak-before less_space"><code>marriage-recorded</code> is an event notification message. It contains no information except the fact that the person with the specified ID got married. It contains minimal information about the event, and the consumers interested in more details will have to follow the link in the <code>details</code> field.</p>
+
+<p><code>personal-details-changed</code> is an event-carried state transfer message. It describes the changes in the person’s personal details, namely that their last name has been changed. The message doesn’t explain the reason why it has changed. Did the person get married or divorced?</p>
+
+<p>Finally, <code>married</code> is a domain event. It is modeled as close as possible to the nature of the event in the business domain. It includes the person’s ID and a flag indicating whether the person assumed their partner’s name.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch15-even" id="id1595"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch15-even2" id="id1596"></a></p>
+</div></section>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Designing Event-Driven Integration"><div class="sect1" id="designing_event_driven_integration">
+<h1>Designing Event-Driven Integration</h1>
+
+<p>As we discussed in <a data-type="xref" href="ch03.html#managing_domain_complexity">Chapter 3</a>, software design is predominantly<a contenteditable="false" data-type="indexterm" data-primary="event-driven architecture (EDA)" data-secondary="designing" data-tertiary="about" id="id1597"></a><a contenteditable="false" data-type="indexterm" data-primary="boundaries" data-secondary="event-driven architecture" id="id1598"></a> about boundaries. Boundaries define what belongs inside, what remains outside, and most importantly, what goes across the boundaries—essentially, how the components are integrated with one another. The events in an EDA-based system are first-class design elements, affecting both how the components are integrated and the components’ boundaries themselves. Choosing the correct type of event message is what makes (decouples) or breaks (couples) a distributed system.</p>
+
+<p>In this section, you will learn heuristics for applying different event types. But first, let’s see how to use events to design a strongly coupled, distributed big ball of mud.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Distributed Big Ball of Mud"><div class="sect2" id="distributed_big_ball_of_mud">
+<h2>Distributed Big Ball of Mud</h2>
+
+<p>Consider the system shown in <a data-type="xref" href="#strongly_coupled_distributed_system">Figure 15-5</a>.<a contenteditable="false" data-type="indexterm" data-primary="event-driven architecture (EDA)" data-secondary="designing" data-tertiary="distributed big ball of mud" id="id1599"></a><a contenteditable="false" data-type="indexterm" data-primary="big ball of mud" data-secondary="distributing via events" id="id1600"></a></p>
+
+<p>The CRM bounded context is implemented as an event-sourced domain model. When the CRM system had to be integrated with the Marketing bounded context, the teams decided to leverage the event-sourced data model’s flexibility and let the consumer—in this case, Marketing—subscribe to the CRM’s domain events and use them to project the model that fits their needs.</p>
+
+<p>When the AdsOptimization bounded context was introduced, it also had to process the information produced by the CRM bounded context. Again, the teams decided to let AdsOptimization subscribe to all domain events produced in the CRM and project the model that fits AdsOptimization’s needs.</p>
+
+<figure><div id="strongly_coupled_distributed_system" class="figure">
+<img src="assets/lddd_1505.png" alt="Strongly coupled distributed system" width="600" height="486"/>
+<h6><span class="label">Figure 15-5. </span>Strongly coupled distributed system</h6>
+</div></figure>
+
+<p>Interestingly, both the Marketing and AdsOptimization bounded contexts had to present the customers’ information in the same format, and hence ended up projecting the same model out of the CRM’s domain events: a flattened snapshot of each customer’s state.</p>
+
+<p>The Reporting bounded context subscribed only to a subset of domain events published by the CRM and used as event notification messages to fetch the calculations performed in the AdsOptimization context. However, since both AdsOptimization and Reporting bounded contexts use the same events to trigger their calculations, to ensure that the Reporting model is updated the AdsOptimization context introduced a delay. It processed messages five minutes after receiving them.</p>
+
+<p>This design is terrible. Let’s analyze the types of coupling in this <span class="keep-together">system</span>.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Temporal Coupling"><div class="sect2" id="temporal_coupling">
+<h2>Temporal Coupling</h2>
+
+<p>The AdsOptimization and Reporting bounded contexts are temporally<a contenteditable="false" data-type="indexterm" data-primary="event-driven architecture (EDA)" data-secondary="designing" data-tertiary="temporal coupling" id="id1601"></a> coupled: they depend on a strict order of execution. The AdsOptimization component has to finish its processing before the Reporting module is triggered. If the order is reversed, inconsistent data will be produced in the Reporting system.</p>
+
+<p>To enforce the required execution order, the engineers introduced the processing delay in the Reporting system. This delay of five minutes lets the AdsOptimization component finish the required calculations. Obviously, this doesn’t prevent incorrect order of execution:</p>
+<ul>
+<li>
+  <p>AdsOptimization may be overloaded and unable to finish the processing in five minutes.</p></li>
+<li>
+  <p>A network issue may delay the delivery of incoming messages to the AdsOptimization service.</p></li>
+<li>
+  <p>The AdsOptimization component can experience an outage and stop processing incoming messages.</p></li>
+</ul>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Functional Coupling"><div class="sect2" id="logical_coupling">
+<h2>Functional Coupling</h2>
+
+<p>The Marketing and AdsOptimization bounded contexts both subscribed<a contenteditable="false" data-type="indexterm" data-primary="event-driven architecture (EDA)" data-secondary="designing" data-tertiary="logical coupling" id="id1602"></a> to the CRM’s domain events and ended up implementing the same projection of the customers’ data. In other words, the business logic that transforms incoming domain events into a state-based representation was duplicated in both bounded contexts, and it had the same reasons for change: they had to present the customers’ data in the same format. Therefore, if the projection was changed in one of the components, the change had to be replicated in the second bounded context.</p>
+
+<p>That’s an example of functional coupling: multiple components implementing the same business functionality, and if it changes, both components have to change simultaneously.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Implementation Coupling"><div class="sect2" id="implementation_coupling">
+<h2>Implementation Coupling</h2>
+
+<p>This type of coupling is more subtle. The Marketing and AdsOptimization<a contenteditable="false" data-type="indexterm" data-primary="event-driven architecture (EDA)" data-secondary="designing" data-tertiary="implementation coupling" id="id1603"></a> bounded contexts are subscribed to all the domain events generated by the CRM’s event-sourced model. Consequently, a change in the CRM’s implementation, such as adding a new domain event or changing the schema of an existing one, has to be reflected in both subscribing bounded contexts! Failing to do so can lead to inconsistent data. For example, if an event’s schema changes, the subscribers’ projection logic will fail. On the other hand, if a new domain event is added to the CRM’s model, it can potentially affect the projected models, and thus, ignoring it will lead to projecting an inconsistent state.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Refactoring the Event-Driven Integration"><div class="sect2" id="refactoring_the_event_driven_integratio">
+<h2>Refactoring the Event-Driven Integration</h2>
+
+<p>As you can see, blindly pouring events on a system makes it neither<a contenteditable="false" data-type="indexterm" data-primary="event-driven architecture (EDA)" data-secondary="designing" data-tertiary="refactoring" id="id1604"></a><a contenteditable="false" data-type="indexterm" data-primary="refactoring modernization strategy" data-secondary="event-driven architecture" id="id1605"></a> decoupled nor resilient. You may assume that this is an unrealistic example, but unfortunately, this example is based on a true story. Let’s see how the events can be adjusted to improve the design dramatically.</p>
+
+<p>Exposing all the domain events constituting the CRM’s data model couples the subscribers to the producer’s implementation details. The implementation coupling can be addressed by exposing either a much more restrained set of events or a different type of events.</p>
+
+<p>The Marketing and AdsOptimization subscribers are functionally coupled to each other by implementing the same business functionality.</p>
+
+<p>Both implementation and functional coupling can be tackled by encapsulating the projection logic in the producer: the CRM bounded contexts. Instead of exposing its implementation details, the CRM can follow the consumer-driven contract pattern: project the model needed by the consumers and make it a part of the bounded context’s published language—an integration-specific model, decoupled from the internal implementation model. As a result, the consumers get all the data they need and are not aware of the CRM’s implementation model.</p>
+
+<p>To tackle the temporal coupling between the AdsOptimization and Reporting bounded contexts, the AdsOptimization component can publish an event notification message, triggering the Reporting component to fetch the data it needs. This refactored system is shown in <a data-type="xref" href="#refactored_system">Figure 15-6</a>.</p>
+<figure><div id="refactored_system" class="figure">
+<img src="assets/lddd_1506.png" alt="Refactored system" width="600" height="443"/>
+<h6><span class="label">Figure 15-6. </span>Refactored system</h6>
+</div></figure>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Event-Driven Design Heuristics"><div class="sect2" id="event_driven_design_heuristics">
+<h2>Event-Driven Design Heuristics</h2>
+
+<p>Matching types of events to the tasks at hand makes the resultant design orders of magnitude less coupled, more flexible, and fault tolerant. Let’s formulate the design heuristics behind the applied changes.</p>
+
+<section data-type="sect3" data-pdf-bookmark="Assume the worst"><div class="sect3" id="assume_the_worst">
+<h3>Assume the worst</h3>
+
+<p>As Andrew Grove put it, only the paranoid <a contenteditable="false" data-type="indexterm" data-primary="Grove, Andrew" id="id1606"></a>survive.<sup><a data-type="noteref" id="ch01fn49-marker" href="ch15.html#ch01fn49">3</a></sup> Use this as a guiding principle when designing event-driven systems:</p>
+<ul>
+<li>
+  <p>The network is going to be slow.</p></li>
+<li>
+  <p>Servers will fail at the most inconvenient moment.</p></li>
+<li>
+  <p>Events will arrive out of order.</p></li>
+<li>
+  <p>Events will be duplicated.</p></li>
+</ul>
+
+<p>Most importantly, these events will occur most frequently on weekends and public holidays.</p>
+
+<p>The word <em>driven</em> in event-driven architecture means your whole system depends on successful delivery of the messages. Hence, avoid the “things will be okay” mindset like the plague. Ensure that the events are always delivered consistently, no matter what:</p>
+<ul>
+<li>
+  <p>Use the outbox pattern to publish messages reliably.</p></li>
+<li>
+  <p>When publishing messages, ensure that the subscribers will be able to deduplicate the messages and identify and reorder out-of-order messages.</p></li>
+<li>
+  <p>Leverage the saga and process manager patterns when orchestrating cross-bounded context processes that require issuing compensating actions.</p></li>
+</ul>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Use public and private events"><div class="sect3" id="use_public_and_private_events">
+<h3>Use public and private events</h3>
+
+<p>Be wary of exposing implementation details when publishing <a contenteditable="false" data-type="indexterm" data-primary="event-driven architecture (EDA)" data-secondary="designing" data-tertiary="public and private events" id="id1607"></a><a contenteditable="false" data-type="indexterm" data-primary="events" data-secondary="public and private" id="id1608"></a>domain events, especially in event-sourced aggregates. Treat events as an inherent part of the bounded context’s public interface. Therefore, when implementing the open-host service pattern, ensure that the events are reflected in the bounded context’s published language. Patterns for transforming event-based models are discussed in <a data-type="xref" href="ch09.html#communication_patterns">Chapter 9</a>.</p>
+
+<p>When designing bounded contexts’ public interfaces, leverage the different types of events. Event-carried state transfer messages compress the implementation model into a more compact model that communicates only the information the consumers need.</p>
+
+<p>Event notification messages can be used to further minimize the public interface.</p>
+
+<p>Finally, sparingly use domain events for communication with external bounded contexts. Consider designing a set of dedicated public domain events.</p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Evaluate consistency requirements"><div class="sect3" id="evaluate_consistency_requirements">
+<h3>Evaluate consistency requirements</h3>
+
+<p>When designing event-driven communication, evaluate the bounded contexts’ consistency requirements as an additional heuristic for choosing the event type:</p>
+<ul>
+<li>
+  <p>If the components can settle for eventually consistent data, use the event-carried state transfer message.</p></li>
+<li>
+  <p>If the consumer needs to read the last write in the producer’s state, issue an event notification message, with a subsequent query to fetch the producer’s up-to-date state.</p></li>
+</ul>
+</div></section>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Conclusion"><div class="sect1" id="conclusion-id000039">
+<h1>Conclusion</h1>
+
+<p>This chapter presented event-driven architecture as an inherent aspect of designing a bounded context’s public interface. You learned the three types of events that can be used for cross-bounded context communication:</p>
+<dl>
+<dt>Event notification</dt>
+<dd>A notification that something important has happened, but requiring the consumer to query the producer for additional information explicitly.</dd>
+<dt>Event-carried state transfer</dt>
+<dd>A message-based data replication mechanism. Each event contains a snapshot of a state that can be used to maintain a local cache of the producer’s data.</dd>
+<dt>Domain event</dt>
+<dd>A message describing an event in the producer’s business domain.</dd>
+</dl>
+
+<p>Using inappropriate types of events will derail an EDA-based system, inadvertently turning it into a big ball of mud. To choose the correct type of events for integration, evaluate the bounded contexts’ consistency requirements and be wary of exposing implementation details. Design an explicit set of public and private events. Finally, ensure that the system delivers the messages, even in the face of technical issues and outages.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Exercises"><div class="sect1" id="exercises-id000084">
+<h1>Exercises</h1>
+ <ol>
+          <li>
+            <p>Which of the following statements are correct? Select all that apply.</p>
+            <ol type="a">
+              <li>
+                <p>Event-driven architecture defines the events intended to travel across components’ boundaries.</p>
+              </li>
+              <li>
+                <p>Event sourcing defines the events that are intended to stay within the bounded context’s boundary.</p>
+              </li>
+              <li>
+                <p>Event-driven architecture (EDA) and event sourcing are different terms for the same pattern.</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>What type of event is best suited for communicating changes in state?</p>
+            <ol type="a">
+              <li>
+                <p>Event notification</p>
+              </li>
+              <li>
+                <p>Event-carried state transfer</p>
+              </li>
+              <li>
+                <p>Domain event</p>
+              </li>
+              <li>
+                <p>All event types are equally good for communicating changes in state.</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Which bounded context integration pattern calls for explicitly defining public events?</p>
+            <ol type="a">
+              <li>
+                <p>Open-host service</p>
+              </li>
+              <li>
+                <p>Anticorruption layer</p>
+              </li>
+              <li>
+                <p>Shared kernel</p>
+              </li>
+              <li>
+                <p>Conformist</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>The services S1 and S2 are integrated asynchronously. S1 has to communicate data and S2 needs to be able to read the last written data in S1. Which type of event fits this integration scenario?</p>
+            <ol type="a">
+              <li>
+                <p>S1 should publish event-carried state transfer events.</p>
+              </li>
+              <li>
+                <p>S1 should publish public event notifications, which will signal S2 to issue a synchronous request to get the most up-to-date information.</p>
+              </li>
+              <li>
+                <p>S1 should publish domain events.</p>
+              </li>
+            </ol>
+          </li>
+        </ol>
+</div></section>
+<div data-type="footnotes"><p data-type="footnote" id="ch01fn47"><sup><a href="ch15.html#ch01fn47-marker">1</a></sup> Hohpe, G., &amp; Woolf, B. (2003). <em>Enterprise Integration Patterns: Designing, Building, and Deploying Messaging Solutions</em>. Boston: Addison-Wesley.</p><p data-type="footnote" id="ch01fn48"><sup><a href="ch15.html#ch01fn48-marker">2</a></sup> Fowler, M. (n.d.). <em>What do you mean by “Event-Driven”?</em> Retrieved August 12, 2021, from <a href="https://oreil.ly/aSK5l">Martin Fowler (blog)</a>.</p><p data-type="footnote" id="ch01fn49"><sup><a href="ch15.html#ch01fn49-marker">3</a></sup> Grove, A. S. (1998). <em>Only the Paranoid Survive</em>. London: HarperCollins Business.</p></div></div></section></div>
+</div>
+</body>
+</html>

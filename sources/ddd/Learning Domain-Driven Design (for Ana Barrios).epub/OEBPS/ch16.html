@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xml:lang="en"
+lang="en"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title>Learning Domain-Driven Design</title>
+<link rel="stylesheet" type="text/css" href="override_v1.css"/>
+<link rel="stylesheet" type="text/css" href="epub.css"/>
+</head>
+<body>
+<div id="book-content">
+<div id="sbo-rt-content"><section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 16. Data Mesh"><div class="chapter" id="data_mesh-id000059">
+<h1><span class="label">Chapter 16. </span>Data Mesh</h1>
+
+<p>So far in this book, we have discussed models used to build operational systems. <a contenteditable="false" data-type="indexterm" data-primary="online transactional processing (OLTP) data" id="id1609"></a><a contenteditable="false" data-type="indexterm" data-primary="online analytical processing (OLAP) data" data-seealso="data mesh" id="id1610"></a><a contenteditable="false" data-type="indexterm" data-primary="data mesh" data-secondary="about" id="id1611"></a><a contenteditable="false" data-type="indexterm" data-primary="data mesh" data-secondary="online analytical processing data" id="id1612"></a>Operational systems implement real-time transactions that manipulate the system’s data and orchestrate its day-to-day interactions with its environment. These models are the online transactional processing (OLTP) data. Another type of data that deserves attention and proper modeling is online analytical processing (OLAP) data.</p>
+
+<p>In this chapter, you will learn about the analytical data management architecture called data mesh. You will see how the data mesh–based architecture works and how it differs from the more traditional OLAP data management approaches. Ultimately, you will see how domain-driven design and data mesh accommodate each other. But first, let’s see what these analytical data models are and why we can’t just reuse the operational models for analytical use cases.</p>
+
+<section data-type="sect1" data-pdf-bookmark="Analytical Data Model Versus Transactional Data Model"><div class="sect1" id="analytical_data_model_versus_transactio">
+<h1>Analytical Data Model Versus Transactional Data Model</h1>
+
+<p>They say knowledge is power. Analytical data is the knowledge<a contenteditable="false" data-type="indexterm" data-primary="data mesh" data-secondary="analytical versus transactional data model" data-tertiary="about" id="id1613"></a><a contenteditable="false" data-type="indexterm" data-primary="analytical data management platforms" data-secondary="analytical versus transactional model" id="id1614"></a><a contenteditable="false" data-type="indexterm" data-primary="transactional versus analytical data model" id="id1615"></a><a contenteditable="false" data-type="indexterm" data-primary="online analytical processing (OLAP) data" data-secondary="analytical versus transactional data model" id="id1616"></a><a contenteditable="false" data-type="indexterm" data-primary="online transactional processing (OLTP) data" data-secondary="analytical versus transactional data model" id="id1617"></a> that gives companies the power to leverage accumulated data to gain insights into how to optimize the business, better understand customers’ needs, and even make automated decisions by training machine learning (ML) models.</p>
+
+<p>The analytical models (OLAP) and operational models (OLTP) serve different types of consumers, enable the implementation of different kinds of use cases, and are therefore designed following other design principles.</p>
+
+<p>Operational models are built around the various entities from the system’s business domain, implementing their lifecycles and orchestrating their interactions with one another. These models, depicted in <a data-type="xref" href="#a_relational_database_schema_describing">Figure 16-1</a>, are serving operational systems and hence have to be optimized to support real-time business transactions.</p>
+<figure><div id="a_relational_database_schema_describing" class="figure">
+<img src="assets/lddd_1601.png" alt="A relational database schema describing the relationships between entities in an operational model" width="600" height="348"/>
+<h6><span class="label">Figure 16-1. </span>A relational database schema describing the relationships between entities in an operational model</h6>
+</div></figure>
+
+<p>Analytical models are designed to provide different insights into the operational systems. Instead of implementing real-time transactions, an analytical model aims to provide insights into the performance of business activities and, more importantly, how the business can optimize its operations to achieve greater value.</p>
+
+<p>From a data structure perspective, OLAP models ignore the individual business entities and instead focus on business activities by modeling fact tables and dimension tables. We’ll take a closer look at each of these tables next.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Fact Table"><div class="sect2" id="fact_table">
+<h2>Fact Table</h2>
+
+<p>Facts represent business activities that have already happened.<a contenteditable="false" data-type="indexterm" data-primary="online analytical processing (OLAP) data" data-secondary="analytical versus transactional data model" data-tertiary="fact tables" id="ch16-ft"></a><a contenteditable="false" data-type="indexterm" data-primary="data mesh" data-secondary="analytical versus transactional data model" data-tertiary="fact tables" id="ch16-ft2"></a><a contenteditable="false" data-type="indexterm" data-primary="fact tables" id="ch16-ft3"></a><a contenteditable="false" data-type="indexterm" data-primary="names" data-secondary="facts" id="id1618"></a> Facts are similar to the notion of domain events in the sense that both describe things that happened in the past. However, contrary to domain events, there is no stylistic requirement to name facts as verbs in the past tense. Still, facts represent activities of business processes. For example, a fact table <code>Fact_CustomerOnboardings</code> would contain a record for each new onboarded customer and <code>Fact_Sales</code> a record for each committed sale. <a data-type="xref" href="#a_fact_table_containing_records_for_cas">Figure 16-2</a> shows an example of a fact table.</p>
+<figure><div id="a_fact_table_containing_records_for_cas" class="figure">
+<img src="assets/lddd_1602.png" alt="A fact table containing records for cases solved by a company’s support desk" width="600" height="697"/>
+<h6><span class="label">Figure 16-2. </span>A fact table containing records for cases solved by a company’s support desk</h6>
+</div></figure>
+
+<p>Also, similar to domain events, fact records are never deleted or modified: analytical data is append-only data: the only way to express that current data is outdated is to append a new record with the current state. Consider the fact table <code>Fact_CaseStatus</code> in <a data-type="xref" href="#a_fact_table_describing_state_changes_d">Figure 16-3</a>. It contains the measurements of the statuses of support requests through time. There is no explicit verb in the fact name, but the business process captured by the fact is the process of taking care of support cases.</p>
+<figure><div id="a_fact_table_describing_state_changes_d" class="figure">
+<img src="assets/lddd_1603.png" alt="A fact table describing state changes during the lifecycle of a support case" width="600" height="215"/>
+<h6><span class="label">Figure 16-3. </span>A fact table describing state changes during the lifecycle of a support case</h6>
+</div></figure>
+
+<p>Another significant difference between the OLAP and OLTP models is the granularity of the data. Operational systems require the most precise data to handle business transactions. For analytical models, aggregated data is more efficient in many use cases. For example, in the <code>Fact_CaseStatus</code> table shown in <a data-type="xref" href="#a_fact_table_describing_state_changes_d">Figure 16-3</a>, you can see that the snapshots are taken every 30 minutes. The data analysts working with the model decide what level of granularity will best suit their needs. Creating a fact record for each change of the measurement—for example, each change of a case’s data—would be wasteful in some cases and even technically impossible in others.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch16-ft" id="id1619"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch16-ft2" id="id1620"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch16-ft3" id="id1621"></a></p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Dimension Table"><div class="sect2" id="dimension_table">
+<h2>Dimension Table</h2>
+
+<p>Another essential building block of an analytical model<a contenteditable="false" data-type="indexterm" data-primary="dimension table" id="id1622"></a><a contenteditable="false" data-type="indexterm" data-primary="online analytical processing (OLAP) data" data-secondary="dimension table" id="id1623"></a><a contenteditable="false" data-type="indexterm" data-primary="data mesh" data-secondary="analytical versus transactional data model" data-tertiary="dimension table" id="id1624"></a> is a dimension. If a fact represents a business process or action (a verb), a dimension describes the fact (an <span class="keep-together">adjective</span>).</p>
+
+<p>The dimensions are designed to describe the facts’ attributes and are referenced as a foreign key from a fact table to a dimension table. The attributes modeled as dimensions are any measurements or data that is repeated across different fact records and cannot fit in a single column. For example, the schema in <a data-type="xref" href="#the_solvedcases_fact_surrounded_by_its">Figure 16-4</a> augments the <code>SolvedCases</code> fact with its dimensions.</p>
+<figure><div id="the_solvedcases_fact_surrounded_by_its" class="figure">
+<img src="assets/lddd_1604.png" alt="The SolvedCases fact surrounded by its dimensions" width="600" height="483"/>
+<h6><span class="label">Figure 16-4. </span>The SolvedCases fact surrounded by its dimensions</h6>
+</div></figure>
+
+<p>The reason for the high normalization of the dimensions is the analytical system’s need to support flexible querying. That’s another difference between operational and analytical models. It’s possible to predict how an operational model will be queried to support the business requirements. The querying patterns of the analytical models are not predictable. The data analysts need flexible ways of looking at the data, and it’s hard to predict what queries will be executed in the future. As a result, the normalization supports dynamic querying and filtering, and grouping the facts data across the different dimensions.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Analytical Models"><div class="sect2" id="analytical_models">
+<h2>Analytical Models</h2>
+
+<p>The table structure depicted in <a data-type="xref" href="#the_many_to_one_relationship_between_fa">Figure 16-5</a> is called<a contenteditable="false" data-type="indexterm" data-primary="online analytical processing (OLAP) data" data-secondary="analytical versus transactional data model" data-tertiary="analytical models" id="ch16-anm"></a><a contenteditable="false" data-type="indexterm" data-primary="data mesh" data-secondary="analytical versus transactional data model" data-tertiary="analytical models" id="ch16-anm2"></a><a contenteditable="false" data-type="indexterm" data-primary="data mesh" data-secondary="analytical versus transactional data model" data-tertiary="star schema" id="ch16-anm3"></a><a contenteditable="false" data-type="indexterm" data-primary="online analytical processing (OLAP) data" data-secondary="analytical versus transactional data model" data-tertiary="star schema" id="ch16-anm4"></a><a contenteditable="false" data-type="indexterm" data-primary="star schema" id="ch16-anm5"></a> the <em>star schema</em>. It is based on the many-to-one relationships between the facts and their dimensions: each dimension record is used by many facts; a fact’s foreign key points to a single dimension record.</p>
+<figure><div id="the_many_to_one_relationship_between_fa" class="figure">
+<img src="assets/lddd_1605.png" alt="The many-to-one relationship between facts and their dimensions" width="600" height="460"/>
+<h6><span class="label">Figure 16-5. </span>The many-to-one relationship between facts and their dimensions</h6>
+</div></figure>
+
+<p>Another predominant analytical model is the snowflake schema. <a contenteditable="false" data-type="indexterm" data-primary="snowflake schema" id="id1625"></a><a contenteditable="false" data-type="indexterm" data-primary="data mesh" data-secondary="analytical versus transactional data model" data-tertiary="snowflake schema" id="id1626"></a><a contenteditable="false" data-type="indexterm" data-primary="online analytical processing (OLAP) data" data-secondary="analytical versus transactional data model" data-tertiary="snowflake schema" id="id1627"></a>The snowflake schema is based on the same building blocks: facts and dimensions. However, in the snowflake schema, the dimensions are multilevel: each dimension is further normalized into more fine-grained dimensions, as shown in <a data-type="xref" href="#multilevel_dimensions_in_the_snowflake">Figure 16-6</a>.</p>
+
+<p>As a result of the additional normalization, the snowflake schema will use less space to store the dimension data and is easier to maintain. However, querying the facts’ data will require joining more tables, and therefore, more computational resources are needed.</p>
+
+<p>Both the star and snowflake schemas allow data analysts to analyze business performance, gaining insights into what can be optimized and built into business intelligence (BI) reports.</p>
+<figure><div id="multilevel_dimensions_in_the_snowflake" class="figure">
+<img src="assets/lddd_1606.png" alt="Multilevel dimensions in the snowflake schema" width="600" height="456"/>
+<h6><span class="label">Figure 16-6. </span>Multilevel dimensions in the snowflake schema</h6>
+</div></figure>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Analytical Data Management Platforms"><div class="sect1" id="analytical_data_management_platforms">
+<h1>Analytical Data Management Platforms</h1>
+
+<p>Let’s shift the discussion from analytical modeling to data management<a contenteditable="false" data-type="indexterm" data-primary="data mesh" data-secondary="analytical data management platforms" data-tertiary="about" id="id1628"></a><a contenteditable="false" data-type="indexterm" data-primary="analytical data management platforms" data-secondary="about" id="id1629"></a> architectures that support generating and serving analytical data. In this section, we will discuss two common analytical data architectures: data warehouse and data lake. You will learn the basic working principles of each architecture, how they differ from each other, and the challenges of each approach. Knowledge of how the two architectures work will build the foundation for discussing the main topic of this chapter: the data mesh paradigm and its interplay with domain-driven design.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Data Warehouse"><div class="sect2" id="data_warehouse">
+<h2>Data Warehouse</h2>
+
+<p>The data warehouse (DWH) architecture is relatively straightforward.<a contenteditable="false" data-type="indexterm" data-primary="analytical data management platforms" data-secondary="data warehouse" id="ch16-dwh"></a><a contenteditable="false" data-type="indexterm" data-primary="data mesh" data-secondary="analytical data management platforms" data-tertiary="data warehouse" id="ch16-dwh2"></a><a contenteditable="false" data-type="indexterm" data-primary="data warehouse (DWH)" id="ch16-dwh3"></a> Extract data from all of the enterprise’s operational systems, transform the source data into an analytical model, and load the resultant data into a data analysis–oriented database. This database is the data warehouse.</p>
+
+<p>This data management architecture is based primarily on the extract-transform-load (ETL) scripts.<a contenteditable="false" data-type="indexterm" data-primary="ETL (extract, transform, load)" data-secondary="data warehouse architecture" id="ch16-dwh4"></a> The data can come from various sources: operational databases, streaming events, logs, and so on. In addition to translating the source data into a facts/dimensions-based model, the transformation step may include additional operations such as removing sensitive data, deduplicating records, reordering events, aggregating fine-grained events, and more. In some cases, the transformation may require temporary storage for the incoming data. This is known as the staging area.</p>
+
+<p>The resultant data warehouse, shown in <a data-type="xref" href="#a_typical_enterprise_data_warehouse_arc">Figure 16-7</a>, contains analytical data covering all of the enterprise’s business processes. The data is exposed using the SQL language (or one of its dialects) and is used by data analysts and BI engineers.</p>
+
+<figure><div id="a_typical_enterprise_data_warehouse_arc" class="figure">
+<img src="assets/lddd_1607.png" alt="A typical enterprise data warehouse architecture" width="600" height="323"/>
+<h6><span class="label">Figure 16-7. </span>A typical enterprise data warehouse architecture</h6>
+</div></figure>
+
+<p>The careful reader will notice that the data warehouse architecture shares some of the challenges discussed in Chapters <a data-xrefstyle="select:labelnumber" data-type="xref" href="ch02.html#discovering_domain_knowledge">2</a> and <a data-xrefstyle="select:labelnumber" data-type="xref" href="ch03.html#managing_domain_complexity">3</a>.</p>
+
+<p>First, at the heart of the data warehouse architecture is the goal of building an enterprise-wide model. The model should describe the data produced by all of the enterprise’s systems and address all of the different use cases for analytical data. The analytical model enables, for example, optimizing the business, reducing operational costs, making intelligent business decisions, reporting, and even training ML models. As you learned in <a data-type="xref" href="ch03.html#managing_domain_complexity">Chapter 3</a>, such an approach is impractical for anything by the smallest organizations. Designing a model for the task at hand, such as building reports or training ML models, is a much more effective and scalable approach.</p>
+
+<p>The challenge of building an all-encompassing model can be partly addressed by the use of data marts. A data mart is a database that holds data relevant for well-defined analytical needs, such as analysis of a single business department. In the data mart model shown in <a data-type="xref" href="#the_enterprise_data_warehouse_architect">Figure 16-8</a>, one mart is populated directly by an ETL process from an operational system, while another mart extracts its data from the data warehouse.</p>
+<figure><div id="the_enterprise_data_warehouse_architect" class="figure">
+<img src="assets/lddd_1608.png" alt="The enterprise data warehouse architecture augmented with data marts " width="600" height="419"/>
+<h6><span class="label">Figure 16-8. </span>The enterprise data warehouse architecture augmented with data marts</h6>
+</div></figure>
+
+<p>When the data is ingested into a data mart from the enterprise data warehouse, the enterprise-wide model still needs to be defined in the data warehouse. Alternatively, data marts can implement dedicated ETL processes to ingest data directly from the operational systems. In this case, the resultant model makes it challenging to query data across different marts—for example, across different departments—as it requires a cross-database query and significantly impacts performance.</p>
+
+<p>Another challenging aspect of the data warehouse architecture<a contenteditable="false" data-type="indexterm" data-primary="online analytical processing (OLAP) data" data-secondary="ETL processes creating OLTP coupling" id="id1630"></a><a contenteditable="false" data-type="indexterm" data-primary="online transactional processing (OLTP) data" data-secondary="ETL processes creating OLAP coupling" id="id1631"></a><a contenteditable="false" data-type="indexterm" data-primary="ETL (extract, transform, load)" data-secondary="data warehouse architecture" data-tertiary="OLAP–OLTP coupling" id="id1632"></a> is that the ETL processes create a strong coupling between the analytical (OLAP) and the operational (OLTP) systems. The data consumed by the ETL scripts is not necessarily exposed through the system’s public interfaces. Often, DWH systems simply fetch all the data residing in the operational systems’ databases. The schema used in the operational database is not a public interface, but rather an internal implementation detail. As a result, a slight change in the schema is destined to break the data warehouse’s ETL scripts. Since the operational and analytical systems are implemented and maintained by somewhat distant organizational units, the communication between the two is challenging and leads to lots of friction between the teams. This communication pattern is shown in <a data-type="xref" href="#data_warehouse_populated_by_fetching_da">Figure 16-9</a>.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch16-dwh" id="id1633"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch16-dwh2" id="id1634"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch16-dwh3" id="id1635"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch16-dwh4" id="id1636"></a></p>
+<figure><div id="data_warehouse_populated_by_fetching_da" class="figure">
+<img src="assets/lddd_1609.png" alt="Data warehouse populated by fetching data directly from operational databases, ignoring the integration-oriented public interfaces" width="600" height="194"/>
+<h6><span class="label">Figure 16-9. </span>Data warehouse populated by fetching data directly from operational databases, ignoring the integration-oriented public interfaces</h6>
+</div></figure>
+
+<p>The data lake architecture addresses some of the shortcomings of the data warehouse architecture.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Data Lake"><div class="sect2" id="data_lake">
+<h2>Data Lake</h2>
+
+<p>As a data warehouse, the data lake architecture is based on the same<a contenteditable="false" data-type="indexterm" data-primary="ETL (extract, transform, load)" data-secondary="data lake architecture" id="ch16-dl4"></a><a contenteditable="false" data-type="indexterm" data-primary="analytical data management platforms" data-secondary="data lake" id="ch16-dl"></a><a contenteditable="false" data-type="indexterm" data-primary="data mesh" data-secondary="analytical data management platforms" data-tertiary="data lake" id="ch16-dl2"></a><a contenteditable="false" data-type="indexterm" data-primary="data lake" id="ch16-dl3"></a> notion of ingesting the operational systems’ data and transforming it into an analytical model. However, there is a conceptual difference between the two approaches.</p>
+
+<p>A data lake–based system ingests the operational systems’ data. However, instead of being transformed right away into an analytical model, the data is persisted in its raw form, that is, in the original operational model.</p>
+
+<p>Eventually, the raw data cannot fit the needs of data analysts. As a result, it is the job of the data engineers and the BI engineers to make sense of the data in the lake and implement the ETL scripts that will generate analytical models and feed them into a data warehouse. <a data-type="xref" href="#data_lake_architecture">Figure 16-10</a> depicts a data lake architecture.</p>
+<figure><div id="data_lake_architecture" class="figure">
+<img src="assets/lddd_1610.png" alt="Data lake architecture" width="600" height="248"/>
+<h6><span class="label">Figure 16-10. </span>Data lake architecture</h6>
+</div></figure>
+
+<p>Since the operational systems’ data is persisted in its original, raw form and is transformed only afterward, the data lake allows working with multiple, task-oriented analytical models. One model can be used for reporting, another for training ML models, and so on. Furthermore, new models can be added in the future and initialized with the existing raw data.</p>
+
+<p>That said, the delayed generation of analytical models increases the complexity of the overall system. It’s not uncommon for data engineers to implement and support multiple versions of the same ETL script to accommodate different versions of the operational model, as shown in <a data-type="xref" href="#multiple_versions_of_the_same_etl_scrip">Figure 16-11</a>.</p>
+<figure><div id="multiple_versions_of_the_same_etl_scrip" class="figure">
+<img src="assets/lddd_1611.png" alt="Multiple versions of the same ETL script accommodating different versions of the operational model" width="600" height="248"/>
+<h6><span class="label">Figure 16-11. </span>Multiple versions of the same ETL script accommodating different versions of the operational model</h6>
+</div></figure>
+
+<p>Furthermore, since data lakes are schema-less—there is no schema imposed on the incoming data—and there is no control over the quality of the incoming data, the data lake’s data becomes chaotic at certain levels of scale. Data lakes make it easy to ingest data but much more challenging to make use of it. Or, as is often said, a data lake becomes a data swamp. The data scientist’s job becomes orders of magnitude more complex to make sense of the chaos and to extract useful analytical data.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch16-dl" id="id1637"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch16-dl2" id="id1638"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch16-dl3" id="id1639"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch16-dl4" id="id1640"></a></p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Challenges of Data Warehouse and Data Lake Architectures"><div class="sect2" id="challenges_of_data_warehouse_and_data_l">
+<h2>Challenges of Data Warehouse and Data Lake Architectures</h2>
+
+<p>Both data warehouse and data lake architectures are based on the assumption<a contenteditable="false" data-type="indexterm" data-primary="analytical data management platforms" data-secondary="data lake" data-tertiary="challenges of" id="id1641"></a><a contenteditable="false" data-type="indexterm" data-primary="analytical data management platforms" data-secondary="data warehouse" data-tertiary="challenges of" id="id1642"></a><a contenteditable="false" data-type="indexterm" data-primary="data warehouse (DWH)" data-secondary="challenges of" id="id1643"></a><a contenteditable="false" data-type="indexterm" data-primary="data lake" data-secondary="challenges of" id="id1644"></a><a contenteditable="false" data-type="indexterm" data-primary="data mesh" data-secondary="analytical data management platforms" data-tertiary="challenges of data lake and warehouse" id="id1645"></a> that the more data that is ingested for analytics, the more insight the organization will gain. Both approaches, however, tend to break under the weight of “big” data. The transformation of operational to analytical models converges to thousands of unmaintainable, ad hoc ETL scripts at scale.</p>
+
+<p class="pagebreak-before less_space">From a modeling perspective, both architectures trespass the boundaries of the operational systems and create dependencies on their implementation details. The resultant coupling to the implementation models creates friction between the <span class="keep-together">operational</span> and analytical systems teams, often to the point of preventing changes to the operational models for the sake of not breaking the analysis system’s ETL jobs.</p>
+
+<p>To make matters worse, since the data analysts and data engineers belong to a separate organizational unit, they often lack the deep knowledge of the business domain possessed by the operational systems’ development teams. Instead of the knowledge of the business domain, they are specialized mainly in big data tooling.</p>
+
+<p>Last but not least, the coupling to the implementation models is especially acute in domain-driven design–based projects, in which the emphasis is on continuously evolving and improving the business domain’s models. As a result, a change in the operational model can have unforeseen consequences in the analytical model. Such changes are frequent in DDD projects and often result in friction between R&amp;D and data teams.</p>
+
+<p>These limitations of data warehouses and data lakes inspired a new analytical data management architecture: data mesh.</p>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Data Mesh"><div class="sect1" id="data_mesh-id000060">
+<h1>Data Mesh</h1>
+
+<p>The data mesh architecture is, in a sense, domain-driven design for analytical data.<a contenteditable="false" data-type="indexterm" data-primary="analytical data management platforms" data-secondary="data mesh" data-tertiary="about" id="id1646"></a><a contenteditable="false" data-type="indexterm" data-primary="data mesh" data-secondary="about" id="id1647"></a> As the different patterns of DDD draw boundaries and protect their contents, the data mesh architecture defines and protects model and ownership boundaries for analytical data.</p>
+
+<p>The data mesh architecture is based on four core principles: decompose data around domains, data as a product, enable autonomy, and build an ecosystem. Let’s discuss each principle in detail.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Decompose Data Around Domains"><div class="sect2" id="decompose_data_around_domains">
+<h2>Decompose Data Around Domains</h2>
+
+<p>Both the data warehouse and data lake approaches aim to unify all<a contenteditable="false" data-type="indexterm" data-primary="analytical data management platforms" data-secondary="data mesh" data-tertiary="decomposing data around domains" id="id1648"></a><a contenteditable="false" data-type="indexterm" data-primary="data mesh" data-secondary="decomposing data around domains" id="id1649"></a> of the enterprise’s data into one big model. The resultant analytical model is ineffective for all the same reasons as an enterprise-wide operational model is. <a contenteditable="false" data-type="indexterm" data-primary="ownership boundaries" data-secondary="data lake and warehouse architectures" id="id1650"></a>Furthermore, gathering data from all systems into one location blurs the ownership boundaries of the various data <span class="keep-together">elements</span>.</p>
+
+<p>Instead of building a monolithic analytical model, the data mesh architecture<a contenteditable="false" data-type="indexterm" data-primary="ownership boundaries" data-secondary="data mesh architecture" id="id1651"></a> calls for leveraging the same solution we discussed in <a data-type="xref" href="ch03.html#managing_domain_complexity">Chapter 3</a> for operational data: use multiple analytical models and align them with the origin of the data. This naturally aligns the ownership boundaries of the analytical models with the bounded contexts’ boundaries, as shown in <a data-type="xref" href="#aligning_the_ownership_boundaries_of_th">Figure 16-12</a>. When the analysis model is decomposed according to the system’s bounded contexts, the generation of the analysis data becomes the responsibility of the corresponding product teams.</p>
+<figure><div id="aligning_the_ownership_boundaries_of_th" class="figure">
+<img src="assets/lddd_1612.png" alt="Aligning the ownership boundaries of the analytical models with the bounded contexts’ boundaries" width="512" height="800"/>
+<h6><span class="label">Figure 16-12. </span>Aligning the ownership boundaries of the analytical models with the bounded contexts’ boundaries</h6>
+</div></figure>
+
+<p>Each bounded context now owns its operational (OLTP) and analytical (OLAP) models. Consequently, the same team owns the operational model, now in charge of transforming it into the analytical model.</p>
+</div></section>
+
+<section class="pagebreak-before" data-type="sect2" data-pdf-bookmark="Data as a Product"><div class="sect2" id="data_as_a_product">
+<h2 class="less_space">Data as a Product</h2>
+
+<p>The classic data management architectures make it difficult to discover,<a contenteditable="false" data-type="indexterm" data-primary="analytical data management platforms" data-secondary="data mesh" data-tertiary="data as product" id="id1652"></a><a contenteditable="false" data-type="indexterm" data-primary="data mesh" data-secondary="data as product" id="id1653"></a><a contenteditable="false" data-type="indexterm" data-primary="data lake" data-secondary="data as product" id="id1654"></a> understand, and fetch quality analytical data. This is especially acute in the case of data lakes.</p>
+
+<p>The data as a product principle calls for treating the analytical data<a contenteditable="false" data-type="indexterm" data-primary="polyglot modeling" data-secondary="data as product" id="id1655"></a> as a first-class citizen. Instead of the analytical systems having to get the operational data from dubious sources (internal database, logfiles, etc.), in a data mesh–based system the bounded contexts serve the analytical data through well-defined output ports, as shown in <a data-type="xref" href="#polyglot_data_endpoints_exposing_the_an">Figure 16-13</a>.</p>
+<figure><div id="polyglot_data_endpoints_exposing_the_an" class="figure">
+<img src="assets/lddd_1613.png" alt="Polyglot data endpoints exposing the analytical data to the consumers" width="600" height="233"/>
+<h6><span class="label">Figure 16-13. </span>Polyglot data endpoints exposing the analytical data to the consumers</h6>
+</div></figure>
+
+<p>Analytical data should be treated the same as any public API:</p>
+<ul>
+<li>
+	<p>It should be easy to discover the necessary endpoints: the data output ports.</p></li>
+<li>
+	<p>The analytical endpoints should have a well-defined schema describing the served data and its format.</p></li>
+<li>
+	<p>The analytical data should be trustworthy, and as with any API, it should have defined and monitored service-level agreements (SLAs).</p></li>
+<li>
+	<p>The analytical model should be versioned as a regular API and correspondingly manage integration-breaking changes in the model.</p></li>
+</ul>
+
+<p>Furthermore, since the analytical data is treated as a product, it has to address the needs of its consumers. The bounded context’s team is in charge of ensuring that the resultant model addresses the needs of its consumers. Contrary to the data warehouse and data lake architectures, with data mesh, accountability for data quality is a top-level concern.</p>
+
+<p>The goal of the distributed data management architecture is to allow the fine-grained analytical models to be combined to address the organization’s data analysis needs. For example, if a BI report should reflect data from multiple bounded contexts, it should be able to easily fetch their analytical data if needed, apply local transformations, and produce the report.</p>
+
+<p>Finally, different consumers may require the analytical data in different forms. Some may prefer to execute SQL queries, others to fetch analytical data from an object storage service, and so on. As a result, the data products have to be polyglot, serving the data in formats that suit different consumers’ needs.</p>
+
+<p>To implement the data as a product principle, product teams require adding data-oriented specialists. That’s the missing piece in the cross-functional teams puzzle, which traditionally includes only specialists related to the operational systems.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Enable Autonomy"><div class="sect2" id="enable_autonomy">
+<h2>Enable Autonomy</h2>
+
+<p>The product teams should be able to both create their own data products<a contenteditable="false" data-type="indexterm" data-primary="analytical data management platforms" data-secondary="data mesh" data-tertiary="data as product" id="id1656"></a><a contenteditable="false" data-type="indexterm" data-primary="data mesh" data-secondary="data as product" data-tertiary="autonomy enabled" id="id1657"></a> and consume data products served by other bounded contexts. Just as in the case of bounded contexts, the data products should be interoperable.</p>
+
+<p>It would be wasteful, inefficient, and hard to integrate if each team builds their own solution for serving analytical data. To prevent this from happening, a platform is needed to abstract the complexity of building, executing, and maintaining interoperable data products. Designing and building such a platform is a considerable undertaking and requires a dedicated data infrastructure platform team.</p>
+
+<p>The data infrastructure platform team should be in charge of defining the data product blueprints, unified access patterns, access control, and polyglot storage that can be leveraged by product teams, as well as monitoring the platform and ensuring that the SLAs and objectives are met.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Build an Ecosystem"><div class="sect2" id="build_an_ecosystem">
+<h2>Build an Ecosystem</h2>
+
+<p>The final step to creating a data mesh system is to appoint a federated<a contenteditable="false" data-type="indexterm" data-primary="analytical data management platforms" data-secondary="data mesh" data-tertiary="governance ecosystem" id="id1658"></a><a contenteditable="false" data-type="indexterm" data-primary="data mesh" data-secondary="governance ecosystem" id="id1659"></a> governance body to enable interoperability and ecosystem thinking in the domain of the analytical data. Typically, that would be a group consisting of the bounded contexts’ data and product owners and representatives of the data infrastructure platform team, as shown in <a data-type="xref" href="#the_governance_groupcomma_which_ensures">Figure 16-14</a>.</p>
+
+<p>The governance group is in charge of defining the rules to ensure a healthy and interoperable ecosystem. The rules have to be applied to all data products and their interfaces, and it’s the group’s responsibility to ensure adherence to the rules throughout the enterprise.</p>
+
+<figure><div id="the_governance_groupcomma_which_ensures" class="figure">
+<img src="assets/lddd_1614.png" alt="The governance group, which ensures that the distributed data analytics ecosystem is interoperable, healthy, and serves the organization’s needs" width="600" height="481"/>
+<h6><span class="label">Figure 16-14. </span>The governance group, which ensures that the distributed data analytics ecosystem is interoperable, healthy, and serves the organization’s needs</h6>
+</div></figure>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Combining Data Mesh and Domain-Driven Design"><div class="sect2" id="combining_data_mesh_and_domain_driven_d">
+<h2>Combining Data Mesh and Domain-Driven Design</h2>
+
+<p>These are the four principles that the data mesh architecture is based on.<a contenteditable="false" data-type="indexterm" data-primary="analytical data management platforms" data-secondary="data mesh" data-tertiary="domain-driven design and" id="id1660"></a><a contenteditable="false" data-type="indexterm" data-primary="data mesh" data-secondary="domain-driven design and" id="id1661"></a><a contenteditable="false" data-type="indexterm" data-primary="domain-driven design (DDD)" data-secondary="data mesh and" data-seealso="data mesh" id="id1662"></a> The emphasis on defining boundaries, and encapsulating the implementation details behind well-defined output ports, makes it evident that the data mesh architecture is based on the same reasoning as domain-driven design. Furthermore, some of the domain-driven design patterns can greatly support implementing the data mesh architecture.</p>
+
+<p>First and foremost, the ubiquitous language and the resultant<a contenteditable="false" data-type="indexterm" data-primary="ubiquitous language" data-secondary="data mesh architecture" id="id1663"></a><a contenteditable="false" data-type="indexterm" data-primary="domain experts" data-secondary="business knowledge" data-tertiary="data mesh architecture" id="id1664"></a> domain knowledge are essential for designing analytical models. As we discussed in the data warehouse and data lake sections, domain knowledge is lacking in traditional architectures.</p>
+
+<p>Second, exposing a bounded context’s data in a model that is different<a contenteditable="false" data-type="indexterm" data-primary="open-host service" data-secondary="data mesh architecture" id="id1665"></a><a contenteditable="false" data-type="indexterm" data-primary="bounded contexts" data-secondary="data mesh architecture" id="id1666"></a> from its operational model is the open-host pattern. In this case, the analytical model is an additional published language.</p>
+
+<p>The CQRS pattern makes it easy to generate multiple models of the same data.<a contenteditable="false" data-type="indexterm" data-primary="command-query responsibility segregation (CQRS)" data-secondary="data mesh architecture" id="id1667"></a><a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="command-query responsibility segregation" data-tertiary="data mesh architecture" id="id1668"></a> It can be leveraged to transform the operational model into an analytical model. The CQRS pattern’s ability to generate models from scratch makes it easy to generate and serve multiple versions of the analytical model simultaneously, as shown in <a data-type="xref" href="#leveraging_the_cqrs_pattern_to_simultan">Figure 16-15</a>.</p>
+<figure><div id="leveraging_the_cqrs_pattern_to_simultan" class="figure">
+<img src="assets/lddd_1615.png" alt="Leveraging the CQRS pattern to simultaneously serve the analytical data in two different schema versions" width="600" height="307"/>
+<h6><span class="label">Figure 16-15. </span>Leveraging the CQRS pattern to simultaneously serve the analytical data in two different schema versions</h6>
+</div></figure>
+
+<p>Finally, since the data mesh architecture combines the different bounded contexts’ models to implement analytical use cases, the bounded context integration patterns for operational models apply for analytical models as well. Two product teams can evolve their analytical models in partnership. Another can implement an anticorruption layer to protect itself from an ineffective analytical model. Or, on the other hand, the teams can go their separate ways and produce duplicate implementations of analytical models.</p>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Conclusion"><div class="sect1" id="conclusion-id000040">
+<h1>Conclusion</h1>
+
+<p>In this chapter, you learned the different aspects of designing software systems, in particular, defining and managing analytical data. We discussed the predominant models for analytical data, including the star and snowflake schemas, and how the data is traditionally managed in data warehouses and data lakes.</p>
+
+<p>The data mesh architecture aims to address the challenges of the traditional data management architectures. At its core, it applies the same principles as domain-driven design but to analytical data: decomposing the analytical model into manageable units and ensuring that the analytical data can be reliably accessed and used through its public interfaces. Ultimately, the CQRS and bounded context integration patterns can support implementing the data mesh architecture.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Exercises"><div class="sect1" id="exercises-id000085">
+<h1>Exercises</h1>
+
+ <ol>
+          <li>
+            <p>Which of the following statements are correct regarding the differences between transactional (OLTP) and analytical (OLAP) models? Select all that apply. </p>
+            <ol type="a">
+              <li>
+                <p>OLAP models should expose more flexible querying options than OLTP <span class="keep-together">models</span>.</p>
+              </li>
+              <li>
+                <p>OLAP models are expected to undergo more updates than OLTP models, and thus have to be optimized for writes.</p>
+              </li>
+              <li>
+                <p>OLTP data is optimized for real-time operations, whereas it’s acceptable to wait seconds or even minutes for an OLAP query’s response.</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Which bounded context integration pattern is essential for implementation of the data mesh architecture?</p>
+            <ol type="a">
+              <li>
+                <p>Shared kernel</p>
+              </li>
+              <li>
+                <p>Open-host service</p>
+              </li>
+              <li>
+                <p>Anticorruption layer</p>
+              </li>
+              <li>
+                <p>Partnership</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Which architectural pattern is essential for implementation of the data mesh architecture?</p>
+            <ol type="a">
+              <li>
+                <p>Layered architecture</p>
+              </li>
+              <li>
+                <p>Ports and adapters</p>
+              </li>
+              <li>
+                <p>CQRS</p>
+              </li>
+              <li>
+                <p>Architectural patterns cannot support implementation of an OLAP model.</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>The definition of data mesh architecture calls for decomposing data around “domains.” What is DDD’s term for denoting the data mesh’s domains?</p>
+            <ol type="a">
+              <li>
+                <p>Bounded contexts</p>
+              </li>
+              <li>
+                <p>Business domains</p>
+              </li>
+              <li>
+                <p>Subdomains</p>
+              </li>
+              <li>
+                <p>There is no synonym for a data mesh’s domains in DDD.</p>
+              </li>
+            </ol>
+          </li>
+        </ol>
+
+</div></section>
+</div></section></div>
+</div>
+</body>
+</html>

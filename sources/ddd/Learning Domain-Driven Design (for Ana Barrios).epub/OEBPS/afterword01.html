@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xml:lang="en"
+lang="en"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title>Learning Domain-Driven Design</title>
+<link rel="stylesheet" type="text/css" href="override_v1.css"/>
+<link rel="stylesheet" type="text/css" href="epub.css"/>
+</head>
+<body>
+<div id="book-content">
+<div id="sbo-rt-content"><section data-type="afterword" epub:type="afterword" data-pdf-bookmark="Closing Words"><div class="appendix" id="closing_words">
+<h1>Closing Words</h1>
+
+<p>To complete our exploration of domain-driven design I want to get back to the quote we started with:</p>
+<blockquote>
+
+<p>There is no sense in talking about the solution before we agree on the problem, and no sense talking about the implementation steps before we agree on the solution.<a contenteditable="false" data-type="indexterm" data-primary="Goldratt-Ashlag, Efrat" id="id1669"></a><a contenteditable="false" data-type="indexterm" data-primary="domain-driven design (DDD)" data-secondary="about problem–solution–implementation" id="aft-psi"></a></p>
+<p data-type="attribution">Efrat Goldratt-Ashlag</p>
+</blockquote>
+
+<p>This quote neatly summarizes our DDD journey.</p>
+<section data-type="sect1" data-pdf-bookmark="Problem"><div class="sect1" id="problem">
+<h1>Problem</h1>
+
+<p>To provide a software solution, we first have to understand the <a contenteditable="false" data-type="indexterm" data-primary="business knowledge" data-secondary="business problems" id="id1670"></a><a contenteditable="false" data-type="indexterm" data-primary="business problems" id="id1671"></a><a contenteditable="false" data-type="indexterm" data-primary="business domains" data-secondary="about" data-tertiary="need to know" id="id1672"></a>problem: what is the <em>business domain</em> that we are working in, what are the business goals, and what is the strategy for achieving them.</p>
+
+<p>We used the <em>ubiquitous language</em> to gain a deep understanding of the business domain and its logic that we have to implement in software.</p>
+
+<p>You learned to manage the complexity of the business problem by breaking it apart into <em>bounded contexts</em>. Each bounded context implements a single model of the business domain, aimed at solving a specific problem.</p>
+
+<p>We discussed how to identify and categorize the building blocks of business domains: <em>core</em>, <em>supporting</em>, and <em>generic subdomains</em>. <a data-type="xref" href="#the_three_types_of_subdomains">Table E-1</a> compares these three types of <span class="keep-together">subdomains</span>.</p>
+<table class="border" id="the_three_types_of_subdomains">
+<caption><span class="label">Table E-1. </span>The three types of subdomains</caption>
+<tbody>
+<tr>
+<td>Subdomain type</td>
+<td>Competitive advantage</td>
+<td>Complexity</td>
+<td>Volatility</td>
+<td>Implementation</td>
+<td>Problem</td>
+</tr>
+<tr>
+<td>Core</td>
+<td>Yes</td>
+<td>High</td>
+<td>High</td>
+<td>In-house</td>
+<td>Interesting</td>
+</tr>
+<tr>
+<td>Generic</td>
+<td>No</td>
+<td>High</td>
+<td>Low</td>
+<td>Buy/adopt</td>
+<td>Solved</td>
+</tr>
+<tr>
+<td>Supporting</td>
+<td>No</td>
+<td>Low</td>
+<td>Low</td>
+<td>In-house/outsource</td>
+<td>Obvious</td>
+</tr>
+</tbody>
+</table>
+</div></section>
+<section data-type="sect1" data-pdf-bookmark="Solution"><div class="sect1" id="solution">
+<h1>Solution</h1>
+
+<p>You learned to leverage this knowledge to design solutions optimized for each type of subdomain. We discussed four business logic implementation patterns—<em>transaction script</em>, <em>active record</em>, <em>domain model</em>, and <em>event sourced domain model—</em>and the scenarios in which each pattern shines. You also saw three architectural patterns that provide the required scaffolding for the implementation of business logic: <em>layered architecture</em>, <em>ports &amp; adapters</em>, and <em>CQRS</em>. <a data-type="xref" href="#decision_tree_summarizing_heuristics_fo">Figure E-1</a> summarizes the heuristics for tactical decision-making using these patterns.</p>
+<figure><div id="decision_tree_summarizing_heuristics_fo" class="figure">
+<img src="assets/lddd_1701.png" alt="Decision tree summarizing heuristics for tactical decision-making" width="600" height="592"/>
+<h6><span class="label">Figure E-1. </span>Decision tree summarizing heuristics for tactical decision-making</h6>
+</div></figure>
+</div></section>
+<section data-type="sect1" data-pdf-bookmark="Implementation"><div class="sect1" id="implementation-id000106">
+<h1>Implementation</h1>
+
+<p>In <a data-type="xref" href="part03.html#applying_domain_driven_design_in_practi">Part III</a>, we discussed how to turn theory into practice. You learned how to effectively build a ubiquitous language by facilitating an EventStorming session, how to keep the design in shape as the business domain evolves, and how to introduce and start using domain-driven design in brownfield projects.</p>
+
+<p>In <a data-type="xref" href="part04.html#relationships_to_other_methodologies_an">Part IV</a>, we discussed the interplay between domain-driven design and other methodologies and patterns: microservices, event-driven architecture, and data mesh. We saw that not only can DDD be used in tandem with these techniques, but they in fact complement each other.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="aft-psi" id="id1673"></a></p>
+</div></section>
+<section data-type="sect1" data-pdf-bookmark="Further Reading"><div class="sect1" id="further_reading">
+<h1>Further Reading</h1>
+
+<p>I hope this book got you interested in domain-driven design. If you want to keep learning, here are some books that I wholeheartedly recommend.<a contenteditable="false" data-type="indexterm" data-primary="resources" data-secondary="further reading" id="aft-read"></a><a contenteditable="false" data-type="indexterm" data-primary="further reading" id="aft-read2"></a><a contenteditable="false" data-type="indexterm" data-primary="domain-driven design (DDD)" data-secondary="further reading" id="aft-read3"></a><a contenteditable="false" data-type="indexterm" data-primary="reading further" id="aft-read4"></a></p>
+<section data-type="sect2" data-pdf-bookmark="Advanced Domain-Driven Design"><div class="sect2" id="advanced_domain_driven_design">
+<h2>Advanced Domain-Driven Design</h2>
+
+<ul class="references">
+	<li><p>Evans, E. (2003). <a class="orm:hideurl" href="https://learning.oreilly.com/library/view/domain-driven-design-tackling/0321125215/"><em>Domain-Driven Design: Tackling Complexity in the Heart of Software</em></a>. Boston: Addison-Wesley.</p>
+	
+		<p>Eric Evans’s original book that introduced the domain-driven design methodology. Although it doesn’t reflect newer aspects of DDD such as domain events and event sourcing, it’s still essential reading for becoming a DDD black belt.</p></li>
+
+	<li><p>Martraire, C. (2019). <a class="orm:hideurl" href="https://learning.oreilly.com/library/view/living-documentation-continuous/9780134689418/"><em>Living Documentation: Continuous Knowledge Sharing by Design</em></a>. Boston: Addison-Wesley.</p>
+	
+		<p>In this book, Cyrille Martraire proposes a domain-driven design–based approach to knowledge sharing, documentation, and testing.</p></li>
+
+	<li><p>Vernon, V. (2013). <a class="orm:hideurl" href="https://learning.oreilly.com/library/view/implementing-domain-driven-design/9780133039900/"><em>Implementing Domain-Driven Design</em></a>. Boston: Addison-Wesley.</p>
+	
+		<p>Another timeless DDD classic. Vaughn Vernon provides in-depth discussion and detailed examples of domain-driven design thinking and the use of its strategic and tactical toolset. As a learning foundation, Vaughn uses a real-world example of failing initiatives with DDD and the teams’ rejuvenated journey afforded by applying essential course corrections.</p></li>
+
+	<li><p>Young, G. (2017). <a href="https://leanpub.com/esversioning/read"><em>Versioning in an Event Sourced System</em></a>. Leanpub.</p>
+	
+		<p>In <a data-type="xref" href="ch07.html#modeling_the_dimension_of_time">Chapter 7</a>, we discussed that it can be challenging to evolve an event-sourced system. This book is dedicated to this topic.</p></li>
+</ul>
+</div></section>
+<section class="pagebreak-before" data-type="sect2" data-pdf-bookmark="Architectural and Integration Patterns"><div class="sect2" id="architectural_and_integration_patterns">
+<h2 class="less_space">Architectural and Integration Patterns</h2>
+
+<ul class="references">
+	<li><p>Dehghani, Z. (Expected to be published in 2022). <a class="orm:hideurl" href="https://www.oreilly.com/library/view/data-mesh/9781492092384/"><em>Data Mesh: Delivering Data-Driven Value at Scale</em></a>. Boston: O’Reilly.<a contenteditable="false" data-type="indexterm" data-primary="software architecture" data-secondary="further reading" id="id1674"></a></p>
+
+		<p>Zhamak Dehghani is the author of the data mesh pattern that we discussed in <a data-type="xref" href="ch16.html#data_mesh-id000059">Chapter 16</a>. In this book, Dehghani explains the principles behind the data management architecture, as well as how to implement the data mesh architecture in practice.</p></li>
+
+	<li><p>Fowler, M. (2002). <a class="orm:hideurl" href="https://learning.oreilly.com/library/view/patterns-of-enterprise/0321127420/"><em>Patterns of Enterprise Application Architecture</em></a>. Boston: Addison-Wesley.</p>
+	
+		<p>The classic application architecture patterns book that I quoted multiple times in <a data-type="xref" href="ch05.html#implementing_simple_business_logic">Chapter 5</a> and <a data-type="xref" href="ch06.html#tackling_complex_business_logic">Chapter 6</a>. This is the book in which the transaction script, active record, and domain model patterns were originally defined.</p></li>
+
+	<li><p>Hohpe, G., &amp; Woolf, B. (2003). <a class="orm:hideurl" href="https://learning.oreilly.com/library/view/enterprise-integration-patterns/0321200683/"><em>Enterprise Integration Patterns: Designing, Building, and Deploying Messaging Solutions</em></a>. Boston: Addison-Wesley.</p>
+	
+		<p>Many of the patterns discussed in <a data-type="xref" href="ch09.html#communication_patterns">Chapter 9</a> were originally introduced in this book. Read this book for more component integration patterns.</p></li>
+
+	<li><p>Richardson, C. (2019). <a class="orm:hideurl" href="https://www.manning.com/books/microservices-patterns"><em>Microservice Patterns: With Examples in Java</em></a>. New York: Manning Publications.</p>
+	
+		<p>In this book, Chris Richardson provides many detailed examples of patterns often used when architecting microservices-based solutions. Among the discussed patterns are saga, process manager, and outbox, which we discussed in <a data-type="xref" href="ch09.html#communication_patterns">Chapter 9</a>.</p></li>
+</ul>
+</div></section>
+<section data-type="sect2" data-pdf-bookmark="Modernization of Legacy Systems"><div class="sect2" id="modernization_of_legacy_systems">
+<h2>Modernization of Legacy Systems</h2>
+
+<ul class="references">
+	<li><p>Kaiser, S. (Expected to be published in 2022). <em>Adaptive Systems with Domain-Driven Design, Wardley Mapping, and Team Topologies</em>. Boston: Addison-Wesley.<a contenteditable="false" data-type="indexterm" data-primary="modernization strategy" data-secondary="further reading" id="id1675"></a><a contenteditable="false" data-type="indexterm" data-primary="real-world domain-driven design" data-secondary="modernization strategy" data-tertiary="further reading" id="id1676"></a></p>
+
+		<p>Susanne Kaiser shares her experience of modernizing legacy systems by leveraging domain-driven design, Wardley mapping, and team topologies.</p></li>
+
+	<li><p>Tune, N. (Expected to be published in 2022). <a href="https://leanpub.com/arch-modernization-ddd"><em>Architecture Modernization: Product, Domain, &amp; Team Oriented</em></a>. Leanpub.</p>
+	
+		<p>In this book, Nick Tune discusses in depth how to leverage domain-driven design and other techniques to modernize brownfield projects’ architecture.</p></li>
+
+	<li><p>Vernon, V., &amp; Jaskula, T. (2021). <em>Implementing Strategic Monoliths and Microservices</em>. Boston: Addison-Wesley.</p>
+	
+		<p class="pagebreak-before less_space">A hands-on book in which the authors demonstrate ageless software engineering tools, including rapid discovery and learning, domain-driven approaches, and handling the intricacies of properly implementing monolith- and microservices-based solutions, all while focusing on the most important aspect: delivering innovative business strategy.</p></li>
+
+	<li><p>Vernon, V., &amp; Jaskula, T. (2021). <em>Strategic Monoliths and Microservices</em>. Boston: Addison-Wesley.</p>
+	
+		<p>In this book Vaughn and Tomasz promote software strategic thinking by exploring how to achieve all-important innovations using discovery-based learning along with a domain-driven approach, and how to select the most purposeful architecture and tools for the job: microservices, monoliths, or a blend, and how to make them work together.</p></li>
+</ul>
+</div></section>
+<section data-type="sect2" data-pdf-bookmark="EventStorming"><div class="sect2" id="event_storming-id000069">
+<h2>EventStorming</h2>
+
+<ul class="references">
+	<li><p>Brandolini, A. (Not yet published). <a href="https://leanpub.com/introducing_eventstorming"><em>Introducing EventStorming</em></a>. Leanpub.<a contenteditable="false" data-type="indexterm" data-primary="EventStorming" data-secondary="further reading" id="id1677"></a></p>
+
+		<p>Alberto Brandolini is the creator of the EventStorming workshop, and in this book, he explains in detail the process and rationale behind EventStorming.</p></li>
+
+	<li><p>Rayner, P. (Not yet published). <a href="https://leanpub.com/eventstorming_handbook"><em>The EventStorming Handbook</em></a>. Leanpub.</p>
+	
+		<p>Paul Rayner explains how he uses EventStorming in practice, including numerous tips and tricks for facilitating a successful session.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="aft-read" id="id1678"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="aft-read2" id="id1679"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="aft-read3" id="id1680"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="aft-read4" id="id1681"></a></p></li>
+</ul>
+</div></section>
+</div></section>
+<section data-type="sect1" data-pdf-bookmark="Conclusion"><div class="sect1" id="conclusion-id000041">
+<h1>Conclusion</h1>
+
+<p>That’s it! Thank you so much for reading this book. I hope you enjoyed it and that you will use what you’ve learned from it.</p>
+
+<p>What I hope you take away from this book are the logic and the principles behind domain-driven design tools. Don’t follow domain-driven design blindly as a dogma, but rather understand the reasoning it is based on. This understanding will significantly increase your opportunities to apply DDD and gain value from it. Understanding the philosophy of domain-driven design is also the key to leveraging value by incorporating the methodology’s concepts individually, especially in brownfield projects.</p>
+
+<p>Finally, always watch your ubiquitous language, and when in doubt, do EventStorming. Good luck!</p>
+</div></section>
+</div></section></div>
+</div>
+</body>
+</html>

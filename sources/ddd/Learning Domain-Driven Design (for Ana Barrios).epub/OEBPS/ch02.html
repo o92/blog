@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xml:lang="en"
+lang="en"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title>Learning Domain-Driven Design</title>
+<link rel="stylesheet" type="text/css" href="override_v1.css"/>
+<link rel="stylesheet" type="text/css" href="epub.css"/>
+</head>
+<body>
+<div id="book-content">
+<div id="sbo-rt-content"><section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 2. Discovering Domain Knowledge"><div class="chapter" id="discovering_domain_knowledge">
+<h1><span class="label">Chapter 2. </span>Discovering Domain Knowledge</h1>
+<blockquote data-type="epigraph" epub:type="epigraph">
+
+<p>It’s developers’ (mis)understanding, not domain experts’ knowledge, that gets released in <span class="keep-together">production</span>.<a contenteditable="false" data-type="indexterm" data-primary="Brandolini, Alberto" id="id710"></a></p>
+<p data-type="attribution">Alberto Brandolini</p>
+</blockquote>
+
+<p>In the previous chapter, we started exploring business domains. You learned how to identify a company’s business domains, or areas of activity, and analyze its strategy to compete in them; that is, its business subdomains’ boundaries and types.</p>
+
+<p>This chapter continues the topic of business domain analysis but in a different dimension: depth. It focuses on what happens inside a subdomain: its business function and logic. You will learn the domain-driven design tool for effective communication and knowledge sharing: the ubiquitous language. Here we will use it to learn the intricacies of business domains. Later in the book we will use it to model and implement their business logic in software.</p>
+
+<section data-type="sect1" data-pdf-bookmark="Business Problems"><div class="sect1" id="business_problems">
+<h1>Business Problems</h1>
+
+<p>The software systems we are building are solutions to<a contenteditable="false" data-type="indexterm" data-primary="domain experts" data-secondary="business knowledge" data-tertiary="business problems" id="id711"></a><a contenteditable="false" data-type="indexterm" data-primary="business problems" id="id712"></a><a contenteditable="false" data-type="indexterm" data-primary="business knowledge" data-secondary="business problems" id="id713"></a><a contenteditable="false" data-type="indexterm" data-primary="domain knowledge" data-see="domain experts" id="id714"></a><a contenteditable="false" data-type="indexterm" data-primary="knowledge of business" data-see="business knowledge" id="id715"></a><a contenteditable="false" data-type="indexterm" data-primary="strategic design" data-secondary="business knowledge" data-see="business knowledge" id="id716"></a> business problems. In this context, the word <em>problem</em> doesn’t resemble a mathematical problem or a riddle that you can solve and be done with. In the context of business domains, “problem” has a broader meaning. A business problem can be challenges associated with optimizing workflows and processes, minimizing manual labor, managing resources, supporting decisions, managing data, and so on.</p>
+
+<p>Business problems appear both at the business domain and subdomain levels. A company’s goal is to provide a solution for its customers’ problems. Going back to the FedEx example in <a data-type="xref" href="ch01.html#analyzing_business_domains">Chapter 1</a>, that company’s customers need to ship packages in limited time frames, so it optimizes the shipping process.</p>
+
+<p>Subdomains are finer-grained problem domains whose goal<a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="business problem domains" id="id717"></a><a contenteditable="false" data-type="indexterm" data-primary="domain analysis" data-secondary="business problem domains" id="id718"></a> is to provide solutions for specific business capabilities. A knowledge management subdomain optimizes the process of storing and retrieving information. A clearing subdomain optimizes the process of executing financial transactions. An accounting subdomain keeps track of the company’s funds.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Knowledge Discovery"><div class="sect1" id="knowledge_discovery">
+<h1>Knowledge Discovery</h1>
+
+<p>To design an effective software solution, we have to grasp at<a contenteditable="false" data-type="indexterm" data-primary="business knowledge" data-secondary="knowledge discovery" id="id719"></a><a contenteditable="false" data-type="indexterm" data-primary="domain experts" data-secondary="business knowledge" data-tertiary="knowledge discovery" id="id720"></a> least the basic knowledge of the business domain. As we discussed in <a data-type="xref" href="ch01.html#analyzing_business_domains">Chapter 1</a>, this knowledge belongs to domain experts: it’s their job to specialize in and comprehend all the intricacies of the business domain. By no means should we, nor can we, become domain experts. That said, it’s crucial for us to understand domain experts and to use the same business terminology they use.</p>
+
+<p>To be effective, the software has to mimic the <a contenteditable="false" data-type="indexterm" data-primary="modeling business domain" data-secondary="domain experts’ mental models" data-seealso="domain experts" id="id721"></a><a contenteditable="false" data-type="indexterm" data-primary="domain experts" data-secondary="modeling business domain" id="id722"></a>domain experts’ way of thinking about the problem—their mental models. Without an understanding of the business problem and the reasoning behind the requirements, our solutions will be limited to “translating” business requirements into source code. What if the requirements miss a crucial edge case? Or fail to describe a business concept, limiting our ability to implement a model that will support future requirements?</p>
+
+<p>As Alberto Brandolini<sup><a data-type="noteref" id="ch01fn6-marker" href="ch02.html#ch01fn6">1</a></sup> says,<a contenteditable="false" data-type="indexterm" data-primary="Brandolini, Alberto" id="id723"></a> software development is a learning process; working code is a side effect. A software project’s success depends on the effectiveness of knowledge sharing between domain experts and software engineers. We have to understand the problem in order to solve it.</p>
+
+<p>Effective knowledge sharing between domain experts and software engineers <a contenteditable="false" data-type="indexterm" data-primary="business knowledge" data-secondary="communication" id="ch02-comm"></a><a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="business knowledge" id="ch02-comm2"></a>requires effective communication. Let’s take a look at the common impediments to effective communication in software projects.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Communication"><div class="sect1" id="communication">
+<h1>Communication</h1>
+
+<p>It’s safe to say that almost all software projects require the collaboration of stakeholders in different roles: domain experts, product owners, engineers, UI and UX designers, project managers, testers, analysts, and others. As in any collaborative effort, the outcome depends on how well all those parties can work together. For example, do all stakeholders agree on what problem is being solved? What about the solution they are building—do they hold any conflicting assumptions about its functional and nonfunctional requirements? Agreement and alignment on all project-related matters are essential to a project’s success.</p>
+
+<p>Research into why software projects fail has shown that effective communication is essential for knowledge sharing and project success.<sup><a data-type="noteref" id="ch01fn7-marker" href="ch02.html#ch01fn7">2</a></sup> Yet, despite its importance, effective communication is rarely observed in software projects. Often, businesspeople and engineers have no direct interaction with one another. Instead, domain knowledge is pushed down from domain experts to engineers. It is delivered through people playing the role of mediators, or “translators,” systems/business analysts, product owners, and project managers. Such common knowledge sharing flow is illustrated in <a data-type="xref" href="#knowledge_sharing_flow_in_a_software_pr">Figure 2-1</a>.</p>
+<figure><div id="knowledge_sharing_flow_in_a_software_pr" class="figure">
+<img src="assets/lddd_0201.png" alt="Knowledge sharing flow in a software project" width="600" height="278"/>
+<h6><span class="label">Figure 2-1. </span>Knowledge sharing flow in a software project</h6>
+</div></figure>
+
+<p>During the traditional software development lifecycle, the domain knowledge is “translated” into an <a contenteditable="false" data-type="indexterm" data-primary="modeling business domain" data-secondary="analysis model" id="id724"></a><a contenteditable="false" data-type="indexterm" data-primary="analysis model" id="id725"></a><a contenteditable="false" data-type="indexterm" data-primary="business knowledge" data-secondary="communication" data-tertiary="analysis model" id="id726"></a><a contenteditable="false" data-type="indexterm" data-primary="domain experts" data-secondary="business knowledge" data-tertiary="analysis model" id="id727"></a><a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="business knowledge" data-tertiary="analysis model" id="id728"></a>engineer-friendly form known as an <em>analysis model</em>, which is a description of the system’s requirements rather than an understanding of the business domain behind it. While the intentions may be good, such mediation is hazardous to knowledge sharing. In any translation, information is lost; in this case, domain knowledge that is essential for solving business problems gets lost on its way to the software engineers. This is not the only such translation on a typical software project. The analysis model is translated into the software design model (a software design document, which is translated into an implementation model or the source code itself). As often happens, documents go out of date quickly. The source code is used to communicate business domain knowledge to software engineers who will maintain the project later. <a data-type="xref" href="#model_transformations">Figure 2-2</a> illustrates the different translations needed for domain knowledge to be implemented in code.</p>
+<figure><div id="model_transformations" class="figure">
+<img src="assets/lddd_0202.png" alt="Model transformations" width="600" height="205"/>
+<h6><span class="label">Figure 2-2. </span>Model transformations</h6>
+</div></figure>
+
+<p>Such a software development process resembles the children’s game Telephone:<sup><a data-type="noteref" id="ch01fn8-marker" href="ch02.html#ch01fn8">3</a></sup> the message, or domain knowledge, often becomes distorted. The information leads to software engineers implementing the wrong solution, or the right solution but to the wrong problems. In either case, the outcome is the same: a failed software project.</p>
+
+<p>Domain-driven design proposes a better way to get the knowledge from domain experts to software engineers: by using a ubiquitous language.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch02-comm" id="id729"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch02-comm2" id="id730"></a></p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="What Is a Ubiquitous Language?"><div class="sect1" id="what_is_a_ubiquitous_languagequestion_m">
+<h1>What Is a Ubiquitous Language?</h1>
+
+<p>Using a ubiquitous language is the cornerstone practice of domain-driven design.<a contenteditable="false" data-type="indexterm" data-primary="modeling business domain" data-secondary="ubiquitous language" id="ch02-ubi7"></a><a contenteditable="false" data-type="indexterm" data-primary="business domains" data-secondary="ubiquitous language for" id="ch02-ubi6"></a><a contenteditable="false" data-type="indexterm" data-primary="domain experts" data-secondary="business knowledge" data-tertiary="ubiquitous language" id="ch02-ubi5"></a><a contenteditable="false" data-type="indexterm" data-primary="domain-driven design (DDD)" data-secondary="ubiquitous language" data-seealso="ubiquitous language" id="ch02-ubi4"></a><a contenteditable="false" data-type="indexterm" data-primary="business knowledge" data-secondary="communication" data-tertiary="ubiquitous language" data-seealso="ubiquitous language" id="ch02-ubi"></a><a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="business knowledge" data-tertiary="ubiquitous language" data-seealso="ubiquitous language" id="ch02-ubi2"></a><a contenteditable="false" data-type="indexterm" data-primary="ubiquitous language" id="ch02-ubi3"></a> The idea is simple and straightforward: if parties need to communicate efficiently, instead of relying on translations, they have to speak the same language.</p>
+
+<p>Although this notion is borderline common sense, as Voltaire said, “common sense is not so common.” The traditional software development lifecycle implies the following translations:</p>
+<ul>
+<li>
+	<p>Domain knowledge into an analysis model</p></li>
+<li>
+	<p>Analysis model into requirements</p></li>
+<li>
+	<p>Requirements into system design</p></li>
+<li>
+	<p>System design into source code</p></li>
+</ul>
+
+<p>Instead of continuously translating domain knowledge, domain-driven design calls for cultivating a single language for describing the business domain: the ubiquitous language.</p>
+
+<p>All project-related stakeholders—software engineers, product owners, domain experts, UI/UX designers—should use the ubiquitous language when describing the business domain. Most importantly, domain experts must be comfortable using the ubiquitous language when reasoning about the business domain; this language will represent both the business domain and the domain experts’ mental models.</p>
+
+<p>Only through the continuous use of the ubiquitous language and its terms can a shared understanding among all of the project’s stakeholders be cultivated.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Language of the Business"><div class="sect1" id="language_of_the_business">
+<h1>Language of the Business</h1>
+
+<p>It’s crucial to emphasize that the ubiquitous language is the language of the business. As such, it should consist of business domain–related terms only. No technical jargon! Teaching business domain experts about singletons and abstract factories is not your goal. The ubiquitous language aims to frame the domain experts’ understanding and mental models of the business domain in terms that are easy to understand.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Scenarios"><div class="sect2" id="scenarios">
+<h2>Scenarios</h2>
+
+<p>Let’s say we are working on an advertising campaign management system. Consider the following statements:</p>
+<ul>
+<li>
+	<p>An advertising campaign can display different creative materials.</p></li>
+<li>
+	<p>A campaign can be published only if at least one of its placements is active.</p></li>
+<li>
+	<p>Sales commissions are accounted for after transactions are approved.</p></li>
+</ul>
+
+<p>All of these statements are formulated in the language of the business. That is, they reflect the domain experts’ view of the business domain.</p>
+
+<p>On the other hand, the following statements are strictly technical and thus do not fit the notion of the ubiquitous language:</p>
+<ul>
+<li>
+	<p>The advertisement iframe displays an HTML file.</p></li>
+<li>
+	<p>A campaign can be published only if it has at least one associated record in the active-placements table.</p></li>
+<li>
+	<p>Sales commissions are based on correlated records from the transactions and approved-sales tables.</p></li>
+</ul>
+
+<p>These latter statements are purely technical and will be unclear to domain experts. Suppose engineers are only familiar with this technical, solution-oriented view of the business domain. In that case, they won’t be able to completely understand the business logic or why it operates the way it does, which will limit their ability to model and implement an effective solution.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Consistency"><div class="sect2" id="consistency-id000043">
+<h2>Consistency</h2>
+
+<p>The ubiquitous language must be precise and consistent. It should eliminate the need for assumptions and should make the business domain’s logic explicit.</p>
+
+<p>Since ambiguity hinders communication, each term of the ubiquitous language should have one and only one meaning. Let’s look at a few examples of unclear terminology and how it can be improved.</p>
+
+<section data-type="sect3" data-pdf-bookmark="Ambiguous terms"><div class="sect3" id="ambiguous_terms">
+<h3>Ambiguous terms</h3>
+
+<p>Let’s say that in some business domain, the term <em>policy</em> has multiple meanings: it can mean a regulatory rule or an insurance contract. The exact meaning can be worked out in human-to-human interaction, depending on the context. Software, however, doesn’t cope well with ambiguity, and it can be cumbersome and challenging to model the “policy” entity in code.</p>
+
+<p>Ubiquitous language demands a single meaning for each term, so “policy” should be modeled explicitly using the two terms <em>regulatory rule</em> and <em>insurance contract</em>.</p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Synonymous terms"><div class="sect3" id="synonymous_terms">
+<h3>Synonymous terms</h3>
+
+<p>Two terms cannot be used interchangeably in a ubiquitous language. For example, many systems use the term <em>user</em>. However, a careful examination of the domain experts’ lingo may reveal that <em>user</em> and other terms are used interchangeably: for example, <em>user</em>, <em>visitor</em>, <em>administrator</em>, <em>account</em>, etc.</p>
+
+<p>Synonymous terms can seem harmless at first. However, in most cases, they denote different concepts. In this example, both <em>visitor</em> and <em>account</em> technically refer to the system’s users; however, in most systems, unregistered and registered users represent different roles and have different behaviors. For example, the “visitors” data is used mainly for analysis purposes, whereas “accounts” actually uses the system and its functionality.</p>
+
+<p>It is preferable to use each term explicitly in its specific context. Understanding the differences between the terms in use allows for building simpler and clearer models and implementations of the business domain’s entities.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch02-ubi" id="id731"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch02-ubi2" id="id732"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch02-ubi3" id="id733"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch02-ubi4" id="id734"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch02-ubi5" id="id735"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch02-ubi6" id="id736"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch02-ubi7" id="id737"></a></p>
+</div></section>
+</div></section>
+</div></section>
+<section class="pagebreak-before" data-type="sect1" data-pdf-bookmark="Model of the Business Domain"><div class="sect1" id="model_of_the_business_domain">
+<h1 class="less_space">Model of the Business Domain</h1>
+
+<p>Now let’s look at the ubiquitous language from a different perspective: modeling.</p>
+
+<section data-type="sect2" data-pdf-bookmark="What Is a Model?"><div class="sect2" id="what_is_a_modelquestion_mark">
+<h2>What Is a Model?</h2>
+<blockquote data-type="epigraph" epub:type="epigraph">
+
+<p>A model is a simplified representation of a thing or<a contenteditable="false" data-type="indexterm" data-primary="modeling business domain" data-secondary="about models" id="id738"></a><a contenteditable="false" data-type="indexterm" data-primary="business knowledge" data-secondary="modeling" data-seealso="modeling business domain" id="id739"></a><a contenteditable="false" data-type="indexterm" data-primary="business domains" data-secondary="modeling" data-see="modeling business domain" id="id740"></a><a contenteditable="false" data-type="indexterm" data-primary="Wirfs-Brock, Rebecca" id="id741"></a> phenomenon that intentionally emphasizes certain aspects while ignoring others. Abstraction with a specific use in mind.</p>
+
+<p data-type="attribution">Rebecca Wirfs-Brock</p>
+</blockquote>
+
+<p>A model is not a copy of the real world but a human construct that helps us make sense of real-world systems.</p>
+
+<p>A canonical example of a model is a map. Any map is a model, including navigation maps, terrain maps, world maps, subway maps, and others, as shown in <a data-type="xref" href="#different_types_of_maps_displaying_diff">Figure 2-3</a>.</p>
+<figure><div id="different_types_of_maps_displaying_diff" class="figure">
+<img src="assets/lddd_0203.png" alt="" width="600" height="282"/>
+<h6><span class="label">Figure 2-3. </span>Different types of maps displaying different models of the earth: roads, time zones, nautical navigation, terrain, aeronautical navigation, and subway routes.</h6>
+</div></figure>
+
+<p>None of these maps represents all the details of our planet. Instead, each map contains just enough data to support its particular purpose: the problem it is supposed to solve.</p>
+</div></section>
+
+<section class="pagebreak-before" data-type="sect2" data-pdf-bookmark="Effective Modeling"><div class="sect2" id="effective_modeling">
+<h2 class="less_space">Effective Modeling</h2>
+
+<p>All models have a purpose, and an effective model contains only the details<a contenteditable="false" data-type="indexterm" data-primary="modeling business domain" data-secondary="effective modeling" id="id742"></a> needed to fulfill its purpose. For example, you won’t see subway stops on a world map. On the other hand, you cannot use a subway map to estimate distances. Each map contains just the information it is supposed to provide.</p>
+
+<p>This point is worth reiterating: a useful model is not a copy of the real world. Instead, a model is intended to solve a problem, and it should provide just enough information for that purpose. <a contenteditable="false" data-type="indexterm" data-primary="Box, George" id="id743"></a>Or, as statistician George Box put it, “All models are wrong, but some are useful.”</p>
+
+<p>In its essence, a model is an abstraction. The notion of abstraction allows us to handle complexity by omitting unnecessary details and leaving only what’s needed for solving the problem at hand. On the other hand, an ineffective abstraction removes necessary information or produces noise by leaving what’s not required. <a contenteditable="false" data-type="indexterm" data-primary="Dijkstra, Edsger W." id="id744"></a>As noted by Edsger W. Dijkstra in his paper “The Humble Programmer,”<sup><a data-type="noteref" id="ch01fn9-marker" href="ch02.html#ch01fn9">4</a></sup> the purpose of abstracting is not to be vague but to create a new semantic level in which one can be <em>absolutely precise</em>.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Modeling the Business Domain"><div class="sect2" id="modeling_the_business_domain">
+<h2>Modeling the Business Domain</h2>
+
+<p>When cultivating a ubiquitous language, we are effectively<a contenteditable="false" data-type="indexterm" data-primary="modeling business domain" data-secondary="about" id="id745"></a><a contenteditable="false" data-type="indexterm" data-primary="ubiquitous language" data-secondary="modeling business domain" id="id746"></a><a contenteditable="false" data-type="indexterm" data-primary="modeling business domain" data-secondary="domain expert thinking" id="id747"></a><a contenteditable="false" data-type="indexterm" data-primary="domain experts" data-secondary="modeling business domain" id="id748"></a><a contenteditable="false" data-type="indexterm" data-primary="modeling business domain" data-secondary="ubiquitous language" data-tertiary="about modeling business domain" id="id749"></a> building a model of the business domain. The model is supposed to capture the domain experts’ mental models—their thought processes about how the business works to implement its function. The model has to reflect the involved business entities and their behavior, cause and effect relationships, and invariants.</p>
+
+<p>The ubiquitous language we use is not supposed to cover<a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="modeling business domain" data-seealso="ubiquitous language" id="id750"></a> every possible detail of the domain. That would be equivalent to making every stakeholder a domain expert. Instead, the model is supposed to include just enough aspects of the business domain to make it possible to implement the required system; that is, to address the specific problem the software is intended to solve. In the following chapters, you will see how the ubiquitous language can drive low-level design and implementation decisions.</p>
+
+<p>Effective communication between engineering teams and domain experts is vital. The importance of this communication grows with the complexity of the business domain. The more complex the business domain is, the harder it is to model and implement its business logic in code. Even a slight misunderstanding of a complicated business domain, or its underlying principles, will inadvertently lead to an implementation prone to severe bugs. The only reliable way to verify a business domain’s understanding is to converse with domain experts and do it in the language they understand: the language of the business.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Continuous Effort"><div class="sect2" id="continuous_effort">
+<h2>Continuous Effort</h2>
+
+<p>Formulation of a ubiquitous language requires interaction with<a contenteditable="false" data-type="indexterm" data-primary="modeling business domain" data-secondary="ubiquitous language" data-tertiary="continuous effort" id="id751"></a> its natural holders, the domain experts. Only interactions with actual domain experts can uncover inaccuracies, wrong assumptions, or an overall flawed understanding of the business domain.</p>
+
+<p>All stakeholders should consistently use the ubiquitous language in all project-related communications to spread knowledge about and foster a shared understanding of the business domain. The language should be continuously reinforced throughout the project: requirements, tests, documentation, and even the source code itself should use this language.</p>
+
+<p>Most importantly, cultivation of a ubiquitous language is an ongoing process. It should be constantly validated and evolved. Everyday use of the language will, over time, reveal deeper insights into the business domain. When such breakthroughs happen, the ubiquitous language must evolve to keep pace with the newly acquired domain knowledge.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Tools"><div class="sect2" id="tools">
+<h2>Tools</h2>
+
+<p>There are tools and technologies that can alleviate the processes of capturing and managing a ubiquitous language.<a contenteditable="false" data-type="indexterm" data-primary="domain experts" data-secondary="modeling business domain" data-tertiary="tools" id="id752"></a><a contenteditable="false" data-type="indexterm" data-primary="modeling business domain" data-secondary="ubiquitous language" data-tertiary="tools" id="id753"></a><a contenteditable="false" data-type="indexterm" data-primary="ubiquitous language" data-secondary="modeling business domain" data-tertiary="tools" id="id754"></a></p>
+
+<p>For example, a wiki can be used as a <em>glossary</em> to<a contenteditable="false" data-type="indexterm" data-primary="glossary for ubiquitous language" id="id755"></a><a contenteditable="false" data-type="indexterm" data-primary="ubiquitous language" data-secondary="glossary for" id="id756"></a> capture and document the ubiquitous language. Such a glossary alleviates the onboarding process of new team members, as it serves as a go-to place for information about the business domain’s terminology.</p>
+
+<p>It’s important to make glossary maintenance a shared effort. When a ubiquitous language is changed, all team members should be encouraged to go ahead and update the glossary. That’s contrary to a centralized approach, in which only team leaders or architects are in charge of maintaining the glossary.</p>
+
+<p>Despite the obvious advantages of maintaining a glossary of project-related terminology, it has an inherent limitation. Glossaries work best for “nouns”: names of entities, processes, roles, and so on. Although nouns are important, capturing the behavior is crucial. The behavior is not a mere list of verbs associated with nouns, but the actual business logic, with its rules, assumptions, and invariants. Such concepts are much harder to document in a glossary. Hence, glossaries are best used in tandem with other <a contenteditable="false" data-type="indexterm" data-primary="Gherkin tests" id="id757"></a>tools that are better suited to capture the behavior; for example, use cases or <em>Gherkin tests</em>.</p>
+
+<p>Automated tests written in the <a href="https://oreil.ly/WJw3C">Gherkin language</a> are not only great tools for capturing the ubiquitous language but also act as an additional tool for bridging the gap between domain experts and software engineers. Domain experts can read the tests and verify the system’s expected behavior.<sup><a data-type="noteref" id="ch01fn11-marker" href="ch02.html#ch01fn11">5</a></sup> For example, see the following test written in the Gherkin language:</p>
+
+<pre data-type="programlisting" data-code-language="gherkin"><code class="k">Scenario:</code><code class="nf"> Notify the agent about a new support case</code>
+<code class="k">    Given </code><code class="nf">Vincent Jules submits a new support case saying:</code>
+<code class="nf">    </code><code class="k">"""</code><code class="s"></code>
+<code class="s">    I need help configuring AWS Infinidash</code>
+<code class="s">    </code><code class="k">"""</code><code class="nf"></code>
+<code class="nf">    </code><code class="k">When </code><code class="nf">the ticket is assigned to Mr. Wolf</code>
+<code class="nf">    </code><code class="k">Then </code><code class="nf">the agent receives a notification about the new ticket</code></pre>
+
+<p>Managing a Gherkin-based test suite can be challenging at times, especially at the early stages of a project. However, it is definitely worth it for complex business domains.</p>
+
+<p>Finally, there are even static code analysis tools that can verify the usage of a ubiquitous language’s terms. A notable example for such a tool is NDepend.</p>
+
+<p>While these tools are useful, they are secondary to the actual use of a ubiquitous language in day-to-day interactions. Use the tools to support the management of the ubiquitous language, but don’t expect the documentation to replace the actual usage. <a contenteditable="false" data-type="indexterm" data-primary="Agile Manifesto" id="id758"></a>As <a href="https://agilemanifesto.org">the Agile Manifesto says</a>, “Individuals and interactions over processes and tools.”</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Challenges"><div class="sect2" id="challenges-id000019">
+<h2>Challenges</h2>
+
+<p>In theory, cultivating a ubiquitous language sounds like a<a contenteditable="false" data-type="indexterm" data-primary="ubiquitous language" data-secondary="challenges" id="id759"></a><a contenteditable="false" data-type="indexterm" data-primary="modeling business domain" data-secondary="ubiquitous language" data-tertiary="challenges" id="id760"></a><a contenteditable="false" data-type="indexterm" data-primary="domain experts" data-secondary="modeling business domain" data-tertiary="challenges" id="id761"></a> simple, straightforward process. In practice, it isn’t. The only reliable way to gather domain knowledge is to converse with domain experts. Quite often, the most important knowledge is tacit. It’s not documented or codified but resides only in the minds of domain experts. The only way to access it is to ask questions.</p>
+
+<p>As you gain experience in this practice, you will notice that frequently, this process involves not merely discovering knowledge that is already there, but rather co-creating the model in tandem with domain experts. There may be ambiguities and even white spots in domain experts’ own understanding of the business domain; for example, defining only the “happy path” scenarios but not considering edge cases that challenge the accepted assumptions. Furthermore, you may encounter business domain concepts that lack explicit definitions. Asking questions about the nature of the business domain often makes such implicit conflicts and white spots explicit. This is especially common for core subdomains. In such a case, the learning process is mutual—you are helping the domain experts better understand their field.</p>
+
+<p>When introducing domain-driven design practices to a brownfield project, you will notice that there is already a formed language for describing the business domain, and that the stakeholders use it. However, since DDD principles do not drive that language, it won’t necessarily reflect the business domain effectively. For example, it may use technical terms, such as database table names. Changing a language that is already being used in an organization is not easy. The essential tool in such a situation is patience. You need to make sure the correct language is used where it’s easy to control it: in the documentation and source code.</p>
+
+<p>Finally, the question about the ubiquitous language that I am asked often at conferences is what language should we use if the company is not in an English-speaking country.<a contenteditable="false" data-type="indexterm" data-primary="ubiquitous language" data-secondary="non-English-speaking countries" id="id762"></a><a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="non-English-speaking countries" id="id763"></a><a contenteditable="false" data-type="indexterm" data-primary="modeling business domain" data-secondary="ubiquitous language" data-tertiary="non-English-speaking countries" id="id764"></a> My advice is to at least use English nouns for naming the business domain’s entities. This will alleviate using the same terminology in code.</p>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Conclusion"><div class="sect1" id="conclusion-id000027">
+<h1>Conclusion</h1>
+
+<p>Effective communication and knowledge sharing are crucial for a successful software project. Software engineers have to understand the business domain in order to design and build a software solution.</p>
+
+<p>Domain-driven design’s ubiquitous language is an effective tool for bridging the knowledge gap between domain experts and software engineers. It fosters communication and knowledge sharing by cultivating a shared language that can be used by all the stakeholders throughout the project: in conversations, documentation, tests, diagrams, source code, and so on.</p>
+
+<p>To ensure effective communication, the ubiquitous language has to eliminate ambiguities and implicit assumptions. All of a language’s terms have to be consistent—no ambiguous terms and no synonymous terms.</p>
+
+<p>Cultivating a ubiquitous language is a continuous process. As the project evolves, more domain knowledge will be discovered. It’s important for such insights to be reflected in the ubiquitous language.</p>
+
+<p>Tools such as wiki-based glossaries and Gherkin tests can greatly alleviate the process of documenting and maintaining a ubiquitous language. However, the main prerequisite for an effective ubiquitous language is usage: the language has to be used consistently in all project-related communications.</p>
+</div></section>
+<section class="pagebreak-before" data-type="sect1" data-pdf-bookmark="Exercises"><div class="sect1" id="exercises-id000071">
+<h1 class="less_space">Exercises</h1>
+
+ <ol>
+          <li>
+            <p>What is the primary purpose of a ubiquitous language?</p>
+            <ol type="a">
+              <li>
+                <p>To create a programming language that can be used for implementing the required business functionality.</p>
+              </li>
+              <li>
+                <p>To provide a shared and common language that bridges the gap between technical and business teams.</p>
+              </li>
+              <li>
+                <p>To document the software requirements in a formal specification </p>
+              </li>
+              <li>
+                <p>To develop a secret code that only the development team understands</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Who should be able to contribute to the definition of a ubiquitous language? Select all that apply. </p>
+            <ol type="a">
+              <li>
+                <p>Domain experts</p>
+              </li>
+              <li>
+                <p>Software engineers</p>
+              </li>
+              <li>
+                <p>End users</p>
+              </li>
+              <li>
+                <p>All of the project’s stakeholders</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Where should a ubiquitous language be used? Select all that apply.</p>
+            <ol type="a">
+              <li>
+                <p>In-person conversations</p>
+              </li>
+              <li>
+                <p>Documentation</p>
+              </li>
+              <li>
+                <p>Code</p>
+              </li>
+              <li>
+                <p>All of the above</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Which of the following statements is correct?</p>
+            <ol type="a">
+              <li>
+                <p>The ubiquitous language should evolve as the understanding of the domain improves.</p>
+              </li>
+              <li>
+                <p>The ubiquitous language should be static and unchanging once defined.</p>
+              </li>
+              <li>
+                <p>The ubiquitous language should reflect the project’s technological design decisions.</p>
+              </li>
+              <li>
+                <p>The ubiquitous language can only be used by the development team.</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Consider a software project you are working on at the moment or worked on in the past:</p>
+            <ol type="a">
+              <li>
+                <p>Try to come up with concepts of the business domain that you could use in conversations with domain experts.</p>
+              </li>
+              <li>
+                <p>Try to identify examples of inconsistent terms: business domain concepts that have either different meanings or identical concepts represented by different terms.</p>
+              </li>
+              <li>
+                <p>Have you encountered software development inefficiencies that resulted from poor communication?</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Assume you are working on a project and you notice that domain experts from different organizational units use the same term, for example, policy, to describe unrelated concepts of the business domain.</p>
+            <p>The resultant ubiquitous language is based on domain experts’ mental models but fails to fulfill the requirement of a term having a single meaning.</p>
+           <p>Before you continue to the next chapter, how would you address such a <span class="keep-together">conundrum</span>?</p>
+          </li>
+        </ol>
+
+</div></section>
+<div data-type="footnotes"><p data-type="footnote" id="ch01fn6"><sup><a href="ch02.html#ch01fn6-marker">1</a></sup> Brandolini, Alberto. (n.d.). <a href="https://www.eventstorming.com/book"><em>Introducing EventStorming</em></a>. Leanpub.</p><p data-type="footnote" id="ch01fn7"><sup><a href="ch02.html#ch01fn7-marker">2</a></sup> Sudhakar, Goparaju Purna. (2012). “A Model of Critical Success Factors for Software Projects.” <em>Journal of Enterprise Information Management, 25</em>(6), 537–558.</p><p data-type="footnote" id="ch01fn8"><sup><a href="ch02.html#ch01fn8-marker">3</a></sup> Players form a line, and the first player comes up with a message and whispers it into the ear of the second player. The second player repeats the message to the third player, and so on. The last player announces the message they heard to the entire group. The first player then compares the original message with the final version. Although the objective is to communicate the same message, it usually gets garbled and the last player receives a message that is significantly different from the original one.</p><p data-type="footnote" id="ch01fn9"><sup><a href="ch02.html#ch01fn9-marker">4</a></sup> Edsger W. Dijkstra, <a href="https://oreil.ly/LXd4W">“The Humble Programmer”</a>.</p><p data-type="footnote" id="ch01fn11"><sup><a href="ch02.html#ch01fn11-marker">5</a></sup> But please don’t fall into the trap of thinking that domain experts will write Gherkin tests.</p></div></div></section></div>
+</div>
+</body>
+</html>

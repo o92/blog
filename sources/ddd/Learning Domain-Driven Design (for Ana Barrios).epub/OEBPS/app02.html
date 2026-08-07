@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xml:lang="en"
+lang="en"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title>Learning Domain-Driven Design</title>
+<link rel="stylesheet" type="text/css" href="override_v1.css"/>
+<link rel="stylesheet" type="text/css" href="epub.css"/>
+</head>
+<body>
+<div id="book-content">
+<div id="sbo-rt-content"><section data-type="appendix" epub:type="appendix" data-pdf-bookmark="Appendix B. Answers to Exercise Questions"><div class="appendix" id="b_answers_to_exercise_questions">
+<h1><span class="label">Appendix B. </span>Answers to Exercise Questions</h1>
+
+<section data-type="sect1" data-pdf-bookmark="Chapter 1"><div class="sect1" id="chapter_one">
+<h1><a data-type="xref" href="ch01.html#analyzing_business_domains">Chapter 1</a></h1>
+ <ol>
+          <li>
+            <p>D: Both A and C are correct. Only core subdomains provide competitive advantage.<a contenteditable="false" data-type="indexterm" data-primary="answers to exercise questions" id="appb-ans"></a><a contenteditable="false" data-type="indexterm" data-primary="exercise question answers" id="appb-ans2"></a></p>
+          </li>
+          <li>
+            <p>B: All companies in a given industry can use the same solutions for generic subdomains.</p>
+          </li>
+          <li>
+            <p>A: Core subdomains are functionalities in which the company aims to excel, compared to its competitors. It requires iterative design to find the best solution. Moreover, as the competitors are catching up, core subdomains change and evolve to stay ahead of the competition.</p>
+          </li>
+          <li>
+            <p>C: Domain experts have a deep understanding of the specific business domain, its processes, rules, and needs.</p>
+          </li>
+        </ol>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Chapter 2"><div class="sect1" id="chapter_two">
+<h1><a data-type="xref" href="ch02.html#discovering_domain_knowledge">Chapter 2</a></h1>
+ <ol>
+          <li>
+            <p>B: The primary purpose of ubiquitous language is to bridge the gap between various stakeholders, including technical and business teams, to foster a shared understanding of the business functionality among all stakeholders.</p>
+          </li>
+          <li>
+            <p>D: All of the project’s stakeholders need to communicate in a ubiquitous language. As a result, all need to be able to contribute their knowledge to make it more efficient.</p>
+          </li>
+          <li>
+            <p>D: A ubiquitous language should be used in a project’s documentation-related communication. That includes in-person conversations, documentation, code, tests, and others.</p>
+          </li>
+          <li>
+            <p>A: Ubiquitous language should be adapted and refined as the team’s understanding of the business domain deepens.</p>
+          </li>
+        </ol>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Chapter 3"><div class="sect1" id="chapter_three">
+<h1><a data-type="xref" href="ch03.html#managing_domain_complexity">Chapter 3</a></h1>
+<ol>
+          <li>
+            <p>B: Subdomains are identified during the analysis of the business domain. Bounded contexts, on the other hand, are designed according to different factors.</p>
+          </li>
+        </ol>
+        <p>D: A bounded context defines the context in which a model is valid, all of its contents share the same lifecycle, and only one team should be in charge of it (ownership).</p>
+        <ol>
+          <li>
+            <p>D: Bounded contexts are design decisions that should be decided according to the project’s context.</p>
+          </li>
+          <li>
+            <p>D: A bounded context can be owned by one team only, but the same team can be in charge of multiple bounded contexts.</p>
+          </li>
+        </ol>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Chapter 4"><div class="sect1" id="chapter_four">
+<h1><a data-type="xref" href="ch04.html#integrating_bounded_contexts">Chapter 4</a></h1>
+<ol>
+          <li>
+            <p>D: Duplicating the functionality of a core subdomain in multiple bounded contexts will thwart the possibility of evolving it in the future, as all of the (frequent) changes will have to be coordinated across the two bounded contexts.</p>
+          </li>
+          <li>
+            <p>A: The goal of the anticorruption layer pattern is to protect the downstream model. It is especially relevant if the downstream is a core subdomain.</p>
+          </li>
+          <li>
+            <p>A: The goal of the open-host service pattern is to protect consumers from changes in the upstream bounded context. It is especially relevant if the upstream is a core subdomain, because they are highly volatile.</p>
+          </li>
+          <li>
+            <p>B: The shared kernel pattern allows multiple teams to co-evolve a part of a model belonging to one bounded context. Since this pattern is the exception from the rule rather than the rule itself, it should be used sparingly and its use must be justified.</p>
+          </li>
+        </ol>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Chapter 5"><div class="sect1" id="chapter_five">
+<h1><a data-type="xref" href="ch05.html#implementing_simple_business_logic">Chapter 5</a></h1>
+<ol>
+          <li>
+            <p>C: The transaction script and active record patterns are suitable for implementing simple business logic. In a core subdomain the business logic is more complicated than these patterns can accommodate.</p>
+          </li>
+          <li>
+            <p>D: Both the transaction script and active record patterns are suitable for implementing simple business logic.</p>
+          </li>
+          <li class="pagebreak-before">
+            <p>D: All of the above issues are possible:</p>
+         
+        <ul>
+        <li><p>If the execution fails after line 6, the caller retries the operation, and the same agent is chosen by the FindLeastBusyAgent method, the agent’s ActiveTickets counter will be increased by more than 1.</p></li>
+        <li><p>If the execution fails after line 6 but the caller doesn’t retry the operation, the counter will be increased, while the ticket itself won’t be created.</p></li>
+        <li><p>If the execution fails after line 12, the ticket is created and assigned, but the notification on line 14 won’t be sent.</p></li>
+        </ul>
+         </li>
+          <li>
+            <p>B: For example, if the execution fails after line 12 and the caller retries the operation and it succeeds, the same ticket will be persisted and assigned twice.</p>
+          </li>
+        </ol>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Chapter 6"><div class="sect1" id="chapter_six">
+<h1><a data-type="xref" href="ch06.html#tackling_complex_business_logic">Chapter 6</a></h1>
+ <ol>
+          <li>
+            <p>C: Value objects are immutable, and can contain both data and behavior.</p>
+          </li>
+          <li>
+            <p>B: Aggregates should be designed to be as small as possible, as long as the business domain’s data consistency requirements are intact.</p>
+          </li>
+          <li>
+            <p>B: Limiting changes to an aggregate instance to a single database transaction is another way to ensure that all the information that’s required to be strongly consistent is included in the aggregate’s boundary.</p>
+          </li>
+          <li>
+            <p>A &amp; C: Value objects describe entities’ properties and an aggregate contains one or more entities.</p>
+          </li>
+          <li>
+            <p>B: Both active records and aggregate can contain behavior. However, the aggregate pattern enforces that all the related behavior resides in its boundary.</p>
+          </li>
+        </ol>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Chapter 7"><div class="sect1" id="chapter_seven">
+<h1><a data-type="xref" href="ch07.html#modeling_the_dimension_of_time">Chapter 7</a></h1>
+ <ol>
+          <li>
+            <p>A: Domain events use value objects to describe what has happened in the business domain.</p>
+          </li>
+          <li>
+            <p>C: Multiple state representations can be projected and you can always add additional projections in the future.</p>
+          </li>
+          <li>
+            <p>B &amp; C: Both types of aggregates can emit domain events, but only event-sourced aggregates ensure that a domain event is emitted for all state transitions.</p>
+          </li>
+          <li>
+            <p>A: The ticket lifecycle algorithm is a good candidate to be implemented as an event-sourced domain model. Generating domain events for all state transitions can make it more convenient to project additional state representations optimized for the fraud detection algorithm and the support autopilot functionality.</p>
+          </li>
+        </ol>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Chapter 8"><div class="sect1" id="chapter_eight">
+<h1><a data-type="xref" href="ch08.html#architectural_patterns-id000006">Chapter 8</a></h1>
+ <ol>
+          <li>
+            <p>A &amp; C: Although the layered architecture supports the active record pattern, there are cases when the CQRS pattern can be beneficial as well.</p>
+          </li>
+          <li>
+            <p>B &amp; C: Both the ports and adapters and CQRS patterns abstract infrastructural concerns away from the business logic.</p>
+          </li>
+          <li>
+            <p>C: Infrastructural components should reside in the infrastructure layer.</p>
+          </li>
+          <li>
+            <p>A &amp; D: Asynchronous projections are easier to scale than the synchronous ones, and a command can return strongly consistent information to the caller.</p>
+          </li>
+          <li>
+            <p>B: Working with multiple models projected by the CQRS pattern doesn’t contradict the bounded context’s requirement of being a model boundary, since only one of the models is defined as the source of truth and is used for making changes in the aggregates’ states.</p>
+          </li>
+        </ol>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Chapter 9"><div class="sect1" id="chapter_nine">
+<h1><a data-type="xref" href="ch09.html#communication_patterns">Chapter 9</a></h1>
+ <ol>
+          <li>
+            <p>B &amp; C: The anticorruption layer transforms the model exposed by the upstream, into a model that is better suited to the downstream bounded context’s needs. The open-host service, on the other hand, transforms the model used internally by the upstream bounded context into a model tailored for integration with consumers.</p>
+          </li>
+          <li>
+            <p>B: The outbox pattern should be used when you need to reliably publish messages.</p>
+          </li>
+          <li>
+            <p>A: The outbox pattern can be used to implement asynchronous execution of external components. For example, it can be used for sending email messages.</p>
+          </li>
+          <li>
+            <p>A &amp; D: A process manager requires explicit instantiation, while a saga is executed when a relevant domain event is published. The process manager pattern is suitable for complex business workflows, while the saga pattern lends itself towards simpler processes.</p>
+          </li>
+        </ol>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Chapter 10"><div class="sect1" id="chapter_onezero">
+<h1><a data-type="xref" href="ch10.html#design_heuristics">Chapter 10</a></h1>
+ <ol>
+          <li>
+            <p>D: Since this is a core subdomain that requires deep analytics, the event-sourced domain model is the optimal way to model its business logic. CQRS pattern is needed to generate additional models and allow flexible querying of the data, and unit tests suit best for testing behavior of the aggregates.</p>
+          </li>
+          <li>
+            <p>A: The shifts can be modeled as active records, working in the layered architectural pattern. The testing strategy should primarily focus on integration tests.</p>
+          </li>
+          <li>
+            <p>D: The business logic can be implemented as a transaction script, organized in a layered architecture. From a testing perspective, it’s worth concentrating on end-to-end tests, verifying the full integration flow. </p>
+          </li>
+        </ol>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Chapter 11"><div class="sect1" id="chapter_oneone">
+<h1><a data-type="xref" href="ch11.html#evolving_design_decisions">Chapter 11</a></h1>
+  <ol>
+          <li>
+            <p>A: Partnership to customer–supplier (conformist, anticorruption layer, or open-host service). As an organization grows, it can become more challenging for teams to integrate their bounded contexts in an ad hoc fashion. As a result, they switch to a more formal integration pattern.</p>
+          </li>
+          <li>
+            <p>A &amp; B: The development teams struggle to cooperate because bounded contexts go separate ways when the cost of duplication is lower than the overhead of collaboration.  Additionally, the separate ways pattern can be used for supporting and generic subdomains.</p>
+          </li>
+          <li>
+            <p>B &amp; C: A supporting subdomain turning into a core subdomain, will make it harder to implement the new requirements—which will come at a much higher rate than when it was a supporting one.</p>
+          </li>
+          <li>
+            <p>A &amp; C: Either a supporting or a generic subdomain turning into a core subdomain implies increased competitive advantage, and thus, a new business opportunity.</p>
+          </li>
+          <li>
+            <p>B: WolfDesk’s new data centers around the world would require considerable efforts to rollout, and would provide competitive advantage over other players in the field.</p>
+          </li>
+        </ol>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Chapter 12"><div class="sect1" id="chapter_onetwo">
+<h1><a data-type="xref" href="ch12.html#event_storming-id000068">Chapter 12</a></h1>
+<ol>
+          <li>
+            <p>D: All stakeholders having knowledge of the business domain that you want to explore.</p>
+          </li>
+          <li>
+            <p>All of the answers are correct: All the answers are sound reasons to facilitate an EventStorming session.</p>
+          </li>
+          <li>
+            <p>All of the answers are correct: All the answers are possible outcomes of an EventStorming session. The outcome you should expect to get depends on your initial purpose for facilitating the session.</p>
+          </li>
+        </ol>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Chapter 13"><div class="sect1" id="chapter_onethree">
+<h1><a data-type="xref" href="ch13.html#domain_driven_design_in_the_real_world">Chapter 13</a></h1>
+ <ol>
+          <li>
+            <p>B: Analyzing the business domain and identifying the relevant subdomains and their types will allow you to make better design decisions when refactoring the codebase.</p>
+          </li>
+          <li>
+            <p>A &amp; B: Sharing a database across multiple bounded contexts, as well duplicating the functionality of a core subdomain both contradict the principles of domain-driven design. However, since the strangler pattern implies that this is a temporary design needed to retire the legacy bounded context, it’s a viable migration process.</p>
+          </li>
+          <li>
+            <p>Selecting both answers is correct: It’s safe to introduce big changes gradually. In this case, refactoring to a state-based aggregate first allows you to focus on the correct transactional boundaries and then apply event sourcing next.</p>
+          </li>
+        </ol>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Chapter 14"><div class="sect1" id="chapter_onefour">
+<h1><a data-type="xref" href="ch14.html#microservices">Chapter 14</a></h1>
+ <ol>
+          <li>
+            <p>A: All microservices are bounded contexts, but not all bounded contexts are microservices.</p>
+          </li>
+          <li>
+            <p>D: A design should manage the complexity of a system. Properly encapsulating knowledge of the business domain in the relevant services’ boundaries allows you to manage both the local and global complexities.</p>
+          </li>
+          <li>
+            <p>C: The range between the widest possible bounded contexts and microservices is the safe zone allowing the avoidance of  conflicting models and accidental global complexity.</p>
+          </li>
+          <li>
+            <p>D: Depending on the interactions between the aggregates, it can be beneficial or not to expose aggregates as microservices.</p>
+          </li>
+        </ol>
+</div></section>
+<section data-type="sect1" data-pdf-bookmark="Chapter 15"><div class="sect1" id="chapter_onefive">
+<h1><a data-type="xref" href="ch15.html#event_driven_architectur">Chapter 15</a></h1>
+ <ol>
+          <li>
+            <p>A &amp; B: EDA describes the events flowing across the components of a system, while event sourcing describes events used for modeling a business domain (within a bounded context).</p>
+          </li>
+          <li>
+            <p>B: Event-carried state transfer messages are, in a sense, an event-based state replication mechanism.</p>
+          </li>
+          <li>
+            <p>A: The open-host service pattern requires the upstream bounded context to define an integration-specific model that will be exposed to the consumers. Such a model should also differentiate between public events that are exposed to the consumers, and private events that are used internally within the bounded context.</p>
+          </li>
+          <li>
+            <p>B: Asking the consumers to issue a synchronous call to get data can make it possible to ensure that S2 will read the last written data.</p>
+          </li>
+        </ol>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Chapter 16"><div class="sect1" id="chapter_onesix">
+<h1><a data-type="xref" href="ch16.html#data_mesh-id000059">Chapter 16</a></h1>
+ <ol>
+          <li>
+            <p>A &amp; C: OLAP models have to be optimized for reading data, while OLTP—for writing.</p>
+          </li>
+          <li>
+            <p>C: The open-host service pattern requires the upstream bounded context to define one or more integration specific models. Such models can share analytical data used in the data mesh architecture.</p>
+          </li>
+          <li>
+            <p>C: CQRS allows representing data in multiple persistent models, making it convenient to generate and share analytical models.</p>
+          </li>
+          <li>
+            <p>A: Domain-driven design’s bounded contexts are the closest to data mesh’s domain.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="appb-ans" id="id1744"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="appb-ans2" id="id1745"></a></p>
+          </li>
+        </ol>
+</div></section>
+</div></section></div>
+</div>
+</body>
+</html>

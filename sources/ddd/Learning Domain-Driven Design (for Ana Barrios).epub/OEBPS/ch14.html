@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xml:lang="en"
+lang="en"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title>Learning Domain-Driven Design</title>
+<link rel="stylesheet" type="text/css" href="override_v1.css"/>
+<link rel="stylesheet" type="text/css" href="epub.css"/>
+</head>
+<body>
+<div id="book-content">
+<div id="sbo-rt-content"><section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 14. Microservices"><div class="chapter" id="microservices">
+<h1><span class="label">Chapter 14. </span>Microservices</h1>
+
+<p>In the mid-2010s, microservices took the software engineering industry by storm.<a contenteditable="false" data-type="indexterm" data-primary="microservices" data-secondary="about microservices" data-tertiary="history" id="id1501"></a> The intent was to address modern systems’ need to change quickly, scale, and fit the distributed nature of cloud computing naturally. Many companies made the strategic decision to decompose their monolithic codebases in favor of the flexibility provided by the microservices-based architecture. Unfortunately, many such endeavors didn’t end well. Instead of flexible architectures, these companies ended up with distributed big balls of mud—designs that are much more fragile, clumpy, and expensive than the monoliths the companies wanted to break apart.</p>
+
+<p>Historically, microservices are often associated with DDD, especially with the bounded context pattern. Many people even use the terms <em>bounded context</em> and <em>microservices</em> interchangeably. But are they really the same thing? This chapter explores the relationship between domain-driven design methodology and the microservices architectural pattern. You will learn the interplay between the patterns, and more importantly, how you can leverage DDD to design effective microservices-based <span class="keep-together">systems</span>.</p>
+
+<p>Let’s start with the basics and define what exactly are services and microservices.</p>
+
+<section data-type="sect1" data-pdf-bookmark="What Is a Service?"><div class="sect1" id="what_is_a_servicequestion_mark">
+<h1>What Is a Service?</h1>
+
+<p>According to OASIS, a service is a mechanism that enables access<a contenteditable="false" data-type="indexterm" data-primary="microservices" data-secondary="about services" id="id1502"></a> to one or more capabilities, where the access is provided using a prescribed interface.<sup><a data-type="noteref" id="ch01fn45-marker" href="ch14.html#ch01fn45">1</a></sup> The <em>prescribed interface</em> is any mechanism for getting data in or out of a service. It can be synchronous, such as a request/response model, or asynchronous, such as a model that is producing and consuming events. <a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="services" id="id1503"></a>This is the service public interface, as shown in <a data-type="xref" href="#communication_between_services">Figure 14-1</a>, which provides a means for communicating and integrating with other system components.</p>
+<figure><div id="communication_between_services" class="figure">
+<img src="assets/lddd_1401.png" alt="Communication between services" width="600" height="141"/>
+<h6><span class="label">Figure 14-1. </span>Communication between services</h6>
+</div></figure>
+
+<p><a href="https://oreil.ly/IU6xJ">Randy Shoup</a> likens a service’s interface to a front door.<a contenteditable="false" data-type="indexterm" data-primary="Shoup, Randy" id="id1504"></a> All data going into or out of the service has to pass through the front door. Furthermore, a service’s public interface defines the service itself: the functionality exposed by the service. A well-expressed interface is enough to describe the functionality implemented by a service. For example, the public interface illustrated in <a data-type="xref" href="#a_serviceapostrophes_public_interface">Figure 14-2</a> explicitly describes the functionality of the <span class="keep-together">service</span>.</p>
+<figure><div id="a_serviceapostrophes_public_interface" class="figure">
+<img src="assets/lddd_1402.png" alt="A service’s public interface" width="600" height="383"/>
+<h6><span class="label">Figure 14-2. </span>A service’s public interface</h6>
+</div></figure>
+
+<p>This takes us to the definition of microservice.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="What Is a Microservice?"><div class="sect1" id="what_is_a_microservicequestion_mark">
+<h1>What Is a Microservice?</h1>
+
+<p>The definition of a microservice is surprisingly simple. Since a service<a contenteditable="false" data-type="indexterm" data-primary="microservices" data-secondary="about microservices" id="id1505"></a> is defined by its public interface, a microservice is a service with a micro-public interface: a micro-front door.</p>
+
+<p class="pagebreak-before less_space">Having a micro-public interface makes it easier to understand both the function of a single service and its integration with other system components. Reducing a service’s functionality also limits its reasons for change and makes the service more autonomous for development, management, and scale.</p>
+
+<p>In addition, it explains the practice of microservices not exposing their databases. Exposing a database, making it a part of the service’s front door, would make its public interface huge. For example, how many different SQL queries can you execute on a relational database? Since SQL is quite a flexible language, the likely estimate would be infinity. Hence, microservices encapsulate their databases. The data can only be accessed through a much more compact, integration-oriented public interface.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Method as a Service:  Perfect Microservices?"><div class="sect2" id="method_as_a_service__perfect_microservi">
+<h2>Method as a Service:  Perfect Microservices?</h2>
+
+<p>Saying that a microservice is a micro-public interface is deceptively simple.<a contenteditable="false" data-type="indexterm" data-primary="microservices" data-secondary="about microservices" data-tertiary="naïve decomposition" id="id1506"></a> It may sound as though limiting service interfaces to a single method would result in perfect microservices. Let’s see what will happen if we apply this naïve decomposition in practice.</p>
+
+<p>Consider the backlog management service in <a data-type="xref" href="#na_decomposition">Figure 14-3</a>. Its public interface consists of eight public methods, and we want to apply the “one method per service” rule.</p>
+<figure><div id="na_decomposition" class="figure">
+<img src="assets/lddd_1403.png" alt="Naïve decomposition" width="600" height="245"/>
+<h6><span class="label">Figure 14-3. </span>Naïve decomposition</h6>
+</div></figure>
+
+<p>Since these are well-behaved microservices, each encapsulates its database. No one service is allowed to access another service’s database directly; only through its public interface. But currently, there is no public interface for that. The services have to work together and synchronize the changes each service is applying. As a result, we need to expand the services’ interfaces to account for these integration-related concerns. Furthermore, when visualized, the integrations and data flow between the resultant services resemble a typical distributed big ball of mud, as shown in <a data-type="xref" href="#integration_complexity">Figure 14-4</a>.</p>
+<figure><div id="integration_complexity" class="figure">
+<img src="assets/lddd_1404.png" alt="Integration complexity" width="600" height="660"/>
+<h6><span class="label">Figure 14-4. </span>Integration complexity</h6>
+</div></figure>
+
+<p>Paraphrasing Randy Shoup’s metaphor, by decomposing the system to such fine-grained services, we definitely minimized the services’ front doors. However, to implement the overarching system’s functionality, we had to add enormous “staff only” entrances to each service. Let’s see what we can learn from this example.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Design Goal"><div class="sect2" id="design_goal">
+<h2>Design Goal</h2>
+
+<p>Following the simplistic decomposition heuristic of having each service<a contenteditable="false" data-type="indexterm" data-primary="microservices" data-secondary="about microservices" data-tertiary="design goal" id="id1507"></a> expose only a single method proved to be suboptimal for many reasons. First, it’s simply not possible. Since the services have to work together, we were forced to expand their public interfaces with integration-related public methods. Second, we won the battle but lost the war. Each service ended up being much simpler than the original design, however the resultant system became orders of magnitude more complex.</p>
+
+<p>The goal of the microservices architecture is to produce a flexible system. Concentrating the design efforts on a single component, but ignoring its interactions with the rest of the system, goes against the <a contenteditable="false" data-type="indexterm" data-primary="microservices" data-secondary="system definition" id="id1508"></a><a contenteditable="false" data-type="indexterm" data-primary="system complexity and microservices" data-secondary="system definition" id="id1509"></a><a contenteditable="false" data-type="indexterm" data-primary="complexity" data-secondary="system complexity" data-tertiary="system definition" id="id1510"></a>very definition of a system:</p>
+<ul>
+<li>
+  <p>A set of connected things or devices that operate together</p></li>
+<li>
+  <p>A set of computer equipment and programs used together for a particular <span class="keep-together">purpose</span></p></li>
+</ul>
+
+<p>Hence, a system cannot be built out of independent components. In a proper microservices-based system, however decoupled, the services still have to be integrated and communicate with each other. Let’s take a look at the interplay between the complexity of individual microservices and the complexity of the overarching system.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="System Complexity"><div class="sect2" id="system_complexity">
+<h2>System Complexity</h2>
+
+<p>Forty years ago, there was no cloud computing, there were no global-scale requirements,<a contenteditable="false" data-type="indexterm" data-primary="microservices" data-secondary="about microservices" data-tertiary="system complexity" id="ch14-comp2"></a><a contenteditable="false" data-type="indexterm" data-primary="system complexity and microservices" id="ch14-comp"></a><a contenteditable="false" data-type="indexterm" data-primary="complexity" data-secondary="system complexity" data-tertiary="microservices and" id="ch14-comp3"></a> and there was no need to deploy a system every 11.7 seconds. But engineers still had to tame systems’ complexity. Even though the tools in those days were different, the challenges—and more importantly, the solution—are relevant nowadays and can be applied to the design of microservices-based systems.</p>
+
+<p>In his book, <em>Composite/Structured Design</em>, Glenford J. Myers <a contenteditable="false" data-type="indexterm" data-primary="Myers, Glenford J." id="id1511"></a><a contenteditable="false" data-type="indexterm" data-primary="Composite/Structured Design (Myers)" id="id1512"></a>discusses how to structure procedural code to reduce its complexity. On the first page of the book, he writes:</p>
+<blockquote>
+
+<p>There is much more to the subject of complexity than simply attempting to minimize the local complexity of each part of a program. <a contenteditable="false" data-type="indexterm" data-primary="complexity" data-secondary="global complexity" id="id1513"></a><a contenteditable="false" data-type="indexterm" data-primary="global complexity" id="id1514"></a>A much more important type of complexity is global complexity: the complexity of the overall structure of a program or system (i.e., the degree of association or interdependence among the major pieces of a program).</p>
+</blockquote>
+
+<p>In our context, <em>local complexity</em> is the complexity<a contenteditable="false" data-type="indexterm" data-primary="local complexity" id="id1515"></a> of each individual microservice, whereas <em>global complexity</em> is the complexity of the whole system. Local complexity depends on the implementation of a service; global complexity is defined by the interactions and dependencies between the services. Which of the complexities is more important to optimize when designing a microservices-based system? Let’s analyze both extremes.</p>
+
+<p>It’s surprisingly easy to reduce global complexity to a minimum. All we have to do is eliminate any interactions between the system’s components—that is, implement all functionality in one monolithic service. As we’ve seen earlier, this strategy may work in certain scenarios. In others, it may lead to the dreaded big ball of mud:  probably the highest possible level of local complexity.</p>
+
+<p>On the other hand, we know what happens when we optimize only the local complexity but neglect the system’s global complexity—the even more dreaded distributed big ball of mud. This relationship is shown in <a data-type="xref" href="#service_granularity_and_system_complexi">Figure 14-5</a>.</p>
+<figure><div id="service_granularity_and_system_complexi" class="figure">
+<img src="assets/lddd_1405.png" alt="Service granularity and system complexities" width="600" height="492"/>
+<h6><span class="label">Figure 14-5. </span>Service granularity and system complexities</h6>
+</div></figure>
+
+<p>To design a proper microservices-based system, we have to optimize both global and local complexities. Setting the design goal of optimizing either one individually is a local optima. The global optima balances both complexities. Let’s see how the notion of micro-public interfaces lends itself to balancing global and local complexities.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Microservices as Deep Services"><div class="sect2" id="microservices_as_deep_services">
+<h2>Microservices as Deep Services</h2>
+
+<p>A module in a software system, or any system, for that matter, is defined by its function and logic.<a contenteditable="false" data-type="indexterm" data-primary="modules in software system" id="id1516"></a><a contenteditable="false" data-type="indexterm" data-primary="deep modules" data-secondary="modules in software system" id="id1517"></a><a contenteditable="false" data-type="indexterm" data-primary="microservices" data-secondary="about microservices" data-tertiary="deep services" id="id1518"></a> A <em>function</em> is what the module is supposed to do—its business functionality. The <em>logic</em> is the module’s business logic—how the module implements its business functionality.</p>
+
+<p>In his book, <em>The Philosophy of Software Design,</em> John Ousterhout <a contenteditable="false" data-type="indexterm" data-primary="Ousterhout, John" id="id1519"></a><a contenteditable="false" data-type="indexterm" data-primary="The Philosophy of Software Design (Ousterhout)" data-primary-sortas="Philosophy of Software" id="id1520"></a>discusses the notion of modularity and proposes a simple yet powerful visual heuristic for evaluating a module’s design: depth.</p>
+
+<p>Ousterhout proposes to visualize a module as a rectangle, as shown in <a data-type="xref" href="#deep_modules">Figure 14-6</a>. The rectangle’s top edge represents the module’s function, or the complexity of its public interface. A wider rectangle represents broader functionality, while a narrower one has a more restricted function and thus a simpler public interface. The area of the rectangle represents the module’s logic, or the implementation of its functionality.</p>
+<figure><div id="deep_modules" class="figure">
+<img src="assets/lddd_1406.png" alt="Deep modules" width="600" height="422"/>
+<h6><span class="label">Figure 14-6. </span>Deep modules</h6>
+</div></figure>
+
+<p>According to this model, effective modules are deep: a simple public interface encapsulates complex logic. Ineffective modules are shallow: a shallow module’s public interface encapsulates much less complexity than a deep module. Consider the method in the following listing:</p>
+<pre data-code-language="csharp"><code class="kt">int</code> <code class="nf">AddTwoNumbers</code><code class="p">(</code><code class="kt">int</code> <code class="n">a</code><code class="p">,</code> <code class="kt">int</code> <code class="n">b</code><code class="p">)</code> 
+<code class="p">{</code>
+  <code class="k">return</code> <code class="n">a</code> <code class="p">+</code> <code class="n">b</code><code class="p">;</code>
+<code class="p">}</code></pre>
+
+<p>This is the extreme case of a shallow module: the public interface (the method’s signature) and its logic (the methods) are exactly the same. Having such a module introduces extraneous “moving parts,” and thus, instead of encapsulating complexity, it adds accidental complexity to the overarching system.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Microservices as Deep Modules"><div class="sect2" id="microservices_as_deep_modules">
+<h2>Microservices as Deep Modules</h2>
+
+<p>Apart from different terminology, the notion of deep modules differs<a contenteditable="false" data-type="indexterm" data-primary="microservices" data-secondary="about microservices" data-tertiary="deep modules" id="id1521"></a><a contenteditable="false" data-type="indexterm" data-primary="modules in software system" data-secondary="microservices as deep modules" id="id1522"></a><a contenteditable="false" data-type="indexterm" data-primary="deep modules" data-secondary="microservices as deep modules" id="id1523"></a><a contenteditable="false" data-type="indexterm" data-primary="physical boundaries" data-secondary="microservices" id="id1524"></a><a contenteditable="false" data-type="indexterm" data-primary="boundaries" data-secondary="physical boundaries" data-tertiary="microservices" id="id1525"></a> from the microservices pattern in that the modules can denote both logical and physical boundaries, while microservices are strictly physical. Otherwise, both concepts and their underlying design principles are the same.</p>
+
+<p>The services implementing a single business method, shown in <a data-type="xref" href="#na_decomposition">Figure 14-3</a>, are shallow modules. Because we had to introduce integration-related public methods, the resultant interfaces are “wider” than they should have been.</p>
+
+<p>From a system complexity standpoint, a deep module reduces the system’s global complexity, while a shallow module increases it by introducing a component that doesn’t encapsulate its local complexity.</p>
+
+<p>Shallow services are also the reason why so many microservices-oriented projects fail. The mistaken definitions of a microservice as a service having no more than <em>X</em> lines of code, or as a service that should be easier to rewrite than to modify, concentrate on the individual service while missing the most important aspect of the architecture: the system.</p>
+
+<p>The threshold upon which a system can be decomposed into microservices is defined by the use cases of the system that the microservices are a part of. If we decompose a monolith into services, the cost of introducing a change goes down. It is minimized when the system is decomposed into microservices. However, if you keep decomposing past the microservices threshold, the deep services will become more and more shallow. Their interfaces will grow back up. This time, due to integration needs, the cost of introducing a change will go up as well, and the overall system’s architecture will turn into the dreaded distributed big ball of mud. This is depicted in <a data-type="xref" href="#granularity_and_cost_of_change">Figure 14-7</a>.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch14-comp" id="id1526"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch14-comp2" id="id1527"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch14-comp3" id="id1528"></a></p>
+<figure><div id="granularity_and_cost_of_change" class="figure">
+<img src="assets/lddd_1407.png" alt="Granularity and cost of change" width="600" height="483"/>
+<h6><span class="label">Figure 14-7. </span>Granularity and cost of change</h6>
+</div></figure>
+
+<p>Now that we’ve learned what microservices are, let’s take a look at how domain-driven design can help us find the boundaries of deep services.</p>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Domain-Driven Design and Microservices’ Boundaries"><div class="sect1" id="domain_driven_design_and_microservicesa">
+<h1>Domain-Driven Design and Microservices’ Boundaries</h1>
+
+<p>As microservices, many of the domain-driven design patterns<a contenteditable="false" data-type="indexterm" data-primary="microservices" data-secondary="boundaries" data-tertiary="about" id="id1529"></a><a contenteditable="false" data-type="indexterm" data-primary="boundaries" data-secondary="microservices" data-tertiary="about" id="id1530"></a> discussed in the previous chapters are about boundaries: the bounded context is the boundary of a model, a subdomain bounds a business capability, while aggregate and value objects are transactional boundaries. Let’s see which of these boundaries lends itself to the notion of microservices.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Bounded Contexts"><div class="sect2" id="bounded_contexts-id000012">
+<h2>Bounded Contexts</h2>
+
+<p>The microservices and bounded context patterns have a lot in common, <a contenteditable="false" data-type="indexterm" data-primary="boundaries" data-secondary="microservices" data-tertiary="bounded contexts" id="ch14-bou"></a><a contenteditable="false" data-type="indexterm" data-primary="bounded contexts" data-secondary="microservices" id="ch14-bou2"></a><a contenteditable="false" data-type="indexterm" data-primary="microservices" data-secondary="boundaries" data-tertiary="bounded contexts" id="ch14-bou3"></a>so much so that the patterns are often used interchangeably. Let’s see whether that’s really the case: do bounded contexts’ boundaries correlate with the boundaries of effective microservices?</p>
+
+<p>Both microservices and bounded contexts are physical boundaries.<a contenteditable="false" data-type="indexterm" data-primary="physical boundaries" data-secondary="microservices" id="id1531"></a><a contenteditable="false" data-type="indexterm" data-primary="physical boundaries" data-secondary="bounded contexts" id="id1532"></a><a contenteditable="false" data-type="indexterm" data-primary="boundaries" data-secondary="physical boundaries" data-tertiary="microservices" id="id1533"></a><a contenteditable="false" data-type="indexterm" data-primary="boundaries" data-secondary="physical boundaries" data-tertiary="bounded contexts" id="id1534"></a> Microservices, as bounded contexts, are owned by a single team. As in bounded contexts, conflicting models cannot be implemented in a microservice, resulting in complex interfaces. Microservices are indeed bounded contexts. But does this relationship work the other way around? Can we say that bounded contexts are microservices?</p>
+
+<p>As you learned in <a data-type="xref" href="ch03.html#managing_domain_complexity">Chapter 3</a>, bounded contexts protect the consistency of ubiquitous languages and models. No conflicting models can be implemented in the same bounded context. Say you are working on an advertising management system. In the system’s business domain, the business entity Lead is represented by different models in the Promotions and Sales contexts. Hence, Promotions and Sales are bounded contexts, each defining one and only one model of the Lead entity, which is valid in its boundary, as shown in <a data-type="xref" href="#bounded_contexts-id000013">Figure 14-8</a>.</p>
+<figure><div id="bounded_contexts-id000013" class="figure">
+<img src="assets/lddd_1408.png" alt="Bounded contexts" width="600" height="265"/>
+<h6><span class="label">Figure 14-8. </span>Bounded contexts</h6>
+</div></figure>
+
+<p>For simplicity’s sake, let’s assume there are no other conflicting models in the system besides Lead. This makes the resultant bounded contexts naturally wide—each bounded context can contain multiple subdomains. The subdomains can be moved from one bounded context to another one. As long as the subdomains do not imply conflicting models, all the alternative decompositions in <a data-type="xref" href="#alternative_decompositions_to_bounded_c">Figure 14-9</a> are perfectly valid bounded contexts.</p>
+<figure><div id="alternative_decompositions_to_bounded_c" class="figure">
+<img src="assets/lddd_1409.png" alt="Alternative decompositions to bounded contexts" width="600" height="497"/>
+<h6><span class="label">Figure 14-9. </span>Alternative decompositions to bounded contexts</h6>
+</div></figure>
+
+<p>The different decompositions to bounded contexts attribute different requirements, such as different teams’ sizes and structures, lifecycle dependencies, and so on. But can we say that all the valid bounded contexts in this example are necessarily microservices? No. Especially considering the relatively wide functionalities of the two bounded contexts in decomposition 1.</p>
+
+<p>Therefore, the relationship between microservices and bounded contexts is not symmetric. Although microservices are bounded contexts, not every bounded context is a microservice. Bounded contexts, on the other hand, denote the boundaries of the largest valid monolith. Such a monolith should not be confused with a big ball of mud; it’s a viable design option that protects the consistency of its ubiquitous <span class="keep-together">language</span>, or its model of the business domain. As we will discuss in <a data-type="xref" href="ch15.html#event_driven_architectur">Chapter 15</a>, such broad boundaries are more effective than microservices in certain cases.</p>
+
+<p><a data-type="xref" href="#granularity_and_modularity">Figure 14-10</a> visually demonstrates the relationship between bounded contexts and microservices. The area between the bounded contexts and microservices is safe. These are valid design options. However, if the system is not decomposed into proper bounded contexts or is decomposed past the microservices threshold, it will result in a big ball of mud or a distributed big ball of mud, respectively.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch14-bou" id="id1535"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch14-bou2" id="id1536"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch14-bou3" id="id1537"></a></p>
+<figure><div id="granularity_and_modularity" class="figure">
+<img src="assets/lddd_1410.png" alt="Granularity and modularity" width="600" height="369"/>
+<h6><span class="label">Figure 14-10. </span>Granularity and modularity</h6>
+</div></figure>
+
+<p>Next, let’s examine the other extreme: whether aggregates can help find the microservices’ boundaries.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Aggregates"><div class="sect2" id="aggregates-id000003">
+<h2>Aggregates</h2>
+
+<p>While bounded contexts impose limits on the widest valid boundaries,<a contenteditable="false" data-type="indexterm" data-primary="aggregates" data-secondary="about" data-tertiary="boundaries" id="id1538"></a><a contenteditable="false" data-type="indexterm" data-primary="boundaries" data-secondary="aggregates" id="id1539"></a><a contenteditable="false" data-type="indexterm" data-primary="boundaries" data-secondary="microservices" data-tertiary="aggregates" id="id1540"></a><a contenteditable="false" data-type="indexterm" data-primary="microservices" data-secondary="boundaries" data-tertiary="aggregates" id="id1541"></a><a contenteditable="false" data-type="indexterm" data-primary="aggregates" data-secondary="microservices" id="id1542"></a> the aggregate pattern does the opposite. The aggregate’s boundary is the narrowest boundary possible. Decomposing an aggregate into multiple physical services, or bounded contexts, is not only suboptimal but, as you will learn in <a data-type="xref" href="app01.html#a_applying_ddd_a_case_study">Appendix A</a>, leads to undesired consequences, to say the least.</p>
+
+<p>As bounded contexts, aggregates’ boundaries are also often considered to drive the boundaries of microservices. An aggregate is an indivisible business functionality unit that encapsulates the complexities of its internal business rules, invariants, and logic. That said, as you learned earlier in this chapter, microservices are not about individual services. An individual service has to be considered in the context of its interactions with other components of the system:</p>
+
+<p class="pagebreak-before less_space">Does the aggregate in question communicate with other aggregates in its subdomain?</p>
+<ul>
+<li>
+  <p>Does it share value objects with other aggregates?</p></li>
+<li>
+  <p>How likely will the aggregate’s business logic changes affect other components of the subdomain and vice versa?</p></li>
+</ul>
+
+<p>The stronger the aggregate’s relationship is with the other business entities of its subdomain, the shallower it will be as an individual service.</p>
+
+<p>There will be cases in which having an aggregate as a service will produce a modular design. However, much more often such fine-grained services will increase the overarching system’s global complexity.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Subdomains"><div class="sect2" id="subdomains-id000145">
+<h2>Subdomains</h2>
+
+<p>A more balanced heuristic for designing microservices is to<a contenteditable="false" data-type="indexterm" data-primary="boundaries" data-secondary="microservices" data-tertiary="subdomains" id="id1543"></a><a contenteditable="false" data-type="indexterm" data-primary="microservices" data-secondary="boundaries" data-tertiary="subdomains" id="id1544"></a><a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="microservices" id="id1545"></a><a contenteditable="false" data-type="indexterm" data-primary="business domains" data-secondary="subdomains" data-seealso="subdomains" id="id1546"></a><a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="about" id="id1547"></a> align the services with the boundaries of business subdomains. As you learned in <a data-type="xref" href="ch01.html#analyzing_business_domains">Chapter 1</a>, subdomains are correlated with fine-grained business capabilities. These are the business building blocks required for the company to compete in its business domain(s). From a business domain perspective, subdomains describe the capabilities—what the business does—without explaining how the capabilities are implemented. From a technical standpoint, subdomains represent sets of coherent use cases: using the same model of the business domain, working on the same or closely related data, and having a strong functional relationship. A change in the business requirements of one of the use cases is likely to affect the other use cases, as shown in <a data-type="xref" href="#subdomains-id000146">Figure 14-11</a>.</p>
+<figure><div id="subdomains-id000146" class="figure">
+<img src="assets/lddd_1411.png" alt="Subdomains" width="600" height="355"/>
+<h6><span class="label">Figure 14-11. </span>Subdomains</h6>
+</div></figure>
+
+<p>The subdomains’ granularity and the focus on the functionality—the “what” rather than the “how”—makes<a contenteditable="false" data-type="indexterm" data-primary="modules in software system" data-secondary="subdomains as deep modules" id="id1548"></a><a contenteditable="false" data-type="indexterm" data-primary="deep modules" data-secondary="subdomains as deep modules" id="id1549"></a> subdomains naturally deep modules. A subdomain’s description—the function—encapsulates the more complex implementation details—the logic. The coherent nature of the use cases contained in a subdomain also ensures the resultant module’s depth. Splitting them apart in many cases would result in a more complex public interface and thus shallower modules. All of these things make subdomains a safe boundary for designing microservices.</p>
+
+<p>Aligning microservices with subdomains is a safe heuristic that produces optimal solutions for the majority of microservices. That said, there will be cases where other boundaries will be more efficient; for example, staying in the wider, linguistic boundaries of the bounded context or, due to nonfunctional requirements, resorting to an aggregate as a microservice. The solution depends not only on the business domain but also on the organization’s structure, business strategy, and nonfunctional requirements. As we discussed in <a data-type="xref" href="ch11.html#evolving_design_decisions">Chapter 11</a>, it’s crucial to continuously adapt the software architecture and design to changes in the environment.</p>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Compressing Microservices’ Public Interfaces"><div class="sect1" id="compressing_microservicesapostrophe_pub">
+<h1>Compressing Microservices’ Public Interfaces</h1>
+
+<p>In addition to finding service boundaries, domain-driven design can help make services deeper. This section demonstrates how the open-host service and anticorruption layer patterns can simplify the microservices’ public interfaces.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Open-Host Service"><div class="sect2" id="open_host_service-id000123">
+<h2>Open-Host Service</h2>
+
+<p>The open-host service decouples the bounded context’s model<a contenteditable="false" data-type="indexterm" data-primary="microservices" data-secondary="open-host service" id="id1550"></a><a contenteditable="false" data-type="indexterm" data-primary="open-host service" data-secondary="microservices" id="id1551"></a> of the business domain from the model used for integration with other components of the system, as shown in <a data-type="xref" href="#integrating_services_through_a_publishe">Figure 14-12</a>.</p>
+
+<p>Introducing the integration-oriented model, the published language, reduces the system’s global complexity. First, it allows us to evolve the service’s implementation without impacting its consumers: the new implementation model can be translated to the existing published language. Second, the published language exposes a more restrained model. It is designed around integration needs. It encapsulates the complexity of the implementation that is not relevant to the service’s consumers. For example, it can expose less data and in a more convenient model for consumers.</p>
+
+<p>Having a simpler public interface (function) over the same implementation (logic) makes the service “deeper” and contributes to a more effective microservice design.</p>
+
+<figure><div id="integrating_services_through_a_publishe" class="figure">
+<img src="assets/lddd_1412.png" alt="Integrating services through a published language" width="600" height="514"/>
+<h6><span class="label">Figure 14-12. </span>Integrating services through a published language</h6>
+</div></figure>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Anticorruption Layer"><div class="sect2" id="anticorruption_layer-id000005">
+<h2>Anticorruption Layer</h2>
+
+<p>The anticorruption layer (ACL) pattern works the other way around.<a contenteditable="false" data-type="indexterm" data-primary="anticorruption layer" data-secondary="microservices" id="id1552"></a><a contenteditable="false" data-type="indexterm" data-primary="microservices" data-secondary="anticorruption layer" id="id1553"></a> It reduces the complexity of integrating the service with other bounded contexts. Traditionally, the anticorruption layer belongs to the bounded context it protects. However, as we discussed in <a data-type="xref" href="ch09.html#communication_patterns">Chapter 9</a>, this notion can be taken a step further and implemented as a standalone service.</p>
+
+<p>The ACL service in <a data-type="xref" href="#anticorruption_layer_as_a_stand_alone_s">Figure 14-13</a> reduces both the local complexity of the consuming bounded context and the system’s global complexity. The consuming bounded context’s business complexity is separated from the integration complexity. The latter is offloaded to the ACL service. Because the consuming bounded context is working with a more convenient, integration-oriented model, its public interface is compressed—it doesn’t reflect the integration complexity exposed by the producing <span class="keep-together">service</span>.</p>
+
+<figure><div id="anticorruption_layer_as_a_stand_alone_s" class="figure">
+<img src="assets/lddd_1413.png" alt="Anticorruption layer as a stand-alone service" width="600" height="275"/>
+<h6><span class="label">Figure 14-13. </span>Anticorruption layer as a stand-alone service</h6>
+</div></figure>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Conclusion"><div class="sect1" id="conclusion-id000038">
+<h1>Conclusion</h1>
+
+<p>Historically, the microservice-based architectural style is deeply interconnected with domain-driven design, so much so that the terms <em>microservice</em> and <em>bounded context</em> are often used interchangeably. In this chapter, we analyzed the connection between the two and saw that they are not the same thing.</p>
+
+<p>All microservices are bounded contexts, but not all bounded contexts are necessarily microservices. In its essence, a microservice defines the smallest valid boundary of a service, while a bounded context protects the consistency of the encompassed model and represents the widest valid boundaries. Defining boundaries to be wider than their bounded contexts will result in a big ball of mud, while boundaries that are smaller than microservices will lead to a distributed big ball of mud.</p>
+
+<p>Nevertheless, the connection between microservices and domain-driven design is tight. We saw how domain-driven design tools can be used to design effective microservice boundaries.</p>
+
+<p>In <a data-type="xref" href="ch15.html#event_driven_architectur">Chapter 15</a>, we will continue discussing high-level system architecture but from a different perspective: asynchronous integration through event-driven architecture. You will learn how to leverage the different kinds of event messages to further optimize microservices’ boundaries.</p>
+</div></section>
+
+<section class="pagebreak-before" data-type="sect1" data-pdf-bookmark="Exercises"><div class="sect1" id="exercises-id000083">
+<h1 class="less_space">Exercises</h1>
+
+<ol>
+          <li>
+            <p>What is the relationship between bounded contexts and microservices?</p>
+            <ol type="a">
+              <li>
+                <p>All microservices are bounded contexts.</p>
+              </li>
+              <li>
+                <p>All bounded contexts are microservices.</p>
+              </li>
+              <li>
+                <p>Microservices and bounded contexts are different terms for the same concept.</p>
+              </li>
+              <li>
+                <p>Microservices and bounded contexts are completely different concepts and cannot be compared.</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>What part of a microservice should be “micro”?</p>
+            <ol type="a">
+              <li>
+                <p>The number of pizzas required to feed the team implementing the microservices; i.e., using “two pizza“ principle to design service boundaries. </p>
+              </li>
+              <li>
+                <p>The number of lines of code it takes to implement the service’s functionality. Since the metric is agnostic of the lines’ widths, it’s preferable to implement microservices on ultrawide monitors.</p>
+              </li>
+              <li>
+                <p>The most important aspect of designing microservices-based systems is to get microservices-friendly middleware and other infrastructural components, preferably from microservices-certified vendors.</p>
+              </li>
+              <li>
+                <p>The knowledge of the business domain and its intricacies exposed across the service’s boundary and reflected by its public interface.</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>What are the safe component boundaries?</p>
+            <ol type="a">
+              <li>
+                <p>Boundaries wider than bounded contexts.</p>
+              </li>
+              <li>
+                <p>Boundaries narrower than microservices.</p>
+              </li>
+              <li>
+                <p>Boundaries between bounded contexts (widest) and microservices (<span class="keep-together">narrowest</span>).</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Is it a good design decision to align microservices with the boundaries of <span class="keep-together">aggregates</span>?</p>
+            <ol type="a">
+              <li>
+                <p>Yes, aggregates always make for proper microservices.</p>
+              </li>
+              <li>
+                <p>No, aggregates should never be exposed as individual microservices.</p>
+              </li>
+              <li>
+                <p>It’s impossible to make a microservice out of a single aggregate.</p>
+              </li>
+              <li>
+                <p>The decision depends on the business domain.</p>
+              </li>
+            </ol>
+          </li>
+        </ol>
+</div></section>
+<div data-type="footnotes"><p data-type="footnote" id="ch01fn45"><sup><a href="ch14.html#ch01fn45-marker">1</a></sup> Reference model for service-oriented architecture v1.0. (n.d.). Retrieved June 14, 2021, from <a href="https://oreil.ly/IXhpG">OASIS</a>.</p></div></div></section></div>
+</div>
+</body>
+</html>

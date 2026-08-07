@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xml:lang="en"
+lang="en"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title>Learning Domain-Driven Design</title>
+<link rel="stylesheet" type="text/css" href="override_v1.css"/>
+<link rel="stylesheet" type="text/css" href="epub.css"/>
+</head>
+<body>
+<div id="book-content">
+<div id="sbo-rt-content"><section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 11. Evolving Design Decisions"><div class="chapter" id="evolving_design_decisions">
+<h1><span class="label">Chapter 11. </span>Evolving Design Decisions</h1>
+
+<p>In the modern, fast-paced world we inhabit, companies cannot afford to be lethargic.<a contenteditable="false" data-type="indexterm" data-primary="design" data-secondary="changes in design" data-tertiary="about" id="id1307"></a><a contenteditable="false" data-type="indexterm" data-primary="business logic implementation" data-secondary="design heuristics" data-tertiary="changes in design" id="ch11-evo2"></a><a contenteditable="false" data-type="indexterm" data-primary="domain model for business logic" data-secondary="design evolving" id="ch11-evo3"></a> To keep up with the competition, they have to continually change, evolve, and even reinvent themselves over time. We cannot ignore this fact when designing systems, especially if we intend to design software that’s well adapted to the requirements of its business domain. When changes are not managed properly, even the most sophisticated and thoughtful design will eventually become a nightmare to maintain and evolve. This chapter discusses how changes in a software project’s environment can affect design decisions and how to evolve the design accordingly. We will examine the four most common vectors of change: business domain, organizational structure, domain knowledge, and growth.</p>
+
+<section data-type="sect1" data-pdf-bookmark="Changes in Domains"><div class="sect1" id="changes_in_domains">
+<h1>Changes in Domains</h1>
+
+<p>In <a data-type="xref" href="ch02.html#discovering_domain_knowledge">Chapter 2</a>, you’ve learned the three<a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="changes in design" id="ch11-evo4"></a><a contenteditable="false" data-type="indexterm" data-primary="design" data-secondary="changes in design" data-tertiary="domains changed" id="ch11-deldom"></a> types of business subdomains and how they are different from one another:</p>
+<dl>
+<dt>Core</dt>
+<dd>Activities the company is performing differently from its competitors to gain a competitive advantage<a contenteditable="false" data-type="indexterm" data-primary="core subdomains" id="id1308"></a></dd>
+<dt>Supporting</dt>
+<dd>Things the company is doing differently from its competitors, but that do not provide a competitive edge<a contenteditable="false" data-type="indexterm" data-primary="supporting subdomains" id="id1309"></a></dd>
+<dt>Generic</dt>
+<dd>Things all companies do in the same way<a contenteditable="false" data-type="indexterm" data-primary="generic subdomains" id="id1310"></a></dd>
+</dl>
+
+<p class="pagebreak-before less_space">In the previous chapters, you saw that the type of subdomain at play affects strategic and tactical design decisions:</p>
+<ul>
+<li>
+	<p>How to design the bounded contexts’ boundaries</p></li>
+<li>
+	<p>How to orchestrate integration between the contexts</p></li>
+<li>
+	<p>Which design patterns to use to accommodate the complexity of the business logic</p></li>
+</ul>
+
+<p>To design software that is driven by the business domain’s needs, it’s crucial to identify the business subdomains and their types. However, that’s not the whole story. It’s equally important to be alert to the evolution of the subdomains. As an organization grows and evolves, it’s not unusual for some of its subdomains to morph from one type to another. Let’s look at some examples of such changes.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Core to Generic"><div class="sect2" id="core_to_generic">
+<h2>Core to Generic</h2>
+
+<p>Imagine that an online retail company called BuyIT has been implementing<a contenteditable="false" data-type="indexterm" data-primary="core subdomains" data-secondary="design evolving" data-tertiary="changing to generic" id="id1311"></a><a contenteditable="false" data-type="indexterm" data-primary="generic subdomains" data-secondary="design evolving" data-tertiary="core changing to" id="id1312"></a> its own order delivery solution. It developed an innovative algorithm to optimize its couriers’ delivery routes and thus is able to charge lower delivery fees than its <span class="keep-together">competitors</span>.</p>
+
+<p>One day, another company—DeliverIT—disrupts the delivery industry. It claims it has solved the “traveling salesman” problem and provides path optimization as a service. Not only is DeliverIT’s optimization more advanced, it is offered at a fraction of the price that it costs BuyIT to perform the same task.</p>
+
+<p>From BuyIT’s perspective, once DeliverIT’s solution became available as an off-the-shelf product, its core subdomain turned into a generic subdomain. As a result, the optimal solution became available to all of BuyIT’s competitors. Without massive investments in research and development, BuyIT can no longer gain a competitive advantage in the path optimization subdomain. What was previously considered a competitive advantage for BuyIT has become a commodity available to all of its <span class="keep-together">competitors</span>.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Generic to Core"><div class="sect2" id="generic_to_core">
+<h2>Generic to Core</h2>
+
+<p>Since its inception, BuyIT has been using an off-the-shelf<a contenteditable="false" data-type="indexterm" data-primary="generic subdomains" data-secondary="design evolving" data-tertiary="changing to core" id="id1313"></a><a contenteditable="false" data-type="indexterm" data-primary="core subdomains" data-secondary="design evolving" data-tertiary="generic changing to" id="id1314"></a> solution to manage its inventory. However, its business intelligence reports are continuously showing inadequate predictions of its customers’ demands. Consequently, BuyIT fails to replenish its stock of the most popular products and is wasting warehouse real estate on the unpopular products. After evaluating a few alternative inventory management solutions, BuyIT’s management team makes the strategic decision to invest in designing and building an in-house system. This in-house solution will consider the intricacies of the products BuyIT sells and make better predictions of customers’ demands.</p>
+
+<p>BuyIT’s decision to replace the off-the-shelf solution with its own implementation has turned inventory management from a generic subdomain into a core subdomain: successful implementation of the functionality will provide BuyIT additional competitive advantage over its competitors—the competitors will remain “stuck” with the generic solution and will not be able to use the advanced demand prediction algorithms invented and developed by BuyIT.</p>
+
+<p>A real-life textbook example of a company turning a generic subdomain into a core subdomain is Amazon. Like all service providers, Amazon needed an infrastructure on which to run its services. The company was able to “reinvent” the way it managed its physical infrastructure and later even turned it into a profitable business: Amazon Web Services.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Supporting to Generic"><div class="sect2" id="supporting_to_generic">
+<h2>Supporting to Generic</h2>
+
+<p>BuyIT’s marketing department implements a system for managing<a contenteditable="false" data-type="indexterm" data-primary="supporting subdomains" data-secondary="design evolving" data-tertiary="changing to generic" id="id1315"></a><a contenteditable="false" data-type="indexterm" data-primary="generic subdomains" data-secondary="design evolving" data-tertiary="supporting changing to" id="id1316"></a> the vendors it works with and their contracts. There is nothing special or complex about the <span class="keep-together">system—</span>it’s just some CRUD user interfaces for entering data. In other words, it is a typical supporting subdomain.</p>
+
+<p>However, a few years after BuyIT began implementing the in-house solution, an open source contracts management solution came out. The open source project implements the same functionality as the existing solution and has more advanced features, like OCR and full-text search. These additional features had been on BuyIT’s backlog for a long time but were never prioritized because of their low business impact. Hence, the company decides to ditch the in-house solution in favor of integrating the open source solution. In doing so, the document management subdomain turns from a supporting into a generic subdomain.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Supporting to Core"><div class="sect2" id="supporting_to_core">
+<h2>Supporting to Core</h2>
+
+<p>A supporting subdomain can also turn into a core<a contenteditable="false" data-type="indexterm" data-primary="supporting subdomains" data-secondary="design evolving" data-tertiary="changing to core" id="id1317"></a><a contenteditable="false" data-type="indexterm" data-primary="core subdomains" data-secondary="design evolving" data-tertiary="supporting changing to" id="id1318"></a> subdomain—for example, if a company finds a way to optimize the supporting logic in such a way that it either reduces costs or generates additional profits.</p>
+
+<p>The typical symptom of such a transformation is the increasing complexity of the supporting subdomain’s business logic. Supporting subdomains, by definition, are simple, mainly resembling CRUD interfaces or ETL processes. However, if the business logic becomes more complicated over time, there should be a reason for the additional complexity. If it doesn’t affect the company’s profits, why would it become more complicated? That’s accidental business complexity. On the other hand, if it enhances the company’s profitability, it’s a sign of a supporting subdomain becoming a core subdomain.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Core to Supporting"><div class="sect2" id="core_to_supporting">
+<h2>Core to Supporting</h2>
+
+<p>A core subdomain can, over time, become a supporting subdomain.<a contenteditable="false" data-type="indexterm" data-primary="core subdomains" data-secondary="design evolving" data-tertiary="changing to supporting" id="id1319"></a><a contenteditable="false" data-type="indexterm" data-primary="supporting subdomains" data-secondary="design evolving" data-tertiary="core changing to" id="id1320"></a> This can happen when the subdomain’s complexity isn’t justified. In other words, it’s not profitable. In such cases, the organization may decide to cut the extraneous complexity, leaving the minimum logic needed to support implementation of other subdomains.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Generic to Supporting"><div class="sect2" id="generic_to_supporting">
+<h2>Generic to Supporting</h2>
+
+<p>Finally, for the same reason as a core subdomain, a generic subdomain<a contenteditable="false" data-type="indexterm" data-primary="generic subdomains" data-secondary="design evolving" data-tertiary="changing to supporting" id="id1321"></a><a contenteditable="false" data-type="indexterm" data-primary="supporting subdomains" data-secondary="design evolving" data-tertiary="generic changing to" id="id1322"></a> can turn into a supporting one. Going back to the example of BuyIT’s document management system, assume the company has decided that the complexity of integrating the open source solution doesn’t justify the benefits and has resorted back to the in-house system. As a result, the generic subdomain has turned into a supporting subdomain.</p>
+
+<p>The changes in subdomains we just discussed are demonstrated in <a data-type="xref" href="#subdomain_type_change_factors">Figure 11-1</a>.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch11-evo2" id="id1323"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch11-evo3" id="id1324"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch11-evo4" id="id1325"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch11-deldom" id="id1326"></a></p>
+<figure><div id="subdomain_type_change_factors" class="figure">
+<img src="assets/lddd_1101.png" alt="Subdomain type change factors" width="600" height="572"/>
+<h6><span class="label">Figure 11-1. </span>Subdomain type change factors</h6>
+</div></figure>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Strategic Design Concerns"><div class="sect1" id="strategic_design_concerns">
+<h1>Strategic Design Concerns</h1>
+
+<p>A change in a subdomain’s type directly affects its bounded context and, <a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="changes in design" data-tertiary="strategic design concerns" id="id1327"></a><a contenteditable="false" data-type="indexterm" data-primary="bounded contexts" data-secondary="subdomains versus" data-tertiary="subdomain design changes and" id="id1328"></a><a contenteditable="false" data-type="indexterm" data-primary="design" data-secondary="changes in design" data-tertiary="strategic design concerns" id="id1329"></a><a contenteditable="false" data-type="indexterm" data-primary="strategic design" data-secondary="design evolving" id="id1330"></a>consequently, corresponding strategic design decisions. As you learned in <a data-type="xref" href="ch04.html#integrating_bounded_contexts">Chapter 4</a>, different bounded context integration patterns accommodate the different subdomain types. The core subdomains have to protect their models by using anticorruption layers and have to protect consumers from frequent changes in the implementation models by using published languages (OHS).</p>
+
+<p class="pagebreak-before less_space">Another integration pattern that is affected by such changes is the separate ways pattern.<a contenteditable="false" data-type="indexterm" data-primary="collaboration patterns" data-secondary="separate ways no collaboration" data-tertiary="subdomain changes affecting" id="id1331"></a><a contenteditable="false" data-type="indexterm" data-primary="collaboration patterns" data-secondary="customer–supplier" data-tertiary="subdomain changes affecting" id="id1332"></a><a contenteditable="false" data-type="indexterm" data-primary="customer–supplier collaboration pattern" data-secondary="subdomain changes affecting" id="id1333"></a><a contenteditable="false" data-type="indexterm" data-primary="separate ways no collaboration pattern" data-secondary="subdomain changes affecting" id="id1334"></a> As you saw earlier, teams can use this pattern for supporting and generic subdomains. If the subdomain morphs into a core subdomain, duplicating its functionality by multiple teams is no longer acceptable. Hence, the teams have no choice but to integrate their implementations. The customer–supplier relationship will make the most sense in this case, since the core subdomain will only be implemented by one team.</p>
+
+<p>From an implementation strategy standpoint, core and supporting subdomains differ in how they can be implemented. Supporting subdomains can be outsourced or used as “training wheels” for new hires. Core subdomains must be implemented in-house, as close as possible to the sources of domain knowledge. Therefore, when a supporting subdomain turns into a core subdomain, its implementation should be moved in-house. The same logic works the other way around. If a core subdomain turns into a supporting subdomain, it’s possible to outsource the implementation to let the in-house R&amp;D teams concentrate on the core subdomains.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Tactical Design Concerns"><div class="sect1" id="tactical_design_concerns">
+<h1>Tactical Design Concerns</h1>
+
+<p>The main indicator of a change in a subdomain’s type is the inability<a contenteditable="false" data-type="indexterm" data-primary="design" data-secondary="changes in design" data-tertiary="tactical design concerns" id="ch11-tact"></a><a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="changes in design" data-tertiary="tactical design concerns" id="ch11-tact2"></a><a contenteditable="false" data-type="indexterm" data-primary="tactical design" data-secondary="evolving design concerns" id="ch11-tact3"></a> of the existing technical design to support current business needs.</p>
+
+<p>Let’s go back to the example of a supporting subdomain becoming a core subdomain. Supporting subdomains are implemented with relatively simple design patterns for modeling the business logic: namely, the transaction script or active record pattern. As you saw in <a data-type="xref" href="ch05.html#implementing_simple_business_logic">Chapter 5</a>, these patterns are not a good fit for business logic involving complex rules and invariants.</p>
+
+<p>If complicated rules and invariants are added to the business logic over time, the codebase will become increasingly complex as well. It will be painful to add the new functionality, as the design won’t support the new level of complexity. This “pain” is an important signal. Use it as a call to reassess the business domain and design choices.</p>
+
+<p>The need for change in the implementation strategy is nothing to fear. It’s normal. We cannot foresee how a business will evolve down the road. We also cannot apply the most elaborate design patterns for all types of subdomains; that would be wasteful and ineffective. We have to choose the most appropriate design and evolve it when needed.</p>
+
+<p>If the decision for how to model the business logic is made consciously, and you are aware of all the possible design choices and the differences between them, migrating from one design pattern to another is not that troublesome. The following subsections highlight a few examples.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Transaction Script to Active Record"><div class="sect2" id="transaction_script_to_active_record">
+<h2>Transaction Script to Active Record</h2>
+
+<p>At their core, both the transaction script and active record patterns<a contenteditable="false" data-type="indexterm" data-primary="tactical design" data-secondary="evolving design concerns" data-tertiary="transaction script to active record" id="id1335"></a><a contenteditable="false" data-type="indexterm" data-primary="design" data-secondary="changes in design" data-tertiary="transaction script to active record" id="id1336"></a><a contenteditable="false" data-type="indexterm" data-primary="transaction scripts" data-secondary="changing to active records" id="id1337"></a><a contenteditable="false" data-type="indexterm" data-primary="active records" data-secondary="design evolving" data-tertiary="transaction script to active record" id="id1338"></a> are based on the same principle: the business logic is implemented as a procedural script. The difference between them is how the data structures are modeled: the active record pattern introduces the data structures to encapsulate the complexity of mapping them to the storage mechanism.</p>
+
+<p>As a result, when working with data becomes challenging in a transaction script, refactor it into the active record pattern. Look for complicated data structures and encapsulate them in active record objects. Instead of accessing the database directly, use active records to abstract its model and structure.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Active Record to Domain Model"><div class="sect2" id="active_record_to_domain_model">
+<h2>Active Record to Domain Model</h2>
+
+<p>If the business logic that manipulates active records becomes<a contenteditable="false" data-type="indexterm" data-primary="design" data-secondary="changes in design" data-tertiary="active record to domain model" id="id1339"></a><a contenteditable="false" data-type="indexterm" data-primary="tactical design" data-secondary="evolving design concerns" data-tertiary="active record to domain model" id="id1340"></a><a contenteditable="false" data-type="indexterm" data-primary="active records" data-secondary="design evolving" data-tertiary="active record to domain model" id="id1341"></a><a contenteditable="false" data-type="indexterm" data-primary="domain model for business logic" data-secondary="design evolving" data-tertiary="active record to domain model" id="id1342"></a> complex and you notice more and more cases of inconsistencies and duplications, refactor the implementation to the domain model pattern.</p>
+
+<p>Start by identifying value objects. What data structures can be modeled as immutable objects? Look for the related business logic, and make it a part of the value objects as well.</p>
+
+<p>Next, analyze the data structures and look for transactional boundaries. To ensure that all state-modifying logic is explicit, make all of the active records’ setters private so that they can only be modified from inside the active record itself. Obviously, expect the compilation to fail; however, the compilation errors will make it clear where the state-modifying logic resides. Refactor it into the active record’s boundaries. For example:</p>
+<pre data-code-language="csharp"><code class="k">public</code> <code class="k">class</code> <code class="nc">Player</code>
+<code class="p">{</code>
+    <code class="k">public</code> <code class="n">Guid</code> <code class="n">Id</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+    <code class="k">public</code> <code class="kt">int</code> <code class="n">Points</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+<code class="p">}</code>
+
+<code class="k">public</code> <code class="k">class</code> <code class="nc">ApplyBonus</code>
+<code class="p">{</code>
+    <code class="p">...</code>
+
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Execute</code><code class="p">(</code><code class="n">Guid</code> <code class="n">playerId</code><code class="p">,</code> <code class="kt">byte</code> <code class="n">percentage</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="kt">var</code> <code class="n">player</code> <code class="p">=</code> <code class="n">_repository</code><code class="p">.</code><code class="n">Load</code><code class="p">(</code><code class="n">playerId</code><code class="p">);</code>
+        <code class="n">player</code><code class="p">.</code><code class="n">Points</code> <code class="p">*=</code> <code class="m">1</code> <code class="p">+</code> <code class="n">percentage</code><code class="p">/</code><code class="m">100.0</code><code class="p">;</code>
+        <code class="n">_repository</code><code class="p">.</code><code class="n">Save</code><code class="p">(</code><code class="n">player</code><code class="p">);</code>
+    <code class="p">}</code>
+<code class="p">}</code></pre>
+
+<p>In the following code, you can see the first steps toward the transformation. The code won’t compile yet, but the errors will make it explicit where external components are controlling the object’s state:</p>
+<pre data-code-language="csharp"><code class="k">public</code> <code class="k">class</code> <code class="nc">Player</code>
+<code class="p">{</code>
+    <code class="k">public</code> <code class="n">Guid</code> <code class="n">Id</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+    <code class="k">public</code> <code class="kt">int</code> <code class="n">Points</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+<code class="p">}</code>
+
+<code class="k">public</code> <code class="k">class</code> <code class="nc">ApplyBonus</code>
+<code class="p">{</code>
+    <code class="p">...</code>
+
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Execute</code><code class="p">(</code><code class="n">Guid</code> <code class="n">playerId</code><code class="p">,</code> <code class="kt">byte</code> <code class="n">percentage</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="kt">var</code> <code class="n">player</code> <code class="p">=</code> <code class="n">_repository</code><code class="p">.</code><code class="n">Load</code><code class="p">(</code><code class="n">playerId</code><code class="p">);</code>
+        <code class="n">player</code><code class="p">.</code><code class="n">Points</code> <code class="p">*=</code> <code class="m">1</code> <code class="p">+</code> <code class="n">percentage</code><code class="p">/</code><code class="m">100.0</code><code class="p">;</code>
+        <code class="n">_repository</code><code class="p">.</code><code class="n">Save</code><code class="p">(</code><code class="n">player</code><code class="p">);</code>
+    <code class="p">}</code>
+<code class="p">}</code></pre>
+
+<p>In the next iteration, we can move that logic inside the active record’s boundary:</p>
+<pre data-code-language="csharp"><code class="k">public</code> <code class="k">class</code> <code class="nc">Player</code>
+<code class="p">{</code>
+    <code class="k">public</code> <code class="n">Guid</code> <code class="n">Id</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+    <code class="k">public</code> <code class="kt">int</code> <code class="n">Points</code> <code class="p">{</code> <code class="k">get</code><code class="p">;</code> <code class="k">private</code> <code class="k">set</code><code class="p">;</code> <code class="p">}</code>
+
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">ApplyBonus</code><code class="p">(</code><code class="kt">int</code> <code class="n">percentage</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="k">this</code><code class="p">.</code><code class="n">Points</code> <code class="p">*=</code> <code class="m">1</code> <code class="p">+</code> <code class="n">percentage</code><code class="p">/</code><code class="m">100.0</code><code class="p">;</code>
+    <code class="p">}</code>
+<code class="p">}</code></pre>
+
+<p>When all the state-modifying business logic is moved inside the boundaries of the corresponding objects, examine what hierarchies are needed to ensure strongly consistent checking of business rules and invariants. Those are good candidates for aggregates. Keeping in mind the aggregate design principles we discussed in <a data-type="xref" href="ch06.html#tackling_complex_business_logic">Chapter 6</a>, look for the smallest transaction boundaries, that is, the smallest amount of data that you need to keep strongly consistent. Decompose the hierarchies along those boundaries. Make sure the external aggregates are only referenced by their IDs.</p>
+
+<p>Finally, for each aggregate, identify its root, or the entry point for its public interface. Make the methods of all the other internal objects in the aggregate private and only callable from within the aggregate.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Domain Model to Event-Sourced Domain Model"><div class="sect2" id="domain_model_to_event_sourced_domain_mo">
+<h2>Domain Model to Event-Sourced Domain Model</h2>
+
+<p>Once you have a domain model with properly designed aggregate boundaries,<a contenteditable="false" data-type="indexterm" data-primary="tactical design" data-secondary="evolving design concerns" data-tertiary="domain model to event-sourced domain model" id="id1343"></a><a contenteditable="false" data-type="indexterm" data-primary="design" data-secondary="changes in design" data-tertiary="domain model to event-sourced domain model" id="id1344"></a><a contenteditable="false" data-type="indexterm" data-primary="domain model for business logic" data-secondary="design evolving" data-tertiary="domain model to event-sourced domain model" id="id1345"></a><a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="domain model changing to" id="id1346"></a> you can transition it to the event-sourced model. Instead of modifying the aggregate’s data directly, model the domain events needed to represent the aggregate’s lifecycle.</p>
+
+<p>The most challenging aspect of refactoring a domain model into an event-sourced domain model is the history of the existing aggregates: migrating the “timeless” state into the event-based model. Since the fine-grained data representing all the past state changes is not there, you have to either generate past events on a best-effort basis or model migration events.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Generating Past Transitions"><div class="sect2" id="generating_past_transitions">
+<h2>Generating Past Transitions</h2>
+
+<p>This approach entails generating an approximate stream of events<a contenteditable="false" data-type="indexterm" data-primary="design" data-secondary="changes in design" data-tertiary="generating past transitions" id="id1347"></a><a contenteditable="false" data-type="indexterm" data-primary="event-sourced domain model" data-secondary="historical perspectives" data-tertiary="generating past transitions" id="id1348"></a><a contenteditable="false" data-type="indexterm" data-primary="time modeled via event sourcing" data-secondary="historical perspectives" data-tertiary="generating past transitions" id="id1349"></a><a contenteditable="false" data-type="indexterm" data-primary="historical perspectives via event sourcing" data-secondary="generating past transitions" id="id1350"></a><a contenteditable="false" data-type="indexterm" data-primary="tactical design" data-secondary="evolving design concerns" data-tertiary="generating past transitions" id="id1351"></a> for each aggregate so that the stream of events can be projected into the same state representation as in the original implementation. Consider the example you saw in <a data-type="xref" href="ch07.html#modeling_the_dimension_of_time">Chapter 7</a>, as represented in <a data-type="xref" href="#a_state_based_representation_of_the_agg">Table 11-1</a>.</p>
+
+<table id="a_state_based_representation_of_the_agg">
+	<caption><span class="label">Table 11-1. </span>A state-based representation of the aggregate’s data</caption>
+	<thead>
+    <tr>
+	    <th>lead-id</th>
+      <th>first-name</th>
+      <th>last-name</th>
+      <th>phone_number</th>
+      <th>status</th>
+      <th>last-contacted-on</th>
+      <th>order-placed-on</th>
+      <th>converted-on</th>
+      <th>followup-on</th>
+    </tr>
+	</thead>
+	<tbody>
+  <tr>
+    <td>12</td>
+    <td>Shauna</td> 
+    <td>Mercia</td>
+    <td>555-4753</td>
+    <td>converted</td> 
+    <td>2020-​05-27​T​12:02:12.51Z</td>
+    <td>2020-​05-27​T​12:02:12.51Z</td> 
+    <td>2020-​05-27​T​12:02:12.51Z</td>
+    <td>null</td>
+  </tr>
+</tbody>
+</table>
+
+<p>We can assume from the business logic perspective that the instance of the aggregate has been initialized; then the person has been contacted, an order has been placed, and finally, since the status was “converted,” the payment for the order has been confirmed. The following set of events can represent all of these assumptions:</p>
+<pre data-code-language="json"><code class="p">{</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"lead-id"</code><code class="p">:</code><code class="w"> </code><code class="mi">12</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-id"</code><code class="p">:</code><code class="w"> </code><code class="mi">0</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-type"</code><code class="p">:</code><code class="w"> </code><code class="s2">"lead-initialized"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"first-name"</code><code class="p">:</code><code class="w"> </code><code class="s2">"Shauna"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"last-name"</code><code class="p">:</code><code class="w"> </code><code class="s2">"Mercia"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"phone-number"</code><code class="p">:</code><code class="w"> </code><code class="s2">"555-4753"</code><code class="w"></code>
+<code class="p">},</code><code class="w"></code>
+<code class="p">{</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"lead-id"</code><code class="p">:</code><code class="w"> </code><code class="mi">12</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-id"</code><code class="p">:</code><code class="w"> </code><code class="mi">1</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-type"</code><code class="p">:</code><code class="w"> </code><code class="s2">"contacted"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"timestamp"</code><code class="p">:</code><code class="w"> </code><code class="s2">"2020-05-27T12:02:12.51Z"</code><code class="w"></code>
+<code class="p">},</code><code class="w"></code>
+<code class="p">{</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"lead-id"</code><code class="p">:</code><code class="w"> </code><code class="mi">12</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-id"</code><code class="p">:</code><code class="w"> </code><code class="mi">2</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-type"</code><code class="p">:</code><code class="w"> </code><code class="s2">"order-submitted"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"payment-deadline"</code><code class="p">:</code><code class="w"> </code><code class="s2">"2020-05-30T12:02:12.51Z"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"timestamp"</code><code class="p">:</code><code class="w"> </code><code class="s2">"2020-05-27T12:02:12.51Z"</code><code class="w"></code>
+<code class="p">},</code><code class="w"></code>
+<code class="p">{</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"lead-id"</code><code class="p">:</code><code class="w"> </code><code class="mi">12</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-id"</code><code class="p">:</code><code class="w"> </code><code class="mi">3</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-type"</code><code class="p">:</code><code class="w"> </code><code class="s2">"payment-confirmed"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"status"</code><code class="p">:</code><code class="w"> </code><code class="s2">"converted"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"timestamp"</code><code class="p">:</code><code class="w"> </code><code class="s2">"2020-05-27T12:38:44.12Z"</code><code class="w"></code>
+<code class="p">}</code><code class="w"></code></pre>
+
+<p>When applied one by one, these events can be projected into the exact state representation as in the original system. The “recovered” events can be easily tested by projecting the state and comparing it to the original data.</p>
+
+<p>However, it’s important to keep in mind the disadvantage of this approach. The goal of using event sourcing is to have a reliable, strongly consistent history of the aggregates’ domain events. When this approach is used, it’s impossible to recover the complete history of state transitions. In the preceding example, we don’t know how many times the sales agent has contacted the person, and therefore, how many “contacted” events we have missed.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Modeling Migration Events"><div class="sect2" id="modeling_migration_events">
+<h2>Modeling Migration Events</h2>
+
+<p>The alternative approach is to acknowledge the lack of knowledge<a contenteditable="false" data-type="indexterm" data-primary="design" data-secondary="changes in design" data-tertiary="modeling migration events" id="id1352"></a><a contenteditable="false" data-type="indexterm" data-primary="tactical design" data-secondary="evolving design concerns" data-tertiary="modeling migration events" id="id1353"></a><a contenteditable="false" data-type="indexterm" data-primary="events" data-secondary="modeling migration events" id="id1354"></a> about past events and explicitly model it as an event. Instead of recovering the events that may have led to the current state, define a migration event and use it to initialize the event streams of existing aggregate instances:</p>
+<pre data-code-language="json"><code class="p">{</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"lead-id"</code><code class="p">:</code><code class="w"> </code><code class="mi">12</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-id"</code><code class="p">:</code><code class="w"> </code><code class="mi">0</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"event-type"</code><code class="p">:</code><code class="w"> </code><code class="s2">"migrated-from-legacy"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"first-name"</code><code class="p">:</code><code class="w"> </code><code class="s2">"Shauna"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"last-name"</code><code class="p">:</code><code class="w"> </code><code class="s2">"Mercia"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"phone-number"</code><code class="p">:</code><code class="w"> </code><code class="s2">"555-4753"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"status"</code><code class="p">:</code><code class="w"> </code><code class="s2">"converted"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"last-contacted-on"</code><code class="p">:</code><code class="w"> </code><code class="s2">"2020-05-27T12:02:12.51Z"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"order-placed-on"</code><code class="p">:</code><code class="w"> </code><code class="s2">"2020-05-27T12:02:12.51Z"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"converted-on"</code><code class="p">:</code><code class="w"> </code><code class="s2">"2020-05-27T12:38:44.12Z"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"followup-on"</code><code class="p">:</code><code class="w"> </code><code class="kc">null</code><code class="w"></code>
+<code class="p">}</code><code class="w"></code></pre>
+
+<p>The advantage of this approach is that it makes the lack of past data explicit. At no stage can someone mistakenly assume that the event stream captures all of the domain events that happened during the aggregate instance’s lifecycle. The disadvantage is that the traces of the legacy system will remain in the event store forever. For example, if you are using the CQRS pattern (and with the event-sourced domain model you most likely will), the projections will always have to take into account the migration events.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch11-tact" id="id1355"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch11-tact2" id="id1356"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch11-tact3" id="id1357"></a></p>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Organizational Changes"><div class="sect1" id="organizational_changes">
+<h1>Organizational Changes</h1>
+
+<p>Another type of change that can affect a system’s design is a change<a contenteditable="false" data-type="indexterm" data-primary="design" data-secondary="changes in design" data-tertiary="organizational changes" id="id1358"></a><a contenteditable="false" data-type="indexterm" data-primary="organizational changes" id="id1359"></a><a contenteditable="false" data-type="indexterm" data-primary="bounded contexts" data-secondary="organizational changes and" id="id1360"></a> in the organization itself. <a data-type="xref" href="ch04.html#integrating_bounded_contexts">Chapter 4</a> looked at different patterns of integrating bounded contexts: partnership, shared kernel, conformist, anticorruption layer, open-host service, and separate ways. Changes in the organization’s structure can affect teams’ communication and collaboration levels and, as a result, the ways the bounded contexts should be integrated.</p>
+
+<p>A trivial example of such change is growing development centers, as shown in <a data-type="xref" href="#splitting_a_wide_bounded_context_to_acc">Figure 11-2</a>. Since a bounded context can be implemented by only one team, adding new development teams can cause the existing wider bounded context boundaries to split into smaller ones so that each team can work on its own bounded context.</p>
+<figure><div id="splitting_a_wide_bounded_context_to_acc" class="figure">
+<img src="assets/lddd_1102.png" alt="Splitting a wide bounded context to accommodate growing engineering teams" width="600" height="298"/>
+<h6><span class="label">Figure 11-2. </span>Splitting a wide bounded context to accommodate growing engineering teams</h6>
+</div></figure>
+
+<p>Moreover, the organization’s development centers are often located in different geographical locations. When the work on the existing bounded contexts is shifted to another location, it may negatively impact the teams’ collaboration. As a result, the bounded contexts’ integration patterns have to evolve accordingly, as described in the following scenarios.</p>
+
+<section class="pagebreak-before" data-type="sect2" data-pdf-bookmark="Partnership to Customer–Supplier"><div class="sect2" id="partnership_to_customerem_dashsupplier">
+<h2 class="less_space">Partnership to Customer–Supplier</h2>
+
+<p>The partnership pattern assumes there is strong communication<a contenteditable="false" data-type="indexterm" data-primary="organizational changes" data-secondary="partnership to customer–supplier" id="id1361"></a><a contenteditable="false" data-type="indexterm" data-primary="collaboration patterns" data-secondary="organizational changes" data-tertiary="partnership to customer–supplier" id="id1362"></a><a contenteditable="false" data-type="indexterm" data-primary="partnerships in bounded contexts" data-secondary="partnership changing to customer–supplier" id="id1363"></a><a contenteditable="false" data-type="indexterm" data-primary="customer–supplier collaboration pattern" data-secondary="partnership changing to" id="id1364"></a> and collaboration among teams. As time goes by, that might cease to be the case; for example, when work on one of the bounded contexts is moved to a distant development center. Such a change will negatively affect the teams’ communication, and it may make sense to move away from the partnership pattern toward a customer–supplier relationship.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Customer–Supplier to Separate Ways"><div class="sect2" id="customerem_dashsupplier_to_separate_way">
+<h2>Customer–Supplier to Separate Ways</h2>
+
+<p>Unfortunately, it’s not uncommon for teams to have severe communication problems.<a contenteditable="false" data-type="indexterm" data-primary="organizational changes" data-secondary="customer–supplier to separate ways" id="id1365"></a><a contenteditable="false" data-type="indexterm" data-primary="collaboration patterns" data-secondary="organizational changes" data-tertiary="customer–supplier to separate ways" id="id1366"></a><a contenteditable="false" data-type="indexterm" data-primary="customer–supplier collaboration pattern" data-secondary="changing to separate ways" id="id1367"></a><a contenteditable="false" data-type="indexterm" data-primary="separate ways no collaboration pattern" data-secondary="customer–supplier changing to" id="id1368"></a> The issues might be caused by geographical distance or organizational politics. Such teams may experience more and more integration issues over time. At some point, it may become more cost-effective to duplicate the functionality instead of continuously chasing one another’s tails.</p>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Domain Knowledge"><div class="sect1" id="domain_knowledge">
+<h1>Domain Knowledge</h1>
+
+<p>As you’ll recall, the core tenet of domain-driven design is that domain<a contenteditable="false" data-type="indexterm" data-primary="design" data-secondary="changes in design" data-tertiary="domain knowledge" id="id1369"></a><a contenteditable="false" data-type="indexterm" data-primary="domain experts" data-secondary="business knowledge" data-tertiary="knowledge lost" id="id1370"></a><a contenteditable="false" data-type="indexterm" data-primary="business knowledge" data-secondary="knowledge lost" id="id1371"></a> knowledge is essential for designing a successful software system. Acquiring domain knowledge is one of the most challenging aspects of software engineering, especially for the core subdomains. A core subdomain’s logic is not only complicated, but also expected to change often. Moreover, modeling is an ongoing process. Models have to improve as more knowledge of the business domain is acquired.</p>
+
+<p>Many times, the business domain’s complexity is implicit. Initially, everything seems simple and straightforward. The initial simplicity is often deceptive and it quickly morphs into complexity. As more functionality is added, more and more edge cases, invariants, and rules are discovered. Such insights are often disruptive, requiring rebuilding the model from the ground up, including the boundaries of the bounded contexts, aggregates, and other implementation details.</p>
+
+<p>From a strategic design standpoint, it’s a useful heuristic to design the bounded contexts’ boundaries according to the level of domain knowledge. The cost of decomposing a system into bounded contexts that, over time, turn out to be incorrect can be high. Therefore, when the domain logic is unclear and changes often, it makes sense to design the bounded contexts with broader boundaries. Then, as domain knowledge is discovered over time and changes to the business logic stabilize, those broad bounded contexts can be decomposed into contexts with narrower boundaries, or <em>microservices</em>. We will discuss the interplay between bounded contexts and microservices in more detail in <a data-type="xref" href="ch14.html#microservices">Chapter 14</a>.</p>
+
+<p>When new domain knowledge is discovered, it should be leveraged to evolve the design and make it more resilient. Unfortunately, changes in domain knowledge are not always positive: domain knowledge can be lost. As time goes by, documentation often becomes stale, people who were working on the original design leave the company, and new functionality is added in an ad hoc manner until, at one point, the codebase gains the dubious status of a legacy system. It’s vital to prevent such degradation of domain knowledge proactively. An effective tool for recovering domain knowledge is the EventStorming workshop, which is the topic of the next chapter.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Growth"><div class="sect1" id="growth">
+<h1>Growth</h1>
+
+<p>Growth is a sign of a healthy system. When new functionality<a contenteditable="false" data-type="indexterm" data-primary="design" data-secondary="changes in design" data-tertiary="growth" id="ch11-grow"></a><a contenteditable="false" data-type="indexterm" data-primary="growth management" id="ch11-grow2"></a> is continuously added, it’s a sign that the system is successful: it brings value to its users and is expanded to further address users’ needs and keep up with competing products. <a contenteditable="false" data-type="indexterm" data-primary="big ball of mud" data-seealso="real-world domain-driven design" id="id1372"></a><a contenteditable="false" data-type="indexterm" data-primary="real-world domain-driven design" data-secondary="big ball of mud" id="id1373"></a>But growth has a dark side. As a software project grows, its codebase can grow into a big ball of mud:</p>
+<blockquote>
+
+<p>A big ball of mud is a haphazardly structured, sprawling, sloppy, duct-tape-and-baling-wire, spaghetti-code jungle. These systems show unmistakable signs of unregulated growth, and repeated, expedient repair.</p>
+
+<p data-type="attribution">Brian Foote and Joseph Yoder<sup><a data-type="noteref" id="ch01fn43-marker" href="ch11.html#ch01fn43">1</a></sup></p>
+</blockquote>
+
+<p>The unregulated growth that leads to big balls of mud results from extending a software system’s functionality without re-evaluating its design decisions. Growth blows up the components’ boundaries, increasingly extending their functionality. It’s crucial to examine the effects of growth on design decisions, especially since many domain-driven design tools are all about setting boundaries: business building blocks (subdomains), model (bounded contexts), immutability (value objects), or consistency (aggregates).</p>
+
+<p>The guiding principle for dealing with growth-driven complexity<a contenteditable="false" data-type="indexterm" data-primary="complexity" data-secondary="growth and accidental complexity" id="id1374"></a><a contenteditable="false" data-type="indexterm" data-primary="growth management" data-secondary="accidental complexity" id="id1375"></a><a contenteditable="false" data-type="indexterm" data-primary="complexity" data-secondary="accidental complexity" data-tertiary="growth and" id="id1376"></a><a contenteditable="false" data-type="indexterm" data-primary="accidental complexity" data-secondary="growth and" id="id1377"></a> is to identify and eliminate accidental complexity: the complexity caused by outdated design decisions. The essential complexity, or inherent complexity of the business domain, should be managed using domain-driven design tools and practices.</p>
+
+<p>When we discuss DDD in earlier chapters, we follow the process of first analyzing the business domain and its strategic components, designing the relevant models of the business domain, and then designing and implementing the models in code. Let’s follow the same script for dealing with growth-driven complexity.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Subdomains"><div class="sect2" id="subdomains-id000144">
+<h2>Subdomains</h2>
+
+<p>As we discussed in <a data-type="xref" href="ch01.html#analyzing_business_domains">Chapter 1</a>, the subdomains’ boundaries<a contenteditable="false" data-type="indexterm" data-primary="growth management" data-secondary="subdomains" id="id1378"></a><a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="growth management" id="id1379"></a><a contenteditable="false" data-type="indexterm" data-primary="boundaries" data-secondary="growth management" id="id1380"></a><a contenteditable="false" data-type="indexterm" data-primary="subdomains" data-secondary="boundaries identified" data-tertiary="growth management" id="id1381"></a> can be challenging to identify, and as a result, instead of striving for boundaries that are perfect, we must strive for boundaries that are useful. That is, the subdomains should allow us to <span class="keep-together">identify</span> components of different business value and use the appropriate tools to design and implement the solution.</p>
+
+<p>As the business domain grows, the subdomains’ boundaries can become even more blurred, making it harder to identify cases of a subdomain spanning multiple, finer-grained subdomains. Hence, it’s important to revisit the identified subdomains and follow the heuristic of coherent use cases (sets of use cases working on the same set of data) to try to identify where to split a subdomain (see <a data-type="xref" href="#optimizing_subdomainsapostrophe_boundar">Figure 11-3</a>).</p>
+<figure><div id="optimizing_subdomainsapostrophe_boundar" class="figure">
+<img src="assets/lddd_1103.png" alt="Optimizing subdomains’ boundaries to accommodate growth" width="600" height="102"/>
+<h6><span class="label">Figure 11-3. </span>Optimizing subdomains’ boundaries to accommodate growth</h6>
+</div></figure>
+
+<p>If you are able to identify finer-grained subdomains of different types, this is an important insight that will allow you to manage the business domain’s essential complexity. The more precise the information about the subdomains and their types is, the more effective you will be at choosing technical solutions for each subdomain.</p>
+
+<p>Identifying inner subdomains that can be extracted and made explicit is especially important for core subdomains. We should always aim to distill core subdomains as much as possible from all others so that we can invest our effort where it matters most from a business strategy perspective.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Bounded Contexts"><div class="sect2" id="bounded_contexts-id000010">
+<h2>Bounded Contexts</h2>
+
+<p>In <a data-type="xref" href="ch03.html#managing_domain_complexity">Chapter 3</a>, you learned that the <a contenteditable="false" data-type="indexterm" data-primary="growth management" data-secondary="bounded contexts" id="id1382"></a><a contenteditable="false" data-type="indexterm" data-primary="bounded contexts" data-secondary="growth management" id="id1383"></a>bounded context pattern allows us to use different models of the business domain. Instead of building a “jack of all trades, master of none” model, we can build multiple models, each focused on solving a specific <span class="keep-together">problem</span>.</p>
+
+<p>As a project evolves and grows, it’s not uncommon for the bounded contexts to lose their focus and accumulate logic related to different problems. <a contenteditable="false" data-type="indexterm" data-primary="complexity" data-secondary="growth and accidental complexity" id="id1384"></a><a contenteditable="false" data-type="indexterm" data-primary="growth management" data-secondary="accidental complexity" id="id1385"></a><a contenteditable="false" data-type="indexterm" data-primary="complexity" data-secondary="accidental complexity" data-tertiary="growth and" id="id1386"></a><a contenteditable="false" data-type="indexterm" data-primary="accidental complexity" data-secondary="growth and" id="id1387"></a>That’s accidental complexity. As with subdomains, it’s crucial to revisit the bounded contexts’ boundaries from time to time. Always look for opportunities to simplify the models by extracting bounded contexts that are laser focused at solving specific problems.</p>
+
+<p>Growth can also make existing implicit design issues explicit. For example, you may notice that a number of bounded contexts become increasingly “chatty” over time, unable to complete any operation without calling another bounded context. That can be a strong signal of an ineffective model and should be addressed by redesigning the bounded contexts’ boundaries to increase their autonomy.</p>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Aggregates"><div class="sect2" id="aggregates-id000002">
+<h2>Aggregates</h2>
+
+<p>When we discussed the domain model pattern in <a data-type="xref" href="ch06.html#tackling_complex_business_logic">Chapter 6</a>, we used the following guiding principle for designing aggregates’ boundaries:<a contenteditable="false" data-type="indexterm" data-primary="growth management" data-secondary="aggregates" id="id1388"></a><a contenteditable="false" data-type="indexterm" data-primary="aggregates" data-secondary="growth management" id="id1389"></a></p>
+
+<blockquote><p>The rule of thumb is to keep the aggregates as small as possible and include only objects that are required to be in a strongly consistent state by the business domain.</p>
+</blockquote>
+<p>As the system’s business requirements grow, it can be “convenient” to distribute the new functionalities among the existing aggregates, without revisiting the principle of keeping aggregates small. If an aggregate grows to include data that is not needed to be strongly consistent by all of its business logic, again, <a contenteditable="false" data-type="indexterm" data-primary="complexity" data-secondary="accidental complexity" data-tertiary="growth and" id="id1390"></a><a contenteditable="false" data-type="indexterm" data-primary="complexity" data-secondary="growth and accidental complexity" id="id1391"></a><a contenteditable="false" data-type="indexterm" data-primary="growth management" data-secondary="accidental complexity" id="id1392"></a><a contenteditable="false" data-type="indexterm" data-primary="accidental complexity" data-secondary="growth and" id="id1393"></a>that’s accidental complexity that has to be eliminated.</p>
+
+<p>Extracting business functionality into a dedicated aggregate not only simplifies the original aggregate, but potentially can simplify the bounded context it belongs to. Often, such refactoring uncovers an additional hidden model that, once made explicit, should be extracted into a different bounded context.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch11-grow" id="id1394"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch11-grow2" id="id1395"></a></p>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Conclusion"><div class="sect1" id="conclusion-id000035">
+<h1>Conclusion</h1>
+
+<p>As Heraclitus famously said, the only constant in life is change. Businesses are no exception. To stay competitive, companies constantly strive to evolve and reinvent themselves. Those changes should be treated as first-class elements of the design <span class="keep-together">process</span>.</p>
+
+<p>As the business domain evolves, changes to its subdomains must be identified and acted on in the system’s design. Make sure your past design decisions are aligned with the current state of the business domain and its subdomains. When needed, evolve your design to better match the current business strategy and needs.</p>
+
+<p>It’s also important to recognize that changes in the organizational structure can affect communication and cooperation among teams and the ways their bounded contexts can be integrated. Learning about the business domain is an ongoing process. As more domain knowledge is discovered over time, it has to be leveraged to evolve strategic and tactical design decisions.</p>
+
+<p>Finally, software growth is a desired type of change, but when it is not managed correctly, it may have disastrous effects on the system design and architecture. Therefore:</p>
+<ul>
+<li>
+	<p>When a subdomain’s functionality is expanded, try to identify more finer-grained subdomain boundaries that will enable you to make better design decisions.</p></li>
+<li>
+	<p>Don’t allow a bounded context to become a “jack of all trades.” Make sure the models encompassed by bounded contexts are focused to solve specific problems.</p></li>
+<li>
+	<p>Make sure your aggregates’ boundaries are as small as possible. Use the heuristic of strongly consistent data to detect possibilities to extract business logic into new aggregates.</p></li>
+</ul>
+
+<p>My final words of wisdom on the topic are to continuously check the different boundaries for signs of growth-driven complexity. Act to eliminate accidental complexities, and use domain-driven design tools to manage the business domain’s essential complexity.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Exercises"><div class="sect1" id="exercises-id000080">
+<h1>Exercises</h1>
+ <ol>
+          <li>
+            <p>What kind of changes in bounded context integration are often caused by organizational growth?</p>
+            <ol type="a">
+              <li>
+                <p>Partnership to customer–supplier (conformist, anticorruption layer, or open-host service)</p>
+              </li>
+              <li>
+                <p>Anticorruption layer to open-host service</p>
+              </li>
+              <li>
+                <p>Conformist to shared kernel</p>
+              </li>
+              <li>
+                <p>Open-host service to shared kernel</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Assume that the bounded contexts’ integration shifts from a conformist relationship to separate ways. What information can you deduce based on the change? Select all that apply.</p>
+            <ol type="a">
+              <li>
+                <p>The development teams struggled to cooperate.</p>
+              </li>
+              <li>
+                <p>The duplicate functionality is either a supporting or a generic subdomain.</p>
+              </li>
+              <li>
+                <p>The duplicate functionality is a core subdomain.</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>What are the indicators for when a supporting subdomain should become a core subdomain? Select all that apply. </p>
+            <ol type="a">
+              <li>
+                <p>It becomes easier to evolve the existing model and implement the new requirements.</p>
+              </li>
+              <li>
+                <p>It becomes painful to evolve the existing model.</p>
+              </li>
+              <li>
+                <p>The subdomain changes at a higher frequency.</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>What change results from discovering a new business opportunity? Select all that apply. </p>
+            <ol type="a">
+              <li>
+                <p>A supporting subdomain turns into a core one.</p>
+              </li>
+              <li>
+                <p>A supporting subdomain turns into a generic one.</p>
+              </li>
+              <li>
+                <p>A generic subdomain turns into a core one.</p>
+              </li>
+              <li>
+                <p>A generic subdomain turns into a supporting one.</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>What change in the business strategy could turn one of WolfDesk’s (the fictitious company described in the <a data-type="link" href="preface01.html#preface">Preface</a>) generic subdomains into a core subdomain?</p>
+            <ol type="a">
+              <li>
+                <p>Switching to a managed service for identifying fraud attempts, instead of using a proprietary solution.</p>
+              </li>
+              <li>
+                <p>Upon reaching a certain level of growth, WolfDesk could follow the footsteps of Amazon and implement its own compute platform to further optimize its ability to scale elastically and optimize its infrastructure costs.</p>
+              </li>
+              <li>
+                <p>Hiring outsourced support agents.</p>
+              </li>
+            </ol>
+          </li>
+        </ol>
+</div></section>
+<div data-type="footnotes"><p data-type="footnote" id="ch01fn43"><sup><a href="ch11.html#ch01fn43-marker">1</a></sup> Brian Foote and Joseph Yoder. Big Ball of Mud. Fourth Conference on Patterns Languages of Programs (PLoP ’97/EuroPLoP ’97), Monticello, Illinois, September 1997.</p></div></div></section></div>
+</div>
+</body>
+</html>

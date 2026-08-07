@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" lang="en" xml:lang="en">
+  <head><title>Principle: Deployment Infrastructure</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <style>.style0 {font-weight: bold} .style1 {color: rgb(0, 0, 255)} .style2 {color: rgb(0, 0, 255); font-style: italic} .style3 {font-style: italic; font-weight: bold} .style5 {font-style: italic} .style6 {color: rgb(52, 52, 52)} </style>
+    </head>
+  <body>
+    <br/>
+    <h2 class="style3">Principle: Deployment Infrastructure</h2>
+    <br/>
+    <p>So far, you have the ability to deploy small, frequent releases that are instrumented to provide the necessary telemetry data, and you are monitoring the status of these releases.</p>
+    <br/>
+    <p>But to ensure you are providing the necessary value, there is one more important element, which involves the infrastructure used for deployment.</p>
+    <br/>
+    <p>Suppose you have a new capability that is ready to be released into production. Even assuming you have tested that new capability and ensured that it works properly, occasionally you will find that in the production environment, there is some sort of problem, and the deployment infrastructure needs the ability to roll back that change when required.</p>
+    <br/>
+    <p>But even if things are operating fine, what you don't yet know is how this actually will be utilized by your customers in their daily use.</p>
+    <br/>
+    <p>There are three possible outcomes here:</p>
+    <br/>
+    <p>Customers love this new capability, and they immediately start using and depending on it. This, of course, is what you hope for.</p>
+    <br style="line-height: 0.5"/>
+    <p class="style5">Once it's released into production, this new capability for some reason actually hurts your customers’ ability to use your products. One common reason for this, especially with mobile applications, is that due to the very limited amount of real estate on their device, sometimes when you add a capability, customers can no longer find a more important capability. In this case, you would not want to deploy this capability until and unless you could correct this problem.</p>
+    <br style="line-height: 0.5"/>
+    <p>The new feature is deployed and technically works fine, but it's simply not used, at least not to the level you had hoped for or expected. The result is that the new capability does not hurt or help anything. This case is actually surprisingly common and very frustrating.</p>
+    <br style="line-height: 0.5"/>
+    <p>If you are to hold yourself to a standard of achieving business outcomes, then you need to deploy new capabilities such that you know which one of these three cases is happening.</p>
+    <br/>
+    <p>The most common way of doing this is to have your deployment infrastructure support A/B testing. This is considered the “gold standard” because you can easily isolate the contribution of just a single new capability. However, this also depends on significant levels of traffic to determine results quickly.</p>
+    <br/>
+    <p>You may not be aware of this, but companies operating in the product model are running many (often hundreds or more) of these tests simultaneously. The deployment infrastructure runs these various tests, collects the analytics for each test, and continues until there are statistically significant results.</p>
+    <br/>
+    <p>Other deployment infrastructure capabilities enable you to control which of your customers are able to see specific new capabilities. One especially popular capability allows you to deploy new capabilities into production, but to keep that new capability hidden from your customers until such time as you are ready. This technique is especially helpful when you have a combination of changes that need to be made visible simultaneously or when you want to wait to show it at a special marketing event.</p>
+    <br/>
+    <p>In terms of deployment infrastructure, although several commercial tools are available, companies have a range of needs, and it is not unusual for companies to have a blend of commercial and custom infrastructure.</p>
+    <br/>
+    <div style="border-style: dashed; border-color: rgb(0, 0, 0); border-top-width: 1px;width: 0.0625"/>
+    <br/>
+    <p class="style0">Managing Technical Debt</p>
+    <br/>
+    <p>We mention the tech debt problem here because if the situation is severe enough, this will get in the way of everything else, starting with changing how you build and deploy.</p>
+    <br/>
+    <p>Every company has technical debt,⁴ but a disproportionate number of companies that want to transform have very serious level of tech debt.</p>
+    <br/>
+    <p>There are two common reasons for this:</p>
+    <br/>
+    <p>Companies that have a history of acquisitions not only inherit the debt of the companies they acquire, but between the need to integrate with other systems and the postacquisition loss of experienced engineers, the problems usually multiply.</p>
+    <br style="line-height: 0.5"/>
+    <p>In most of the prior models, especially those run under the classic IT-style project-based funding model, this is a recipe for creating very high levels of technical debt quickly, as funding is only for the particular project, and usually does not include looking holistically at the systems to constantly improve products and the systems that run them.</p>
+    <br style="line-height: 0.5"/>
+    <p>No matter the cause, the symptoms of tech debt are usually quite clear. Work that used to take days or weeks now takes months. Product teams complain of too many dependencies and too little autonomy. Even small capabilities become expensive, and the large initiatives that are so important to companies become so difficult that the company tries everything possible to avoid them.</p>
+    <br/>
+    <p>This is why technical debt is so feared across so many companies. It is one of the few true business-continuity risks that companies face.</p>
+    <br/>
+    <p>Moving to the product model where product teams have real ownership of major areas is a big step toward improving the situation, but you still will need to dig yourself out of the hole.</p>
+    <br/>
+    <p>The specifics of different replatforming efforts are well beyond the scope of this book, but specialty firms can help you formulate a solid plan to modernize your code base, if needed. However, the most important thing to realize is that you need to start on this work on addressing tech debt immediately, and then do this work continuously, indefinitely.</p>
+    <br/>
+    <p>Most companies with a good handle on tech debt will tell you that they work on tech debt every day, with about 10 to 30 percent of the engineering capacity. Sometimes, the situation is so dire that it demands more like 40 to 60 percent of the engineering capacity. At this point, you have very little remaining capacity for your customers, so you would need to proceed carefully and intentionally.</p>
+    <br/>
+    <p>While getting this tech debt issue under control usually will take one to three years, the good news is that if you have a solid plan and experienced engineers, you often will begin to see real results in just a few months.</p>
+    <br/>
+    <div style="border-style: dashed; border-color: rgb(0, 0, 0); border-top-width: 1px;width: 0.0625"/>
+    <div style="page-break-before: always;"/>
+  </body>
+</html>

@@ -1,0 +1,562 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xml:lang="en"
+lang="en"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title>Learning Domain-Driven Design</title>
+<link rel="stylesheet" type="text/css" href="override_v1.css"/>
+<link rel="stylesheet" type="text/css" href="epub.css"/>
+</head>
+<body>
+<div id="book-content">
+<div id="sbo-rt-content"><section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 9. Communication Patterns"><div class="chapter" id="communication_patterns">
+<h1><span class="label">Chapter 9. </span>Communication Patterns</h1>
+
+<p>Chapters <a data-xrefstyle="select:labelnumber" data-type="xref" href="ch05.html#implementing_simple_business_logic">5</a>–<a data-xrefstyle="select:labelnumber" data-type="xref" href="ch08.html#architectural_patterns-id000006">8</a> presented tactical design patterns that define the different ways to implement a system’s components: how to model the business logic and how to organize the internals of a bounded context architecturally. In this chapter, we will step beyond the boundaries of a single component and discuss the patterns for organizing the flow of communication across a system’s elements.</p>
+
+<p>The patterns you will learn about in this chapter facilitate cross-bounded context communication, address the limitations imposed by aggregate design principles, and orchestrate business processes spanning multiple system components.</p>
+
+<section data-type="sect1" data-pdf-bookmark="Model Translation"><div class="sect1" id="model_translation">
+<h1>Model Translation</h1>
+
+<p>A bounded context is the boundary of a model—a ubiquitous language.<a contenteditable="false" data-type="indexterm" data-primary="open-host service" data-secondary="model translation" id="ch09-anti2"></a><a contenteditable="false" data-type="indexterm" data-primary="anticorruption layer" data-secondary="model translation" id="ch09-anti"></a><a contenteditable="false" data-type="indexterm" data-primary="bounded contexts" data-secondary="communication" id="ch09-modt2"></a><a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="model translation" data-tertiary="about" id="id1232"></a><a contenteditable="false" data-type="indexterm" data-primary="ubiquitous language" data-secondary="model translation" id="ch09-modt"></a> As you learned in <a data-type="xref" href="ch03.html#managing_domain_complexity">Chapter 3</a>, there are different patterns for designing communication across different bounded contexts. <a contenteditable="false" data-type="indexterm" data-primary="contracts in bounded contexts" data-secondary="communication" id="id1233"></a>Suppose the teams implementing two bounded contexts are communicating effectively and willing to collaborate. In this case, the bounded contexts can be integrated in a partnership: the protocols can be coordinated in an ad hoc manner, and any integration issues can be effectively addressed through communication between the teams. <a contenteditable="false" data-type="indexterm" data-primary="shared kernel in bounded contexts" data-secondary="communication via model translation" id="id1234"></a>Another cooperation-driven integration method is <em>shared kernel</em>: the teams extract and co-evolve a limited portion of a model; for example, extracting the bounded contexts’ integration contracts into a co-owned <span class="keep-together">repository</span>.</p>
+
+<p>In a customer–supplier relationship, the balance of power tips toward either the upstream (supplier) or the downstream (consumer) bounded context. Suppose the downstream bounded context cannot conform to the upstream bounded context’s model. In this case, a more elaborate technical solution is required that can facilitate communication by translating the bounded contexts’ models.</p>
+
+<p>This translation can be handled by one, or sometimes both, sides: the downstream bounded context can adapt the upstream bounded context’s model to its needs using an anticorruption layer (ACL), while the upstream bounded context can act as an open-host service (OHS) and protect its consumers from changes to its implementation model by using an integration-specific published language. Since the translation logic is similar for both the anticorruption layer and the open-host service, this chapter covers the implementation options without differentiating between the patterns and mentions the differences only in exceptional cases.</p>
+
+<p>The model’s translation logic can be either stateless or stateful.<a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="model translation" data-tertiary="stateless" id="id1235"></a> <em>Stateless translation</em> happens on the fly, as incoming (OHS) or outgoing (ACL) requests are issued, while <em>stateful translation</em> involves a more complicated translation logic that requires a database. Let’s see design patterns for implementing both types of model translation.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Stateless Model Translation"><div class="sect2" id="stateless_model_translation">
+<h2>Stateless Model Translation</h2>
+
+<p>For stateless model translation, the bounded context that owns the translation (OHS for upstream, ACL for downstream) implements the <a href="https://oreil.ly/A1nb2">proxy design pattern</a> to interject the incoming and outgoing requests and map the source model to the bounded context’s target model. This is depicted in <a data-type="xref" href="#model_translation_by_a_proxy">Figure 9-1</a>.</p>
+<figure><div id="model_translation_by_a_proxy" class="figure">
+<img src="assets/lddd_0901.png" alt="Model translation by a proxy" width="600" height="68"/>
+<h6><span class="label">Figure 9-1. </span>Model translation by a proxy</h6>
+</div></figure>
+
+<p>Implementation of the proxy depends on whether the bounded contexts are communicating synchronously or asynchronously.</p>
+
+<section data-type="sect3" data-pdf-bookmark="Synchronous"><div class="sect3" id="synchronous">
+<h3>Synchronous</h3>
+
+<p>The typical way to translate models used in synchronous communication<a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="model translation" data-tertiary="stateless synchronous" id="id1236"></a> is to embed the transformation logic in the bounded context’s codebase, as shown in <a data-type="xref" href="#synchronous_communication">Figure 9-2</a>. In an open-host service, translation to the public language takes place when processing incoming requests, and in an anticorruption layer, it occurs when calling the upstream bounded context.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch09-anti2" id="id1237"></a></p>
+<figure><div id="synchronous_communication" class="figure">
+<img src="assets/lddd_0902.png" alt="Synchronous communication" width="600" height="111"/>
+<h6><span class="label">Figure 9-2. </span>Synchronous communication</h6>
+</div></figure>
+
+<p>In some cases, it can be more cost-effective and convenient to offload the translation logic to an external component such as an API gateway pattern. The API gateway component can be an open source software-based solution such as Kong or KrakenD, or it can be a cloud vendor’s managed service such as AWS API Gateway, Google Apigee, or Azure API Management.</p>
+
+<p>For bounded contexts implementing the open-host pattern, the API gateway is responsible for converting the internal model into the integration-optimized published language. Moreover, having an explicit API gateway can alleviate the process of managing and serving multiple versions of the bounded context’s API, as depicted in <a data-type="xref" href="#exposing_different_versions_of_the_publ">Figure 9-3</a>.</p>
+<figure><div id="exposing_different_versions_of_the_publ" class="figure">
+<img src="assets/lddd_0903.png" alt="Exposing different versions of the published language" width="600" height="243"/>
+<h6><span class="label">Figure 9-3. </span>Exposing different versions of the published language</h6>
+</div></figure>
+
+<p>Anticorruption layers implemented using an API gateway can be consumed by multiple downstream bounded contexts. In such cases, the anticorruption layer acts as an integration-specific bounded context, as shown in <a data-type="xref" href="#shared_anticorruption_layer">Figure 9-4</a>.</p>
+<figure><div id="shared_anticorruption_layer" class="figure">
+<img src="assets/lddd_0904.png" alt="Shared anticorruption layer" width="600" height="252"/>
+<h6><span class="label">Figure 9-4. </span>Shared anticorruption layer</h6>
+</div></figure>
+
+<p>Such bounded contexts, which are mainly in charge of transforming models for more convenient consumption by other components, are often referred to as <em>interchange contexts</em>.</p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Asynchronous"><div class="sect3" id="asynchronous">
+<h3>Asynchronous</h3>
+
+<p>To translate models used in asynchronous communication<a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="model translation" data-tertiary="stateless asynchronous" id="id1238"></a> you can implement a <em>message proxy</em>: an intermediary component subscribing to messages coming from the source bounded context. The proxy will apply the required model transformations and forward the resultant messages to the target subscriber (see <a data-type="xref" href="#translating_models_in_asynchronous_comm">Figure 9-5</a>).</p>
+<figure><div id="translating_models_in_asynchronous_comm" class="figure">
+<img src="assets/lddd_0905.png" alt="Translating models in asynchronous communication" width="600" height="60"/>
+<h6><span class="label">Figure 9-5. </span>Translating models in asynchronous communication</h6>
+</div></figure>
+
+<p>In addition to translating the messages’ model, the intercepting component can also reduce the noise on the target bounded context by filtering out irrelevant messages.</p>
+
+<p>Asynchronous model translation is essential when implementing an open host service. It’s a common mistake to design and expose a published language for the model’s objects and allow domain events to be published as they are, thereby exposing the bounded context’s implementation model. Asynchronous translation can be used to intercept the domain events and convert them into a published language, thus providing better encapsulation of the bounded context’s implementation details (see <a data-type="xref" href="#domain_events_in_a_published_language">Figure 9-6</a>).</p>
+
+<p>Moreover, translating messages to the published language enables<a contenteditable="false" data-type="indexterm" data-primary="ubiquitous language" data-secondary="published language public protocol" data-tertiary="model translation" id="id1239"></a><a contenteditable="false" data-type="indexterm" data-primary="events" data-secondary="domain events" data-tertiary="message translation and" id="id1240"></a> differentiating between private events that are intended for the bounded context’s internal needs and public events that are designed for integration with other bounded contexts. We’ll revisit and expand on the topic of private/public events in <a data-type="xref" href="ch15.html#event_driven_architectur">Chapter 15</a>, where we discuss the relationship between domain-driven design and event-driven architecture.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch09-anti" id="id1241"></a></p>
+<figure><div id="domain_events_in_a_published_language" class="figure">
+<img src="assets/lddd_0906.png" alt="Domain events in a published language" width="600" height="124"/>
+<h6><span class="label">Figure 9-6. </span>Domain events in a published language</h6>
+</div></figure>
+</div></section>
+</div></section>
+
+<section class="pagebreak-before" data-type="sect2" data-pdf-bookmark="Stateful Model Translation"><div class="sect2" id="stateful_model_translation">
+<h2 class="less_space">Stateful Model Translation</h2>
+
+<p>For more significant model transformations—for <a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="model translation" data-tertiary="stateful" id="id1242"></a>example, when the translation mechanism has to aggregate the source data or unify data from multiple sources into a single model—a stateful translation may be required. Let’s discuss each of these use cases in detail.</p>
+
+<section data-type="sect3" data-pdf-bookmark="Aggregating incoming data"><div class="sect3" id="aggregating_incoming_data">
+<h3>Aggregating incoming data</h3>
+
+<p>Let’s say a bounded context is interested in aggregating<a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="model translation" data-tertiary="stateful aggregating incoming data" id="id1243"></a> incoming requests and processing them in batches for performance optimization. In this case, aggregation may be required both for synchronous and asynchronous requests (see <a data-type="xref" href="#batching_requests">Figure 9-7</a>).</p>
+<figure><div id="batching_requests" class="figure">
+<img src="assets/lddd_0907.png" alt="Batching requests" width="600" height="260"/>
+<h6><span class="label">Figure 9-7. </span>Batching requests</h6>
+</div></figure>
+
+<p>Another common use case for aggregation of source data is combining multiple fine-grained messages into a single message containing the unified data, as depicted in <a data-type="xref" href="#unifying_incoming_events">Figure 9-8</a>.</p>
+<figure><div id="unifying_incoming_events" class="figure">
+<img src="assets/lddd_0908.png" alt="Unifying incoming events" width="600" height="167"/>
+<h6><span class="label">Figure 9-8. </span>Unifying incoming events</h6>
+</div></figure>
+
+<p class="pagebreak-before less_space">Model transformation that aggregates incoming data cannot be implemented using an API gateway, and thus requires more elaborate, stateful processing. To track the incoming data and process it accordingly, the translation logic requires its own persistent storage (see <a data-type="xref" href="#stateful_model_transformation">Figure 9-9</a>).</p>
+<figure><div id="stateful_model_transformation" class="figure">
+<img src="assets/lddd_0909.png" alt="Stateful model transformation" width="600" height="207"/>
+<h6><span class="label">Figure 9-9. </span>Stateful model transformation</h6>
+</div></figure>
+
+<p>In some use cases, you can avoid implementing a custom solution for a stateful translation by using off-the-shelf products; for example, a stream-process platform (Kafka, AWS Kinesis, etc.), or a batching solution (Apache NiFi, AWS Glue, Spark, etc.).</p>
+</div></section>
+
+<section data-type="sect3" data-pdf-bookmark="Unifying multiple sources"><div class="sect3" id="unifying_multiple_sources">
+<h3>Unifying multiple sources</h3>
+
+<p>A bounded context may need to process data aggregates from multiple sources,<a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="model translation" data-tertiary="stateful unifying multiple sources" id="id1244"></a><a contenteditable="false" data-type="indexterm" data-primary="backend-for-frontend pattern" id="id1245"></a> including other bounded contexts. A typical example for this is the backend-for-frontend pattern,<sup><a data-type="noteref" id="ch01fn39-marker" href="ch09.html#ch01fn39">1</a></sup> in which the user interface has to combine data originating from multiple services.</p>
+
+<p>Another example is a bounded context that must process data from multiple other contexts and implement complex business logic to process all the data. In this case, it can be beneficial to decouple the integration and business logic complexities by fronting the bounded context with an anticorruption layer that aggregates data from all other bounded contexts, as shown in <a data-type="xref" href="#simplifying_the_integration_model_using">Figure 9-10</a>.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch09-modt" id="id1246"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch09-modt2" id="id1247"></a></p>
+<figure><div id="simplifying_the_integration_model_using" class="figure">
+<img src="assets/lddd_0910.png" alt="Simplifying the integration model using the anticorruption layer pattern" width="600" height="348"/>
+<h6><span class="label">Figure 9-10. </span>Simplifying the integration model using the anticorruption layer pattern</h6>
+</div></figure>
+</div></section>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Integrating Aggregates "><div class="sect1" id="integrating_aggregates">
+<h1>Integrating Aggregates </h1>
+
+<p>In <a data-type="xref" href="ch06.html#tackling_complex_business_logic">Chapter 6</a>, we discussed that one of<a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="aggregates" data-tertiary="domain events" id="ch09-agc"></a><a contenteditable="false" data-type="indexterm" data-primary="aggregates" data-secondary="communication" data-tertiary="domain events" id="ch09-agc2"></a><a contenteditable="false" data-type="indexterm" data-primary="domain events" data-secondary="aggregate communication" id="ch09-agc3"></a> the ways aggregates communicate with the rest of the system is by publishing domain events. External components can subscribe to these domain events and execute their logic. But how are domain events published to a message bus?</p>
+
+<p>Before we get to the solution, let’s examine a few common mistakes in the event publishing process and the consequences of each approach. Consider the following code:</p>
+<pre data-code-language="csharp"><code class="m">01</code>  <code class="k">public</code> <code class="k">class</code> <code class="nc">Campaign</code>
+<code class="m">02</code>  <code class="p">{</code>
+<code class="m">03</code>      <code class="p">...</code>
+<code class="m">04</code>      <code class="n">List</code><code class="p">&lt;</code><code class="n">DomainEvent</code><code class="p">&gt;</code> <code class="n">_events</code><code class="p">;</code>
+<code class="m">05</code>      <code class="n">IMessageBus</code> <code class="n">_messageBus</code><code class="p">;</code>
+<code class="m">06</code>      <code class="p">...</code>
+<code class="m">07</code> 
+<code class="m">08</code>      <code class="k">public</code> <code class="k">void</code> <code class="n">Deactivate</code><code class="p">(</code><code class="kt">string</code> <code class="n">reason</code><code class="p">)</code>
+<code class="m">09</code>      <code class="p">{</code>
+<code class="m">10</code>          <code class="k">for</code> <code class="p">(</code><code class="n">l</code> <code class="k">in</code> <code class="n">_locations</code><code class="p">.</code><code class="n">Values</code><code class="p">())</code>
+<code class="m">11</code>          <code class="p">{</code>
+<code class="m">12</code>              <code class="n">l</code><code class="p">.</code><code class="n">Deactivate</code><code class="p">();</code>
+<code class="m">13</code>          <code class="p">}</code>
+<code class="m">14</code> 
+<code class="m">15</code>          <code class="n">IsActive</code> <code class="p">=</code> <code class="k">false</code><code class="p">;</code>
+<code class="m">16</code> 
+<code class="m">17</code>          <code class="kt">var</code> <code class="n">newEvent</code> <code class="p">=</code> <code class="k">new</code> <code class="n">CampaignDeactivated</code><code class="p">(</code><code class="n">_id</code><code class="p">,</code> <code class="n">reason</code><code class="p">);</code>
+<code class="m">18</code>          <code class="n">_events</code><code class="p">.</code><code class="n">Append</code><code class="p">(</code><code class="n">newEvent</code><code class="p">);</code>
+<code class="m">19</code>          <code class="n">_messageBus</code><code class="p">.</code><code class="n">Publish</code><code class="p">(</code><code class="n">newEvent</code><code class="p">);</code>
+<code class="m">20</code>      <code class="p">}</code>
+<code class="m">21</code>  <code class="p">}</code></pre>
+
+<p>On line 17, a new event is instantiated. On the following two lines, it is appended to the aggregate’s internal list of domain events (line 18), and the event is published to the message bus (line 19). This implementation of publishing domain events is simple but wrong. Publishing the domain event right from the aggregate is bad for two reasons. First, the event will be dispatched before the aggregate’s new state is committed to the database. A subscriber may receive the notification that the campaign was deactivated, but it would contradict the campaign’s state. Second, what if the database transaction fails to commit because of a race condition, subsequent aggregate logic rendering the operation invalid, or simply a technical issue in the database? Even though the database transaction is rolled back, the event is already published and pushed to subscribers, and there is no way to retract it.</p>
+
+<p>Let’s try something else:</p>
+<pre data-code-language="csharp"><code class="m">01</code>  <code class="k">public</code> <code class="k">class</code> <code class="nc">ManagementAPI</code>
+<code class="m">02</code>  <code class="p">{</code>
+<code class="m">03</code>      <code class="p">...</code>
+<code class="m">04</code>      <code class="k">private</code> <code class="k">readonly</code> <code class="n">IMessageBus</code> <code class="n">_messageBus</code><code class="p">;</code>
+<code class="m">05</code>      <code class="k">private</code> <code class="k">readonly</code> <code class="n">ICampaignRepository</code> <code class="n">_repository</code><code class="p">;</code>
+<code class="m">06</code>      <code class="p">...</code>
+<code class="m">07</code>      <code class="k">public</code> <code class="n">ExecutionResult</code> <code class="n">DeactivateCampaign</code><code class="p">(</code><code class="n">CampaignId</code> <code class="n">id</code><code class="p">,</code> <code class="kt">string</code> <code class="n">reason</code><code class="p">)</code>
+<code class="m">08</code>      <code class="p">{</code>
+<code class="m">09</code>          <code class="k">try</code>
+<code class="m">10</code>          <code class="p">{</code>
+<code class="m">11</code>              <code class="kt">var</code> <code class="n">campaign</code> <code class="p">=</code> <code class="n">repository</code><code class="p">.</code><code class="n">Load</code><code class="p">(</code><code class="n">id</code><code class="p">);</code>
+<code class="m">12</code>              <code class="n">campaign</code><code class="p">.</code><code class="n">Deactivate</code><code class="p">(</code><code class="n">reason</code><code class="p">);</code>
+<code class="m">13</code>              <code class="n">_repository</code><code class="p">.</code><code class="n">CommitChanges</code><code class="p">(</code><code class="n">campaign</code><code class="p">);</code>
+<code class="m">14</code> 
+<code class="m">15</code>              <code class="kt">var</code> <code class="n">events</code> <code class="p">=</code> <code class="n">campaign</code><code class="p">.</code><code class="n">GetUnpublishedEvents</code><code class="p">();</code>
+<code class="m">16</code>              <code class="k">for</code> <code class="p">(</code><code class="n">IDomainEvent</code> <code class="n">e</code> <code class="k">in</code> <code class="n">events</code><code class="p">)</code>
+<code class="m">17</code>              <code class="p">{</code>
+<code class="m">18</code>                  <code class="n">_messageBus</code><code class="p">.</code><code class="n">publish</code><code class="p">(</code><code class="n">e</code><code class="p">);</code>
+<code class="m">19</code>              <code class="p">}</code>
+<code class="m">20</code>              <code class="n">campaign</code><code class="p">.</code><code class="n">ClearUnpublishedEvents</code><code class="p">();</code>
+<code class="m">21</code>          <code class="p">}</code>
+<code class="m">22</code>          <code class="k">catch</code><code class="p">(</code><code class="n">Exception</code> <code class="n">ex</code><code class="p">)</code>
+<code class="m">23</code>          <code class="p">{</code>
+<code class="m">24</code>              <code class="p">...</code>
+<code class="m">25</code>          <code class="p">}</code>
+<code class="m">26</code>      <code class="p">}</code>
+<code class="m">27</code>  <code class="p">}</code></pre>
+
+<p>In the preceding listing, the responsibility of publishing new domain events is shifted to the application layer. On lines 11 through 13, the relevant instance of the <code>Campaign</code> aggregate is loaded, its <code>Deactivate</code> command is executed, and only after the updated state is successfully committed to the database, on lines 15 through 20, are the new domain events published to the message bus. Can we trust this code? No.</p>
+
+<p>In this case, the process running the logic for some reason fails to publish the domain events.  Perhaps the message bus is down. Or the server running the code fails right after committing the database transaction, but before publishing the events the system will still end in an inconsistent state, which means that the database transaction is committed, but the domain events will never be published.</p>
+
+<p>These edge cases can be addressed using the outbox pattern.</p>
+
+<section data-type="sect2" data-pdf-bookmark="Outbox "><div class="sect2" id="outbox">
+<h2>Outbox </h2>
+
+<p>The outbox pattern (<a data-type="xref" href="#outbox_pattern">Figure 9-11</a>) ensures reliable<a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="aggregates" data-tertiary="outbox pattern" id="id1248"></a><a contenteditable="false" data-type="indexterm" data-primary="aggregates" data-secondary="communication" data-tertiary="outbox pattern" id="id1249"></a><a contenteditable="false" data-type="indexterm" data-primary="outbox pattern of communication" id="id1250"></a><a contenteditable="false" data-type="indexterm" data-primary="domain events" data-secondary="aggregate communication" data-tertiary="outbox pattern" id="id1251"></a> publishing of domain events using the following algorithm:</p>
+<ul>
+<li>
+	<p>Both the updated aggregate’s state and the new domain events are committed in the same atomic transaction.</p></li>
+<li>
+	<p>A message relay fetches newly committed domain events from the database.</p></li>
+<li>
+	<p>The relay publishes the domain events to the message bus.</p></li>
+<li>
+	<p>Upon successful publishing, the relay either marks the events as <code>published</code> in the database or deletes them completely.</p></li>
+</ul>
+<figure><div id="outbox_pattern" class="figure">
+<img src="assets/lddd_0911.png" alt="Outbox pattern" width="600" height="263"/>
+<h6><span class="label">Figure 9-11. </span>Outbox pattern</h6>
+</div></figure>
+
+<p>When using a relational database, it’s convenient to leverage the database’s ability to commit to two tables atomically and use a dedicated table for storing the messages, as shown in <a data-type="xref" href="#outbox_table">Figure 9-12</a>.</p>
+<figure><div id="outbox_table" class="figure">
+<img src="assets/lddd_0912.png" alt="Outbox table" width="600" height="114"/>
+<h6><span class="label">Figure 9-12. </span>Outbox table</h6>
+</div></figure>
+
+<p>When using a NoSQL database that doesn’t support multidocument transactions, the outgoing domain events have to be embedded in the aggregate’s record. For example:</p>
+<pre data-code-language="json"><code class="p">{</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"campaign-id"</code><code class="p">:</code><code class="w"> </code><code class="s2">"364b33c3-2171-446d-b652-8e5a7b2be1af"</code><code class="p">,</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"state"</code><code class="p">:</code><code class="w"> </code><code class="p">{</code><code class="w"></code>
+<code class="w">        </code><code class="nt">"name"</code><code class="p">:</code><code class="w"> </code><code class="s2">"Autumn 2017"</code><code class="p">,</code><code class="w"></code>
+<code class="w">        </code><code class="nt">"publishing-state"</code><code class="p">:</code><code class="w"> </code><code class="s2">"DEACTIVATED"</code><code class="p">,</code><code class="w"></code>
+<code class="w">        </code><code class="nt">"ad-locations"</code><code class="p">:</code><code class="w"> </code><code class="p">[</code><code class="w"></code>
+<code class="w">            </code><code class="err">...</code><code class="w"></code>
+<code class="w">        </code><code class="p">]</code><code class="w"></code>
+<code class="w">        </code><code class="err">...</code><code class="w"></code>
+<code class="w">    </code><code class="p">},</code><code class="w"></code>
+<code class="w">    </code><code class="nt">"outbox"</code><code class="p">:</code><code class="w"> </code><code class="p">[</code><code class="w"></code>
+<code class="w">        </code><code class="p">{</code><code class="w"></code>
+<code class="w">            </code><code class="nt">"campaign-id"</code><code class="p">:</code><code class="w"> </code><code class="s2">"364b33c3-2171-446d-b652-8e5a7b2be1af"</code><code class="p">,</code><code class="w"></code>
+<code class="w">            </code><code class="nt">"type"</code><code class="p">:</code><code class="w"> </code><code class="s2">"campaign-deactivated"</code><code class="p">,</code><code class="w"></code>
+<code class="w">            </code><code class="nt">"reason"</code><code class="p">:</code><code class="w"> </code><code class="s2">"Goals met"</code><code class="p">,</code><code class="w"></code>
+<code class="w">            </code><code class="nt">"published"</code><code class="p">:</code><code class="w"> </code><code class="kc">false</code><code class="w"></code>
+<code class="w">        </code><code class="p">}</code><code class="w"></code>
+<code class="w">    </code><code class="p">]</code><code class="w"></code>
+<code class="p">}</code><code class="w"></code></pre>
+
+<p>In this sample, you can see the JSON document’s additional property, <code>outbox</code>, containing a list of domain events that have to be published.</p>
+
+<section data-type="sect3" data-pdf-bookmark="Fetching unpublished events"><div class="sect3" id="fetching_unpublished_events">
+<h3>Fetching unpublished events</h3>
+
+<p>The publishing relay can fetch the new domain events in either a pull-based or push-based manner:</p>
+<dl>
+<dt>Pull: polling publisher</dt>
+<dd>The relay can continuously query the database for unpublished events. Proper indexes have to be in place to minimize the load on the database induced by the constant polling.</dd>
+<dt class="pagebreak-before less_space">Push: transaction log tailing</dt>
+<dd>Here we can leverage the database’s feature set to proactively call the publishing relay when new events are appended. For example, some relational databases enable getting notifications about updated/inserted records by tailing the database’s transaction log. Some NoSQL databases expose committed changes as streams of events (e.g., AWS DynamoDB Streams).</dd>
+</dl>
+
+<p>It’s important to note that the outbox pattern guarantees delivery of the messages at least once: if the relay fails right after publishing a message but before marking it as published in the database, the same message will be published again in the next <span class="keep-together">iteration</span>.</p>
+
+<p>Next, we’ll take a look at how we can leverage the reliable publishing of domain events to overcome some of the limitations imposed by aggregate design principles.</p>
+</div></section>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Saga"><div class="sect2" id="saga-id000122">
+<h2>Saga</h2>
+
+<p>One of the core aggregate design principles is to limit each transaction<a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="aggregates" data-tertiary="saga pattern" id="ch09-sag"></a><a contenteditable="false" data-type="indexterm" data-primary="aggregates" data-secondary="communication" data-tertiary="saga pattern" id="ch09-sag2"></a><a contenteditable="false" data-type="indexterm" data-primary="saga pattern of aggregate communication" id="ch09-sag3"></a><a contenteditable="false" data-type="indexterm" data-primary="domain events" data-secondary="aggregate communication" data-tertiary="saga pattern" id="ch09-sag4"></a><a contenteditable="false" data-type="indexterm" data-primary="commands" data-secondary="saga pattern of aggregate communication" id="ch09-sag5"></a> to a single instance of an aggregate. This ensures that an aggregate’s boundaries are carefully considered and encapsulate a coherent set of business functionality. But there are cases when you have to implement a business process that spans multiple aggregates.</p> 
+
+<p>Consider the following example: when an advertising campaign<a contenteditable="false" data-type="indexterm" data-primary="saga pattern of aggregate communication" data-secondary="example" id="ch09-sag6"></a> is activated, it should automatically submit the campaign’s advertising materials to its publisher. Upon receiving the confirmation from the publisher, the campaign’s publishing state should change to <code>Published</code>. In the case of rejection by the publisher, the campaign should be marked as <code>Rejected</code>.</p>
+
+<p>This flow spans two business entities: advertising campaign and publisher. Co-locating the entities in the same aggregate boundary would definitely be overkill, as these are clearly different business entities that have different responsibilities and may belong to different bounded contexts. Instead, this flow can be implemented as a saga.</p>
+
+<p>A saga is a long-running business process. It’s long running not necessarily<a contenteditable="false" data-type="indexterm" data-primary="saga pattern of aggregate communication" data-secondary="about sagas" id="id1252"></a> in terms of time, as sagas can run from seconds to years, but rather in terms of transactions: a business process that spans multiple transactions. The transactions can be handled not only by aggregates but by any component emitting domain events and responding to commands. The saga listens to the events emitted by the relevant components and issues subsequent commands to the other components. If one of the execution steps fails, the saga is in charge of issuing relevant compensating actions to ensure the system state remains consistent.</p>
+
+<p>Let’s see how the advertising campaign publishing flow from the preceding example can be implemented as a saga, as shown in <a data-type="xref" href="#saga-id000123">Figure 9-13</a>.</p>
+<figure><div id="saga-id000123" class="figure">
+<img src="assets/lddd_0913.png" alt="Saga" width="600" height="258"/>
+<h6><span class="label">Figure 9-13. </span>Saga</h6>
+</div></figure>
+
+<p>To implement the publishing process, the saga has to listen to the <code>Campaign​Act​iva⁠ted</code> event from the <code>Campaign</code> aggregate and the <code>PublishingConfirmed</code> and <code>Pub​lish​ing​Rejected</code> events from the <code>AdPublishing</code> bounded context. The saga has to execute the <code>Submit​Advertisement</code> command on <code>AdPublishing</code>, and the <code>Track​Pub​lishing​Confirmation</code> and <code>TrackPublishingRejection</code> commands on the <span class="keep-together"><code>Campaign</code></span> aggregate. In this example, the <code>TrackPublishingRejection</code> command acts as a compensation action that will ensure that the advertising campaign is not listed as active. Here is the code:</p>
+<pre data-code-language="csharp"><code class="k">public</code> <code class="k">class</code> <code class="nc">CampaignPublishingSaga</code>
+<code class="p">{</code>
+    <code class="k">private</code> <code class="k">readonly</code> <code class="n">ICampaignRepository</code> <code class="n">_repository</code><code class="p">;</code>
+    <code class="k">private</code> <code class="k">readonly</code> <code class="n">IPublishingServiceClient</code> <code class="n">_publishingService</code><code class="p">;</code>
+    <code class="p">...</code>
+
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Process</code><code class="p">(</code><code class="n">CampaignActivated</code> <code class="n">@event</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="kt">var</code> <code class="n">campaign</code> <code class="p">=</code> <code class="n">_repository</code><code class="p">.</code><code class="n">Load</code><code class="p">(</code><code class="n">@event</code><code class="p">.</code><code class="n">CampaignId</code><code class="p">);</code>
+        <code class="kt">var</code> <code class="n">advertisingMaterials</code> <code class="p">=</code> <code class="n">campaign</code><code class="p">.</code><code class="n">GenerateAdvertisingMaterials</code><code class="p">();</code>
+        <code class="n">_publishingService</code><code class="p">.</code><code class="n">SubmitAdvertisement</code><code class="p">(</code><code class="n">@event</code><code class="p">.</code><code class="n">CampaignId</code><code class="p">,</code>
+                                              <code class="n">advertisingMaterials</code><code class="p">);</code>
+    <code class="p">}</code>
+
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Process</code><code class="p">(</code><code class="n">PublishingConfirmed</code> <code class="n">@event</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="kt">var</code> <code class="n">campaign</code> <code class="p">=</code> <code class="n">_repository</code><code class="p">.</code><code class="n">Load</code><code class="p">(</code><code class="n">@event</code><code class="p">.</code><code class="n">CampaignId</code><code class="p">);</code>
+        <code class="n">campaign</code><code class="p">.</code><code class="n">TrackPublishingConfirmation</code><code class="p">(</code><code class="n">@event</code><code class="p">.</code><code class="n">ConfirmationId</code><code class="p">);</code>
+        <code class="n">_repository</code><code class="p">.</code><code class="n">CommitChanges</code><code class="p">(</code><code class="n">campaign</code><code class="p">);</code>
+    <code class="p">}</code>
+
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Process</code><code class="p">(</code><code class="n">PublishingRejected</code> <code class="n">@event</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="kt">var</code> <code class="n">campaign</code> <code class="p">=</code> <code class="n">_repository</code><code class="p">.</code><code class="n">Load</code><code class="p">(</code><code class="n">@event</code><code class="p">.</code><code class="n">CampaignId</code><code class="p">);</code>
+        <code class="n">campaign</code><code class="p">.</code><code class="n">TrackPublishingRejection</code><code class="p">(</code><code class="n">@event</code><code class="p">.</code><code class="n">RejectionReason</code><code class="p">);</code>
+        <code class="n">_repository</code><code class="p">.</code><code class="n">CommitChanges</code><code class="p">(</code><code class="n">campaign</code><code class="p">);</code>
+    <code class="p">}</code>
+<code class="p">}</code></pre>
+
+<p>The preceding example relies on the messaging infrastructure to deliver the relevant events, and it reacts to the events by executing the relevant commands. This is an example of a relatively simple saga: it has no state. You will encounter sagas that do require state management; for example, to track the executed operations so that relevant compensating actions can be issued in case of a failure. In such a situation, the saga can be implemented as an event-sourced aggregate, persisting the complete history of received events and issued commands. However, the command execution logic should be moved out of the saga itself and executed asynchronously, similar to the way domain events are dispatched in the outbox pattern:</p>
+<pre data-code-language="csharp"><code class="k">public</code> <code class="k">class</code> <code class="nc">CampaignPublishingSaga</code>
+<code class="p">{</code>
+    <code class="k">private</code> <code class="k">readonly</code> <code class="n">ICampaignRepository</code> <code class="n">_repository</code><code class="p">;</code>
+    <code class="k">private</code> <code class="k">readonly</code> <code class="n">IList</code><code class="p">&lt;</code><code class="n">IDomainEvent</code><code class="p">&gt;</code> <code class="n">_events</code><code class="p">;</code>
+    <code class="p">...</code>
+
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Process</code><code class="p">(</code><code class="n">CampaignActivated</code> <code class="n">activated</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="kt">var</code> <code class="n">campaign</code> <code class="p">=</code> <code class="n">_repository</code><code class="p">.</code><code class="n">Load</code><code class="p">(</code><code class="n">activated</code><code class="p">.</code><code class="n">CampaignId</code><code class="p">);</code>
+        <code class="kt">var</code> <code class="n">advertisingMaterials</code> <code class="p">=</code> <code class="n">campaign</code><code class="p">.</code><code class="n">GenerateAdvertisingMaterials</code><code class="p">();</code>
+        <code class="kt">var</code> <code class="n">commandIssuedEvent</code> <code class="p">=</code> <code class="k">new</code> <code class="n">CommandIssuedEvent</code><code class="p">(</code>
+            <code class="n">target</code><code class="p">:</code> <code class="n">Target</code><code class="p">.</code><code class="n">PublishingService</code><code class="p">,</code>
+            <code class="n">command</code><code class="p">:</code> <code class="k">new</code> <code class="n">SubmitAdvertisementCommand</code><code class="p">(</code><code class="n">activated</code><code class="p">.</code><code class="n">CampaignId</code><code class="p">,</code>
+            <code class="n">advertisingMaterials</code><code class="p">));</code>
+        
+        <code class="n">_events</code><code class="p">.</code><code class="n">Append</code><code class="p">(</code><code class="n">activated</code><code class="p">);</code>
+        <code class="n">_events</code><code class="p">.</code><code class="n">Append</code><code class="p">(</code><code class="n">commandIssuedEvent</code><code class="p">);</code>
+    <code class="p">}</code>
+
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Process</code><code class="p">(</code><code class="n">PublishingConfirmed</code> <code class="n">confirmed</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="kt">var</code> <code class="n">commandIssuedEvent</code> <code class="p">=</code> <code class="k">new</code> <code class="n">CommandIssuedEvent</code><code class="p">(</code>
+            <code class="n">target</code><code class="p">:</code> <code class="n">Target</code><code class="p">.</code><code class="n">CampaignAggregate</code><code class="p">,</code>
+            <code class="n">command</code><code class="p">:</code> <code class="k">new</code> <code class="n">TrackConfirmation</code><code class="p">(</code><code class="n">confirmed</code><code class="p">.</code><code class="n">CampaignId</code><code class="p">,</code>
+                                           <code class="n">confirmed</code><code class="p">.</code><code class="n">ConfirmationId</code><code class="p">));</code>
+
+        <code class="n">_events</code><code class="p">.</code><code class="n">Append</code><code class="p">(</code><code class="n">confirmed</code><code class="p">);</code>
+        <code class="n">_events</code><code class="p">.</code><code class="n">Append</code><code class="p">(</code><code class="n">commandIssuedEvent</code><code class="p">);</code>
+    <code class="p">}</code>
+
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Process</code><code class="p">(</code><code class="n">PublishingRejected</code> <code class="n">rejected</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="kt">var</code> <code class="n">commandIssuedEvent</code> <code class="p">=</code> <code class="k">new</code> <code class="n">CommandIssuedEvent</code><code class="p">(</code>
+            <code class="n">target</code><code class="p">:</code> <code class="n">Target</code><code class="p">.</code><code class="n">CampaignAggregate</code><code class="p">,</code>
+            <code class="n">command</code><code class="p">:</code> <code class="k">new</code> <code class="n">TrackRejection</code><code class="p">(</code><code class="n">rejected</code><code class="p">.</code><code class="n">CampaignId</code><code class="p">,</code>
+                                        <code class="n">rejected</code><code class="p">.</code><code class="n">RejectionReason</code><code class="p">));</code>
+
+        <code class="n">_events</code><code class="p">.</code><code class="n">Append</code><code class="p">(</code><code class="n">rejected</code><code class="p">);</code>
+        <code class="n">_events</code><code class="p">.</code><code class="n">Append</code><code class="p">(</code><code class="n">commandIssuedEvent</code><code class="p">);</code>
+    <code class="p">}</code>
+<code class="p">}</code></pre>
+
+<p>In this example, the outbox relay will have to execute the commands on relevant endpoints for each instance of <code>CommandIssuedEvent</code>. As in the case of publishing domain events, separating the transition of the saga’s state from the execution of commands ensures that the commands will be executed reliably, even if the process fails at any stage.</p>
+
+<section data-type="sect3" data-pdf-bookmark="Consistency"><div class="sect3" id="consistency-id000044">
+<h3>Consistency</h3>
+
+<p>Although the saga pattern orchestrates a multicomponent transaction,<a contenteditable="false" data-type="indexterm" data-primary="aggregates" data-secondary="consistency and aggregate boundaries" id="id1253"></a> the states of the involved components are eventually consistent. And although the saga will eventually execute the relevant commands, no two transactions can be considered atomic. This correlates with another aggregate design principle:</p>
+<blockquote>
+<p><em>Only the data within an aggregate’s boundaries can be considered strongly consistent. Everything outside is eventually consistent.</em></p>
+</blockquote>
+<p>Use this as a guiding principle to make sure you are not abusing sagas to compensate for improper aggregate boundaries. Business operations that have to belong to the same aggregate require strongly consistent data.</p>
+
+<p>The saga pattern is often confused with another pattern: process manager. Although the implementation is similar, these are different patterns. In the next section, we’ll discuss the purpose of the process manager pattern and how it differs from the saga pattern.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch09-sag" id="id1254"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch09-sag2" id="id1255"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch09-sag3" id="id1256"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch09-sag4" id="id1257"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch09-sag6" id="id1258"></a></p>
+</div></section>
+</div></section>
+
+<section data-type="sect2" data-pdf-bookmark="Process Manager"><div class="sect2" id="process_manager-id000115">
+<h2>Process Manager</h2>
+
+<p>The saga pattern manages simple, linear flow. Strictly<a contenteditable="false" data-type="indexterm" data-primary="domain events" data-secondary="aggregate communication" data-tertiary="process manager" id="ch09-pm4"></a><a contenteditable="false" data-type="indexterm" data-primary="commands" data-secondary="saga pattern of aggregate communication" data-tertiary="process manager versus" id="id1259"></a><a contenteditable="false" data-type="indexterm" data-primary="communication" data-secondary="aggregates" data-tertiary="process manager" id="ch09-pm"></a><a contenteditable="false" data-type="indexterm" data-primary="aggregates" data-secondary="communication" data-tertiary="process manager" id="ch09-pm2"></a><a contenteditable="false" data-type="indexterm" data-primary="process manager pattern of aggregate communication" id="ch09-pm3"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch09-sag5" id="id1260"></a> speaking, a saga matches events to the corresponding commands. In the examples we used to demonstrate saga implementations, we actually implemented simple matching of events to commands:</p>
+<ul>
+<li>
+	<p><code>CampaignActivated</code> event to <code>PublishingService.SubmitAdvertisement</code> <span class="keep-together">command</span></p></li>
+<li>
+	<p><code>PublishingConfirmed</code> event to <code>Campaign.TrackConfirmation</code> command</p></li>
+<li>
+	<p><code>PublishingRejected</code> event to <code>Campaign.TrackRejection</code> command</p></li>
+</ul>
+
+<p>The process manager pattern, shown in <a data-type="xref" href="#process_manager-id000116">Figure 9-14</a>, is intended to implement a business-logic-based process. It is defined as a central processing unit that maintains the state of the sequence and determines the next processing steps.<sup><a data-type="noteref" id="ch01fn40-marker" href="ch09.html#ch01fn40">2</a></sup></p>
+<figure><div id="process_manager-id000116" class="figure">
+<img src="assets/lddd_0914.png" alt="Process manager" width="600" height="299"/>
+<h6><span class="label">Figure 9-14. </span>Process manager</h6>
+</div></figure>
+
+<p>As a simple rule of thumb, if a saga contains if-else statements to choose the correct course of action, it is probably a process manager.</p>
+
+<p>Another difference between a process manager and a saga is that a saga is instantiated implicitly when a particular event is observed, as in <code>CampaignActivated</code> in the preceding examples. A process manager, on the other hand, cannot be bound to a single source event. Instead, it’s a coherent business process consisting of multiple steps. Hence, a process manager has to be instantiated explicitly. Consider the following example:</p>
+
+<p>Booking a business trip starts with the routing algorithm choosing the most cost-effective flight route and asking the employee to approve it. In case the employee prefers a different route, their direct manager needs to approve it. After the flight is booked, one of the preapproved hotels has to be booked for the appropriate dates. If no hotels are available, the flight tickets have to be canceled.</p>
+
+<p>In this example, there is no central entity to trigger the trip booking process. The trip booking is the process and it has to be implemented as a process manager (see <a data-type="xref" href="#trip_booking_process_manager">Figure 9-15</a>).</p>
+<figure><div id="trip_booking_process_manager" class="figure">
+<img src="assets/lddd_0915.png" alt="Trip booking process manager" width="600" height="345"/>
+<h6><span class="label">Figure 9-15. </span>Trip booking process manager</h6>
+</div></figure>
+
+<p>From an implementation perspective, process managers are often implemented as aggregates, either state based or event sourced. For example:</p>
+<pre data-code-language="csharp"><code class="k">public</code> <code class="k">class</code> <code class="nc">BookingProcessManager</code>
+<code class="p">{</code>
+    <code class="k">private</code> <code class="k">readonly</code> <code class="n">IList</code><code class="p">&lt;</code><code class="n">IDomainEvent</code><code class="p">&gt;</code> <code class="n">_events</code><code class="p">;</code>
+    <code class="k">private</code> <code class="n">BookingId</code> <code class="n">_id</code><code class="p">;</code>
+    <code class="k">private</code> <code class="n">Destination</code> <code class="n">_destination</code><code class="p">;</code>
+    <code class="k">private</code> <code class="n">TripDefinition</code> <code class="n">_parameters</code><code class="p">;</code>
+    <code class="k">private</code> <code class="n">EmployeeId</code> <code class="n">_traveler</code><code class="p">;</code>
+    <code class="k">private</code> <code class="n">Route</code> <code class="n">_route</code><code class="p">;</code>
+    <code class="k">private</code> <code class="n">IList</code><code class="p">&lt;</code><code class="n">Route</code><code class="p">&gt;</code> <code class="n">_rejectedRoutes</code><code class="p">;</code>
+    <code class="k">private</code> <code class="n">IRoutingService</code> <code class="n">_routing</code><code class="p">;</code>
+    <code class="p">...</code>
+
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Initialize</code><code class="p">(</code><code class="n">Destination</code> <code class="n">destination</code><code class="p">,</code>
+                           <code class="n">TripDefinition</code> <code class="n">parameters</code><code class="p">,</code>
+                           <code class="n">EmployeeId</code> <code class="n">traveler</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="n">_destination</code> <code class="p">=</code> <code class="n">destination</code><code class="p">;</code>
+        <code class="n">_parameters</code> <code class="p">=</code> <code class="n">parameters</code><code class="p">;</code>
+        <code class="n">_traveler</code> <code class="p">=</code> <code class="n">traveler</code><code class="p">;</code>
+        <code class="n">_route</code> <code class="p">=</code> <code class="n">_routing</code><code class="p">.</code><code class="n">Calculate</code><code class="p">(</code><code class="n">destination</code><code class="p">,</code> <code class="n">parameters</code><code class="p">);</code>
+
+        <code class="kt">var</code> <code class="n">routeGenerated</code> <code class="p">=</code> <code class="k">new</code> <code class="n">RouteGeneratedEvent</code><code class="p">(</code>
+            <code class="n">BookingId</code><code class="p">:</code> <code class="n">_id</code><code class="p">,</code>
+            <code class="n">Route</code><code class="p">:</code> <code class="n">_route</code><code class="p">);</code>
+
+        <code class="kt">var</code> <code class="n">commandIssuedEvent</code> <code class="p">=</code> <code class="k">new</code> <code class="n">CommandIssuedEvent</code><code class="p">(</code>
+            <code class="n">command</code><code class="p">:</code> <code class="k">new</code> <code class="n">RequestEmployeeApproval</code><code class="p">(</code><code class="n">_traveler</code><code class="p">,</code> <code class="n">_route</code><code class="p">)</code>
+        <code class="p">);</code>
+
+        <code class="n">_events</code><code class="p">.</code><code class="n">Append</code><code class="p">(</code><code class="n">routeGenerated</code><code class="p">);</code>
+        <code class="n">_events</code><code class="p">.</code><code class="n">Append</code><code class="p">(</code><code class="n">commandIssuedEvent</code><code class="p">);</code>
+    <code class="p">}</code>
+
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Process</code><code class="p">(</code><code class="n">RouteConfirmed</code> <code class="n">confirmed</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="kt">var</code> <code class="n">commandIssuedEvent</code> <code class="p">=</code> <code class="k">new</code> <code class="n">CommandIssuedEvent</code><code class="p">(</code>
+            <code class="n">command</code><code class="p">:</code> <code class="k">new</code> <code class="n">BookFlights</code><code class="p">(</code><code class="n">_route</code><code class="p">,</code> <code class="n">_parameters</code><code class="p">)</code>
+        <code class="p">);</code>
+
+        <code class="n">_events</code><code class="p">.</code><code class="n">Append</code><code class="p">(</code><code class="n">confirmed</code><code class="p">);</code>
+        <code class="n">_events</code><code class="p">.</code><code class="n">Append</code><code class="p">(</code><code class="n">commandIssuedEvent</code><code class="p">);</code>
+    <code class="p">}</code>
+
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Process</code><code class="p">(</code><code class="n">RouteRejected</code> <code class="n">rejected</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="kt">var</code> <code class="n">commandIssuedEvent</code> <code class="p">=</code> <code class="k">new</code> <code class="n">CommandIssuedEvent</code><code class="p">(</code>
+            <code class="n">command</code><code class="p">:</code> <code class="k">new</code> <code class="n">RequestRerouting</code><code class="p">(</code><code class="n">_traveler</code><code class="p">,</code> <code class="n">_route</code><code class="p">)</code>
+        <code class="p">);</code>
+
+        <code class="n">_events</code><code class="p">.</code><code class="n">Append</code><code class="p">(</code><code class="n">rejected</code><code class="p">);</code>
+        <code class="n">_events</code><code class="p">.</code><code class="n">Append</code><code class="p">(</code><code class="n">commandIssuedEvent</code><code class="p">);</code>
+    <code class="p">}</code>
+
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Process</code><code class="p">(</code><code class="n">ReroutingConfirmed</code> <code class="n">confirmed</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="n">_rejectedRoutes</code><code class="p">.</code><code class="n">Append</code><code class="p">(</code><code class="n">route</code><code class="p">);</code>
+        <code class="n">_route</code> <code class="p">=</code> <code class="n">_routing</code><code class="p">.</code><code class="n">CalculateAltRoute</code><code class="p">(</code><code class="n">destination</code><code class="p">,</code>
+                                            <code class="n">parameters</code><code class="p">,</code> <code class="n">rejectedRoutes</code><code class="p">);</code>
+        <code class="kt">var</code> <code class="n">routeGenerated</code> <code class="p">=</code> <code class="k">new</code> <code class="n">RouteGeneratedEvent</code><code class="p">(</code>
+            <code class="n">BookingId</code><code class="p">:</code> <code class="n">_id</code><code class="p">,</code>
+            <code class="n">Route</code><code class="p">:</code> <code class="n">_route</code><code class="p">);</code>
+        
+        <code class="kt">var</code> <code class="n">commandIssuedEvent</code> <code class="p">=</code> <code class="k">new</code> <code class="n">CommandIssuedEvent</code><code class="p">(</code>
+            <code class="n">command</code><code class="p">:</code> <code class="k">new</code> <code class="n">RequestEmployeeApproval</code><code class="p">(</code><code class="n">_traveler</code><code class="p">,</code> <code class="n">_route</code><code class="p">)</code>
+        <code class="p">);</code>
+
+        <code class="n">_events</code><code class="p">.</code><code class="n">Append</code><code class="p">(</code><code class="n">confirmed</code><code class="p">);</code>
+        <code class="n">_events</code><code class="p">.</code><code class="n">Append</code><code class="p">(</code><code class="n">routeGenerated</code><code class="p">);</code>
+        <code class="n">_events</code><code class="p">.</code><code class="n">Append</code><code class="p">(</code><code class="n">commandIssuedEvent</code><code class="p">);</code>
+    <code class="p">}</code>
+
+    <code class="k">public</code> <code class="k">void</code> <code class="nf">Process</code><code class="p">(</code><code class="n">FlightBooked</code> <code class="n">booked</code><code class="p">)</code>
+    <code class="p">{</code>
+        <code class="kt">var</code> <code class="n">commandIssuedEvent</code> <code class="p">=</code> <code class="k">new</code> <code class="n">CommandIssuedEvent</code><code class="p">(</code>
+            <code class="n">command</code><code class="p">:</code> <code class="k">new</code> <code class="n">BookHotel</code><code class="p">(</code><code class="n">_destination</code><code class="p">,</code> <code class="n">_parameters</code><code class="p">)</code>
+        <code class="p">);</code>
+    
+        <code class="n">_events</code><code class="p">.</code><code class="n">Append</code><code class="p">(</code><code class="n">booked</code><code class="p">);</code>
+        <code class="n">_events</code><code class="p">.</code><code class="n">Append</code><code class="p">(</code><code class="n">commandIssuedEvent</code><code class="p">);</code>
+    <code class="p">}</code>
+
+    <code class="p">...</code>
+<code class="p">}</code></pre>
+
+<p>In this example, the process manager has its explicit ID and persistent state, describing the trip that has to be booked. As in the earlier example of a saga pattern, the process manager subscribes to events that control the workflow (<code>RouteConfirmed</code>, <code>RouteRejected</code>, <code>ReroutingConfirmed</code>, etc.), and it instantiates events of type <code>Com​mand​Issued​Event</code> that will be processed by an outbox relay to execute the actual <span class="keep-together">commands</span>.<a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch09-agc" id="id1261"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch09-agc2" id="id1262"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch09-agc3" id="id1263"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch09-pm" id="id1264"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch09-pm2" id="id1265"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch09-pm3" id="id1266"></a><a contenteditable="false" data-type="indexterm" data-primary="" data-startref="ch09-pm4" id="id1267"></a></p>
+</div></section>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Conclusion"><div class="sect1" id="conclusion-id000033">
+<h1>Conclusion</h1>
+
+<p>In this chapter, you learned the different patterns for integrating a system’s components. The chapter began by exploring patterns for model translations that can be used to implement anticorruption layers or open-host services. We saw that translations can be handled on the fly or can follow a more complex logic, requiring state tracking.</p>
+
+<p>The outbox pattern is a reliable way to publish aggregates’ domain events. It ensures that domain events are always going to be published, even in the face of different process failures.</p>
+
+<p>The saga pattern can be used to implement simple cross-component business processes. More complex business processes can be implemented using the process manager pattern. Both patterns rely on asynchronous reactions to domain events and the issuing of commands.</p>
+</div></section>
+
+<section data-type="sect1" data-pdf-bookmark="Exercises"><div class="sect1" id="exercises-id000078">
+<h1>Exercises</h1>
+<ol>
+          <li>
+            <p>Which bounded context integration pattern requires implementation of model transformation logic? Select all that apply.</p>
+            <ol type="a">
+              <li>
+                <p>Conformist</p>
+              </li>
+              <li>
+                <p>Anticorruption layer</p>
+              </li>
+              <li>
+                <p>Open-host service</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>What is the goal of the outbox pattern?</p>
+            <ol type="a">
+              <li>
+                <p>Decouple messaging infrastructure from the system’s business logic layer</p>
+              </li>
+              <li>
+                <p>Reliably publish messages</p>
+              </li>
+              <li>
+                <p>Support implementation of the event-sourced domain model pattern</p>
+              </li>
+            </ol>
+          </li>
+          <li class="pagebreak-before">
+            <p>Apart from publishing messages to a message bus, are there other possible use cases for the outbox pattern?</p>
+            <ol type="a">
+              <li>
+                <p>Yes</p>
+              </li>
+              <li>
+                <p>No</p>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>What are the differences between the saga and process manager patterns? Select all that apply.</p>
+            <ol type="a">
+              <li>
+                <p>A process manager requires explicit instantiation, while a saga is executed when a relevant domain event is published.</p>
+              </li>
+              <li>
+                <p>Contrary to a saga, a process manager never requires persistence of its execution state.</p>
+              </li>
+              <li>
+                <p>A saga requires the components it manipulates to implement the event sourcing pattern, while a process manager doesn’t.</p>
+              </li>
+              <li>
+                <p>The process manager pattern is suitable for complex business workflows.</p>
+              </li>
+            </ol>
+          </li>
+        </ol>
+</div></section>
+<div data-type="footnotes"><p data-type="footnote" id="ch01fn39"><sup><a href="ch09.html#ch01fn39-marker">1</a></sup> Richardson, C. (2019). <em>Microservice Patterns: With Examples in Java</em>. New York: Manning Publications.</p><p data-type="footnote" id="ch01fn40"><sup><a href="ch09.html#ch01fn40-marker">2</a></sup> Hohpe, G., &amp; Woolf, B. (2003). <em>Enterprise Integration Patterns: Designing, Building, and Deploying Messaging Solutions</em>. Boston: Addison-Wesley.</p></div></div></section></div>
+</div>
+</body>
+</html>
