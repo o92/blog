@@ -10,8 +10,18 @@ Prior Model:
   source: "product-operating-model/01-introduction/01-terms.md#Prior Model"
   aliases: ["先前模型"]
 
+IT Model:
+  summary: "IT 模型：业务点菜、技术接单的成本中心式运作"
+  source: "product-operating-model/01-introduction/01-terms.md#IT Model"
+  aliases: ["IT 模型"]
+
+Project Model:
+  summary: "项目模型：按项目拨款组队结项，知识易流失、技术债高发"
+  source: "product-operating-model/01-introduction/01-terms.md#Project Model"
+  aliases: ["项目模型"]
+
 Feature Factory:
-  summary: "功能工厂：高效交付功能却缺少客户与业务结果"
+  summary: "功能工厂：很会交付功能，但看不到客户价值与业务结果"
   source: "product-operating-model/01-introduction/01-terms.md#Feature Factory"
   aliases: ["功能工厂"]
 
@@ -31,7 +41,7 @@ Changing How You Decide Which Problems to Solve:
   aliases: ["改变如何选题"]
 
 Empowered Product Team:
-  summary: "赋能产品团队：拿问题与结果，跨职能发现并交付方案"
+  summary: "赋能产品团队：拿问题与结果，跨职能自己发现并交付方案"
   source: "product-operating-model/02-transformation-defined/01-terms.md#Empowered Product Team"
   aliases: ["赋能产品团队", "赋能团队"]
 
@@ -40,38 +50,58 @@ Feature Team:
   source: "product-operating-model/02-transformation-defined/01-terms.md#Feature Team"
   aliases: ["功能团队"]
 
+Orphaned Feature:
+  summary: "孤儿功能：已上线却几乎无价值，也无人再迭代或下线的功能"
+  source: "product-operating-model/02-transformation-defined/01-terms.md#Orphaned Feature"
+  aliases: ["孤儿功能"]
+
 Product Discovery:
-  summary: "产品发现：低成本快速验证想法，优化 time to money"
+  summary: "产品发现：用原型等低成本方式快速验证，找到值得构建的方案"
   source: "product-operating-model/02-transformation-defined/01-terms.md#Product Discovery"
   aliases: ["产品发现", "发现"]
+
+Time to Money:
+  summary: "出结果时间：从动手到达成必要业务结果要多久"
+  source: "product-operating-model/02-transformation-defined/01-terms.md#Time to Money"
+  aliases: ["出结果时间", "达成结果的时间"]
+
+Time to Market:
+  summary: "上市时间：多快把东西发出去；不管有没有业务结果就会变成功能工厂"
+  source: "product-operating-model/02-transformation-defined/01-terms.md#Time to Market"
+  aliases: ["上市时间", "上线时间"]
 
 Fake Agile:
   summary: "假敏捷：仪式齐全但无小步可靠发布之实"
   source: "product-operating-model/02-transformation-defined/01-terms.md#Fake Agile"
   aliases: ["假敏捷"]
 
+Big-Bang Release:
+  summary: "大爆炸发布：大量变更捆成一次上线，难测难回滚"
+  source: "product-operating-model/02-transformation-defined/01-terms.md#Big-Bang Release"
+  aliases: ["大爆炸发布", "大爆炸"]
+
 Product Manager:
-  summary: "产品经理：扛价值与商业可行性风险，对 outcomes 问责"
+  summary: "产品经理：承担价值与商业可行性风险，对业务结果问责"
   source: "product-operating-model/03-competencies/01-terms.md#Product Manager"
   aliases: ["产品经理", "PM"]
 
 Product Designer:
-  summary: "产品设计师：扛可用性与整段体验，参与发现"
+  summary: "产品设计师：承担可用性与整段体验，参与发现"
   source: "product-operating-model/03-competencies/01-terms.md#Product Designer"
   aliases: ["产品设计师"]
 
 Tech Lead:
-  summary: "技术负责人：扛可行性与交付，保障小步可靠发布"
+  summary: "技术负责人：承担技术可行性与交付，保障小步可靠发布"
   source: "product-operating-model/03-competencies/01-terms.md#Tech Lead"
   aliases: ["技术负责人"]
 
 Product Leaders:
-  summary: "产品领导者：产品/设计/工程管理者，教练并给战略上下文"
+  summary: "产品领导者：产品/设计/工程管理者，辅导带教并给战略上下文"
   source: "product-operating-model/03-competencies/01-terms.md#Product Leaders"
   aliases: ["产品领导者"]
 
 Product Triad:
-  summary: "产品铁三角：PM + Designer + Tech Lead"
+  summary: "产品铁三角：PM + Designer + Tech Lead，缺一难对结果问责"
   source: "product-operating-model/03-competencies/01-terms.md#Product Triad / Troika"
   aliases: ["产品铁三角", "Troika"]
 
@@ -79,6 +109,16 @@ Outcomes over Output:
   summary: "结果重于产出：为业务与客户结果负责，而非功能件数"
   source: "product-operating-model/04-concepts/01-terms.md#Outcomes over Output"
   aliases: ["结果重于产出"]
+
+Output:
+  summary: "产出：功能数、是否按时交付等交付物本身"
+  source: "product-operating-model/04-concepts/01-terms.md#Output"
+  aliases: ["产出"]
+
+Outcome:
+  summary: "结果：客户与业务是否真的变好（转化、收入、降本等）"
+  source: "product-operating-model/04-concepts/01-terms.md#Outcome"
+  aliases: ["业务结果", "结果"]
 
 Product Vision:
   summary: "产品愿景：客户中心的未来图景"
@@ -90,10 +130,45 @@ Product Strategy:
   source: "product-operating-model/04-concepts/01-terms.md#Product Strategy"
   aliases: ["产品策略"]
 
+Placing Bets:
+  summary: "下策略赌注：把策略当成可调整的投资判断而非假确定性"
+  source: "product-operating-model/04-concepts/01-terms.md#Placing Bets"
+  aliases: ["下策略赌注", "策略赌注", "赌注"]
+
 Product Culture:
   summary: "产品文化：原则/信任/创新/学习优先于流程控制与虚假可预测"
   source: "product-operating-model/04-concepts/01-terms.md#Product Culture"
   aliases: ["产品文化"]
+
+Value Risk:
+  summary: "价值风险：做出来客户不觉得够好，不愿买/换"
+  source: "product-operating-model/04-concepts/01-terms.md#Value Risk"
+  aliases: ["价值风险"]
+
+Usability Risk:
+  summary: "可用性风险：用户搞不懂或学不会"
+  source: "product-operating-model/04-concepts/01-terms.md#Usability Risk"
+  aliases: ["可用性风险"]
+
+Feasibility Risk:
+  summary: "技术可行性风险：技能/时间/技术做不出或运维不起"
+  source: "product-operating-model/04-concepts/01-terms.md#Feasibility Risk"
+  aliases: ["技术可行性风险", "可行性风险"]
+
+Viability Risk:
+  summary: "商业可行性风险：合规/销售/成本等约束下公司经营不起"
+  source: "product-operating-model/04-concepts/01-terms.md#Viability Risk"
+  aliases: ["商业可行性风险"]
+
+Instrumentation:
+  summary: "埋点：发布时带遥测，否则无法验证结果"
+  source: "product-operating-model/04-concepts/01-terms.md#Instrumentation"
+  aliases: ["埋点"]
+
+Uncoupled Releases:
+  summary: "解耦发布：团队可独立小步上线，不绑大爆炸火车"
+  source: "product-operating-model/04-concepts/01-terms.md#Uncoupled Releases"
+  aliases: ["解耦发布"]
 
 Customer Discovery Program:
   summary: "客户发现计划：与参考客户验证问题与方案的机制"
