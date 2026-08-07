@@ -8,10 +8,7 @@
     "build": "hugo --gc --minify && node scripts/glossary-inject.mjs && npm run pagefind",
     "build:pages": "hugo --gc --minify --baseURL https://o92.github.io/blog/ && node scripts/glossary-inject.mjs && npm run pagefind",
     "dev": "node scripts/dev.mjs",
-    "preview": "npm run build && npx --yes serve public -p 1313",
-    "hooks:install": "bash scripts/audit/install.sh",
-    "audit": "node scripts/audit/run.mjs",
-    "audit:precommit": "node scripts/audit/run.mjs --commit"
+    "preview": "npm run build && npx --yes serve public -p 1313"
   },
   "dependencies": {
     "@iarna/toml": "^2.2.5",
