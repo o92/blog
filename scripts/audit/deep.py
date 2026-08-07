@@ -25,6 +25,7 @@ SKIP_DIR_NAMES = {
     "resources",
     ".cursor",
     "agent-transcripts",
+    "sources",  # 原书 EPUB 等仅供本地/AI，不上站；体积常 >1MB
 }
 
 

@@ -9,22 +9,22 @@ weight = 3
 - **不是**：一套固定流程、一种「唯一正确」的造法、产品部夺权（故作者不爱 product-led / product-centric 等易被误解的标签）。
 - **customer-driven** 一词已被用滥，效用下降。
 
-本质：持续做出 **customers love, yet work for your business** 的技术驱动方案；从财务看，是把技术投资回报做到最大。
+本质：持续做出「客户爱用、且对公司可行」的技术驱动方案；从财务看，是把技术投入的回报做到最大。
 
 ### 与 Prior Model 对照
 
 问「谁真正在开车」：
 
-- **IT Model**：「业务」提需求，技术组织是成本中心式服务台。
-- **Project Model**：按项目拨款、组队、结项走人——学到的知识大多流失，技术债高发（像装修给别人住 vs 自己住）。
-- **Feature-Team Model**：干系人各自塞功能路线图；团队只对 output 负责。
+- **IT Model**
+- **Project Model**
+- **Feature-Team Model**（干系人塞功能路线图；团队只对 output 负责）
 
-本书把你离开的叫 **prior model**，要去的叫 **product operating model / product model**。三维精确定义见 PART II。
+本书把你离开的叫 **Prior Model**，要去的叫 **Product Operating Model**。三维精确定义见 PART II。
 
 ### 「什么算产品？」
 
 三层常见困惑：
 
 1. **非直接面向付费客户**（内部工具、平台、后台）——仍是产品。
-2. **只是大系统一角**（team topology）——仍按产品对待。
+2. **只覆盖大系统的一块**（由 **Team Topology** 决定边界）——那一块仍按产品对待。
 3. **技术全外包、只做供应商管理**（自己没有工程师在构建产品）——本模型通常不适用；它假设你在用自有技术团队持续做产品。

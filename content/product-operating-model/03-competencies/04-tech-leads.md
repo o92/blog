@@ -3,7 +3,7 @@ title = "Tech Leads"
 weight = 4
 +++
 
-Tech Lead 不是「写代码最多的人」头衔，而是对 **feasibility** 与 **delivery** 问责的角色：
+Tech Lead 不是「写代码最多的人」头衔，而是对 **Feasibility Risk** 与 **Product Delivery** 问责的角色：
 
 - 确保方案在约束下可实现，并看到技术可能性以贡献创新。
 - 对测试、部署、监控、回滚等交付基础设施与工程实践负责，使「每两周或更频的可靠发布」成为现实。

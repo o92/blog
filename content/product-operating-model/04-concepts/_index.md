@@ -5,4 +5,4 @@ weight = 4
 final = true
 +++
 
-PART IV：五大概念块——Product Teams、Strategy、Discovery、Delivery、Culture——各有一组原则。
+PART IV：五大概念块——**Product Teams**、**Product Strategy**、**Product Discovery**、**Product Delivery**、**Product Culture**——各有一组原则。

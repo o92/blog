@@ -5,7 +5,7 @@ weight = 3
 
 ### Trainline（PART V / 相关章节）
 
-KKR 收购后认为业务被低估，关键杠杆是迁到 product model。引入强 CEO（Clare Gilmartin），再配齐工程与产品负责人；CPO Jon Moore 的第一人称叙述强调：**组织每一块都要改**才够得着期望轨迹——从遗产票务分销转向强消费科技产品公司。阅读焦点：私募催生的 CEO 站台、产品/工程领导到位、遗业监管约束下如何仍做技术驱动创新。
+KKR 收购后认为业务被低估，关键杠杆是迁到 **Product Operating Model**。引入强 CEO（Clare Gilmartin），再配齐工程与 **Product Leaders**；CPO Jon Moore 的第一人称叙述强调：**组织每一块都要改**才够得着期望轨迹——从遗产票务分销转向强消费科技产品公司。阅读焦点：私募催生的 CEO 站台、产品/工程领导到位、**遗产行业**监管约束下如何仍做技术驱动创新。
 
 ### Datasite（PART VII / 相关章节）
 

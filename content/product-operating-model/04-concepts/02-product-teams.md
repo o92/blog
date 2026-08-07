@@ -7,13 +7,13 @@ weight = 2
 
 ### Empowered with Problems to Solve
 
-赋能 = 分到客户或公司问题，并由团队找出最佳解——不是领取功能/项目清单。跨职能 = 具备解题所需能力覆盖（通常 PM + Designer + Engineers；铁三角分工见能力章）。不能要求团队对结果问责却又不给齐技能。
+**Empowered Product Team**：拿问题找解，不是领功能清单。跨职能要齐（通常 Product Manager + Product Designer + Engineers；见 **Product Triad**）。不能要求对结果问责却又不给齐技能。
 
-产品领导负责辅导带教与战略上下文；障碍清除是日常。人不会自动变成赋能成员。
+**Product Leaders** 负责辅导带教与战略上下文；障碍清除是日常。人不会自动变成赋能成员。
 
 ### Outcomes over Output
 
-客户不认为你的方案显著更好 → 失败；功能发得多但无业务结果 → 失败。看数据的团队甚至会**减功能**（尤其移动端屏效争夺注意力）——只对 output 负责的团队很少认真考虑删除。
+客户不认为你的方案显著更好 → 失败；功能发得多但无业务结果 → 失败。看数据的团队甚至会**减功能**（尤其移动端屏幕空间与注意力有限）——只对 **Output** 负责的团队很少认真考虑删除。
 
 ### Sense of Ownership
 

@@ -10,6 +10,11 @@ Prior Model:
   source: "product-operating-model/01-introduction/01-terms.md#Prior Model"
   aliases: ["先前模型"]
 
+Stakeholder:
+  summary: "干系人：销售/财务/业务线等内部相关方；协作提供约束，而非单向下达功能清单"
+  source: "product-operating-model/01-introduction/01-terms.md#Stakeholder"
+  aliases: ["干系人", "stakeholders"]
+
 IT Model:
   summary: "IT 模型：业务点菜、技术接单的成本中心式运作"
   source: "product-operating-model/01-introduction/01-terms.md#IT Model"
@@ -41,12 +46,12 @@ Changing How You Decide Which Problems to Solve:
   aliases: ["改变如何选题"]
 
 Empowered Product Team:
-  summary: "赋能产品团队：拿问题与结果，跨职能自己发现并交付方案"
+  summary: "赋能产品团队：拿问题与期望结果，自己发现有价值且对公司可行的解"
   source: "product-operating-model/02-transformation-defined/01-terms.md#Empowered Product Team"
   aliases: ["赋能产品团队", "赋能团队"]
 
 Feature Team:
-  summary: "功能团队：实现干系人排好的功能，通常只对产出负责"
+  summary: "功能团队：接干系人功能清单施工，只对做没做完负责，不对业务结果负责"
   source: "product-operating-model/02-transformation-defined/01-terms.md#Feature Team"
   aliases: ["功能团队"]
 
@@ -90,6 +95,21 @@ Product Manager:
   source: "product-operating-model/03-competencies/01-terms.md#Product Manager"
   aliases: ["产品经理", "PM"]
 
+Business Analyst:
+  summary: "业务分析师：整理需求与规格；角色窄于产品模型里的 Product Manager"
+  source: "product-operating-model/03-competencies/01-terms.md#Business Analyst"
+  aliases: ["业务分析师", "BA"]
+
+Product Owner:
+  summary: "Product Owner：Agile/Scrum 常见角色，多侧重待办与交付，通常达不到赋能团队 Product Manager 标尺"
+  source: "product-operating-model/03-competencies/01-terms.md#Product Owner"
+  aliases: ["PO"]
+
+Project Manager:
+  summary: "项目经理：管范围进度资源交付，不对产品价值与业务结果问责"
+  source: "product-operating-model/03-competencies/01-terms.md#Project Manager"
+  aliases: ["项目经理", "Program Manager"]
+
 Product Designer:
   summary: "产品设计师：承担可用性与整段体验，参与发现"
   source: "product-operating-model/03-competencies/01-terms.md#Product Designer"
@@ -103,12 +123,12 @@ Tech Lead:
 Product Leaders:
   summary: "产品领导者：产品/设计/工程管理者，辅导带教并给战略上下文"
   source: "product-operating-model/03-competencies/01-terms.md#Product Leaders"
-  aliases: ["产品领导者"]
+  aliases: ["产品领导者", "产品领导"]
 
 Product Triad:
-  summary: "产品铁三角：PM + Designer + Tech Lead，缺一难对结果问责"
+  summary: "产品铁三角：Product Manager + Product Designer + Tech Lead，缺一难对结果问责"
   source: "product-operating-model/03-competencies/01-terms.md#Product Triad / Troika"
-  aliases: ["产品铁三角", "Troika"]
+  aliases: ["产品铁三角", "铁三角", "Troika"]
 
 Outcomes over Output:
   summary: "结果重于产出：为业务与客户结果负责，而非功能件数"
@@ -123,12 +143,17 @@ Output:
 Outcome:
   summary: "结果：客户与业务是否真的变好（转化、收入、降本等）"
   source: "product-operating-model/04-concepts/01-terms.md#Outcome"
-  aliases: ["业务结果"]
+  aliases: ["业务结果", "outcomes"]
 
 Product Vision:
   summary: "产品愿景：客户中心的未来图景"
   source: "product-operating-model/04-concepts/01-terms.md#Product Vision"
   aliases: ["产品愿景"]
+
+Team Topology:
+  summary: "团队拓扑：各产品团队负责什么、边界与彼此依赖如何切分"
+  source: "product-operating-model/01-introduction/01-terms.md#Team Topology"
+  aliases: ["团队拓扑"]
 
 Product Strategy:
   summary: "产品策略：洞察驱动、有焦点的透明赌注"
@@ -145,25 +170,35 @@ Product Culture:
   source: "product-operating-model/04-concepts/01-terms.md#Product Culture"
   aliases: ["产品文化"]
 
+Product Teams:
+  summary: "产品团队：赋能、跨职能的基本单位；拿问题与结果而非功能清单"
+  source: "product-operating-model/04-concepts/01-terms.md#Product Teams"
+  aliases: ["产品团队"]
+
 Value Risk:
   summary: "价值风险：做出来客户不觉得够好，不愿买/换"
   source: "product-operating-model/04-concepts/01-terms.md#Value Risk"
-  aliases: ["价值风险"]
+  aliases: ["价值风险", "value"]
 
 Usability Risk:
   summary: "可用性风险：用户搞不懂或学不会"
   source: "product-operating-model/04-concepts/01-terms.md#Usability Risk"
-  aliases: ["可用性风险"]
+  aliases: ["可用性风险", "usability"]
 
 Feasibility Risk:
   summary: "技术可行性风险：技能/时间/技术做不出或运维不起"
   source: "product-operating-model/04-concepts/01-terms.md#Feasibility Risk"
-  aliases: ["技术可行性风险", "可行性风险"]
+  aliases: ["技术可行性风险", "可行性风险", "feasibility"]
 
 Viability Risk:
   summary: "商业可行性风险：合规/销售/成本等约束下公司经营不起"
   source: "product-operating-model/04-concepts/01-terms.md#Viability Risk"
-  aliases: ["商业可行性风险"]
+  aliases: ["商业可行性风险", "viability"]
+
+Product Delivery:
+  summary: "产品交付：可靠构建并发布；小步发布、自动化、监控与回滚"
+  source: "product-operating-model/04-concepts/01-terms.md#Product Delivery"
+  aliases: ["产品交付", "delivery"]
 
 Instrumentation:
   summary: "埋点：发布时带遥测，否则无法验证结果"
@@ -209,6 +244,11 @@ Product Coach:
   summary: "产品教练：帮助建立产品模型能力的内外部教练"
   source: "product-operating-model/06-techniques/01-terms.md#Product Coach"
   aliases: ["产品教练"]
+
+Product Delivery Coach:
+  summary: "交付教练：教测试/发布自动化与 CI/CD，把小步可靠发布做起来"
+  source: "product-operating-model/06-techniques/01-terms.md#Product Delivery Coach"
+  aliases: ["交付教练"]
 
 Objection Handling:
   summary: "异议应对：按角色回应转型中的典型反对意见"

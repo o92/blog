@@ -17,7 +17,7 @@ weight = 5
 
 ### Monitoring
 
-主动发现异常， ideally 先于客户。
+主动发现异常，最好能比客户更早发现。
 
 ### Deployment Infrastructure
 
