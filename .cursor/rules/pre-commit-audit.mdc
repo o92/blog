@@ -54,6 +54,8 @@ npm run audit          # 本地试跑（跳过 macOS 对话框需非 Darwin 或 
 
 词条高亮是 **构建期** `glossary-inject` 写入 HTML 的。
 
-- 推荐：`npm run dev`（hugo server 写盘后自动再注入）
+- 推荐：`npm run dev`（固定 **1313**；启动前会清掉旧 dev/占用，避免 Hugo 自动换端口）
+- 换端口：`PORT=1314 npm run dev`
 - 不要裸跑 `hugo server`：重建会覆盖 `public/`，泡泡会全部消失
 - 生产：`npm run build`（含 inject）
+- 注意：pre-commit 审计会用 Pages 的 `/blog` baseURL 重建 `public/`；本地看样式请再跑一次 `npm run dev`
