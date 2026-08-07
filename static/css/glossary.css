@@ -4,10 +4,10 @@
   position: relative;
   cursor: help;
   color: inherit;
-  padding: 0.05em 0.18em;
-  margin: 0 -0.05em;
+  padding: 0.1em 0.28em;
+  margin: 0 -0.08em;
   border-radius: 0.2em;
-  background: color-mix(in srgb, var(--link) 12%, transparent);
+  background: var(--glossary-bg);
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
   transition: background 0.12s ease;
@@ -15,7 +15,7 @@
 
 .glossary-term:hover,
 .glossary-term.is-tip-open {
-  background: color-mix(in srgb, var(--link) 22%, transparent);
+  background: var(--glossary-bg-hover);
 }
 
 .glossary-tip {

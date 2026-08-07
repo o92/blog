@@ -219,7 +219,7 @@ body.search-open {
 }
 
 .site-search__result-excerpt mark {
-  background: color-mix(in srgb, var(--link) 22%, transparent);
+  background: var(--glossary-bg-hover);
   color: var(--body-fg);
   border-radius: 0.15rem;
   padding: 0 0.1em;

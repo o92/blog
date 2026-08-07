@@ -19,6 +19,9 @@
   --link: #0070f3;
   --link-visited: #0070f3;
   --link-active: #0070f3;
+  /* 术语/搜索 mark：浅色链色淡底；深色见下方灰底 token */
+  --glossary-bg: color-mix(in srgb, var(--link) 12%, var(--body-bg));
+  --glossary-bg-hover: color-mix(in srgb, var(--link) 22%, var(--body-bg));
 
   --tip-bg: #111111;
   --tip-fg: #ededed;
@@ -60,6 +63,8 @@
     --link: #3291ff;
     --link-visited: #3291ff;
     --link-active: #52a8ff;
+    --glossary-bg: #3a3a3a;
+    --glossary-bg-hover: #4a4a4a;
     --sidebar-bg: #0a0a0a;
     --sidebar-hover: #171717;
     --sidebar-active-bg: #0c1929;
@@ -77,6 +82,8 @@ html[data-theme="dark"] {
   --link: #3291ff;
   --link-visited: #3291ff;
   --link-active: #52a8ff;
+  --glossary-bg: #3a3a3a;
+  --glossary-bg-hover: #4a4a4a;
   --sidebar-bg: #0a0a0a;
   --sidebar-hover: #171717;
   --sidebar-active-bg: #0c1929;
