@@ -3,11 +3,11 @@ title = "Product Managers"
 weight = 2
 +++
 
-作者直言：这是**最难建立**的新能力。公司里多半已有「产品经理」头衔，却常从 **Product Owner** / **Business Analyst** / **Project Manager** 改名而来——**同名不同职**。
+作者直言：建立真正的 **Product Manager** 能力，是转型里**最难**的一环。公司里多半已有「产品经理」头衔，却常从 **Product Owner** / **Business Analyst** / **Project Manager** 改名而来——**同名不同职**。
 
-### Prior vs Product Model
+### Prior Model vs 产品模型
 
-Prior Model 里，价值与商业可行性往往隐式落在干系人身上。产品模型里，**Product Manager** **显式**负责 **Value Risk** + **Viability Risk**。
+**Prior Model** 里，价值与商业可行性往往隐式落在干系人身上。产品模型里，**Product Manager** **显式**负责 **Value Risk** + **Viability Risk**。
 
 - **懂客户**：用户如何选择与使用（定性与定量）、市场、竞争、技术与行业趋势。
 - **懂生意**：产品如何被资助、变现、制造、营销、销售、交付、服务，以及法律/合同/合规约束。

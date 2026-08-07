@@ -151,6 +151,42 @@ function contentFileToPermalink(absFile) {
 }
 
 /**
+ * 若内容页挂在 final=true 祖先下，站上真实正文在祖先合并页。
+ * 「显示更多」应链到合并页，而不是只会 redirect 的 stub 子页。
+ */
+function findFinalAncestorIndex(absFile) {
+  const contentRoot = path.join(root, config.contentDir);
+  let dir = path.dirname(absFile);
+  for (;;) {
+    const rel = path.relative(contentRoot, dir);
+    if (!rel || rel.startsWith("..")) break;
+    for (const name of ["_index.md", "_index.markdown", "index.md", "index.markdown"]) {
+      const idx = path.join(dir, name);
+      if (!fs.existsSync(idx)) continue;
+      const { data } = parseFrontMatter(fs.readFileSync(idx, "utf8"));
+      if (data && data.final === true) return idx;
+    }
+    const parent = path.dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  return null;
+}
+
+/** 读者实际打开的 permalink（合并页优先） */
+function contentFileToCanonicalPermalink(absFile) {
+  const finalIdx = findFinalAncestorIndex(absFile);
+  return contentFileToPermalink(finalIdx || absFile);
+}
+
+/** 与 layouts/partials/final-anchor.html 一致：part-<ContentBaseName> */
+function partAnchorForContentFile(absFile) {
+  const base = path.basename(absFile).replace(/\.md(arkdown)?$/i, "");
+  if (base === "_index" || base === "index") return null;
+  return `part-${anchorize(base)}`;
+}
+
+/**
  * Extract markdown body under a heading (same or higher level ends section).
  * Returns { text, heading } or null.
  */
@@ -211,7 +247,8 @@ function resolveSource(source) {
   }
   const rawMd = fs.readFileSync(abs, "utf8");
   const { content } = parseFrontMatter(rawMd);
-  const permalink = contentFileToPermalink(abs);
+  const permalink = contentFileToCanonicalPermalink(abs);
+  const underFinal = Boolean(findFinalAncestorIndex(abs));
   let excerpt = "";
   let moreHref = permalink;
 
@@ -219,6 +256,10 @@ function resolveSource(source) {
     const sec = extractHeadingSection(content, heading);
     if (!sec) {
       console.warn(`[glossary] heading not found in ${filePart}: #${heading}`);
+      if (underFinal) {
+        const part = partAnchorForContentFile(abs);
+        if (part) moreHref = `${permalink}#${part}`;
+      }
     } else {
       const t = truncateText(sec.text, EXCERPT_MAX);
       excerpt = t.text;
@@ -232,7 +273,12 @@ function resolveSource(source) {
       .trim();
     const t = truncateText(plain, EXCERPT_MAX);
     excerpt = t.text;
-    moreHref = permalink;
+    if (underFinal) {
+      const part = partAnchorForContentFile(abs);
+      moreHref = part ? `${permalink}#${part}` : permalink;
+    } else {
+      moreHref = permalink;
+    }
   }
 
   // Always offer 显示更多 when source is set

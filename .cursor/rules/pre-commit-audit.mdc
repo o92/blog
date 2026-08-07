@@ -7,6 +7,12 @@ alwaysApply: true
 
 Cursor **Commit** → `.githooks/pre-commit` → `scripts/audit/run.sh`。
 
+**注意**：左侧 Source Control 若一秒内就提交成功、且没有 macOS「确认提交」弹窗，说明 hook 没跑到（可看 `.git/hook-invocations.log` 有无新行）。此时请用终端：
+
+```bash
+git add -A && git commit -m "…"
+```
+
 审计对象是**磁盘上的完整工作区**（含未暂存）。目的：保证全库随时可构建、可发布。
 
 额外约束：若某文件**已暂存但仍有未暂存修改**，直接失败——防止「工作区审计通过、实际提交内容却不同」。

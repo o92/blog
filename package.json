@@ -9,7 +9,7 @@
     "build:pages": "hugo --gc --minify --baseURL https://o92.github.io/blog/ && node scripts/glossary-inject.mjs && npm run pagefind",
     "dev": "node scripts/dev.mjs",
     "preview": "npm run build && npx --yes serve public -p 1313",
-    "hooks:install": "git config core.hooksPath .githooks && chmod +x .githooks/pre-commit scripts/audit/run.sh scripts/git-pre-commit-audit.sh scripts/audit/deep.py && git config --get core.hooksPath",
+    "hooks:install": "bash scripts/install-hooks.sh",
     "audit": "CONFIRM_COMMIT=1 bash scripts/audit/run.sh",
     "audit:precommit": "npm run audit"
   },

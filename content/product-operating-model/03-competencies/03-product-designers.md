@@ -5,7 +5,7 @@ weight = 3
 
 ### How the Product Works
 
-设计师对「产品如何被理解与使用」负责：信息架构、交互、视觉与体验一致性。不是开发完成后再贴皮。
+**Product Designer** 对「产品如何被理解与使用」负责：信息架构、交互、视觉与体验一致性。不是开发完成后再贴皮。
 
 ### Product Discovery
 

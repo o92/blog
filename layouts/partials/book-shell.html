@@ -19,7 +19,13 @@
 <script>
   (function () {
     var a = document.getElementById("final-redirect");
-    if (a) location.replace(a.href);
+    if (!a) return;
+    // glossary「显示更多」等会带 #具体标题；不要冲掉成仅 #part-…
+    var dest = new URL(a.getAttribute("href"), location.href);
+    if (location.hash && location.hash.length > 1) {
+      dest.hash = location.hash;
+    }
+    location.replace(dest.pathname + dest.search + dest.hash);
   })();
 </script>
 {{ else }}

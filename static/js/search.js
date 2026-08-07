@@ -77,6 +77,37 @@
     });
   }
 
+  /** final 合并页很长：优先用 Pagefind sub_results（带 #标题锚点） */
+  function flattenToDeepLinks(pageRows) {
+    var out = [];
+    pageRows.forEach(function (data) {
+      var pageTitle = (data.meta && data.meta.title) || data.url || "";
+      var pageUrl = data.url || "";
+      var subs = data.sub_results || [];
+      var withHash = subs.filter(function (s) {
+        return (s.url || "").indexOf("#") >= 0;
+      });
+      if (withHash.length) {
+        withHash.slice(0, 3).forEach(function (s) {
+          out.push({
+            url: s.url,
+            title: pageTitle + " · " + (s.title || "本节"),
+            meta: pageUrl,
+            excerpt: s.excerpt || data.excerpt || "",
+          });
+        });
+      } else {
+        out.push({
+          url: pageUrl,
+          title: pageTitle,
+          meta: pageUrl,
+          excerpt: data.excerpt || "",
+        });
+      }
+    });
+    return out.slice(0, 12);
+  }
+
   function renderResults(query, rows) {
     clearResults();
     if (!query) {
@@ -104,8 +135,9 @@
         '<div class="site-search__result-meta"></div>' +
         '<div class="site-search__result-excerpt"></div>';
       a.querySelector(".site-search__result-title").textContent =
-        row.meta.title || row.url;
-      a.querySelector(".site-search__result-meta").textContent = row.url;
+        row.title || row.url;
+      a.querySelector(".site-search__result-meta").textContent =
+        row.meta || row.url;
       a.querySelector(".site-search__result-excerpt").innerHTML =
         row.excerpt || "";
 
@@ -134,7 +166,7 @@
       })
       .then(function (search) {
         if (query !== lastQuery) return null;
-        var slice = (search.results || []).slice(0, 12);
+        var slice = (search.results || []).slice(0, 8);
         return Promise.all(
           slice.map(function (r) {
             return r.data();
@@ -143,8 +175,8 @@
       })
       .then(function (rows) {
         if (rows == null || query !== lastQuery) return;
-        currentResults = rows;
-        renderResults(query, rows);
+        currentResults = flattenToDeepLinks(rows);
+        renderResults(query, currentResults);
       })
       .catch(function () {
         if (query !== lastQuery) return;
@@ -193,6 +225,12 @@
       items[activeIndex].click();
     }
   }
+
+  resultsEl.addEventListener("click", function (e) {
+    if (!e.target.closest("a.site-search__result-link")) return;
+    // 同页 #锚点不会整页刷新；先关面板再让 anchor-offset 滚动
+    closeSearch();
+  });
 
   openBtn.addEventListener("click", function () {
     openSearch();

@@ -26,7 +26,7 @@ weight = 1
 ### Product Strategy
 
 - **中文**：产品策略
-- 由洞察驱动、有焦点的**赌注**组合；说清赌什么、不赌什么；承认不确定并用发现/交付结果调整。
+- 由洞察驱动、有焦点的**赌注**组合；说清赌什么、不赌什么；承认不确定，并用 Product Discovery 与 Product Delivery 得到的结果来调整。
 
 ### Placing Bets
 
