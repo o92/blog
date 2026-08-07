@@ -8,6 +8,7 @@
   margin: 0 -0.08em;
   border-radius: 0.2em;
   background: var(--glossary-bg);
+  white-space: nowrap;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
   transition: background 0.12s ease;
@@ -42,6 +43,7 @@
   font-style: normal;
   text-decoration: none;
   text-align: left;
+  white-space: normal;
   box-shadow: 0 0.45rem 1.4rem rgba(0, 0, 0, 0.24);
   transition: opacity 0.12s ease, visibility 0.12s ease;
   pointer-events: none;
