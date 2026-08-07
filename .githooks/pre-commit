@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Git pre-commit entry (used via: git config core.hooksPath .githooks)
+# Git pre-commit → 全库工作区审计
 set -euo pipefail
 ROOT="$(git rev-parse --show-toplevel)"
-exec bash "$ROOT/scripts/git-pre-commit-audit.sh"
+exec bash "$ROOT/scripts/audit/run.sh"

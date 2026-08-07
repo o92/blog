@@ -1,36 +1,48 @@
 ---
-description: Git pre-commit 审计与二次确认（Cursor SCM Commit）
+description: Git pre-commit 全库工作区深度审计
 alwaysApply: true
 ---
 
-# 提交门禁（Git hook）
+# 提交门禁（全库 · 工作区）
 
-本仓库用 **Cursor 源码管理 Commit**；门禁靠 Git `pre-commit`（会拦截面板 Commit）。
+Cursor **Commit** → `.githooks/pre-commit` → `scripts/audit/run.sh`。
 
-## 启用（每个 clone 一次）
+审计对象是**磁盘上的完整工作区**（含未暂存改动），不是「仅暂存区快照」。目的：保证全库随时可构建、可发布；暂存列表只用于二次确认展示。
+
+## 布局
+
+```
+scripts/audit/
+  run.sh     # 编排入口
+  deep.py    # 结构/内容一致性
+  html.mjs   # 构建后 HTML 断链等
+scripts/git-pre-commit-audit.sh  # 兼容旧路径 → run.sh
+.githooks/pre-commit
+```
+
+## 启用
 
 ```bash
 npm run hooks:install
+pip3 install pyyaml
+# 可选：brew install shellcheck
+npm run audit          # 本地试跑（跳过 macOS 对话框需非 Darwin 或 CONFIRM_COMMIT）
 ```
 
-等价于：`git config core.hooksPath .githooks`
+## 检查项
 
-## 点 Commit 时会发生什么
+1. 禁止跟踪 `public/`、`node_modules/`
+2. 可疑密钥文件名（跟踪 + 源码树未跟踪）
+3. 冲突标记；`git diff --check`（工作区 + 暂存）
+4. 密钥/私钥内容形态
+5. 全库 JS/MJS `node --check`
+6. shellcheck（已安装时）
+7. Python：YAML/JSON、nav、glossary、mermaid、MD 站内链、大文件、front matter
+8. **`npm run build`**（Pages `HUGO_BASEURL`）+ glossary 错误即失败
+9. 构建后 HTML 审计
+10. `hugo --printPathWarnings`（path/ref/ERROR）
+11. macOS 二次确认
 
-1. 扫描暂存区：可疑密钥文件名、冲突标记、`git diff --check`
-2. diff 内可疑密钥/私钥模式
-3. 若改了 `data/glossary/*.yaml`：校验 `source` 指向的 content 文件是否存在
-4. 写出报告：`.git/last-pre-commit-audit.txt`
-5. **macOS 弹窗二次确认** → 取消则中止 commit
+报告：`.git/last-pre-commit-audit.txt`、`.git/last-pre-commit-build.log`
 
-## 应急跳过
-
-```bash
-SKIP_COMMIT_AUDIT=1 git commit ...
-```
-
-Cursor 面板一般不能带该环境变量；应急可在终端提交，或临时 `git commit --no-verify`（不推荐）。
-
-## Agent 注意
-
-不要承诺「聊天里点 Commit 自动 AI 审计」。面板 Commit 只走上述 hook。
+跳过：`SKIP_COMMIT_AUDIT=1`

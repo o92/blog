@@ -556,9 +556,16 @@ function processFile(htmlPath, domains, byDomain) {
   const $ = cheerio.load(html, { decodeEntities: false });
   const contentRoot = findContentRoot($);
   if (!contentRoot) {
-    console.warn(
-      `[glossary] no content root in ${path.relative(root, htmlPath)}`,
-    );
+    // final 祖先下的重定向 stub：有意无 .post-content
+    const ignored =
+      $("[data-pagefind-ignore]").length > 0 ||
+      $("#final-redirect").length > 0 ||
+      $("main.page-shell--simple").length > 0;
+    if (!ignored) {
+      console.warn(
+        `[glossary] unexpected no content root in ${path.relative(root, htmlPath)}`,
+      );
+    }
     return 0;
   }
   const termIndex = buildTermIndex(byDomain, domains);
