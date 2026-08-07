@@ -7,9 +7,9 @@
 
 自建 Hugo 布局（不绑死第三方文档主题），实现：
 
-- 顶栏多层导航：领域分类（可多层）→ 书名
-- 书内阅读页三栏：左 = 本书目录，中 = 正文，右 = 当前章节 TOC
-- 书为主 + 少量随笔（`posts`）
+- 顶栏多层导航：领域分类（可多层）→ 笔记
+- 笔记阅读页三栏：左 = 笔记目录，中 = 正文，右 = 当前章节 TOC
+- 笔记为主 + 少量随笔
 - 明暗主题：默认跟随系统；右上角浅/深切换；sessionStorage（关浏览器后恢复系统）
 
 ## 非目标（本期）
@@ -28,7 +28,7 @@
 categories:
   - title: 技术
     children:
-      # 非一级 + 无 children + 仅一本书 ⇒ 节点本身就是书（一点进入）
+      # 非一级 + 无 children + 仅一份笔记 ⇒ 节点本身就是该笔记（一点进入）
       - title: Go
         book: go-concurrency          # 或 books: [go-concurrency]
       - title: 分布式
@@ -42,37 +42,37 @@ categories:
 - 分类**不**出现在 `content/` 目录树里
 - 顶栏只读 `data/nav.yaml` 生成多层菜单（节点无需 `id` 字段）
 - **一级分类**始终是目录（展开看 children / books）
-- **非一级**：无 `children` 且只有一本书（`book: <content目录名>` 或 `books: [<名>]`）时，节点标题直接链到该书；有子分类或 ≥2 本书时才是可展开目录
+- **非一级**：无 `children` 且只有一份笔记（`book: <content目录名>` 或 `books: [<名>]`）时，节点标题直接链到该笔记；有子分类或 ≥2 份时才是可展开目录
 - `book` / `books` 中的值对应 `content/<名>/`（无 `content/books/` 中间层）
 
-### 书与章节（content 多层）
+### 笔记与章节（content 多层）
 
 ```text
 content/
-  <书目录名>/
-    _index.md          # 书首页（可当简介）
+  <笔记目录名>/
+    _index.md          # 笔记首页（可当简介）
     01-....md
     02-section/
       _index.md
       01-....md        # 可继续嵌套
 ```
 
-书根 `_index.md` 建议：
+笔记根 `_index.md` 建议：
 
 ```toml
 title = "简介"                 # 本页标题（正文 h1）
-book_title = "领域驱动设计…"   # 书名（面板、面包屑书根等；左栏目录顶项用 title）
+book_title = "领域驱动设计…"   # 笔记显示名（面板、面包屑等；左栏目录顶项用 title）
 ```
 
 缺省 `book_title` 时回退为 `title`。
 
-- 左侧「本书目录」= 当前 book section 下的页面树（章/节/更深层）
+- 左侧「笔记目录」= 当前笔记 section 下的页面树（章/节/更深层）
 - 分类及以上层级**不**出现在左侧目录
 
 ### 随笔
 
 - 「随笔」只是 `data/nav.yaml` 里的分类名，可挂 `books: [essays]`
-- 内容放在 `content/essays/`（或其它书目录），与技术书同一套三栏布局
+- 内容放在 `content/essays/`（或其它笔记目录），与主题笔记同一套三栏布局
 - 不再使用 `content/posts/` 或独立随笔排版
 
 ### 最终页（合并子文件）
@@ -87,19 +87,19 @@ final = true
 
 - 该页为**最终阅读页**（独立 URL），子 `.md` 正文合并进本页
 - 子页若被直接打开，会跳转到 `本页#part-<文件名>`
-- **左侧书目仍显示**子项，链接为页内锚点
+- **左侧目录仍显示**子项，链接为页内锚点
 - 右侧「本章」也会列出这些 part
 
 非最终页行为不变（一文件一页）。
 
 ## 版式
 
-### 书内阅读页
+### 笔记阅读页
 
 ```text
 [ Logo/站名 ........ 分类菜单（多层） ........ 明暗切换 ]
 +------------------+--------------------+------------------+
-| 左：本书目录      | 中：正文            | 右：本章 TOC      |
+| 左：笔记目录      | 中：正文            | 右：本章 TOC      |
 | （多层，当前高亮） | .post-content      | （h2/h3 等）      |
 +------------------+--------------------+------------------+
 ```
@@ -135,8 +135,8 @@ layouts/
   _default/single.html      # → book-shell
   _default/list.html        # → book-shell
   partials/
-    book-shell.html         # 书内三栏壳
-    book-root.html          # 书根 section
+    book-shell.html         # 笔记阅读三栏壳
+    book-root.html          # 笔记根 section
     nav.html                # 读 data/nav.yaml
     book-toc.html           # 左栏
     page-toc.html           # 右栏
@@ -170,8 +170,8 @@ data/nav.yaml
 | 项 | 决策 |
 |----|------|
 | 主题策略 | 方案 2：自建 layouts |
-| 站点类型 | 书为主 + 随笔 |
+| 站点类型 | 笔记为主 + 随笔 |
 | 分类 | `data/nav.yaml`，可多层，不进 content 树 |
-| 书/章 | `content/<书目录名>/` 可多层嵌套 |
-| 版式 | 顶栏 + 左书目 + 中正文 + 右章节 TOC |
+| 笔记/章 | `content/<笔记目录名>/` 可多层嵌套 |
+| 版式 | 顶栏 + 左笔记目录 + 中正文 + 右章节 TOC |
 | 明暗 | 默认跟系统；按钮仅浅/深；sessionStorage（关浏览器失效） |

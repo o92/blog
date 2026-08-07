@@ -27,7 +27,7 @@ weight = 1
 
 - **中文**：核心子域
 - **简称**：Core（亦称 Core Domain）
-- 相对对手的差异化来源（发明、优化、诀窍、IP）。本身复杂、易变；应 **自研**，用最强工程能力。本书偏好 Core Subdomain，以免与 Business Domain 混淆。
+- 相对对手的差异化来源（发明、优化、诀窍、IP）。本身复杂、易变；应 **自研**，用最强工程能力。原书偏好 Core Subdomain，以免与 Business Domain 混淆。
 
 ### Supporting Subdomain
 

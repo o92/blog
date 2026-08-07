@@ -35,8 +35,8 @@
   <button type="button" class="sidebar-toggle sidebar-toggle--left" id="toggle-book-toc" aria-controls="book-toc" aria-expanded="false">目录</button>
   <button type="button" class="sidebar-toggle sidebar-toggle--right" id="toggle-page-toc" aria-controls="page-toc" aria-expanded="false">大纲</button>
 
-  <aside id="book-toc" class="book-toc-panel" aria-label="本书目录">
-    {{ $panelTitle := "本书" }}{{ with $book }}{{ $panelTitle = partial "book-name.html" . }}{{ end }}
+  <aside id="book-toc" class="book-toc-panel" aria-label="笔记目录">
+    {{ $panelTitle := "笔记" }}{{ with $book }}{{ $panelTitle = partial "book-name.html" . }}{{ end }}
     {{ partial "panel-head.html" (dict "title" $panelTitle "rail" "menu") }}
     <div class="book-toc-panel__scroll">
       {{ partial "book-toc.html" (dict "book" $book "page" .) }}

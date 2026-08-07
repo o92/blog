@@ -38,7 +38,7 @@ Strategic Design 从「公司如何竞争」起，而不是从代码起。
 - 不必然是技术（珠宝设计是 Core，网店引擎可能是 Generic）
 - 应 **in-house**，最强人力与最认真的工程；外包/外购会削弱优势
 
-本书称 **Core Subdomain**（亦有人写 Core Domain）；偏好前者以免与 Business Domain 混淆，也便于描述类型演化（如 Core → Generic）。
+原书称 **Core Subdomain**（亦有人写 Core Domain）；偏好前者以免与 Business Domain 混淆，也便于描述类型演化（如 Core → Generic）。
 
 ### Generic Subdomain
 

@@ -33,7 +33,7 @@
   --header-h: 3.5rem;
   --author-footer-h: 4.75rem; /* 左栏底部作者信息固定高度 */
   /* 三栏宽度：改这三项即可（左右贴边，中间正文居中限宽） */
-  --menu-width: 17rem; /* 左：本书目录 */
+  --menu-width: 17rem; /* 左：笔记目录 */
   --toc-width: 15rem; /* 右：本章 TOC */
   --content-max: 48rem; /* 中：正文最大阅读宽 */
   --layout-duration: 0.28s;
