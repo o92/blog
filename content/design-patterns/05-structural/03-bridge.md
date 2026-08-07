@@ -23,3 +23,41 @@ weight = 3
 ## 易混 / 关系
 
 与 Adapter（事后修补接口）不同：Bridge 常在设计之初分离。接近 Strategy 的委托形态，但意图是结构分层。
+
+## Go 示例
+
+抽象（远程控制）与实现（设备）分开，运行时组合。
+
+```go
+package main
+
+import "fmt"
+
+type Device interface {
+	On()
+	Off()
+}
+
+type TV struct{}
+func (TV) On()  { fmt.Println("TV on") }
+func (TV) Off() { fmt.Println("TV off") }
+
+type Radio struct{}
+func (Radio) On()  { fmt.Println("Radio on") }
+func (Radio) Off() { fmt.Println("Radio off") }
+
+type Remote struct{ d Device }
+
+func (r Remote) Toggle(on bool) {
+	if on {
+		r.d.On()
+	} else {
+		r.d.Off()
+	}
+}
+
+func main() {
+	Remote{d: TV{}}.Toggle(true)
+	Remote{d: Radio{}}.Toggle(false)
+}
+```

@@ -23,3 +23,49 @@ weight = 3
 ## 易混 / 关系
 
 常内部用 Factory Method；可与 Builder 互补（一步步 vs 整族）。
+
+## Go 示例
+
+产品族用一组工厂方法；客户端只依赖抽象接口。
+
+```go
+package main
+
+import "fmt"
+
+type Button interface{ Paint() }
+type Checkbox interface{ Paint() }
+
+type GUIFactory interface {
+	CreateButton() Button
+	CreateCheckbox() Checkbox
+}
+
+type winButton struct{}
+func (winButton) Paint() { fmt.Println("Windows button") }
+type winCheckbox struct{}
+func (winCheckbox) Paint() { fmt.Println("Windows checkbox") }
+
+type WinFactory struct{}
+func (WinFactory) CreateButton() Button     { return winButton{} }
+func (WinFactory) CreateCheckbox() Checkbox { return winCheckbox{} }
+
+type macButton struct{}
+func (macButton) Paint() { fmt.Println("Mac button") }
+type macCheckbox struct{}
+func (macCheckbox) Paint() { fmt.Println("Mac checkbox") }
+
+type MacFactory struct{}
+func (MacFactory) CreateButton() Button     { return macButton{} }
+func (MacFactory) CreateCheckbox() Checkbox { return macCheckbox{} }
+
+func renderUI(f GUIFactory) {
+	f.CreateButton().Paint()
+	f.CreateCheckbox().Paint()
+}
+
+func main() {
+	renderUI(WinFactory{})
+	renderUI(MacFactory{})
+}
+```

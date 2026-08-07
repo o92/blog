@@ -23,3 +23,36 @@ weight = 6
 ## 易混 / 关系
 
 对比 Adapter（一对一接口转换）、Mediator（对象互联中心）、Singleton（有时外观被做成单例）。
+
+## Go 示例
+
+对外一个方法，内部编排多个子系统。
+
+```go
+package main
+
+import "fmt"
+
+type VideoFile struct{ Path string }
+type Codec struct{ Name string }
+type BitrateReader struct{}
+
+func (BitrateReader) Convert(f VideoFile, c Codec) {
+	fmt.Printf("convert %s via %s\n", f.Path, c.Name)
+}
+
+// Facade
+type VideoConverter struct {
+	reader BitrateReader
+}
+
+func (v VideoConverter) Convert(path, format string) {
+	file := VideoFile{Path: path}
+	codec := Codec{Name: format}
+	v.reader.Convert(file, codec)
+}
+
+func main() {
+	VideoConverter{}.Convert("movie.mp4", "ogg")
+}
+```

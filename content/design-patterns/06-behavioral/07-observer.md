@@ -23,3 +23,42 @@ weight = 7
 ## 易混 / 关系
 
 MVC 中视图常观察模型；对比 Mediator、信号槽、现代事件总线。
+
+## Go 示例
+
+发布者维护订阅列表并广播。
+
+```go
+package main
+
+import "fmt"
+
+type Observer interface {
+	Update(msg string)
+}
+
+type Subscriber struct{ name string }
+func (s Subscriber) Update(msg string) {
+	fmt.Printf("%s got: %s\n", s.name, msg)
+}
+
+type Publisher struct {
+	subs []Observer
+}
+
+func (p *Publisher) Subscribe(o Observer) {
+	p.subs = append(p.subs, o)
+}
+func (p *Publisher) Notify(msg string) {
+	for _, s := range p.subs {
+		s.Update(msg)
+	}
+}
+
+func main() {
+	p := &Publisher{}
+	p.Subscribe(Subscriber{"A"})
+	p.Subscribe(Subscriber{"B"})
+	p.Notify("price changed")
+}
+```

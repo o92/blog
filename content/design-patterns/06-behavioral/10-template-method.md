@@ -23,3 +23,36 @@ weight = 10
 ## 易混 / 关系
 
 工厂方法常是模板中的一步；对比 Strategy（组合换算法）vs 模板（继承换步骤）。
+
+## Go 示例
+
+Go 无抽象类继承，用「骨架函数 + 钩子接口」模拟模板方法。
+
+```go
+package main
+
+import "fmt"
+
+type GameHooks interface {
+	Start()
+	TakeTurn()
+	End()
+}
+
+func Play(h GameHooks, turns int) { // 模板：固定骨架
+	h.Start()
+	for i := 0; i < turns; i++ {
+		h.TakeTurn()
+	}
+	h.End()
+}
+
+type Chess struct{}
+func (Chess) Start()        { fmt.Println("chess start") }
+func (Chess) TakeTurn()     { fmt.Println("chess turn") }
+func (Chess) End()          { fmt.Println("chess end") }
+
+func main() {
+	Play(Chess{}, 2)
+}
+```

@@ -23,3 +23,33 @@ weight = 2
 ## 易混 / 关系
 
 对比 Bridge（预设分离抽象与实现）、Decorator（同接口增强）、Proxy（同接口控访问）、Facade（简化子系统）。
+
+## Go 示例
+
+第三方类型接口不合用时，包一层适配到客户端期望的接口。
+
+```go
+package main
+
+import "fmt"
+
+// 客户端期望的接口
+type Notifier interface {
+	Notify(msg string)
+}
+
+// 遗留/第三方：方法名不同
+type LegacySMS struct{}
+
+func (LegacySMS) SendSMS(text string) { fmt.Println("SMS:", text) }
+
+type SMSAdapter struct{ sms LegacySMS }
+
+func (a SMSAdapter) Notify(msg string) { a.sms.SendSMS(msg) }
+
+func alert(n Notifier) { n.Notify("order paid") }
+
+func main() {
+	alert(SMSAdapter{sms: LegacySMS{}})
+}
+```

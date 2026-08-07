@@ -23,3 +23,40 @@ weight = 4
 ## 易混 / 关系
 
 与 Composite 绝配；语言内置 foreach 往往已是迭代器模式。
+
+## Go 示例
+
+手写 `HasNext`/`Next`；生产代码也可直接用 `for range` 或 `iter.Seq`（Go 1.23+）。
+
+```go
+package main
+
+import "fmt"
+
+type Iterator[T any] interface {
+	HasNext() bool
+	Next() T
+}
+
+type sliceIter[T any] struct {
+	data []T
+	i    int
+}
+
+func NewSliceIter[T any](data []T) *sliceIter[T] {
+	return &sliceIter[T]{data: data}
+}
+func (it *sliceIter[T]) HasNext() bool { return it.i < len(it.data) }
+func (it *sliceIter[T]) Next() T {
+	v := it.data[it.i]
+	it.i++
+	return v
+}
+
+func main() {
+	it := NewSliceIter([]string{"a", "b", "c"})
+	for it.HasNext() {
+		fmt.Println(it.Next())
+	}
+}
+```

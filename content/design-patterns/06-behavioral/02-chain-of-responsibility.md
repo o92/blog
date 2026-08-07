@@ -23,3 +23,56 @@ weight = 2
 ## 易混 / 关系
 
 常与 Composite 结合（父链）；对比 Decorator（都可嵌套，意图不同）。
+
+## Go 示例
+
+处理者决定处理或交给 `next`。
+
+```go
+package main
+
+import "fmt"
+
+type Handler interface {
+	SetNext(Handler) Handler
+	Handle(amount int)
+}
+
+type base struct{ next Handler }
+
+func (b *base) SetNext(h Handler) Handler {
+	b.next = h
+	return h
+}
+func (b *base) forward(amount int) {
+	if b.next != nil {
+		b.next.Handle(amount)
+	}
+}
+
+type Cashier struct{ base }
+func (c *Cashier) Handle(amount int) {
+	if amount <= 100 {
+		fmt.Println("cashier handles", amount)
+		return
+	}
+	c.forward(amount)
+}
+
+type Manager struct{ base }
+func (m *Manager) Handle(amount int) {
+	if amount <= 1000 {
+		fmt.Println("manager handles", amount)
+		return
+	}
+	m.forward(amount)
+}
+
+func main() {
+	cashier := &Cashier{}
+	manager := &Manager{}
+	cashier.SetNext(manager)
+	cashier.Handle(50)
+	cashier.Handle(500)
+}
+```

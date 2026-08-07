@@ -23,3 +23,43 @@ weight = 8
 ## 易混 / 关系
 
 对比 Decorator（叠功能且常多层）、Adapter（接口不同）、Facade（简化多类而非替一个）。
+
+## Go 示例
+
+与真实对象同接口；这里做懒加载（虚拟代理）。
+
+```go
+package main
+
+import "fmt"
+
+type Image interface {
+	Display()
+}
+
+type RealImage struct{ path string }
+
+func NewRealImage(path string) *RealImage {
+	fmt.Println("load from disk:", path)
+	return &RealImage{path: path}
+}
+func (r *RealImage) Display() { fmt.Println("display:", r.path) }
+
+type ImageProxy struct {
+	path string
+	real *RealImage
+}
+
+func (p *ImageProxy) Display() {
+	if p.real == nil {
+		p.real = NewRealImage(p.path)
+	}
+	p.real.Display()
+}
+
+func main() {
+	img := &ImageProxy{path: "photo.png"}
+	img.Display() // 首次加载
+	img.Display() // 复用
+}
+```

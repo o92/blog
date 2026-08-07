@@ -23,3 +23,39 @@ weight = 3
 ## 易混 / 关系
 
 与 Strategy 形似但意图是请求对象化；常配 Memento 做撤销；宏命令可用 Composite。
+
+## Go 示例
+
+请求变成对象，可交给调用者执行（可扩展 undo/队列）。
+
+```go
+package main
+
+import "fmt"
+
+type Command interface {
+	Execute()
+}
+
+type Light struct{}
+func (Light) On()  { fmt.Println("light on") }
+func (Light) Off() { fmt.Println("light off") }
+
+type LightOnCommand struct{ light Light }
+func (c LightOnCommand) Execute() { c.light.On() }
+
+type LightOffCommand struct{ light Light }
+func (c LightOffCommand) Execute() { c.light.Off() }
+
+type Remote struct{ cmd Command }
+func (r *Remote) Press() { r.cmd.Execute() }
+
+func main() {
+	light := Light{}
+	r := &Remote{}
+	r.cmd = LightOnCommand{light: light}
+	r.Press()
+	r.cmd = LightOffCommand{light: light}
+	r.Press()
+}
+```

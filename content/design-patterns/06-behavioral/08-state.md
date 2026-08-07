@@ -23,3 +23,45 @@ weight = 8
 ## 易混 / 关系
 
 与 Strategy 结构极像：State 常自知下一状态；Strategy 通常由客户端选择算法。
+
+## Go 示例
+
+行为随当前状态对象切换；状态可推动转换。
+
+```go
+package main
+
+import "fmt"
+
+type State interface {
+	Publish(c *Document)
+}
+
+type Document struct{ state State }
+
+func (d *Document) Publish() { d.state.Publish(d) }
+
+type Draft struct{}
+func (Draft) Publish(c *Document) {
+	fmt.Println("draft -> moderation")
+	c.state = Moderation{}
+}
+
+type Moderation struct{}
+func (Moderation) Publish(c *Document) {
+	fmt.Println("moderation -> published")
+	c.state = Published{}
+}
+
+type Published struct{}
+func (Published) Publish(c *Document) {
+	fmt.Println("already published")
+}
+
+func main() {
+	doc := &Document{state: Draft{}}
+	doc.Publish()
+	doc.Publish()
+	doc.Publish()
+}
+```

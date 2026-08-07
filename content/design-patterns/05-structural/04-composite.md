@@ -23,3 +23,41 @@ weight = 4
 ## 易混 / 关系
 
 常与 Builder / Iterator / Visitor 一起遍历或构建树；Decorator 结构相似但意图不同。
+
+## Go 示例
+
+叶子与容器实现同一接口，客户端统一 `Price()`。
+
+```go
+package main
+
+import "fmt"
+
+type Component interface {
+	Price() int
+}
+
+type Product struct{ price int }
+func (p Product) Price() int { return p.price }
+
+type Box struct{ kids []Component }
+
+func (b *Box) Add(c Component) { b.kids = append(b.kids, c) }
+func (b Box) Price() int {
+	sum := 0
+	for _, k := range b.kids {
+		sum += k.Price()
+	}
+	return sum
+}
+
+func main() {
+	inner := &Box{}
+	inner.Add(Product{10})
+	inner.Add(Product{20})
+	root := &Box{}
+	root.Add(inner)
+	root.Add(Product{5})
+	fmt.Println(root.Price()) // 35
+}
+```

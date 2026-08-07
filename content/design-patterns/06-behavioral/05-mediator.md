@@ -23,3 +23,44 @@ weight = 5
 ## 易混 / 关系
 
 对比 Facade（单向简化子系统）、Observer（信号分发）、Mediator 强调多方协同规则。
+
+## Go 示例
+
+组件不互调，只通知中介者。
+
+```go
+package main
+
+import "fmt"
+
+type Mediator interface {
+	Notify(sender, event string)
+}
+
+type Button struct {
+	name string
+	m    Mediator
+}
+func (b *Button) Click() { b.m.Notify(b.name, "click") }
+
+type Dialog struct {
+	ok, cancel *Button
+}
+
+func (d *Dialog) Notify(sender, event string) {
+	switch {
+	case sender == "ok" && event == "click":
+		fmt.Println("submit form")
+	case sender == "cancel" && event == "click":
+		fmt.Println("close dialog")
+	}
+}
+
+func main() {
+	d := &Dialog{}
+	d.ok = &Button{name: "ok", m: d}
+	d.cancel = &Button{name: "cancel", m: d}
+	d.ok.Click()
+	d.cancel.Click()
+}
+```

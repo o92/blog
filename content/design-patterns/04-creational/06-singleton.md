@@ -23,3 +23,35 @@ weight = 6
 ## 易混 / 关系
 
 外观上像全局变量；Facade 有时被做成单例。能用显式注入就少用。
+
+## Go 示例
+
+用 `sync.Once` 保证只初始化一次。能注入依赖时尽量少用全局单例。
+
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+type Config struct{ Env string }
+
+var (
+	cfg  *Config
+	once sync.Once
+)
+
+func GetConfig() *Config {
+	once.Do(func() {
+		cfg = &Config{Env: "prod"}
+	})
+	return cfg
+}
+
+func main() {
+	a, b := GetConfig(), GetConfig()
+	fmt.Println(a == b, a.Env) // true prod
+}
+```

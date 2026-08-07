@@ -23,3 +23,39 @@ weight = 5
 ## 易混 / 关系
 
 可代替 Abstract Factory 的某种配置；常与 Command / Memento 等需复制状态的模式联用。
+
+## Go 示例
+
+实现 `Clone`；注意切片/指针要按需深拷贝。
+
+```go
+package main
+
+import "fmt"
+
+type Shape interface {
+	Clone() Shape
+	String() string
+}
+
+type Circle struct {
+	Radius int
+	Color  string
+}
+
+func (c Circle) Clone() Shape {
+	cp := c // 值拷贝；若含引用字段需手动深拷贝
+	return cp
+}
+
+func (c Circle) String() string {
+	return fmt.Sprintf("Circle(r=%d,%s)", c.Radius, c.Color)
+}
+
+func main() {
+	proto := Circle{Radius: 10, Color: "red"}
+	c2 := proto.Clone().(Circle)
+	c2.Color = "blue"
+	fmt.Println(proto, c2)
+}
+```

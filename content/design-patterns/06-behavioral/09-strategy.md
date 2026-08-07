@@ -23,3 +23,41 @@ weight = 9
 ## 易混 / 关系
 
 与 State 形似；与 Bridge 委托相似但意图不同；常落实 OCP / Encapsulate What Varies。
+
+## Go 示例
+
+算法族抽成接口，Context 持有并可切换。
+
+```go
+package main
+
+import "fmt"
+
+type RouteStrategy interface {
+	Build(from, to string) string
+}
+
+type RoadStrategy struct{}
+func (RoadStrategy) Build(from, to string) string {
+	return from + " -(road)-> " + to
+}
+
+type WalkStrategy struct{}
+func (WalkStrategy) Build(from, to string) string {
+	return from + " -(walk)-> " + to
+}
+
+type Navigator struct{ strategy RouteStrategy }
+
+func (n *Navigator) SetStrategy(s RouteStrategy) { n.strategy = s }
+func (n Navigator) Route(from, to string) string {
+	return n.strategy.Build(from, to)
+}
+
+func main() {
+	nav := Navigator{strategy: RoadStrategy{}}
+	fmt.Println(nav.Route("A", "B"))
+	nav.SetStrategy(WalkStrategy{})
+	fmt.Println(nav.Route("A", "B"))
+}
+```

@@ -23,3 +23,44 @@ weight = 2
 ## 易混 / 关系
 
 常演化为 Abstract Factory、Template Method（工厂方法是特例钩子）、Prototype。
+
+## Go 示例
+
+Go 无类继承，常用「创建者接口 + 具体创建者」表达 Factory Method。
+
+```go
+package main
+
+import "fmt"
+
+type Product interface {
+	Name() string
+}
+
+type chair struct{}
+func (chair) Name() string { return "chair" }
+
+type sofa struct{}
+func (sofa) Name() string { return "sofa" }
+
+// Creator：工厂方法由实现方决定产品类型
+type Creator interface {
+	CreateProduct() Product
+}
+
+type ChairCreator struct{}
+func (ChairCreator) CreateProduct() Product { return chair{} }
+
+type SofaCreator struct{}
+func (SofaCreator) CreateProduct() Product { return sofa{} }
+
+func order(c Creator) {
+	p := c.CreateProduct()
+	fmt.Println("ordered:", p.Name())
+}
+
+func main() {
+	order(ChairCreator{})
+	order(SofaCreator{})
+}
+```

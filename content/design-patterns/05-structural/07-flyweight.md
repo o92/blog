@@ -23,3 +23,56 @@ weight = 7
 ## 易混 / 关系
 
 常与 Composite 组树；不要与缓存/池化概念完全等同，意图是共享不可变内在状态。
+
+## Go 示例
+
+内在状态（树种）共享；外在状态（坐标）由上下文传入。
+
+```go
+package main
+
+import "fmt"
+
+type TreeType struct {
+	Name, Color string // intrinsic
+}
+
+func (t TreeType) Draw(x, y int) {
+	fmt.Printf("%s/%s at (%d,%d)\n", t.Name, t.Color, x, y)
+}
+
+type TreeFactory struct {
+	cache map[string]*TreeType
+}
+
+func NewTreeFactory() *TreeFactory {
+	return &TreeFactory{cache: map[string]*TreeType{}}
+}
+
+func (f *TreeFactory) Get(name, color string) *TreeType {
+	key := name + ":" + color
+	if t, ok := f.cache[key]; ok {
+		return t
+	}
+	t := &TreeType{Name: name, Color: color}
+	f.cache[key] = t
+	return t
+}
+
+type Tree struct {
+	X, Y int
+	Type *TreeType
+}
+
+func main() {
+	f := NewTreeFactory()
+	trees := []Tree{
+		{1, 2, f.Get("oak", "green")},
+		{3, 4, f.Get("oak", "green")}, // 复用同一 TreeType
+	}
+	for _, t := range trees {
+		t.Type.Draw(t.X, t.Y)
+	}
+	fmt.Println("types cached:", len(f.cache))
+}
+```

@@ -23,3 +23,44 @@ weight = 11
 ## 易混 / 关系
 
 常遍历 Composite；现代语言可用模式匹配部分替代双分派。
+
+## Go 示例
+
+双分派在 Go 里偏啰嗦；结构稳定、操作常增时仍可用。现代代码也可用类型 switch 简化。
+
+```go
+package main
+
+import "fmt"
+
+type Shape interface {
+	Accept(v Visitor)
+}
+
+type Visitor interface {
+	VisitDot(d Dot)
+	VisitCircle(c Circle)
+}
+
+type Dot struct{ X, Y int }
+func (d Dot) Accept(v Visitor) { v.VisitDot(d) }
+
+type Circle struct{ R int }
+func (c Circle) Accept(v Visitor) { v.VisitCircle(c) }
+
+type XMLExport struct{}
+func (XMLExport) VisitDot(d Dot) {
+	fmt.Printf("<dot x=%d y=%d/>\n", d.X, d.Y)
+}
+func (XMLExport) VisitCircle(c Circle) {
+	fmt.Printf("<circle r=%d/>\n", c.R)
+}
+
+func main() {
+	shapes := []Shape{Dot{1, 2}, Circle{5}}
+	v := XMLExport{}
+	for _, s := range shapes {
+		s.Accept(v)
+	}
+}
+```

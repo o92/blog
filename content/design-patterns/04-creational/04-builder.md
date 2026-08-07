@@ -23,3 +23,36 @@ weight = 4
 ## 易混 / 关系
 
 与 Abstract Factory（整族产品）不同：Builder 关注一步步组装。常与 Composite 搭配构建树。
+
+## Go 示例
+
+分步设置字段，最后 `Build`；可用链式调用。
+
+```go
+package main
+
+import "fmt"
+
+type Pizza struct {
+	Dough, Sauce, Topping string
+}
+
+type PizzaBuilder struct{ p Pizza }
+
+func NewPizzaBuilder() *PizzaBuilder { return &PizzaBuilder{} }
+
+func (b *PizzaBuilder) Dough(d string) *PizzaBuilder  { b.p.Dough = d; return b }
+func (b *PizzaBuilder) Sauce(s string) *PizzaBuilder  { b.p.Sauce = s; return b }
+func (b *PizzaBuilder) Topping(t string) *PizzaBuilder { b.p.Topping = t; return b }
+
+func (b *PizzaBuilder) Build() Pizza { return b.p }
+
+func main() {
+	p := NewPizzaBuilder().
+		Dough("thin").
+		Sauce("tomato").
+		Topping("mozzarella").
+		Build()
+	fmt.Printf("%+v\n", p)
+}
+```

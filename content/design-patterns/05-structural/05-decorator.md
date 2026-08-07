@@ -23,3 +23,39 @@ weight = 5
 ## 易混 / 关系
 
 对比 Adapter（改接口）、Proxy（控访问）、Composite（树）。Java I/O 流是经典例子。
+
+## Go 示例
+
+同接口包装，可多层嵌套叠加行为。
+
+```go
+package main
+
+import "fmt"
+
+type Notifier interface {
+	Send(msg string)
+}
+
+type EmailNotifier struct{}
+func (EmailNotifier) Send(msg string) { fmt.Println("email:", msg) }
+
+type SMSDecorator struct{ wrap Notifier }
+func (d SMSDecorator) Send(msg string) {
+	d.wrap.Send(msg)
+	fmt.Println("sms:", msg)
+}
+
+type SlackDecorator struct{ wrap Notifier }
+func (d SlackDecorator) Send(msg string) {
+	d.wrap.Send(msg)
+	fmt.Println("slack:", msg)
+}
+
+func main() {
+	var n Notifier = EmailNotifier{}
+	n = SMSDecorator{wrap: n}
+	n = SlackDecorator{wrap: n}
+	n.Send("deployed")
+}
+```
