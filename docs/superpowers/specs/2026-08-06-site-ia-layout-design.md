@@ -123,7 +123,7 @@ final = true
 ## 与术语功能的关系
 
 - 正文容器保持 `.post-content`（或更新 `scripts/glossary.config.json` 选择器并同步规则）
-- 构建顺序：`hugo` → `glossary-inject` → `pagefind` → 部署
+- 构建顺序：`site-check` → `hugo` → `glossary-inject` → `pagefind` → 部署
 - 单独 `hugo server` 不含术语注入与搜索索引；完整效果用 `npm run preview`
 - `glossary.css` 改为依赖主题 CSS 变量
 

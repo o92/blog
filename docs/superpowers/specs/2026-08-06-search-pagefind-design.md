@@ -28,6 +28,8 @@
 ```text
 content
   ↓
+site-check（静态门禁）
+  ↓
 hugo（生成 public/）
   ↓
 glossary-inject（术语注入）
@@ -37,7 +39,7 @@ pagefind（对 public/ 建索引 → public/pagefind/）
 部署 / npm run preview
 ```
 
-构建顺序必须是：`hugo` → `glossary-inject` → `pagefind` → 部署。
+构建顺序必须是：`site-check` → `hugo` → `glossary-inject` → `pagefind` → 部署。
 
 ## 入口与面板
 
@@ -82,7 +84,7 @@ package.json                    # pagefind 依赖；build/preview 串第三步
 
 ## 构建命令
 
-- 本地：`npm run build` = hugo → glossary-inject → pagefind  
+- 本地：`npm run build` = site-check → hugo → glossary-inject → pagefind  
 - 预览：`npm run preview`（完整构建后静态服务）  
 - CI：与本地同一顺序；`npx pagefind --site public`（或 package script）
 

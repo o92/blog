@@ -9,13 +9,15 @@ alwaysApply: true
 
 ## 构建
 
-`npm run build` = `hugo` → `glossary-inject` → `pagefind`。  
-`hugo server` **不会**注入术语或建搜索索引；完整预览用 `npm run preview`。
+`npm run build` = `site-check` → `hugo` → `glossary-inject` → `pagefind`。  
+`hugo server` **不会**注入术语或建搜索索引；完整预览用 `npm run preview`。  
+静态质量：`scripts/site-check.mjs`（词库 / nav / 站内断链）；见 `docs/superpowers/specs/2026-08-07-site-check-design.md`。
 
 ## 词库与声明
 
 - `data/glossary/global.yaml` + `data/glossary/<domain>.yaml`
 - 词条：`summary` 必填；`source`（站内摘录 +「显示更多」）；`link`（仅外链）；`aliases`（同义中文/别名，共用同一气泡）
+- **`source` 严格**：指向的 content 文件或 `#标题` 不存在 → site-check / inject **失败退出**（构建失败）；错误会列出全部坏链
 - 文章 `glossary: ["domain"]`；未声明时仅 `global`
 - **继承**：子页 / 最终页会合并祖先 section `_index` 上的 `glossary`（在笔记根声明即可覆盖整份笔记）
 - 正文选择器：默认仅 `.post-content`（`scripts/glossary.config.json`）

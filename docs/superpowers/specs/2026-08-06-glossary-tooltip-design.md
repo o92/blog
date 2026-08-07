@@ -17,7 +17,9 @@
 ## 架构
 
 ```text
-content + data/glossary/*.yaml
+content + data/glossary/*.yaml + data/nav.yaml
+        ↓
+site-check（静态门禁，失败即停）
         ↓
 hugo（生成 public/）
         ↓
@@ -26,7 +28,7 @@ node scripts/glossary-inject.mjs（扫 HTML，注入术语标记）
 带高亮 + 气泡的静态页 → 本地预览 / GitHub Pages
 ```
 
-构建顺序必须是：`hugo` → `glossary-inject` → 部署。  
+构建顺序必须是：`site-check` → `hugo` → `glossary-inject` → `pagefind` → 部署。  
 单独 `hugo server` **不等于**最终效果（server 不会自动跑后处理）。
 
 ## 词库与 front matter
@@ -50,6 +52,7 @@ goroutine:
 
 - 必填：`summary`
 - 可选：`source`（`路径.md` 或 `路径.md#标题`）；摘录长度由 `scripts/glossary.config.json` 的 `excerptMaxLength` 限制；自动生成「显示更多」跳到对应页/锚点；**链接会带上站点 basePath**（如 GitHub Pages 的 `/blog`，从构建后的 HTML 或 `HUGO_BASEURL` 识别）
+- **`source` 严格校验（默认开启）**：文件不存在、带了 `#` 但标题为空、或 `#标题` 在正文中找不到 → `glossary-inject` **打印全部错误并以 exit code 1 失败**（从而使 `npm run build` / `dev` 失败）。不再 warn 后继续。
 - 可选：`link`（仅 `http(s)://` 外链）；站内跳转不要用 `link`，用 `source`
 - 可选：`aliases`（字符串数组）；别名与主词条共用 summary / source / link
 - 气泡展示顺序：领域标签 → summary → 摘录（若有）→「显示更多」/「外部链接」
@@ -89,7 +92,7 @@ glossary: ["go", "distributed"]   # 可选；加载 global + 列出的领域
 ### 命令
 
 ```bash
-npm run build   # hugo --gc --minify && glossary-inject && pagefind
+npm run build   # site-check && hugo && glossary-inject && pagefind
 ```
 
 ### 输入
@@ -135,4 +138,5 @@ npm run build   # hugo --gc --minify && glossary-inject && pagefind
 | 文章关联 | front matter `glossary` |
 | 冲突 | 气泡同时显示通用 + 领域 |
 | 重复出现 | 每次都高亮 |
+| source 校验 | 严格：缺文件或缺 `#标题` → inject exit 1 |
 | 主题 | 用户自配，功能主题无关 |

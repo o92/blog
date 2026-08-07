@@ -3,8 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "site-check": "node scripts/site-check.mjs",
     "pagefind": "pagefind --site public --force-language zh",
-    "build": "hugo --gc --minify && node scripts/glossary-inject.mjs && npm run pagefind",
+    "build": "npm run site-check && hugo --gc --minify && node scripts/glossary-inject.mjs && npm run pagefind",
     "dev": "node scripts/dev.mjs",
     "preview": "npm run build && npx --yes serve public -p 1313"
   },

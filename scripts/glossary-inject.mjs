@@ -236,15 +236,28 @@ function truncateText(text, max) {
   return { text: cut.replace(/[，,;；、.\s]+$/g, "") + "…", truncated: true };
 }
 
-function resolveSource(source) {
+/**
+ * Resolve glossary `source` (content path + optional #heading).
+ * Strict: missing file or missing heading → push to `errors` and return null.
+ */
+function resolveSource(source, { domain, term, errors }) {
   if (!source) return null;
+  const label = `${domain}/${term}`;
   const raw = String(source).trim();
   const hash = raw.indexOf("#");
   const filePart = hash >= 0 ? raw.slice(0, hash) : raw;
   const heading = hash >= 0 ? decodeURIComponent(raw.slice(hash + 1)).trim() : "";
+  if (!filePart) {
+    errors.push(`[glossary] ${label}: source missing content path (${raw})`);
+    return null;
+  }
+  if (hash >= 0 && !heading) {
+    errors.push(`[glossary] ${label}: source has empty #heading (${raw})`);
+    return null;
+  }
   const abs = resolveContentFile(filePart);
   if (!abs) {
-    console.warn(`[glossary] source file not found: ${filePart}`);
+    errors.push(`[glossary] ${label}: source file not found: ${filePart}`);
     return null;
   }
   const rawMd = fs.readFileSync(abs, "utf8");
@@ -257,16 +270,14 @@ function resolveSource(source) {
   if (heading) {
     const sec = extractHeadingSection(content, heading);
     if (!sec) {
-      console.warn(`[glossary] heading not found in ${filePart}: #${heading}`);
-      if (underFinal) {
-        const part = partAnchorForContentFile(abs);
-        if (part) moreHref = `${permalink}#${part}`;
-      }
-    } else {
-      const t = truncateText(sec.text, EXCERPT_MAX);
-      excerpt = t.text;
-      moreHref = `${permalink}#${anchorize(sec.heading)}`;
+      errors.push(
+        `[glossary] ${label}: heading not found in ${filePart}: #${heading}`,
+      );
+      return null;
     }
+    const t = truncateText(sec.text, EXCERPT_MAX);
+    excerpt = t.text;
+    moreHref = `${permalink}#${anchorize(sec.heading)}`;
   } else {
     const plain = content
       .replace(/```[\s\S]*?```/g, " ")
@@ -292,6 +303,8 @@ function loadGlossaries() {
   const files = fs.existsSync(dir)
     ? fs.readdirSync(dir).filter((f) => f.endsWith(".yaml") || f.endsWith(".yml"))
     : [];
+  /** @type {string[]} */
+  const sourceErrors = [];
   /** @type {Record<string, Record<string, object>>} */
   const byDomain = {};
   for (const file of files) {
@@ -308,7 +321,11 @@ function loadGlossaries() {
         summary: String(value.summary),
       };
       if (value.source) {
-        const resolved = resolveSource(value.source);
+        const resolved = resolveSource(value.source, {
+          domain,
+          term,
+          errors: sourceErrors,
+        });
         if (resolved) {
           entry.excerpt = resolved.excerpt;
           entry.moreHref = resolved.moreHref;
@@ -336,6 +353,13 @@ function loadGlossaries() {
         byDomain[domain][alias] = { ...entry };
       }
     }
+  }
+  if (sourceErrors.length) {
+    for (const msg of sourceErrors) console.error(msg);
+    console.error(
+      `[glossary] ${sourceErrors.length} invalid source(s); build failed (strict)`,
+    );
+    process.exit(1);
   }
   return byDomain;
 }

@@ -33,5 +33,6 @@ alwaysApply: true
 
 ## 与 glossary / 构建
 
-- `npm run build`：hugo → inject → pagefind
+- `npm run build`：site-check → hugo → inject → pagefind
 - 完整预览：`npm run preview`
+- 静态门禁：`docs/superpowers/specs/2026-08-07-site-check-design.md`

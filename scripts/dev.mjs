@@ -117,6 +117,36 @@ function freePort(port) {
   }
 }
 
+function runSiteCheck() {
+  return new Promise((resolve) => {
+    log("site-check …");
+    const child = spawn("node", ["scripts/site-check.mjs"], {
+      cwd: root,
+      stdio: "inherit",
+    });
+    child.on("exit", (code) => {
+      if (code !== 0) log(`site-check exit ${code}`);
+      resolve(code === 0);
+    });
+  });
+}
+
+/** @type {import('node:child_process').ChildProcess | null} */
+let hugo = null;
+let shuttingDown = false;
+
+function failDev(reason) {
+  if (shuttingDown) return;
+  shuttingDown = true;
+  console.error(`[dev] ${reason}; terminating`);
+  try {
+    hugo?.kill("SIGTERM");
+  } catch {
+    /* ignore */
+  }
+  process.exit(1);
+}
+
 function runInject() {
   if (injecting) {
     pending = true;
@@ -124,17 +154,26 @@ function runInject() {
   }
   injecting = true;
   pending = false;
-  log(`glossary-inject … (HUGO_BASEURL=${HUGO_BASEURL})`);
-  const child = spawn("node", ["scripts/glossary-inject.mjs"], {
-    cwd: root,
-    env: { ...process.env, HUGO_BASEURL },
-    stdio: "inherit",
-  });
-  child.on("exit", (code) => {
-    suppressWatchUntil = Date.now() + 2000;
-    injecting = false;
-    if (code !== 0) log(`glossary-inject exit ${code}`);
-    if (pending) scheduleInject(100);
+  runSiteCheck().then((ok) => {
+    if (!ok) {
+      failDev("site-check failed");
+      return;
+    }
+    log(`glossary-inject … (HUGO_BASEURL=${HUGO_BASEURL})`);
+    const child = spawn("node", ["scripts/glossary-inject.mjs"], {
+      cwd: root,
+      env: { ...process.env, HUGO_BASEURL },
+      stdio: "inherit",
+    });
+    child.on("exit", (code) => {
+      suppressWatchUntil = Date.now() + 2000;
+      injecting = false;
+      if (code !== 0) {
+        failDev(`glossary-inject exit ${code}`);
+        return;
+      }
+      if (pending) scheduleInject(100);
+    });
   });
 }
 
@@ -172,7 +211,7 @@ killStaleDev();
 freePort(PORT);
 log(`hugo server → ${HUGO_BASEURL} (port ${PORT})`);
 
-const hugo = spawn(
+hugo = spawn(
   "hugo",
   [
     "server",
@@ -192,6 +231,7 @@ const hugo = spawn(
 );
 
 hugo.on("exit", (code) => {
+  if (shuttingDown) return;
   log(`hugo exited ${code ?? 0}`);
   process.exit(code ?? 0);
 });
@@ -209,7 +249,7 @@ function safeWatch(rel, onChange) {
 }
 
 safeWatch("content", () => scheduleInject(1500));
-safeWatch("data/glossary", () => scheduleInject(300));
+safeWatch("data", () => scheduleInject(400));
 safeWatch("layouts", () => scheduleInject(1500));
 
 setInterval(() => {
@@ -220,7 +260,9 @@ setInterval(() => {
 scheduleInject(1200);
 
 function shutdown() {
-  hugo.kill("SIGTERM");
+  if (shuttingDown) return;
+  shuttingDown = true;
+  hugo?.kill("SIGTERM");
   process.exit(0);
 }
 process.on("SIGINT", shutdown);
