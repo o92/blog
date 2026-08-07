@@ -20,3 +20,7 @@ categories:
         children:
           - title: Scrum
             book: scrum
+      - title: 产品管理
+        children:
+          - title: 产品运作模型 (Product Operating Model)
+            book: product-operating-model

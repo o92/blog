@@ -1,0 +1,151 @@
+# 产品运作模型术语（Marty Cagan《Transformed》）
+
+Product Operating Model:
+  summary: "产品运作模型：强产品公司基于第一性原理的运作方式，非单一流程"
+  source: "product-operating-model/01-introduction/01-terms.md#Product Operating Model"
+  aliases: ["产品运作模型", "Product Model", "产品模型"]
+
+Prior Model:
+  summary: "先前模型：转型前的运作方式（IT/项目/功能团队等）"
+  source: "product-operating-model/01-introduction/01-terms.md#Prior Model"
+  aliases: ["先前模型"]
+
+Feature Factory:
+  summary: "功能工厂：高效交付功能却缺少客户与业务结果"
+  source: "product-operating-model/01-introduction/01-terms.md#Feature Factory"
+  aliases: ["功能工厂"]
+
+Changing How You Build:
+  summary: "改变如何构建：项目→持续产品；小步频繁可靠发布"
+  source: "product-operating-model/02-transformation-defined/01-terms.md#Changing How You Build"
+  aliases: ["改变如何构建"]
+
+Changing How You Solve Problems:
+  summary: "改变如何解题：功能清单→赋能团队发现有价值的解"
+  source: "product-operating-model/02-transformation-defined/01-terms.md#Changing How You Solve Problems"
+  aliases: ["改变如何解题"]
+
+Changing How You Decide Which Problems to Solve:
+  summary: "改变如何选题：干系人堆需求→愿景与洞察驱动策略"
+  source: "product-operating-model/02-transformation-defined/01-terms.md#Changing How You Decide Which Problems to Solve"
+  aliases: ["改变如何选题"]
+
+Empowered Product Team:
+  summary: "赋能产品团队：拿问题与结果，跨职能发现并交付方案"
+  source: "product-operating-model/02-transformation-defined/01-terms.md#Empowered Product Team"
+  aliases: ["赋能产品团队", "赋能团队"]
+
+Feature Team:
+  summary: "功能团队：实现干系人排好的功能，通常只对产出负责"
+  source: "product-operating-model/02-transformation-defined/01-terms.md#Feature Team"
+  aliases: ["功能团队"]
+
+Product Discovery:
+  summary: "产品发现：低成本快速验证想法，优化 time to money"
+  source: "product-operating-model/02-transformation-defined/01-terms.md#Product Discovery"
+  aliases: ["产品发现", "发现"]
+
+Fake Agile:
+  summary: "假敏捷：仪式齐全但无小步可靠发布之实"
+  source: "product-operating-model/02-transformation-defined/01-terms.md#Fake Agile"
+  aliases: ["假敏捷"]
+
+Product Manager:
+  summary: "产品经理：扛价值与合宜性风险，对 outcomes 问责"
+  source: "product-operating-model/03-competencies/01-terms.md#Product Manager"
+  aliases: ["产品经理", "PM"]
+
+Product Designer:
+  summary: "产品设计师：扛可用性与整段体验，参与发现"
+  source: "product-operating-model/03-competencies/01-terms.md#Product Designer"
+  aliases: ["产品设计师"]
+
+Tech Lead:
+  summary: "技术负责人：扛可行性与交付，保障小步可靠发布"
+  source: "product-operating-model/03-competencies/01-terms.md#Tech Lead"
+  aliases: ["技术负责人"]
+
+Product Leaders:
+  summary: "产品领导者：产品/设计/工程管理者，教练并给战略上下文"
+  source: "product-operating-model/03-competencies/01-terms.md#Product Leaders"
+  aliases: ["产品领导者"]
+
+Product Triad:
+  summary: "产品铁三角：PM + Designer + Tech Lead"
+  source: "product-operating-model/03-competencies/01-terms.md#Product Triad / Troika"
+  aliases: ["产品铁三角", "Troika"]
+
+Outcomes over Output:
+  summary: "结果重于产出：为业务与客户结果负责，而非功能件数"
+  source: "product-operating-model/04-concepts/01-terms.md#Outcomes over Output"
+  aliases: ["结果重于产出"]
+
+Product Vision:
+  summary: "产品愿景：客户中心的未来图景"
+  source: "product-operating-model/04-concepts/01-terms.md#Product Vision"
+  aliases: ["产品愿景"]
+
+Product Strategy:
+  summary: "产品策略：洞察驱动、有焦点的透明赌注"
+  source: "product-operating-model/04-concepts/01-terms.md#Product Strategy"
+  aliases: ["产品策略"]
+
+Product Culture:
+  summary: "产品文化：原则/信任/创新/学习优先于流程控制与虚假可预测"
+  source: "product-operating-model/04-concepts/01-terms.md#Product Culture"
+  aliases: ["产品文化"]
+
+Customer Discovery Program:
+  summary: "客户发现计划：与参考客户验证问题与方案的机制"
+  source: "product-operating-model/05-in-action/01-terms.md#Customer Discovery Program"
+  aliases: ["客户发现计划"]
+
+Go-to-Market:
+  summary: "上市：包装、定价、销售与信息传递的整体安排"
+  source: "product-operating-model/05-in-action/01-terms.md#Go-to-Market"
+  aliases: ["上市", "GTM"]
+
+Stakeholder Collaboration:
+  summary: "干系人协作：用问题与约束共建，而非单向下达需求"
+  source: "product-operating-model/05-in-action/01-terms.md#Stakeholder Collaboration"
+  aliases: ["干系人协作"]
+
+Transformation Outcome:
+  summary: "转型结果：转型后能做到的、以前做不到的能力与业务结果"
+  source: "product-operating-model/06-techniques/01-terms.md#Transformation Outcome"
+  aliases: ["转型结果"]
+
+Transformation Assessment:
+  summary: "转型评估：对能力与概念落地的诚实盘点"
+  source: "product-operating-model/06-techniques/01-terms.md#Transformation Assessment"
+  aliases: ["转型评估"]
+
+Pilot Teams:
+  summary: "试点团队：先在少数团队验证产品模型再扩展"
+  source: "product-operating-model/06-techniques/01-terms.md#Pilot Teams"
+  aliases: ["试点团队"]
+
+Product Coach:
+  summary: "产品教练：帮助建立产品模型能力的内外部教练"
+  source: "product-operating-model/06-techniques/01-terms.md#Product Coach"
+  aliases: ["产品教练"]
+
+Objection Handling:
+  summary: "异议应对：按角色回应转型中的典型反对意见"
+  source: "product-operating-model/07-objections/01-terms.md#Objection Handling"
+  aliases: ["异议应对"]
+
+Innovation Story:
+  summary: "创新故事：展示发现与交付如何带来业务结果的短案例"
+  source: "product-operating-model/08-stories/01-terms.md#Innovation Story"
+  aliases: ["创新故事"]
+
+Transformation Story:
+  summary: "转型故事：组织迁往产品运作模型的长篇叙事"
+  source: "product-operating-model/08-stories/01-terms.md#Transformation Story"
+  aliases: ["转型故事"]
+
+Keys to Successful Transformation:
+  summary: "成功转型十要：CEO、技术角色、领导力、真PM等关键条件"
+  source: "product-operating-model/09-conclusion/01-terms.md#Keys to Successful Transformation"
+  aliases: ["成功转型关键点"]
