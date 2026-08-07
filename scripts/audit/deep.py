@@ -23,6 +23,8 @@ SKIP_DIR_NAMES = {
     "public",
     ".hugo_build.lock",
     "resources",
+    ".cursor",
+    "agent-transcripts",
 }
 
 

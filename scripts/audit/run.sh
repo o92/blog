@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 全库深度审计（工作区 worktree，非仅暂存区）+ macOS 二次确认
+# 全库深度审计（磁盘工作区）+ macOS 二次确认
 # 入口：.githooks/pre-commit → 本脚本
 # 跳过：SKIP_COMMIT_AUDIT=1
 # 试跑：npm run audit
@@ -26,7 +26,6 @@ if [[ "${SKIP_COMMIT_AUDIT:-}" == "1" ]]; then
   exit 0
 fi
 
-# —— 工具依赖 ——
 need() {
   if ! command -v "$1" >/dev/null 2>&1; then
     echo "$PREFIX Critical: 未安装 $1" >&2
@@ -53,7 +52,6 @@ trap 'rm -f "$STAGED" "$TRACKED" "$BUILD_LOG"; rm -rf "$SCAN_TMP"' EXIT
 
 git diff --cached --name-only >"$STAGED"
 git ls-files >"$TRACKED"
-# 工作区相对 HEAD 的改动（含未暂存），仅用于报告
 DIRTY_STAT="$(git status --short 2>/dev/null || true)"
 STAGED_COUNT="$(wc -l <"$STAGED" | tr -d ' ')"
 TRACKED_COUNT="$(wc -l <"$TRACKED" | tr -d ' ')"
@@ -63,18 +61,37 @@ log "========== 全库深度审计（工作区） =========="
 log "root=$ROOT"
 log "跟踪文件 ${TRACKED_COUNT} · 本次暂存 ${STAGED_COUNT}"
 if [[ -n "$DIRTY_STAT" ]]; then
-  log "工作区有未提交改动（审计以磁盘工作区为准，含未暂存）"
+  log "工作区有未提交改动（结构/构建以磁盘工作区为准）"
+fi
+
+# —— 0 暂存与工作区一致性（避免「工作区修好、提交仍是坏的」） ——
+step "0/11 暂存文件不得另有未暂存修改"
+if [[ -s "$STAGED" ]]; then
+  UNSTAGED_TOUCH="$(mktemp)"
+  git diff --name-only >"$UNSTAGED_TOUCH"
+  git diff --name-only --diff-filter=U >>"$UNSTAGED_TOUCH" 2>/dev/null || true
+  MIXED="$(mktemp)"
+  # 交集：已暂存但仍有工作区未暂存 diff
+  sort -u "$STAGED" -o "$STAGED.sorted"
+  sort -u "$UNSTAGED_TOUCH" -o "$UNSTAGED_TOUCH"
+  comm -12 "$STAGED.sorted" "$UNSTAGED_TOUCH" >"$MIXED" || true
+  if [[ -s "$MIXED" ]]; then
+    crit "以下文件既已暂存又有未暂存修改；提交内容 ≠ 本次审计的工作区："
+    cat "$MIXED" >&2
+    echo "$PREFIX Hint: git add 这些文件，或 git restore --staged / checkout 对齐后再提交" >&2
+  fi
+  rm -f "$UNSTAGED_TOUCH" "$MIXED" "$STAGED.sorted"
 fi
 
 # —— 1 禁止跟踪产物 ——
-step "1/10 禁止跟踪 public/ node_modules/"
+step "1/11 禁止跟踪 public/ node_modules/"
 if grep -qE '^(public/|node_modules/)' "$TRACKED"; then
   crit "不应跟踪 public/ 或 node_modules/"
   grep -E '^(public/|node_modules/)' "$TRACKED" | head -20 >&2 || true
 fi
 
-# —— 2 可疑密钥文件名（跟踪 + 工作区常见位置） ——
-step "2/10 可疑密钥文件名"
+# —— 2 可疑密钥文件名 ——
+step "2/11 可疑密钥文件名"
 scan_bad_name() {
   local f="$1" base bad=0
   [[ -z "$f" ]] && return 0
@@ -87,19 +104,23 @@ scan_bad_name() {
   fi
 }
 while IFS= read -r f; do scan_bad_name "$f"; done <"$TRACKED"
-# 未跟踪但落在源码树里的可疑文件
 while IFS= read -r f; do
-  [[ -z "$f" || "$f" != ??* ]] && continue
-  path="${f:3}"
+  [[ -z "$f" ]] && continue
+  # 仅未跟踪 ??
+  case "$f" in
+    "?? "*) path="${f#?? }" ;;
+    ??*) path="${f:3}" ;;
+    *) continue ;;
+  esac
   case "$path" in
-    content/*|data/*|layouts/*|static/*|scripts/*|*.toml|*.yaml|*.yml|package.json)
+    content/*|data/*|layouts/*|static/*|scripts/*|*.toml|*.yaml|*.yml|package.json|.env|.env.*)
       scan_bad_name "$path"
       ;;
   esac
 done <<<"$DIRTY_STAT"
 
-# —— 3 冲突标记 + 空白（全工作区源码） ——
-step "3/10 冲突标记与空白"
+# —— 3 冲突标记 + 空白 ——
+step "3/11 冲突标记与空白"
 set +e
 git grep -nI -e '^<<<<<<< ' -e '^=======$' -e '^>>>>>>> ' -- \
   ':!public' ':!node_modules' \
@@ -107,10 +128,30 @@ git grep -nI -e '^<<<<<<< ' -e '^=======$' -e '^>>>>>>> ' -- \
 gr=$?
 set -e
 if [[ $gr -eq 0 ]]; then
-  crit "发现冲突标记"
+  crit "跟踪文件中发现冲突标记"
   head -30 "$SCAN_TMP/conflicts" >&2 || true
+elif [[ $gr -gt 1 ]]; then
+  crit "git grep 冲突扫描异常 (exit=$gr)"
 fi
-# 暂存与未暂存空白问题都拦
+# 未跟踪源码也扫冲突（git grep 默认不看 untracked）
+set +e
+while IFS= read -r f; do
+  [[ -f "$f" ]] || continue
+  git ls-files --error-unmatch "$f" >/dev/null 2>&1 && continue
+  if grep -nE '^<<<<<<< |^=======$|^>>>>>>> ' "$f" >/dev/null 2>&1; then
+    {
+      echo "$f"
+      grep -nE '^<<<<<<< |^=======$|^>>>>>>> ' "$f" || true
+    } >>"$SCAN_TMP/conflicts-untracked"
+  fi
+done < <(find "$ROOT/content" "$ROOT/data" "$ROOT/layouts" "$ROOT/static" "$ROOT/scripts" \
+  -type f 2>/dev/null)
+set -e
+if [[ -s "$SCAN_TMP/conflicts-untracked" ]]; then
+  crit "未跟踪文件中发现冲突标记"
+  head -30 "$SCAN_TMP/conflicts-untracked" >&2 || true
+fi
+
 if ! git diff --check >/dev/null 2>&1; then
   crit "git diff --check 失败（工作区）"
   git diff --check >&2 || true
@@ -120,8 +161,8 @@ if [[ -s "$STAGED" ]] && ! git diff --cached --check >/dev/null 2>&1; then
   git diff --cached --check >&2 || true
 fi
 
-# —— 4 密钥内容（工作区跟踪文件） ——
-step "4/10 密钥/私钥内容扫描"
+# —— 4 密钥内容（跟踪 + 未跟踪源码） ——
+step "4/11 密钥/私钥内容扫描"
 SECRET_RE='(AKIA[0-9A-Z]{16}|-----BEGIN (RSA |OPENSSH )?PRIVATE KEY-----|api[_-]?key[[:space:]]*[:=][[:space:]]['\''"][^'\''"]{16,})'
 set +e
 git grep -nIE "$SECRET_RE" -- \
@@ -133,12 +174,32 @@ git grep -nIE "$SECRET_RE" -- \
 sr=$?
 set -e
 if [[ $sr -eq 0 ]]; then
-  crit "疑似密钥/私钥"
+  crit "跟踪文件中疑似密钥/私钥"
   head -30 "$SCAN_TMP/secrets" >&2 || true
+elif [[ $sr -gt 1 ]]; then
+  crit "git grep 密钥扫描异常 (exit=$sr)"
+fi
+set +e
+# 仅未跟踪文本；排除二进制扩展名
+while IFS= read -r f; do
+  [[ -f "$f" ]] || continue
+  git ls-files --error-unmatch "$f" >/dev/null 2>&1 && continue
+  case "$f" in
+    *.png|*.jpg|*.jpeg|*.gif|*.webp|*.ico|*.woff|*.woff2|*.ttf|*.eot|*.pdf) continue ;;
+  esac
+  if grep -nIE "$SECRET_RE" "$f" >/dev/null 2>&1; then
+    grep -nIE "$SECRET_RE" "$f" >>"$SCAN_TMP/secrets-untracked" || true
+  fi
+done < <(find "$ROOT/content" "$ROOT/data" "$ROOT/layouts" "$ROOT/static" "$ROOT/scripts" \
+  -type f 2>/dev/null)
+set -e
+if [[ -s "$SCAN_TMP/secrets-untracked" ]]; then
+  crit "未跟踪文件中疑似密钥/私钥"
+  head -30 "$SCAN_TMP/secrets-untracked" >&2 || true
 fi
 
-# —— 5 JS 语法（全库脚本） ——
-step "5/10 JavaScript / 模块语法（node --check）"
+# —— 5 JS 语法 ——
+step "5/11 JavaScript / 模块语法（node --check）"
 shopt -s nullglob 2>/dev/null || true
 for f in \
   "$ROOT"/static/js/*.js \
@@ -154,7 +215,7 @@ do
 done
 
 # —— 6 shellcheck ——
-step "6/10 shellcheck（若已安装）"
+step "6/11 shellcheck（若已安装）"
 if command -v shellcheck >/dev/null 2>&1; then
   if ! shellcheck -x \
     "$ROOT/scripts/audit/run.sh" \
@@ -167,20 +228,19 @@ else
   log "Warning: 未安装 shellcheck，跳过（brew install shellcheck）"
 fi
 
-# —— 7 Python 深度（全工作区） ——
-step "7/10 结构与内容一致性（Python · 工作区）"
+# —— 7 Python 深度 ——
+step "7/11 结构与内容一致性（Python · 工作区）"
 if ! python3 "$AUDIT_HOME/deep.py" --root "$ROOT"; then
   FAIL=1
 fi
 
-# —— 8 完整生产构建（在工作区原地构建） ——
-step "8/10 完整构建 hugo + glossary-inject + pagefind"
+# —— 8 完整生产构建 ——
+step "8/11 完整构建 hugo + glossary-inject + pagefind"
 if [[ ! -d "$ROOT/node_modules" ]]; then
   log "npm ci（缺少 node_modules）…"
   npm ci --ignore-scripts
 fi
-# 清空旧产物，避免残留页 / hugo server 的 livereload 污染全库审计
-log "清理 public/（保证构建反映当前全库）…"
+log "清理 public/（避免旧产物污染）…"
 rm -rf "$ROOT/public"
 set +e
 (
@@ -200,29 +260,27 @@ if grep -Eq '\[glossary\] source file not found|\[glossary\] heading not found|\
 fi
 
 # —— 9 HTML 产物审计 ——
-step "9/10 构建产物 HTML 审计"
+step "9/11 构建产物 HTML 审计"
 if [[ $br -eq 0 ]]; then
-  if [[ -n "$PAGES_BASEPATH" ]]; then
-    if ! node "$AUDIT_HOME/html.mjs" "$ROOT/public" --base-path="$PAGES_BASEPATH"; then
-      FAIL=1
-    fi
-  else
-    if ! node "$AUDIT_HOME/html.mjs" "$ROOT/public"; then
-      FAIL=1
-    fi
+  # 必须显式传 base-path（含空字符串），避免 html.mjs 误用默认 /blog
+  if ! node "$AUDIT_HOME/html.mjs" "$ROOT/public" --base-path="$PAGES_BASEPATH"; then
+    FAIL=1
   fi
 else
   log "跳过 HTML 审计（构建未成功）"
 fi
 
-# —— 10 Hugo path warnings ——
-step "10/10 Hugo printPathWarnings"
+# —— 10 Hugo path warnings（写到临时目录，禁止覆盖已 inject 的 public/） ——
+step "10/11 Hugo printPathWarnings（独立 destination）"
 if [[ $br -eq 0 ]]; then
+  PATHWARN_DEST="$SCAN_TMP/hugo-pathwarn-out"
+  mkdir -p "$PATHWARN_DEST"
   set +e
   (
     export HUGO_ENVIRONMENT=production
     export HUGO_BASEURL="$PAGES_BASEURL"
-    hugo --gc --minify --printPathWarnings >"$SCAN_TMP/hugo-pathwarn" 2>&1
+    hugo --gc --minify --printPathWarnings --cleanDestinationDir -d "$PATHWARN_DEST" \
+      >"$SCAN_TMP/hugo-pathwarn" 2>&1
   )
   hw=$?
   set -e
@@ -231,20 +289,21 @@ if [[ $br -eq 0 ]]; then
     tail -40 "$SCAN_TMP/hugo-pathwarn" >&2 || true
   fi
   if grep -Eqi 'ERROR|fatal' "$SCAN_TMP/hugo-pathwarn" 2>/dev/null \
-    || grep -Eqi 'WARN.*(Ref|ref\.|link|page not found|Path)' "$SCAN_TMP/hugo-pathwarn" 2>/dev/null; then
+    || grep -Eqi 'WARN.*(Ref|ref\.|link|page not found|Path Warning)' "$SCAN_TMP/hugo-pathwarn" 2>/dev/null; then
     crit "Hugo path/link 告警"
-    grep -Ei 'ERROR|fatal|WARN.*(Ref|ref\.|link|page not found|Path)' "$SCAN_TMP/hugo-pathwarn" | head -40 >&2 || true
+    grep -Ei 'ERROR|fatal|WARN.*(Ref|ref\.|link|page not found|Path Warning)' "$SCAN_TMP/hugo-pathwarn" | head -40 >&2 || true
   fi
 fi
 
-# —— 报告 ——
+# —— 11 报告 ——
+step "11/11 写报告"
 REPORT="$ROOT/.git/last-pre-commit-audit.txt"
 {
   echo "time: $(date '+%Y-%m-%d %H:%M:%S')"
   echo "branch: $(git rev-parse --abbrev-ref HEAD)"
   echo "scope: full worktree + npm run build + html audit"
   echo "baseURL: $PAGES_BASEURL"
-  echo "basePath: ${PAGES_BASEPATH:-/}"
+  echo "basePath: ${PAGES_BASEPATH:-"(root)"}"
   echo "tracked_files: $TRACKED_COUNT"
   echo "staged_paths: $STAGED_COUNT"
   echo "result: $([[ "$FAIL" -eq 0 ]] && echo PASS || echo FAIL)"

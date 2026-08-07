@@ -8,15 +8,6 @@ import path from "node:path";
 import * as cheerio from "cheerio";
 import fg from "fast-glob";
 
-const args = process.argv.slice(2);
-let publicDir = path.resolve(process.cwd(), "public");
-let basePath = "/blog";
-for (const a of args) {
-  if (a.startsWith("--base-path=")) basePath = a.slice("--base-path=".length) || "";
-  else if (!a.startsWith("--")) publicDir = path.resolve(a);
-}
-basePath = basePath.replace(/\/$/, "");
-
 const errors = [];
 const warnings = [];
 const err = (m) => {
@@ -27,6 +18,22 @@ const warn = (m) => {
   warnings.push(m);
   console.error(`[audit] Warning: ${m}`);
 };
+
+const args = process.argv.slice(2);
+let publicDir = path.resolve(process.cwd(), "public");
+// 默认空：站点挂在域名根。Pages 子路径须由调用方显式传入 --base-path=/blog
+let basePath = "";
+let basePathSet = false;
+for (const a of args) {
+  if (a.startsWith("--base-path=")) {
+    basePath = a.slice("--base-path=".length) || "";
+    basePathSet = true;
+  } else if (!a.startsWith("--")) publicDir = path.resolve(a);
+}
+basePath = basePath.replace(/\/$/, "");
+if (!basePathSet) {
+  warn("未传 --base-path，按站点根路径校验（若部署在 /blog 请显式传入）");
+}
 
 if (!fs.existsSync(publicDir)) {
   err(`public 目录不存在: ${publicDir}`);
