@@ -3,10 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "glossary:inject": "node scripts/glossary-inject.mjs",
     "pagefind": "pagefind --site public --force-language zh",
     "build": "hugo --gc --minify && node scripts/glossary-inject.mjs && npm run pagefind",
-    "build:pages": "hugo --gc --minify --baseURL https://o92.github.io/blog/ && node scripts/glossary-inject.mjs && npm run pagefind",
     "dev": "node scripts/dev.mjs",
     "preview": "npm run build && npx --yes serve public -p 1313"
   },
