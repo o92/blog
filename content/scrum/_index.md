@@ -2,6 +2,7 @@
 title = "简介"
 book_title = "Scrum 流程笔记"
 glossary = ["scrum"]
+final = true
 +++
 
 基于 [2020 Scrum Guide](https://scrumguides.org/scrum-guide.html) 的流程笔记：先认专名，再看谁参与、产出什么。不替代官方全文。

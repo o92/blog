@@ -2,6 +2,7 @@
 title = "Tactical Design"
 book_title = "战术设计"
 weight = 2
+final = true
 +++
 
 Tactical Design 关心 *how*：在 Bounded Context 内如何实现业务逻辑、组织代码、可靠地协作。

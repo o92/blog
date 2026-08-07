@@ -2,6 +2,7 @@
 title = "Strategic Design"
 book_title = "战略设计"
 weight = 1
+final = true
 +++
 
 Strategic Design 关心 *what* 与 *why*：要建什么软件、为何而建。
