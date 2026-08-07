@@ -1,17 +1,6 @@
 #!/usr/bin/env bash
-# Git pre-commit → 全库工作区审计
+# Git pre-commit → 全库审计 + 二次确认
 set -euo pipefail
-
-# Cursor Source Control 继承的 PATH 往往很瘦，补上本机常见前缀
-export PATH="${HOME}/.proto/shims:${HOME}/.proto/bin:/opt/local/bin:/opt/homebrew/bin:/usr/local/bin:${PATH}"
-
 ROOT="$(git rev-parse --show-toplevel)"
-# 诊断：每次真正进 hook 都会落盘（面板提交若 ~30ms 且无此行 = hook 没跑）
-printf '%s\thost=%s\tpwd=%s\tpath_has_hugo=%s\n' \
-  "$(date '+%Y-%m-%d %H:%M:%S')" \
-  "$(uname -n)" \
-  "$PWD" \
-  "$(command -v hugo >/dev/null && echo yes || echo no)" \
-  >>"$ROOT/.git/hook-invocations.log" 2>/dev/null || true
-
-exec bash "$ROOT/scripts/audit/run.sh"
+export PATH="${HOME}/.proto/shims:${HOME}/.proto/bin:/opt/local/bin:/opt/homebrew/bin:/usr/local/bin:${PATH}"
+exec bash "$ROOT/scripts/audit/run.sh" --commit

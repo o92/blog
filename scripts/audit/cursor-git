@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Cursor / VS Code「git.path」包装器：丢掉静默 --no-verify，强制走 hooks。
+# 真要跳过：ALLOW_GIT_NO_VERIFY=1 …
+set -euo pipefail
+
+REAL_GIT="${CURSOR_REAL_GIT:-/usr/bin/git}"
+ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+LOG="$ROOT/.git/cursor-git-args.log"
+
+is_commit=0
+for a in "$@"; do
+  if [[ "$a" == "commit" ]]; then
+    is_commit=1
+    break
+  fi
+done
+
+args=()
+dropped=0
+for a in "$@"; do
+  if [[ "$is_commit" -eq 1 && ( "$a" == "--no-verify" || "$a" == "-n" ) ]]; then
+    if [[ "${ALLOW_GIT_NO_VERIFY:-}" == "1" ]]; then
+      args+=("$a")
+    else
+      dropped=1
+    fi
+  else
+    args+=("$a")
+  fi
+done
+
+{
+  printf '%s' "$(date '+%Y-%m-%d %H:%M:%S')"
+  printf '\targv='
+  printf '%q ' "$@"
+  if [[ "$dropped" -eq 1 ]]; then
+    printf '\tDROPPED_NO_VERIFY'
+  fi
+  printf '\n'
+} >>"$LOG" 2>/dev/null || true
+
+exec "$REAL_GIT" "${args[@]}"

@@ -5,28 +5,26 @@ alwaysApply: true
 
 # 提交门禁（全库 · 工作区）
 
-Cursor **Commit** → `.githooks/pre-commit` → `scripts/audit/run.sh`。
-
-**注意**：左侧 Source Control 若一秒内就提交成功、且没有 macOS「确认提交」弹窗，说明 hook 没跑到（可看 `.git/hook-invocations.log` 有无新行）。此时请用终端：
-
-```bash
-git add -A && git commit -m "…"
 ```
-
-审计对象是**磁盘上的完整工作区**（含未暂存）。目的：保证全库随时可构建、可发布。
-
-额外约束：若某文件**已暂存但仍有未暂存修改**，直接失败——防止「工作区审计通过、实际提交内容却不同」。
-
-生产构建审计写到 **临时目录**（`$TMP/public-audit`），**不碰、不删本地 `public/`**，可与 `npm run dev` 并行。
+Cursor Commit / git commit
+  → scripts/audit/cursor-git   # 丢掉静默 --no-verify
+  → .githooks/pre-commit
+  → scripts/audit/run.sh --commit
+       → scan.sh → build.sh → report → confirm.sh
+```
 
 ## 布局
 
 ```
 scripts/audit/
-  run.sh     # 编排入口
-  deep.py    # 结构/内容一致性
-  html.mjs   # 构建后 HTML 断链等
-scripts/git-pre-commit-audit.sh  # 兼容旧路径 → run.sh
+  run.sh       # 编排：默认只检查；--commit 含二次确认
+  lib.sh       # 日志 / PATH / hook 调用记录
+  scan.sh      # 暂存一致性、密钥、冲突、JS、shellcheck
+  build.sh     # deep.py + 临时 hugo/glossary + html.mjs
+  confirm.sh   # macOS 弹窗
+  install.sh   # hooksPath + git.path
+  cursor-git   # Cursor Source Control 包装器
+  deep.py / html.mjs
 .githooks/pre-commit
 ```
 
@@ -34,35 +32,25 @@ scripts/git-pre-commit-audit.sh  # 兼容旧路径 → run.sh
 
 ```bash
 npm run hooks:install
-pip3 install pyyaml
-# 可选：brew install shellcheck
-npm run audit          # 本地试跑（跳过 macOS 对话框需非 Darwin 或 CONFIRM_COMMIT）
+# Command Palette → Developer: Reload Window
+pip3 install pyyaml   # 若尚未安装
+npm run audit         # 试跑（不弹窗）
 ```
 
-## 检查项
+## 行为
 
-1. 禁止跟踪 `public/`、`node_modules/`
-2. 可疑密钥文件名（跟踪 + 源码树未跟踪）
-3. 冲突标记；`git diff --check`（工作区 + 暂存）
-4. 密钥/私钥内容形态
-5. 全库 JS/MJS `node --check`
-6. shellcheck（已安装时）
-7. Python：YAML/JSON、nav、glossary、mermaid、MD 站内链、大文件、front matter
-8. **临时目录** hugo（Pages `HUGO_BASEURL`）+ glossary-inject（跳过 pagefind）
-9. 对该临时产物做 HTML 审计
-10. Hugo `--printPathWarnings`（并入步骤 8）
-11. macOS 二次确认
+- 审计对象是**磁盘完整工作区**（含未暂存）；已暂存又有未暂存改动 → 失败
+- 生产构建写到**临时目录**，不碰本地 `public/`
+- 跳过：`SKIP_COMMIT_AUDIT=1`
+- 真要 `--no-verify`：`ALLOW_GIT_NO_VERIFY=1`
 
-报告：`.git/last-pre-commit-audit.txt`、`.git/last-pre-commit-build.log`
+## 诊断
 
-跳过：`SKIP_COMMIT_AUDIT=1`
+```bash
+tail .git/hook-invocations.log    # hook/审计是否进过
+tail .git/cursor-git-args.log     # 若有 DROPPED_NO_VERIFY = 面板曾静默跳过
+```
 
-## 本地预览（构建期注入）
+## 本地预览
 
-词条高亮是 **构建期** `glossary-inject` 写入 HTML 的。
-
-- 推荐：`npm run dev`（固定 **1313**；启动前会清掉旧 dev/占用，避免 Hugo 自动换端口）
-- 换端口：`PORT=1314 npm run dev`
-- 不要裸跑 `hugo server`：重建会覆盖 `public/`，泡泡会全部消失
-- 生产：`npm run build`（含 inject + pagefind）
-- 提交审计与本地预览互不抢 `public/`
+词条高亮是构建期 `glossary-inject` 写入的。用 `npm run dev`（不要裸 `hugo server`）。
