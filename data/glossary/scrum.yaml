@@ -17,11 +17,12 @@ Scrum Team:
 Product Owner:
   summary: "产品负责人：最大化产品价值；对 Product Backlog 内容与排序负责"
   source: "scrum/01-terms.md#Product Owner"
-  aliases: ["产品负责人"]
+  aliases: ["产品负责人", "PO"]
 
 Scrum Master:
   summary: "建立 Scrum；辅导、清障、保证事件有效发生"
   source: "scrum/01-terms.md#Scrum Master"
+  aliases: ["SM"]
 
 Developers:
   summary: "开发者们：每个 Sprint 做出可用 Increment；自己决定怎么做"
@@ -56,22 +57,22 @@ Sprint Retrospective:
 Product Backlog:
   summary: "产品待办列表：改进产品所需事项的有序清单；工作唯一来源"
   source: "scrum/01-terms.md#Product Backlog"
-  aliases: ["产品待办列表"]
+  aliases: ["产品待办列表", "PB"]
 
 Product Goal:
   summary: "产品目标：Product Backlog 的承诺，产品未来状态（一次一个）"
   source: "scrum/01-terms.md#Product Goal"
-  aliases: ["产品目标"]
+  aliases: ["产品目标", "PG"]
 
 Sprint Backlog:
   summary: "Sprint 待办列表：Sprint Goal + 选中条目 + 交付计划"
   source: "scrum/01-terms.md#Sprint Backlog"
-  aliases: ["Sprint 待办列表"]
+  aliases: ["Sprint 待办列表", "SB"]
 
 Sprint Goal:
   summary: "Sprint 目标：本 Sprint 的单一目标；Sprint Backlog 的承诺"
   source: "scrum/01-terms.md#Sprint Goal"
-  aliases: ["Sprint 目标"]
+  aliases: ["Sprint 目标", "SG"]
 
 Increment:
   summary: "产品增量：满足 Definition of Done、可用的增量"
@@ -81,4 +82,4 @@ Increment:
 Definition of Done:
   summary: "完成的定义：Increment 质量完成标准；未满足则不算完成"
   source: "scrum/01-terms.md#Definition of Done"
-  aliases: ["完成的定义"]
+  aliases: ["完成的定义", "DoD"]

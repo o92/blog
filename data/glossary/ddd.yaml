@@ -1,0 +1,251 @@
+# DDD 术语（战略 / 战术 / 相关方法；aliases = 中文名 + 简称）
+
+Domain-Driven Design:
+  summary: "领域驱动设计：以业务域为核心对齐模型与软件设计"
+  source: "ddd/01-strategic-design/01-terms.md#Domain-Driven Design"
+  aliases: ["领域驱动设计", "DDD"]
+
+Business Domain:
+  summary: "业务域：公司主业与向客户提供的服务"
+  source: "ddd/01-strategic-design/01-terms.md#Business Domain"
+  aliases: ["业务域"]
+
+Subdomain:
+  summary: "子域：更细的业务活动块；合起来支撑 Business Domain"
+  source: "ddd/01-strategic-design/01-terms.md#Subdomain"
+  aliases: ["子域"]
+
+Core Subdomain:
+  summary: "核心子域：差异化来源；复杂易变，应自研"
+  source: "ddd/01-strategic-design/01-terms.md#Core Subdomain"
+  aliases: ["核心子域", "Core Domain", "Core"]
+
+Supporting Subdomain:
+  summary: "支撑子域：需要但不构成优势；多为简单 CRUD/ETL"
+  source: "ddd/01-strategic-design/01-terms.md#Supporting Subdomain"
+  aliases: ["支撑子域", "Supporting"]
+
+Generic Subdomain:
+  summary: "通用子域：大家做得一样的复杂问题；宜买/采用"
+  source: "ddd/01-strategic-design/01-terms.md#Generic Subdomain"
+  aliases: ["通用子域", "Generic"]
+
+Domain Expert:
+  summary: "领域专家：业务知识权威与心智模型源头"
+  source: "ddd/01-strategic-design/01-terms.md#Domain Expert"
+  aliases: ["领域专家"]
+
+Ubiquitous Language:
+  summary: "统一语言：Bounded Context 内共用的业务用语"
+  source: "ddd/01-strategic-design/01-terms.md#Ubiquitous Language"
+  aliases: ["统一语言", "通用语言", "UL"]
+
+Model:
+  summary: "模型：有目的的简化表示，不是世界复印件"
+  source: "ddd/01-strategic-design/01-terms.md#Model"
+  aliases: ["模型"]
+
+Analysis Model:
+  summary: "分析模型：传统流程中多次翻译产生的需求侧描述"
+  source: "ddd/01-strategic-design/01-terms.md#Analysis Model"
+  aliases: ["分析模型"]
+
+Bounded Context:
+  summary: "限界上下文：语言与模型的一致性边界；设计出来的"
+  source: "ddd/01-strategic-design/01-terms.md#Bounded Context"
+  aliases: ["限界上下文", "BC"]
+
+Context Map:
+  summary: "上下文映射：BC 与集成关系的战略鸟瞰图"
+  source: "ddd/01-strategic-design/01-terms.md#Context Map"
+  aliases: ["上下文映射"]
+
+ad hoc:
+  summary: "临时的、就事论事的：无事先通用协议，按当次需要当面协商处理"
+  source: "ddd/01-strategic-design/01-terms.md#ad hoc"
+  aliases: ["就事论事"]
+
+Partnership:
+  summary: "合作伙伴：协作良好时的双向 ad hoc 集成"
+  source: "ddd/01-strategic-design/01-terms.md#Partnership"
+  aliases: ["合作伙伴"]
+
+Shared Kernel:
+  summary: "共享内核：多 BC 共享的最小一致模型片段"
+  source: "ddd/01-strategic-design/01-terms.md#Shared Kernel"
+  aliases: ["共享内核", "SK"]
+
+Customer–Supplier:
+  summary: "客户–供应商：上游提供服务、下游消费的关系"
+  source: "ddd/01-strategic-design/01-terms.md#Customer–Supplier"
+  aliases: ["客户-供应商", "客户供应商"]
+
+Upstream:
+  summary: "上游：Customer–Supplier 中的服务提供方"
+  source: "ddd/01-strategic-design/01-terms.md#Upstream / Downstream"
+  aliases: ["上游"]
+
+Downstream:
+  summary: "下游：Customer–Supplier 中的消费方"
+  source: "ddd/01-strategic-design/01-terms.md#Upstream / Downstream"
+  aliases: ["下游"]
+
+Conformist:
+  summary: "顺从者：下游接受上游模型"
+  source: "ddd/01-strategic-design/01-terms.md#Conformist"
+  aliases: ["顺从者"]
+
+Anticorruption Layer:
+  summary: "防腐层：下游将上游模型翻译为自己的模型"
+  source: "ddd/01-strategic-design/01-terms.md#Anticorruption Layer"
+  aliases: ["防腐层", "ACL"]
+
+Open-Host Service:
+  summary: "开放主机服务：上游以 Published Language 对外提供便利协议"
+  source: "ddd/01-strategic-design/01-terms.md#Open-Host Service"
+  aliases: ["开放主机服务", "OHS"]
+
+Published Language:
+  summary: "发布语言：面向集成的公共协议用语"
+  source: "ddd/01-strategic-design/01-terms.md#Published Language"
+  aliases: ["发布语言"]
+
+Separate Ways:
+  summary: "各行其道：不协作并在本地重复实现（慎用于 Core）"
+  source: "ddd/01-strategic-design/01-terms.md#Separate Ways"
+  aliases: ["各行其道"]
+
+# —— 战术设计 ——
+
+Transaction Script:
+  summary: "事务脚本：按一次对外操作组织过程式逻辑，须具备事务语义"
+  source: "ddd/02-tactical-design/01-terms.md#Transaction Script"
+  aliases: ["事务脚本"]
+
+Active Record:
+  summary: "活动记录：对象封装数据结构与 CRUD；过程仍常是 Transaction Script"
+  source: "ddd/02-tactical-design/01-terms.md#Active Record"
+  aliases: ["活动记录"]
+
+Domain Model:
+  summary: "领域模型：对象同时承载数据与行为，表达复杂规则与不变量"
+  source: "ddd/02-tactical-design/01-terms.md#Domain Model"
+  aliases: ["领域模型"]
+
+Value Object:
+  summary: "值对象：由属性值整体标识、不可变；相等比的是值"
+  source: "ddd/02-tactical-design/01-terms.md#Value Object"
+  aliases: ["值对象", "VO"]
+
+Entity:
+  summary: "实体：显式身份；状态可随生命周期变化"
+  source: "ddd/02-tactical-design/01-terms.md#Entity"
+  aliases: ["实体"]
+
+Aggregate:
+  summary: "聚合：一致性与事务边界；一次事务只改一个聚合实例"
+  source: "ddd/02-tactical-design/01-terms.md#Aggregate"
+  aliases: ["聚合"]
+
+Aggregate Root:
+  summary: "聚合根：聚合对外唯一入口"
+  source: "ddd/02-tactical-design/01-terms.md#Aggregate Root"
+  aliases: ["聚合根"]
+
+Domain Event:
+  summary: "领域事件：域内已发生的重要事实；过去时命名"
+  source: "ddd/02-tactical-design/01-terms.md#Domain Event"
+  aliases: ["领域事件"]
+
+Domain Service:
+  summary: "领域服务：放不进单个聚合、仍属领域的操作"
+  source: "ddd/02-tactical-design/01-terms.md#Domain Service"
+  aliases: ["领域服务"]
+
+Repository:
+  summary: "仓储：按聚合加载/保存的抽象"
+  source: "ddd/02-tactical-design/01-terms.md#Repository"
+  aliases: ["仓储"]
+
+Event Sourcing:
+  summary: "事件溯源：以事件序列为真相来源；状态由重放得到"
+  source: "ddd/02-tactical-design/01-terms.md#Event Sourcing"
+  aliases: ["事件溯源", "ES"]
+
+Layered Architecture:
+  summary: "分层架构：表现/业务/数据访问等横向层"
+  source: "ddd/02-tactical-design/01-terms.md#Layered Architecture"
+  aliases: ["分层架构"]
+
+Ports & Adapters:
+  summary: "端口与适配器：业务在中心，基础设施经端口适配"
+  source: "ddd/02-tactical-design/01-terms.md#Ports & Adapters"
+  aliases: ["端口与适配器", "六边形架构", "Hexagonal Architecture"]
+
+CQRS:
+  summary: "命令查询职责分离：写模型与读模型分开"
+  source: "ddd/02-tactical-design/01-terms.md#CQRS"
+  aliases: ["命令查询职责分离"]
+
+Outbox:
+  summary: "发件箱：状态与待发消息同事务落库，再中继投递"
+  source: "ddd/02-tactical-design/01-terms.md#Outbox"
+  aliases: ["发件箱", "发件箱模式"]
+
+Saga:
+  summary: "跨多个事务/组件的长流程编排"
+  source: "ddd/02-tactical-design/01-terms.md#Saga"
+  aliases: ["长流程编排"]
+Process Manager:
+  summary: "过程管理器：维护流程状态并决定下一步；适合分支策略"
+  source: "ddd/02-tactical-design/01-terms.md#Process Manager"
+  aliases: ["过程管理器"]
+
+# —— 实践 ——
+
+EventStorming:
+  summary: "事件风暴：用便利贴在时间线上协作建模业务流程"
+  source: "ddd/03-applying-ddd/03-event-storming.md#EventStorming"
+  aliases: ["事件风暴"]
+
+# —— 相关方法 ——
+
+Microservice:
+  summary: "微服务：微公共接口的服务；封装数据、限制变更理由"
+  source: "ddd/04-related-methodologies/01-microservices.md#Microservice"
+  aliases: ["微服务"]
+
+Deep Module:
+  summary: "深模块：接口相对简单，封装大量实现复杂度"
+  source: "ddd/04-related-methodologies/01-microservices.md#Deep Module（深模块）"
+  aliases: ["深模块"]
+
+Event-Driven Architecture:
+  summary: "事件驱动架构：组件靠异步事件消息协作"
+  source: "ddd/04-related-methodologies/02-event-driven-architecture.md#Event-Driven Architecture"
+  aliases: ["事件驱动架构", "EDA"]
+
+Event Notification:
+  summary: "事件通知：短通知重要之事，详情由消费者回查"
+  source: "ddd/04-related-methodologies/02-event-driven-architecture.md#Event Notification"
+  aliases: ["事件通知"]
+
+Event-Carried State Transfer:
+  summary: "携带状态的事件：载荷带快照/增量，用于异步复制"
+  source: "ddd/04-related-methodologies/02-event-driven-architecture.md#Event-Carried State Transfer（ECST）"
+  aliases: ["携带状态的事件", "ECST"]
+
+Data Mesh:
+  summary: "数据网格：按域拆分分析数据，以数据产品经公共接口交付"
+  source: "ddd/04-related-methodologies/03-data-mesh.md#Data Mesh"
+  aliases: ["数据网格"]
+
+OLTP:
+  summary: "在线事务处理：实时事务与实体生命周期"
+  source: "ddd/04-related-methodologies/03-data-mesh.md#OLTP vs OLAP"
+  aliases: ["在线事务处理"]
+
+OLAP:
+  summary: "在线分析处理：洞察、报表、优化与灵活查询"
+  source: "ddd/04-related-methodologies/03-data-mesh.md#OLTP vs OLAP"
+  aliases: ["在线分析处理"]

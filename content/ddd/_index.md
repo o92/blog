@@ -1,10 +1,12 @@
 +++
 title = "简介"
 book_title = "领域驱动设计(Domain-Driven Design)"
+glossary = ["ddd"]
 +++
 
-基于 Vlad Khononov《学习领域驱动设计》（*Learning Domain-Driven Design*）的读书笔记。
+基于 Vlad Khononov《Learning Domain-Driven Design》的读书笔记。专名以 **英文** 为准，旁注常用中文。
 
-这本书从「为什么要用 DDD」讲起，再落到战略设计与战术设计：如何划定限界上下文、用统一语言对齐业务与代码，以及实体、值对象、聚合、领域事件等建模手段怎样组合使用。重点不只在名词解释，而在根据业务复杂度选择合适的设计深度——避免把简单问题过度设计，也避免复杂域缺少边界。
-
-本笔记按章节整理要点与实践体会，便于对照原书查阅。
+- [Strategic Design（战略设计）]({{< ref "ddd/01-strategic-design" >}})
+- [Tactical Design（战术设计）]({{< ref "ddd/02-tactical-design" >}})
+- [Applying DDD（实践）]({{< ref "ddd/03-applying-ddd" >}})
+- [Related Methodologies（相关方法）]({{< ref "ddd/04-related-methodologies" >}})

@@ -49,3 +49,11 @@ npm run audit          # 本地试跑（跳过 macOS 对话框需非 Darwin 或 
 报告：`.git/last-pre-commit-audit.txt`、`.git/last-pre-commit-build.log`
 
 跳过：`SKIP_COMMIT_AUDIT=1`
+
+## 本地预览（构建期注入）
+
+词条高亮是 **构建期** `glossary-inject` 写入 HTML 的。
+
+- 推荐：`npm run dev`（hugo server 写盘后自动再注入）
+- 不要裸跑 `hugo server`：重建会覆盖 `public/`，泡泡会全部消失
+- 生产：`npm run build`（含 inject）

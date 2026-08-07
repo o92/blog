@@ -425,7 +425,9 @@ function tipHtml(sources) {
         ? "通用"
         : s.domain === "scrum"
           ? "Scrum"
-          : s.domain;
+          : s.domain === "ddd"
+            ? "DDD"
+            : s.domain;
     const parts = [
       `<span class="glossary-tip-domain">${escapeHtml(label)}</span>`,
       `<span class="glossary-tip-summary">${escapeHtml(s.summary)}</span>`,

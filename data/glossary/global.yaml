@@ -1,8 +1,1 @@
 # 全局术语词库（所有文章都会加载）
-
-Hugo:
-  summary: "静态网站生成器，用 Go 编写"
-  link: "https://gohugo.io/"
-
-术语:
-  summary: "本站自动高亮并支持悬停解释的关键词"

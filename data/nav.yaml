@@ -8,6 +8,3 @@ categories:
       - title: Scrum
         book: scrum
   - title: 技术架构
-    children:
-      - title: Go
-        books: [go-concurrency]
