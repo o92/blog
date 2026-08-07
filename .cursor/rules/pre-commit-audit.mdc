@@ -1,30 +1,29 @@
 ---
-description: Git pre-commit 全库工作区深度审计
+description: Git pre-commit 提交审计（术语泡泡 + 空路径 + 二次确认）
 alwaysApply: true
 ---
 
-# 提交门禁（全库 · 工作区）
+# 提交门禁
 
 ```
-Cursor Commit / git commit
-  → scripts/audit/cursor-git   # 丢掉静默 --no-verify
+git commit
   → .githooks/pre-commit
-  → scripts/audit/run.sh --commit
-       → scan.sh → build.sh → report → confirm.sh
+  → node scripts/audit/run.mjs --commit
+       → glossary-check → links-check → build-temp → bubbles-check → confirm
 ```
 
 ## 布局
 
 ```
 scripts/audit/
-  run.sh       # 编排：默认只检查；--commit 含二次确认
-  lib.sh       # 日志 / PATH / hook 调用记录
-  scan.sh      # 暂存一致性、密钥、冲突、JS、shellcheck
-  build.sh     # deep.py + 临时 hugo/glossary + html.mjs
-  confirm.sh   # macOS 弹窗
-  install.sh   # hooksPath + git.path
-  cursor-git   # Cursor Source Control 包装器
-  deep.py / html.mjs
+  run.mjs              # 入口；默认只检查；--commit 含 macOS 确认
+  glossary-check.mjs   # 词库 summary / source / link / aliases
+  links-check.mjs      # nav book + content 站内链接 / ref
+  build-temp.mjs       # 临时目录 hugo + glossary-inject
+  bubbles-check.mjs    # HTML .glossary-term / .glossary-tip
+  confirm.mjs          # macOS 弹窗
+  lib.mjs
+  install.sh
 .githooks/pre-commit
 ```
 
@@ -32,23 +31,22 @@ scripts/audit/
 
 ```bash
 npm run hooks:install
-# Command Palette → Developer: Reload Window
-pip3 install pyyaml   # 若尚未安装
-npm run audit         # 试跑（不弹窗）
+npm run audit              # 试跑（不弹窗）
+npm run audit:precommit    # 含确认弹窗
 ```
 
 ## 行为
 
-- 审计对象是**磁盘完整工作区**（含未暂存）；已暂存又有未暂存改动 → 失败
-- 生产构建写到**临时目录**，不碰本地 `public/`
+- 纯代码，不走 AI
+- 全站临时构建，不碰本地 `public/`
 - 跳过：`SKIP_COMMIT_AUDIT=1`
-- 真要 `--no-verify`：`ALLOW_GIT_NO_VERIFY=1`
+- 无 `git.path` / cursor-git 包装器（Cursor 若带 `--no-verify` 会绕过）
 
 ## 诊断
 
 ```bash
-tail .git/hook-invocations.log    # hook/审计是否进过
-tail .git/cursor-git-args.log     # 若有 DROPPED_NO_VERIFY = 面板曾静默跳过
+cat .git/last-pre-commit-audit.txt
+tail .git/last-pre-commit-build.log
 ```
 
 ## 本地预览

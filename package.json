@@ -10,8 +10,8 @@
     "dev": "node scripts/dev.mjs",
     "preview": "npm run build && npx --yes serve public -p 1313",
     "hooks:install": "bash scripts/audit/install.sh",
-    "audit": "bash scripts/audit/run.sh",
-    "audit:precommit": "bash scripts/audit/run.sh --commit"
+    "audit": "node scripts/audit/run.mjs",
+    "audit:precommit": "node scripts/audit/run.mjs --commit"
   },
   "dependencies": {
     "@iarna/toml": "^2.2.5",

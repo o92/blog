@@ -23,6 +23,8 @@ const SKIP_TAGS = new Set([
   "style",
   "textarea",
   "svg",
+  // 避免在已有链接内再包 <a class="glossary-tip-more">（非法嵌套会被解析丢掉）
+  "a",
 ]);
 
 const config = JSON.parse(

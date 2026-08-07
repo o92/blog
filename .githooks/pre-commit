@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Git pre-commit → 全库审计 + 二次确认
+# Git pre-commit → 提交审计 + 二次确认
 set -euo pipefail
 ROOT="$(git rev-parse --show-toplevel)"
 export PATH="${HOME}/.proto/shims:${HOME}/.proto/bin:/opt/local/bin:/opt/homebrew/bin:/usr/local/bin:${PATH}"
-exec bash "$ROOT/scripts/audit/run.sh" --commit
+cd "$ROOT"
+exec node "$ROOT/scripts/audit/run.mjs" --commit

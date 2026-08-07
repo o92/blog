@@ -22,7 +22,7 @@ alwaysApply: true
 
 ## 匹配语义（勿擅自改；要改先更新本规则 + design spec）
 
-- 跳过 `pre` / `code` / `kbd` / `samp` / `script` / `style` 及已处理术语
+- 跳过 `pre` / `code` / `kbd` / `samp` / `script` / `style` / `a`（避免链接内再嵌套「显示更多」）及已处理术语
 - 长短优先；英文大小写不敏感；每次出现都高亮
 - 全局与领域重名时气泡并显
 
