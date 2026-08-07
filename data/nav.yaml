@@ -1,10 +1,20 @@
 categories:
+  # 一级 = 专业 BoK 边界；二级起对齐该 BoK 的知识领域（KA）/ 明确二级主题
+  # 详见 .cursor/rules/bok-taxonomy.mdc
   - title: 软件工程
+    bok: SWEBOK
     children:
-      - title: 领域驱动设计(DDD)
-        book: ddd
+      - title: 软件设计
+        ka: Software Design
+        children:
+          - title: 领域驱动设计(DDD)
+            book: ddd
+      # 预留二级（暂无书不挂空节点）：软件架构、软件需求、软件测试…
   - title: 项目管理
+    bok: PMBOK
     children:
-      - title: Scrum
-        book: scrum
-  - title: 技术架构
+      - title: 敏捷
+        ka: Agile
+        children:
+          - title: Scrum
+            book: scrum
