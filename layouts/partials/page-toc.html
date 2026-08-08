@@ -1,9 +1,11 @@
 {{ if .Params.final }}
 <nav class="final-page-toc">
   {{ with .TableOfContents }}
-    {{ if . }}
+    {{- $toc := replaceRE `(?s)^\s*<nav[^>]*>\s*` "" . -}}
+    {{- $toc = replaceRE `(?s)\s*</nav>\s*$` "" $toc -}}
+    {{- if and $toc (ne (trim $toc " \n\r\t") "") -}}
       {{ . }}
-    {{ end }}
+    {{- end -}}
   {{ end }}
   <ul>
     {{ partial "final-toc-flat.html" . }}
@@ -11,11 +13,13 @@
 </nav>
 {{ else }}
   {{ with .TableOfContents }}
-    {{ if . }}
+    {{- $toc := replaceRE `(?s)^\s*<nav[^>]*>\s*` "" . -}}
+    {{- $toc = replaceRE `(?s)\s*</nav>\s*$` "" $toc -}}
+    {{- if and $toc (ne (trim $toc " \n\r\t") "") -}}
       {{ . }}
-    {{ else }}
+    {{- else -}}
       <p class="muted">本页无小标题</p>
-    {{ end }}
+    {{- end -}}
   {{ else }}
     <p class="muted">本页无小标题</p>
   {{ end }}

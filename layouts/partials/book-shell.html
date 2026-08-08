@@ -69,8 +69,11 @@
 
   <aside id="page-toc" class="toc-panel" aria-label="本章目录">
     {{ partial "panel-head.html" (dict "title" "本章" "rail" "toc") }}
-    {{ partial "page-toc.html" . }}
+    <div class="toc-panel__scroll">
+      {{ partial "page-toc.html" . }}
+    </div>
   </aside>
 </main>
 <script src="{{ "js/sidebars.js" | relURL }}" defer></script>
+<script src="{{ "js/page-toc-spy.js" | relURL }}" defer></script>
 {{ end }}

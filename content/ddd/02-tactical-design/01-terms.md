@@ -22,8 +22,17 @@ weight = 1
 ### Domain Model
 
 - **中文**：领域模型
-- 用对象同时承载**数据与行为**，表达复杂状态迁移、规则与不变量。优先业务语言，避开基础设施泄漏。
-- 落地形态见设计模式笔记中的 **Rich Domain Model（充血）** / **Anemic Domain Model（贫血）**；此处指 DDD 战术模式本身。
+- 用对象同时承载**数据与行为**，表达复杂状态迁移、规则与不变量。优先业务语言，避开基础设施泄漏。实践上即 **Rich Domain Model（充血）**；若对象几乎只有字段、行为堆在外部 Service，则是 **Anemic Domain Model（贫血）**——Fowler 视为反模式。
+
+### Rich Domain Model
+
+- **中文**：充血模型
+- **Domain Model** 的正经落地：数据与行为同在对象内。
+
+### Anemic Domain Model
+
+- **中文**：贫血模型
+- 挂着领域对象的壳、行为在 Service 里；名不副实的 Domain Model。
 
 ### Value Object
 

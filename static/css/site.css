@@ -102,6 +102,16 @@ html {
   overflow-y: auto;
 }
 
+/* 有右栏大纲的笔记页：隐藏正文滚动条（仍可滚轮翻页；目录滚动会带动正文） */
+html.hide-doc-scrollbar {
+  scrollbar-width: none;
+}
+html.hide-doc-scrollbar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
 body {
   margin: 0;
   min-width: 20rem;
@@ -832,20 +842,38 @@ html[data-theme="light"] .theme-toggle__icon--sun {
   right: calc(-1 * var(--scrollbar-width));
   top: var(--header-h);
   z-index: 25;
+  display: flex;
+  flex-direction: column;
   width: calc(var(--toc-width) + var(--scrollbar-width));
   height: calc(100vh - var(--header-h));
-  overflow: auto;
-  overflow-x: hidden;
-  padding: 1rem calc(1rem + var(--scrollbar-width)) 2rem 1rem;
+  overflow: hidden;
+  padding: 1rem calc(1rem + var(--scrollbar-width)) 0 1rem;
   background: var(--body-bg);
   border-left: 0;
   font-size: var(--font-size-xs);
   box-sizing: border-box;
-  /* Mirror: put scrollbar on the inner (left) edge toward center */
-  direction: rtl;
+  direction: ltr;
 }
 
-.toc-panel > * {
+.toc-panel__scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  overflow-x: hidden;
+  padding-bottom: 2rem;
+  position: relative;
+  /* Mirror: put scrollbar on the inner (left) edge toward center */
+  direction: rtl;
+  scrollbar-width: none;
+}
+
+.toc-panel__scroll::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.toc-panel__scroll > * {
   direction: ltr;
 }
 
@@ -948,6 +976,39 @@ html[data-toc-collapsed="true"] .toc-panel {
   gap: 0.35rem;
   margin: 0 0.15rem 0.75rem;
   min-height: 1.5rem;
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.book-toc-panel > .panel-head {
+  background: var(--sidebar-bg);
+}
+
+.toc-panel > .panel-head {
+  background: var(--body-bg);
+  /* direction was rtl on old scrolling panel; keep LTR for title/button */
+  direction: ltr;
+  margin-bottom: 0;
+  padding-bottom: 0.35rem;
+}
+
+/* 标题栏下方渐隐，目录滚近顶部时自然淡出 */
+.toc-panel > .panel-head::after {
+  content: "";
+  position: absolute;
+  left: -0.25rem;
+  right: -0.25rem;
+  top: 100%;
+  height: 1.85rem;
+  pointer-events: none;
+  z-index: 6;
+  background: linear-gradient(
+    to bottom,
+    var(--body-bg) 0%,
+    color-mix(in srgb, var(--body-bg) 75%, transparent) 40%,
+    transparent 100%
+  );
 }
 
 /* Left: title … collapse(inner). Right: collapse(inner) … title — mirrored */
@@ -997,15 +1058,24 @@ html[data-toc-collapsed="true"] .toc-panel {
 
 .book-toc ul,
 .toc-panel ul,
-#TableOfContents ul {
+#TableOfContents ul,
+.final-page-toc ul {
   list-style: none;
   margin: 0;
+}
+
+/* 只清顶层 padding；嵌套 ul 靠下面的缩进规则 */
+.book-toc > ul,
+.toc-panel > nav > ul,
+.final-page-toc > ul,
+#TableOfContents > ul {
   padding: 0;
 }
 
 .book-toc li,
 .toc-panel li,
-#TableOfContents li {
+#TableOfContents li,
+.final-page-toc li {
   margin: 0;
 }
 
@@ -1015,13 +1085,12 @@ html[data-toc-collapsed="true"] .toc-panel {
   color: var(--body-fg);
 }
 
-.book-toc ul ul {
-  padding-inline-start: 0.75rem;
+.book-toc ul ul,
+.toc-panel ul ul,
+#TableOfContents ul ul,
+.final-page-toc ul ul {
+  padding-inline-start: 0.85rem;
   margin-top: 0.1rem;
-}
-
-#TableOfContents ul ul {
-  padding-inline-start: 0.75rem;
 }
 
 .book-toc a,
@@ -1037,20 +1106,103 @@ html[data-toc-collapsed="true"] .toc-panel {
   transition: background 0.12s ease, color 0.12s ease;
 }
 
+/* 右栏：默认 / 已访问同色，避免点过后变色 */
 .toc-panel a,
-#TableOfContents a {
-  color: var(--muted);
+.toc-panel a:link,
+.toc-panel a:visited,
+#TableOfContents a,
+#TableOfContents a:link,
+#TableOfContents a:visited {
   display: block;
-  padding: 0.3rem 0.4rem;
+  padding: 0.28rem 0.4rem;
   border-radius: var(--radius);
   word-wrap: break-word;
   text-decoration: none;
+  line-height: 1.35;
+  position: relative;
+  isolation: isolate;
+  --toc-lens: 0;
+  --toc-scale: 1;
+  transform: scale(var(--toc-scale));
+  transform-origin: left center;
+  background: transparent;
+  will-change: transform;
+}
+
+/* 底色画在未放大的层上，避免放大后遮住邻项文字 */
+.toc-panel a::before,
+#TableOfContents a::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: -1;
+  pointer-events: none;
+  background: color-mix(
+    in srgb,
+    var(--sidebar-active-bg) calc(var(--toc-lens) * 58%),
+    transparent
+  );
+  transform: scale(calc(1 / max(var(--toc-scale), 0.001)));
+  transform-origin: left center;
+}
+
+/* L1：小节（名词介绍 / part） */
+.toc-panel > nav > ul > li > a,
+.toc-panel > nav > ul > li > a:link,
+.toc-panel > nav > ul > li > a:visited,
+.final-page-toc > ul > li > a,
+.final-page-toc > ul > li > a:link,
+.final-page-toc > ul > li > a:visited,
+#TableOfContents > ul > li > a,
+#TableOfContents > ul > li > a:link,
+#TableOfContents > ul > li > a:visited {
+  color: var(--body-fg);
+  font-weight: 600;
+  font-size: 0.92em;
+  margin-top: 0.35rem;
+}
+
+.toc-panel > nav > ul > li:first-child > a,
+.final-page-toc > ul > li:first-child > a,
+#TableOfContents > ul > li:first-child > a {
+  margin-top: 0;
+}
+
+/* L2：二级标题 */
+.toc-panel ul ul > li > a,
+.toc-panel ul ul > li > a:link,
+.toc-panel ul ul > li > a:visited,
+.final-page-toc ul ul > li > a,
+.final-page-toc ul ul > li > a:link,
+.final-page-toc ul ul > li > a:visited,
+#TableOfContents ul ul > li > a,
+#TableOfContents ul ul > li > a:link,
+#TableOfContents ul ul > li > a:visited {
+  color: var(--body-fg);
+  font-weight: 500;
+  font-size: 0.88em;
+  opacity: 0.92;
+}
+
+/* L3+：词条 / 更细标题 */
+.toc-panel ul ul ul > li > a,
+.toc-panel ul ul ul > li > a:link,
+.toc-panel ul ul ul > li > a:visited,
+.final-page-toc ul ul ul > li > a,
+.final-page-toc ul ul ul > li > a:link,
+.final-page-toc ul ul ul > li > a:visited,
+#TableOfContents ul ul ul > li > a,
+#TableOfContents ul ul ul > li > a:link,
+#TableOfContents ul ul ul > li > a:visited {
+  color: var(--muted);
+  font-weight: 400;
+  font-size: 0.84em;
+  opacity: 1;
 }
 
 .book-toc a:visited,
-.book-toc__row > a:visited,
-.toc-panel a:visited,
-#TableOfContents a:visited {
+.book-toc__row > a:visited {
   color: inherit;
 }
 
@@ -1062,9 +1214,11 @@ html[data-toc-collapsed="true"] .toc-panel {
 
 .toc-panel a:hover,
 #TableOfContents a:hover {
-  color: var(--link);
-  background: var(--surface);
+  /* 鱼眼已在驱动背景时，悬停只做轻微提亮，避免打架 */
+  filter: brightness(1.03);
 }
+
+/* 放大镜由 page-toc-spy.js 连续插值：上/中/下渐变，中间最强 */
 
 .book-toc .is-active > a,
 .book-toc .is-active > .book-toc__row > a {

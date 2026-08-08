@@ -1,15 +1,23 @@
 {{/*
-  Flat list of part links for right TOC on a final page.
-  . = final page
+  Part links for right TOC on a final page, with each part's in-page headings nested.
+  . = final page (or nested section when recursing)
 */}}
-{{- $final := . -}}
 {{- $items := slice -}}
-{{- range $final.Sections -}}{{- $items = $items | append . -}}{{- end -}}
-{{- range $final.RegularPages -}}{{- $items = $items | append . -}}{{- end -}}
+{{- range .Sections -}}{{- $items = $items | append . -}}{{- end -}}
+{{- range .RegularPages -}}{{- $items = $items | append . -}}{{- end -}}
 {{- $items = sort $items "Weight" "asc" -}}
 {{- range $items -}}
   {{- $id := partial "final-anchor.html" . -}}
-  <li><a href="#{{ $id }}">{{ .LinkTitle }}</a>
+  <li>
+    <a href="#{{ $id }}">{{ .LinkTitle }}</a>
+    {{- with .TableOfContents -}}
+      {{- /* Strip <nav> wrapper so we can nest under the part link without duplicate ids. */ -}}
+      {{- $toc := replaceRE `(?s)^\s*<nav[^>]*>\s*` "" . -}}
+      {{- $toc = replaceRE `(?s)\s*</nav>\s*$` "" $toc -}}
+      {{- if and $toc (ne $toc "") -}}
+        {{- $toc | safeHTML -}}
+      {{- end -}}
+    {{- end -}}
     {{- if .IsSection -}}
     <ul>
       {{ partial "final-toc-flat.html" . }}

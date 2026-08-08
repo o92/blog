@@ -255,6 +255,31 @@ Objection Handling:
   source: "product-operating-model/07-objections/01-terms.md#Objection Handling"
   aliases: ["异议应对"]
 
+Finance:
+  summary: "财务：预算与投资核算职能；产品模型重谈按团队与业务结果资助"
+  source: "product-operating-model/07-objections/01-terms.md#Finance"
+  aliases: ["财务"]
+
+People Operations:
+  summary: "人事 / 人才运营：职级考核与发展路径；按产品能力重写期望"
+  source: "product-operating-model/07-objections/01-terms.md#People Operations"
+  aliases: ["人事", "人才运营", "Human Resources", "People Ops"]
+
+Chief Information Officer:
+  summary: "首席信息官：传统掌管企业信息技术的高管；需从成本中心转向产品工程共建"
+  source: "product-operating-model/07-objections/01-terms.md#Chief Information Officer"
+  aliases: ["首席信息官"]
+
+Program Management Office:
+  summary: "项目集管理办公室：旧式命令控制派工中枢；宜转向服务团队的交付管理"
+  source: "product-operating-model/07-objections/01-terms.md#Program Management Office"
+  aliases: ["项目集管理办公室"]
+
+Return on Investment:
+  summary: "投资回报：投入相对收益；产品模型更看组合赌注与业务结果"
+  source: "product-operating-model/07-objections/01-terms.md#Return on Investment"
+  aliases: ["投资回报"]
+
 Innovation Story:
   summary: "创新故事：展示发现与交付如何带来业务结果的短案例"
   source: "product-operating-model/08-stories/01-terms.md#Innovation Story"
