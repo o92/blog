@@ -17,10 +17,6 @@
     {{- $toc = replaceRE `(?s)\s*</nav>\s*$` "" $toc -}}
     {{- if and $toc (ne (trim $toc " \n\r\t") "") -}}
       {{ . }}
-    {{- else -}}
-      <p class="muted">本页无小标题</p>
     {{- end -}}
-  {{ else }}
-    <p class="muted">本页无小标题</p>
   {{ end }}
 {{ end }}
