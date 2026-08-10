@@ -1,6 +1,7 @@
 {{/*
   Recursively emit merged body for descendants of a final page.
-  . = current section/page whose children to include (the final page itself on first call)
+  Heading id scoping across parts is done in static/js/final-heading-ids.js
+  (duplicate titles would otherwise share one id and break TOC jumps).
 */}}
 {{- $parent := . -}}
 {{- $items := slice -}}

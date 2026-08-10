@@ -1,6 +1,6 @@
 {{/*
   Part links for right TOC on a final page, with each part's in-page headings nested.
-  . = final page (or nested section when recursing)
+  Nested TOC hashes are rewritten to part-scoped ids by static/js/final-heading-ids.js.
 */}}
 {{- $items := slice -}}
 {{- range .Sections -}}{{- $items = $items | append . -}}{{- end -}}
@@ -11,7 +11,6 @@
   <li>
     <a href="#{{ $id }}">{{ .LinkTitle }}</a>
     {{- with .TableOfContents -}}
-      {{- /* Strip <nav> wrapper so we can nest under the part link without duplicate ids. */ -}}
       {{- $toc := replaceRE `(?s)^\s*<nav[^>]*>\s*` "" . -}}
       {{- $toc = replaceRE `(?s)\s*</nav>\s*$` "" $toc -}}
       {{- if and $toc (ne $toc "") -}}

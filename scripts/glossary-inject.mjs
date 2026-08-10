@@ -277,7 +277,15 @@ function resolveSource(source, { domain, term, errors }) {
     }
     const t = truncateText(sec.text, EXCERPT_MAX);
     excerpt = t.text;
-    moreHref = `${permalink}#${anchorize(sec.heading)}`;
+    const headingAnchor = anchorize(sec.heading);
+    if (underFinal) {
+      const part = partAnchorForContentFile(abs);
+      moreHref = part
+        ? `${permalink}#${part}--${headingAnchor}`
+        : `${permalink}#${headingAnchor}`;
+    } else {
+      moreHref = `${permalink}#${headingAnchor}`;
+    }
   } else {
     const plain = content
       .replace(/```[\s\S]*?```/g, " ")
