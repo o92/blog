@@ -41,7 +41,7 @@ weight = 9
 
 ## Go 示例
 
-算法族抽成接口，Context 持有并可切换。
+导航 App 从 A 到 B：开车与步行用不同路线算法，用户可随时切换。算法族抽成接口，`Navigator`（Context）持有并可替换策略。
 
 ```go
 package main

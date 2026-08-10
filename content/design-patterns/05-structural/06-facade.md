@@ -42,7 +42,7 @@ weight = 6
 
 ## Go 示例
 
-对外一个方法，内部编排多个子系统。
+视频转码要打开文件、选编解码器、读码率等多步；客户端只想「一键 Convert」。Facade（`VideoConverter`）对外一个方法，内部编排各子系统。
 
 ```go
 package main

@@ -41,33 +41,31 @@ weight = 10
 
 ## Go 示例
 
-Go 无抽象类继承，用「骨架函数 + 钩子接口」模拟模板方法。
+数据导入固定三步：读文件 → 校验 → 写库；CSV / Excel 只换各步实现。Go 无抽象类继承，用「骨架函数 + 钩子接口」模拟模板方法。
 
 ```go
 package main
 
 import "fmt"
 
-type GameHooks interface {
-	Start()
-	TakeTurn()
-	End()
+type ImportHooks interface {
+	Read()
+	Validate()
+	Write()
 }
 
-func Play(h GameHooks, turns int) { // 模板：固定骨架
-	h.Start()
-	for i := 0; i < turns; i++ {
-		h.TakeTurn()
-	}
-	h.End()
+func Import(h ImportHooks) { // 模板：固定骨架
+	h.Read()
+	h.Validate()
+	h.Write()
 }
 
-type Chess struct{}
-func (Chess) Start()        { fmt.Println("chess start") }
-func (Chess) TakeTurn()     { fmt.Println("chess turn") }
-func (Chess) End()          { fmt.Println("chess end") }
+type CSVImport struct{}
+func (CSVImport) Read()     { fmt.Println("read csv") }
+func (CSVImport) Validate() { fmt.Println("validate rows") }
+func (CSVImport) Write()    { fmt.Println("write db") }
 
 func main() {
-	Play(Chess{}, 2)
+	Import(CSVImport{})
 }
 ```

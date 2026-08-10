@@ -41,41 +41,41 @@ weight = 11
 
 ## Go 示例
 
-双分派在 Go 里偏啰嗦；结构稳定、操作常增时仍可用。现代代码也可用类型 switch 简化。
+购物车里书本与数码品类结构稳定，但要新增「打印明细」等操作。条目 `Accept` 访问者，由 Visitor 按类型输出；双分派在 Go 里偏啰嗦，现代代码也可用类型 switch 简化。
 
 ```go
 package main
 
 import "fmt"
 
-type Shape interface {
+type Item interface {
 	Accept(v Visitor)
 }
 
 type Visitor interface {
-	VisitDot(d Dot)
-	VisitCircle(c Circle)
+	VisitBook(b Book)
+	VisitGadget(g Gadget)
 }
 
-type Dot struct{ X, Y int }
-func (d Dot) Accept(v Visitor) { v.VisitDot(d) }
+type Book struct{ Title string; Price int }
+func (b Book) Accept(v Visitor) { v.VisitBook(b) }
 
-type Circle struct{ R int }
-func (c Circle) Accept(v Visitor) { v.VisitCircle(c) }
+type Gadget struct{ Name string; Price int }
+func (g Gadget) Accept(v Visitor) { v.VisitGadget(g) }
 
-type XMLExport struct{}
-func (XMLExport) VisitDot(d Dot) {
-	fmt.Printf("<dot x=%d y=%d/>\n", d.X, d.Y)
+type ReceiptPrinter struct{}
+func (ReceiptPrinter) VisitBook(b Book) {
+	fmt.Printf("book %s: %d\n", b.Title, b.Price)
 }
-func (XMLExport) VisitCircle(c Circle) {
-	fmt.Printf("<circle r=%d/>\n", c.R)
+func (ReceiptPrinter) VisitGadget(g Gadget) {
+	fmt.Printf("gadget %s: %d\n", g.Name, g.Price)
 }
 
 func main() {
-	shapes := []Shape{Dot{1, 2}, Circle{5}}
-	v := XMLExport{}
-	for _, s := range shapes {
-		s.Accept(v)
+	cart := []Item{Book{"DDD", 88}, Gadget{"earbuds", 199}}
+	v := ReceiptPrinter{}
+	for _, item := range cart {
+		item.Accept(v)
 	}
 }
 ```

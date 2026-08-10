@@ -42,7 +42,7 @@ weight = 3
 
 ## Go 示例
 
-产品族用一组工厂方法；客户端只依赖抽象接口。
+跨平台桌面应用要按系统生成一整套控件：Windows 出 Win 按钮/复选框，Mac 出 Mac 控件，保证同族风格一致。客户端只拿 `GUIFactory`，用一组工厂方法创建产品族。
 
 ```go
 package main

@@ -42,7 +42,7 @@ weight = 2
 
 ## Go 示例
 
-第三方类型接口不合用时，包一层适配到客户端期望的接口。
+业务统一走 `Notifier.Notify`，但遗留短信 SDK 只有 `SendSMS`。用适配器把旧 SDK 包成 Notifier，客户端无需改调用方式。
 
 ```go
 package main

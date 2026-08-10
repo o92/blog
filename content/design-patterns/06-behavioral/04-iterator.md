@@ -41,7 +41,7 @@ weight = 4
 
 ## Go 示例
 
-手写 `HasNext`/`Next`；生产代码也可直接用 `for range` 或 `iter.Seq`（Go 1.23+）。
+遍历自定义歌曲列表时，客户端只靠 `HasNext`/`Next`，不碰内部切片下标。生产代码也可直接用 `for range` 或 `iter.Seq`（Go 1.23+）。
 
 ```go
 package main
@@ -69,7 +69,8 @@ func (it *sliceIter[T]) Next() T {
 }
 
 func main() {
-	it := NewSliceIter([]string{"a", "b", "c"})
+	playlist := []string{"intro", "verse", "outro"}
+	it := NewSliceIter(playlist)
 	for it.HasNext() {
 		fmt.Println(it.Next())
 	}

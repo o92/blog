@@ -41,7 +41,7 @@ weight = 5
 
 ## Go 示例
 
-组件不互调，只通知中介者。
+对话框里 OK / Cancel 互不直连：点按钮只通知中介者，由 Dialog 决定提交表单还是关闭。组件之间不互相调用。
 
 ```go
 package main

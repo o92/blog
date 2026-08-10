@@ -42,7 +42,7 @@ weight = 6
 
 ## Go 示例
 
-用 `sync.Once` 保证只初始化一次。能注入依赖时尽量少用全局单例。
+进程内全局配置（如 Env）只需加载一次，多处 `GetConfig()` 应拿到同一实例。用 `sync.Once` 保证初始化只跑一遍；能注入依赖时尽量少用全局单例。
 
 ```go
 package main

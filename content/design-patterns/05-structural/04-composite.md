@@ -41,7 +41,7 @@ weight = 4
 
 ## Go 示例
 
-叶子与容器实现同一接口，客户端统一 `Price()`。
+电商礼盒可再套小礼盒：单品与盒子都算「可计价」，结账时对根礼盒调一次 `Price()` 即可递归求和。叶子与容器实现同一接口。
 
 ```go
 package main
@@ -52,10 +52,10 @@ type Component interface {
 	Price() int
 }
 
-type Product struct{ price int }
+type Product struct{ price int } // 单品
 func (p Product) Price() int { return p.price }
 
-type Box struct{ kids []Component }
+type Box struct{ kids []Component } // 礼盒（可嵌套）
 
 func (b *Box) Add(c Component) { b.kids = append(b.kids, c) }
 func (b Box) Price() int {
@@ -68,11 +68,11 @@ func (b Box) Price() int {
 
 func main() {
 	inner := &Box{}
-	inner.Add(Product{10})
-	inner.Add(Product{20})
+	inner.Add(Product{10}) // 零食
+	inner.Add(Product{20}) // 水杯
 	root := &Box{}
-	root.Add(inner)
-	root.Add(Product{5})
+	root.Add(inner)        // 内层礼盒
+	root.Add(Product{5})   // 贺卡
 	fmt.Println(root.Price()) // 35
 }
 ```

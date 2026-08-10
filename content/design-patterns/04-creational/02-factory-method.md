@@ -42,41 +42,41 @@ weight = 2
 
 ## Go 示例
 
-Go 无类继承，常用「创建者接口 + 具体创建者」表达 Factory Method。
+电商下单时，不同品类由各自 Creator 产出对应 SKU（手机、笔记本）。`placeOrder` 只调工厂方法，不关心具体类型——Go 无类继承，常用「创建者接口 + 具体创建者」表达。
 
 ```go
 package main
 
 import "fmt"
 
-type Product interface {
+type SKU interface {
 	Name() string
 }
 
-type chair struct{}
-func (chair) Name() string { return "chair" }
+type phoneSKU struct{}
+func (phoneSKU) Name() string { return "iPhone 15" }
 
-type sofa struct{}
-func (sofa) Name() string { return "sofa" }
+type laptopSKU struct{}
+func (laptopSKU) Name() string { return "MacBook Air" }
 
-// Creator：工厂方法由实现方决定产品类型
+// Creator：工厂方法由实现方决定 SKU 类型
 type Creator interface {
-	CreateProduct() Product
+	CreateSKU() SKU
 }
 
-type ChairCreator struct{}
-func (ChairCreator) CreateProduct() Product { return chair{} }
+type PhoneCreator struct{}
+func (PhoneCreator) CreateSKU() SKU { return phoneSKU{} }
 
-type SofaCreator struct{}
-func (SofaCreator) CreateProduct() Product { return sofa{} }
+type LaptopCreator struct{}
+func (LaptopCreator) CreateSKU() SKU { return laptopSKU{} }
 
-func order(c Creator) {
-	p := c.CreateProduct()
-	fmt.Println("ordered:", p.Name())
+func placeOrder(c Creator) {
+	sku := c.CreateSKU()
+	fmt.Println("ordered:", sku.Name())
 }
 
 func main() {
-	order(ChairCreator{})
-	order(SofaCreator{})
+	placeOrder(PhoneCreator{})
+	placeOrder(LaptopCreator{})
 }
 ```

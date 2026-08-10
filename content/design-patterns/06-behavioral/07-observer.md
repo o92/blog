@@ -41,7 +41,7 @@ MVC 中视图常观察模型；对比 Mediator、信号槽、现代事件总线�
 
 ## Go 示例
 
-发布者维护订阅列表并广播。
+商品改价后，关注该商品的订阅者都要收到通知。发布者维护订阅列表，`Notify` 时广播给所有观察者。
 
 ```go
 package main
@@ -57,21 +57,21 @@ func (s Subscriber) Update(msg string) {
 	fmt.Printf("%s got: %s\n", s.name, msg)
 }
 
-type Publisher struct {
+type PriceSubject struct { // 商品价格主题
 	subs []Observer
 }
 
-func (p *Publisher) Subscribe(o Observer) {
+func (p *PriceSubject) Subscribe(o Observer) {
 	p.subs = append(p.subs, o)
 }
-func (p *Publisher) Notify(msg string) {
+func (p *PriceSubject) Notify(msg string) {
 	for _, s := range p.subs {
 		s.Update(msg)
 	}
 }
 
 func main() {
-	p := &Publisher{}
+	p := &PriceSubject{}
 	p.Subscribe(Subscriber{"A"})
 	p.Subscribe(Subscriber{"B"})
 	p.Notify("price changed")

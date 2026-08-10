@@ -41,7 +41,7 @@ weight = 2
 
 ## Go 示例
 
-处理者决定处理或交给 `next`。
+退款审批按金额升级：柜员处理 ≤100，更大额交给经理。每个处理者决定自己处理或 `forward` 给 `next`。
 
 ```go
 package main
@@ -65,7 +65,7 @@ func (b *base) forward(amount int) {
 	}
 }
 
-type Cashier struct{ base }
+type Cashier struct{ base } // 柜员
 func (c *Cashier) Handle(amount int) {
 	if amount <= 100 {
 		fmt.Println("cashier handles", amount)
@@ -74,7 +74,7 @@ func (c *Cashier) Handle(amount int) {
 	c.forward(amount)
 }
 
-type Manager struct{ base }
+type Manager struct{ base } // 经理
 func (m *Manager) Handle(amount int) {
 	if amount <= 1000 {
 		fmt.Println("manager handles", amount)
