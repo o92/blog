@@ -25,6 +25,7 @@ sources/
 | `design-patterns` | `sources/design-patterns/` |
 | `ddd` | `sources/ddd/` |
 | `scrum` | `sources/scrum/` |
+| `collaborative-software-design` | `sources/collaborative-software-design/` |
 
 新开笔记时：在 `content/<slug>/` 与 `sources/<slug>/` 同步建目录，并在 `manifest.yaml` 登记。
 

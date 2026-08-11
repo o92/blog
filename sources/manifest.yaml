@@ -32,3 +32,14 @@ notes:
     primary_title: ""   # 放入原书后补全
     authors: []
     files: []
+
+  collaborative-software-design:
+    note: "content/collaborative-software-design"
+    primary_title: "Collaborative Software Design: How to facilitate domain modeling decisions"
+    authors:
+      - "Evelyn van Kelle"
+      - "Gien Verschatse"
+      - "Kenny Baas-Schwegler"
+    files:
+      - path: collaborative-software-design/VanKelle-Collaborative-Software-Design.epub
+        role: primary

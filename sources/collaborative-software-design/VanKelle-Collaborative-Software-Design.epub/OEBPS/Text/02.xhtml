@@ -1,0 +1,671 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title>2 What is collaborative modeling?</title>
+<link href="../../page_styles.css" rel="stylesheet" type="text/css"/>
+<link href="../../stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div class="calibre1" id="sbo-rt-content"><h1 class="tochead" id="heading_id_2">2 <a id="idTextAnchor000"></a><a id="idTextAnchor001"></a><a id="idTextAnchor002"></a><a id="idTextAnchor003"></a><a id="idTextAnchor004"></a><a id="idTextAnchor005"></a>What is collaborative modeling?</h1>
+<p class="co-summary-head">This chapter covers<a id="idIndexMarker000"></a><a id="marker-18"></a></p>
+<ul class="calibre6">
+<li class="co-summary-bullet">Recognizing the importance of a shared understanding of the business problems</li>
+<li class="co-summary-bullet">Analyzing stakeholders to be involved in collaborative modeling</li>
+<li class="co-summary-bullet">Discovering the different kinds of collaborative modeling tools</li>
+</ul>
+<p class="body">In this chapter, we delve into the essence of collaborative modeling and its pivotal role in software development. Understanding the business problems is essential for software development teams, but that’s just the beginning. We advocate that software development teams actively engage in the design process and make collaborative design decisions because their technical expertise significantly enhances the software’s capability to address user and business needs. In addition, the user journey and business process should be jointly optimized to get the most value out of building that software. That is the true potential of collaborative modeling.</p>
+<p class="body">For those unfamiliar with collaborative modeling, we’ll introduce some of our favorite tools, offering a glimpse into their practical application. Even if you’re a seasoned collaborative modeler, we’ll provide insights on the different tools and when we use one over the other. We end the chapter with the characteristics that make a tool fit for collaborative modeling in software design, what makes a tool less effective for collaborative modeling, and what the difference is between diagramming and collaborative modeling.<a id="idTextAnchor006"></a></p>
+<h2 class="fm-head" id="heading_id_3">2.1 Understanding the business problems</h2>
+<p class="body">As mentioned in the introduction, we believe teams are too focused on finding solutions instead of understanding the business problems. By <i class="fm-italics">business problems</i>, we mean the various needs of our users and stakeholders. Stakeholders are individuals or groups, either within or outside the organization, who are invested in the outcome of solving these business problems. Their needs can range from overarching purposes and objectives to specific goals, tasks, customer and user journeys, business processes, constraints, and any challenges they face. We categorize all these as business problems. Here are a few examples:<a id="marker-19"></a><a id="idIndexMarker001"></a></p>
+<ul class="calibre6">
+<li class="fm-list-bullet">
+<p class="list">Customer needs, such as the need to go to the movies with friends or immerse yourself in a movie</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">The broader experience of a <i class="fm-italics">customer journey</i> when purchasing a ticket at the cinema’s kiosk<a id="idIndexMarker002"></a></p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">The goals and tasks in a <i class="fm-italics">user journey</i> when interacting with our products, such as reserving seats for a movie or having the best seats available<a id="idIndexMarker003"></a></p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">User needs of the back-office system, for example, having automated weekly insight reporting into ticket sales</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Business pain points in which management is worried because of a decrease in ticket sales</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">A pain point of the data team who gets corrupted data from the database and therefore can’t make correct forecasting models</p>
+</li>
+</ul>
+<p class="body">Most of the time, we see software development teams try to understand what the business needs, they are already thinking about how this translates to a feature request that fits in the existing software—instead of analyzing the problem. This is a remnant of the early days of software development. Thirty years ago, companies didn’t depend so heavily on software. Most of the business problems a company faced weren’t related to software. Nowadays, some business problems exist because we use software. BigScreen’s “Anytime, Anywhere” campaign is only relevant because the company sells tickets online.</p>
+<p class="body">We’ve evolved from small software applications that support and automate the business to software being a key component and product to succeed as a company. An important part of a software engineer’s job is to make sure that parts of the software system can evolve together with the company. Most software isn’t created in isolation anymore either; there is already existing software even if it isn’t easy to detect. So, software engineers need to make sure that the overall functionality of the system doesn’t change while the individual parts evol<a id="idTextAnchor007"></a>ve.</p>
+<h3 class="fm-head2" id="heading_id_4">2.1.1 What problems are we trying to solve?</h3>
+<p class="body">Companies must change, or they will run out of business. When companies change, the software system needs to change too. If we look at BigScreen again, one of the major problems is that the company can’t reach its modernization goals because of the software system. The company wants its customers to be able to purchase a ticket “anytime, anywhere” but because of how the software system was built, that isn’t possible. When we’re trying to solve business problems, we can’t do this in isolation anymore—we need to understand the context in which we’re solving the business problems. Here are a few example questions to give us a better understanding of the context:<a id="idIndexMarker004"></a><a id="marker-20"></a></p>
+<ul class="calibre6">
+<li class="fm-list-bullet">
+<p class="list">What industry are we working in?</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">What is the domain that we’re working in?</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">What does the market look like?</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">What is our company’s position in this market?</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">What are the key value propositions that we’re offering our customers?</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">What are the key goals of the company?</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">How is the company going to achieve those goals (often referred to as company strategy)?</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">How can the software help to achieve those goals?</p>
+</li>
+</ul>
+<p class="body">We’ve encountered many teams who were responsible for creating a software system and could not answer these questions because they didn’t know the context in which they were solving the business problems. Fortunately, there are visualization tools that can help you do this, for example, the Business Model Canvas, which we’ll look into later in this chapter.</p>
+<p class="body">Certain areas of the organization couldn’t use the software system to help them do their jobs because it didn’t fulfill their needs or wasn’t adaptable enough. Of the many possible reasons for this, one reason we see often is that the stakeholders don’t always understand what software can do (this is fine, as it isn’t their job to understand that). Software can do a lot of things—even things that humans can’t—so we need to understand the organization and its capabilities to gain a deep understanding of how it works. For example, if we take a stakeholder’s request at face value for a “spreadsheet to know how many tickets a movie has sold each week since it was released,” we’ll miss a lot of opportunities at that moment. We need to dig deeper to understand what the business is trying to achieve. Imagine having the following conversation with Nala, one of the stakeholders responsible for scheduling the movies in the back office:</p>
+<p class="body-ind">Nala: We need to know how many tickets a movie has sold each week since it was released, and we need to be able to export it.</p>
+<p class="body-ind">Us: That’s great, we can do that. Do you need that for all theaters or per theater?</p>
+<p class="body-ind">Nala: We need that per theater. We want to know how well a movie is doing in a given theater.</p>
+<p class="body-ind">Us: That is interesting; what do you do with that information if I may ask?</p>
+<p class="body-ind">Nala: Oh yeah, sure! Movies have a fixed period they are running in the cinema, but if they are still performing great, we extend that a week or maybe even a few weeks.</p>
+<p class="body-ind">Us: Does this only happen once?</p>
+<p class="body-ind">Nala: No, we reevaluate this after a few weeks, together with all the other movies playing. We could extend again, even though that rarely happens.</p>
+<p class="body-ind">Us: I didn’t know that, thanks! One more question . . . you mentioned you need an export for that; which format? How will you be using that export?</p>
+<p class="body-ind">Nala: Excel would be nice. We want to make a chart, so we can see the evolution.</p>
+<p class="body-ind">Us: We could create those charts for you on the page. We can even create functionality for you that makes it possible to extend the playtime for a movie in a specific theater on the same screen and send out a notification for that to the marketing app.</p>
+<p class="body-ind">Nala: Oh, that would be great; that would save us a lot of time. It is very cumbersome to have to update all of that manually every time.</p>
+<p class="body"><a id="marker-21"></a>Amazing, isn’t it? With just a few extra questions, we now understand that they don’t really need an overview of how many tickets a movie sold each week in an export; instead, they want to be able to decide whether or not a movie should stay in a specific theater and how long they can postpone reevaluating that decision. We call this a <i class="fm-italics">complicated problem</i>. Complicated problems are ordered, have predictable outcomes, and have a solution although they require expertise to understand them. In our scenario, this means that the stakeholder knows how to decide to extend the playtime of a movie at this point in time. They have been doing it for many years, and we want to make it easier for them by automating (parts of) that process. <a id="idIndexMarker005"></a></p>
+<p class="body">“At this point in time” is an important part here because the business is always looking for differentiators. The company wants to stand out in the market and change its processes to get a competitive advantage (or for other reasons) but isn’t sure how. This leads us to complex problems.</p>
+<p class="body"><i class="fm-italics">Complex problems</i> are characterized by high uncertainty, unpredictable outcomes, and the absence of fixed solutions. These problems demand exploration and collaboration with stakeholders to unearth potential solutions.<a id="idIndexMarker006"></a></p>
+<p class="body">Take, for instance, the challenge of boosting attendance at a local cinema. On the surface, it might seem simple: offer discounts, screen popular movies, or upgrade the cinema’s amenities. Yet, a deeper examination reveals its complexity. Stakeholders may observe unexpected spikes in attendance on certain days, but the reasons remain elusive. Are the attendance spikes driven by a specific movie premiere, a local event, a recent change in the snack offerings, or a mix of these factors?</p>
+<p class="body">Addressing such challenges in software design demands a different approach because the solution isn’t always evident, there are many unknowns, and we’re trying to discover how this could work. We need to come up with different ways—that is, different models—in which this could work. We need to probe different models to be able to create adaptable software systems. For example, a system might integrate with social media analytics to track movie trends or sync with local event calendars to predict attendance surges. Such a system should be adaptable, enabling the cinema to experiment with various pricing or promotional strategies and swiftly adjust based on feedback.</p>
+<p class="body">If we don’t focus on the problem we’re trying to solve, we don’t know this. It’s important to know whether your problem lies in the <i class="fm-italics">complex</i> or <i class="fm-italics">complicated</i> domain<sup class="footnotenumber" id="footnote-002-backlink"><a class="url1" href="#footnote-002">1</a></sup> because you’ll need different approaches and different collaborative modeling sessions. Essentially, if a problem’s cause and effect become clear only in hindsight, it’s a complex problem.<a id="idIndexMarker007"></a><a id="idIndexMarker008"></a></p>
+<p class="fm-callout"><span class="fm-callout-head">Note</span> The Cynefin framework refers to the decision-making framework created by David Snowden. It helps the decision-maker make sense of the context in which a decision must be made and how to approach finding a solution. It has five domains: clear (all is known), complicated (there are known unknowns), complex (there are unknown unknowns), chaotic (little to no knowledge), and confusion (we can’t determine the context). A problem starts in confusion because we need to categorize the problem that we are dealing with. Once the domain has been determined, as we gain more knowledge, a problem can move from chaotic, via complex and complicated, toward clear. Most of the problems we try to solve with software reside in the complicated or complex domain.</p>
+<p class="body">Addressing these challenges requires a deep understanding of the context and the problems at hand. Collaborative modeling serves as a tool to grasp this context and the business landscape. In the subsequent sections, we’ll delve deeper into the essence of collaborative modeling and its role in problem-<a id="idTextAnchor008"></a>solving.<a id="marker-22"></a><a id="idIndexMarker009"></a></p>
+<h3 class="fm-head2" id="heading_id_5">2.1.2 What is collaborative modeling?</h3>
+<p class="body">You’re actively engaging with the stakeholders to understand their problems better, which is a step in the right direction, but simply talking to the stakeholders isn’t enough—you want to collaborate with them. So, in a very broad sense, we can define collaborative modeling as <i class="fm-italics">“</i>a visualization technique to analyze complex and conflict-laden decision-making processes with all relevant stakeholders and decision-makers to create a shared understanding.<i class="fm-italics">”</i> It’s not innate to software development (<a class="url" href="https://mng.bz/0Ggp">https://mng.bz/0Ggp</a>) and is sometimes referred to as <i class="fm-italics">participatory modeling.</i><sup class="footnotenumber" id="footnote-001-backlink"><a class="url1" href="#footnote-001">2</a></sup><a id="idIndexMarker010"></a><a id="idIndexMarker011"></a></p>
+<p class="body">Let’s take a closer look at the definition of collaborative modeling, starting with “a visualization technique.” Modeling itself isn’t visual by default. You can build up a mental model of the problem by having a dialogue with each other, as we showed in the previous section. There are a few challenges we have to deal with if we aren’t visualizing. First, there is a limit to what you can remember. In her book, <i class="fm-italics">The Programmer’s Brain</i>, Felienne Hermans talks about our cognitive processes and their limitations, and she offers techniques to deal with those limitations that will help us become better programmers. One of those techniques is creating visual or explicit models of the code with tools such as dependency graphs and state tables. Although the book mostly focuses on the technical aspect of programming, those same cognitive processes and their limitations are there when we’re trying to understand a business problem. Similar to code, creating visual models of the problem, for instance, with EventStorming as shown in figure 2.1, will help us become better at understanding it. Don’t worry yet about the notation; we’ll follow up on that later in the <a id="idTextAnchor009"></a>chapter.<a id="idIndexMarker012"></a><a id="idIndexMarker013"></a><a id="marker-23"></a></p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="346" src="../../OEBPS/Images/CH02_F01_Baas.png" width="850"/></p>
+<p class="figurecaption">Figure 2.1 Visualization of the conversation with the business stakeholders at BigScreen on extending movies using EventStorming. domain events are business-relevant events that happen in a conversation. We’ll go more in-depth on how EventStorming works later in the chapter.</p>
+</div>
+<p class="body">Second, people misunderstand each other. Even worse, we often don’t realize that we’re misunderstanding the other person because we’re using the same words for different concepts. When we visualize our mental model of the problem, those misunderstandings will come to light sooner.</p>
+<p class="body">Analyzing complex and conflict-laden decision-making processes, applied to software development, means we model the business problems and analyze the context in which those problems occur. As mentioned in the previous section, complex problems focus on discovery and have a high uncertainty because we’re not yet sure how they could work. This is where collaborative modeling shines. It’s a cheap way to create different models of the problem and validate them for their usefulness. You can throw different scenarios and edge cases at them and see where the model breaks.</p>
+<p class="body">That doesn’t mean collaborative modeling isn’t effective for complicated problems, but just remember that collaboration can be expensive. When dealing with complicated problems, you can analyze the problem in smaller panels of experts. When you model with a small subset of the involved people, make sure you bring information back into the shared model of the people building the software to mitigate the risk of diverging the shared understanding of the domain. You might recognize that feeling when you thought you understood each other, happily started working on some code, and later found out that you weren’t on the same page after all.</p>
+<p class="body">It’s also important to know that conflicts will arise when you’re modeling together. “Conflict-laden” in this context means opposite ideas or interests, disagreement, and controversy. Although conflict is normal, people should not experience any type of barrier to expressing their knowledge because when they do, they will hold back. Chapter 8 is dedicated to the conflict-laden aspect of collaborative modeling and how you can deal with that during collaborative modeling.</p>
+<p class="body">Knowledge resides in the minds of people, but not all knowledge is inside one mind, unfortunately—it’s scattered across multiple minds. We want to have all relevant knowledge when modeling the problem, so we need all relevant stakeholders present during the modeling session. We’ll go in-depth about who those stakeholders are in section 2.2.2. If you’re tackling complex problems, some of those stakeholders will be the decision-makers who decide which models to try out first because they have potential and which ones to throw away. They will also be the ones able to provide you with feedback on how the models are performing and what needs reexamining or adaptation.</p>
+<p class="body">The last part of our definition, “to create a shared understanding,” talks about the purpose of collaborative modeling. The goal of collaborative modeling is to model the business problems so that everyone is working off the same mental models. If you don’t share the same mental models, you can’t have a shared understanding of the problem. We refer to models in the plural form here because, depending on the information you want, you can model a problem differently. Different tools will give you different information and a different perspective on the same problem. Later in this chapter, we’ll dig a bit deeper into what those tools have in common and when to use<a id="idTextAnchor010"></a> which tool.<a id="marker-24"></a><a id="idIndexMarker014"></a></p>
+<h3 class="fm-head2" id="heading_id_6">2.1.3 Exploring business problems using collaborative modeling</h3>
+<p class="body">When exploring business problems through collaborative modeling, the focus of the modeling must be on discovering the domain and not the specific collaborative modeling tool that is being used. In collaborative modeling, <i class="fm-italics">domain</i> refers to the specific area of knowledge or expertise that is being explored or modeled. The domain represents the subject matter or part of the organization that we together with the stakeholders are trying to understand and represent through collaborative modeling. Using collaborative modeling to understand the domain is also called <i class="fm-italics">doma<a id="idTextAnchor011"></a>in modeling</i>. <a id="idIndexMarker015"></a><a id="idIndexMarker016"></a></p>
+<p class="body">While many tools are available for collaborative modeling, not all of them are suited for collaboration. Good collaborative modeling tools have a minimal learning curve. You can explain the tool while you’re modeling with the stakeholders. EventStorming, for example, uses different colored sticky notes. Each color has a specific meaning; for example, a blue sticky represents commands in the domain. If you want to introduce a new color, you can quickly add a sticky to the legend with the concept it represents. During a session, you’re working toward deeper insights into the domain, so things are always moving around on the whiteboard. With a good collaboration tool, you can do this efficiently. Sticky notes are easily moved, swapped, and so on. Domain discovery will span multiple sessions, which means that you need to be able to adapt or re-create parts of your model easily. We’ll go over a few of our favorite tools later in the chapter.</p>
+<p class="body">During the collaboration, pay attention to the words that the stakeholders are using. Dare to ask what they mean when they are using a word that could be ambiguous. Sometimes, a single word contains multiple concepts. When you find a word like that, introduce a new one to capture one of the concepts. In BigScreen, we talk about showing movies, but that captures a lot of things. Theaters play all sorts of things these days: operas, documentaries, movies, and so on. Is it important to know the difference? Is it <i class="fm-italics">always</i> important to know the difference? Other times, there is more than one word for the same concept. Try to create an agreement on which word will be used from now on.</p>
+<p class="body">Let’s go back to the conversation we had with the domain expert in BigScreen. We made a lot of assumptions in that conversation. One of the big assumptions we made is that the playtime of a movie stays the same, but is that true? What if they extend a movie for two weeks, but it will only be playing on Tuesday and Thursday? Another assumption is that all movies can be extended. What about events such as opera nights or premieres? Should we allow extensions on those? In figure 2.2, you can see these assumptions ma<a id="idTextAnchor012"></a>de explicit.<a id="marker-25"></a></p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="356" src="../../OEBPS/Images/CH02_F02_Baas.png" width="850"/></p>
+<p class="figurecaption">Figure 2.2 Visualization of the assumptions we made when a movie gets extended. We used a red sticky as hotspot to show that a movie will always get extended and added its meaning to the legend. We also added our assumptions in the form of questions/remarks.</p>
+</div>
+<p class="body">We want to make extending movies as easy as possible for our users while also helping them avoid mistakes. Discovery of deeper insights only happens when you’re engaged, curious, and not afraid to ask a lot<a id="idTextAnchor013"></a> of questions.<a id="idIndexMarker017"></a></p>
+<h2 class="fm-head" id="heading_id_7">2.2 Domain-Driven Design and collabo<a id="idTextAnchor014"></a>rative modeling</h2>
+<p class="body">Collaborative modeling is often spoken about in the context of <i class="fm-italics">Domain-Driven Design</i> (DDD). Domain modeling was already a recognized topic, but no one discussed what exactly it was or good ways to do it. DDD attempted (and succeeded) in giving us a <i class="fm-italics">framework</i> to talk about good ways to design domain models and use those models in our software systems. A framework<sup class="footnotenumber" id="footnote-000-backlink"><a class="url1" href="#footnote-000">3</a></sup> (e.g., the Cynefin framework described earlier) in this context is a topology that makes you look at things from different perspectives so you can make distinctions and do things in different ways. Let’s take a closer look at what <a id="idTextAnchor015"></a>DDD exactly is.<a id="idIndexMarker018"></a><a id="idIndexMarker019"></a></p>
+<h3 class="fm-head2" id="heading_id_8">2.2.1 What is Domain-Driven Design?</h3>
+<p class="body">DDD is a discipline rooted in the belief that creating good software systems for problems in the complex domain can’t be done without a deep understanding of the business problems you’re trying to solve in the domain. It has a set of principles for designing software to guide that belief and a lot of patterns, tools, and techniques that enable us to follow these principles, which are described here:<a id="idIndexMarker020"></a><a id="idIndexMarker021"></a><a id="marker-26"></a></p>
+<ul class="calibre6">
+<li class="fm-list-bullet">
+<p class="list">To create a software system for a complex domain, all stakeholders involved need to share a deep understanding of the domain itself. Creating that shared understanding is guided by <a id="idTextAnchor016"></a>the domain experts.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">To improve understanding, the stakeholders communicate with each other in a language, the <i class="fm-italics">ubiquitous language</i>, which is designed from the domain language. Unlike the domain language, the ubiquitous language is unambiguous.<a id="idIndexMarker022"></a></p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">The shared understanding is expressed in a model that uses the ubiquitous language and captures the complexity of the domain inside the problem space.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">The design has explicit boundaries, called <i class="fm-italics">bounded contexts</i>, in which the model and ubiquitous language are consistent.<a id="idIndexMarker023"></a></p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Stakeholders should continuously improve their understanding and refactor the model toward deeper insight.</p>
+</li>
+</ul>
+<p class="body">DDD has two main pillars: <i class="fm-italics">strategic design</i> and <i class="fm-italics">tactical design</i>. Strategic design focuses on alignment with the organization and discovery of the domain. It concentrates on the higher levels of a software system, that is, activities you do to design solutions and create an architecture, such as designing bounded contexts and their ubiquitous language. We’ll go deeper into this in chapter 3. Tactical design focuses on code implementation of each bounded context.<a id="idIndexMarker024"></a><a id="idIndexMarker025"></a></p>
+<p class="body">Having a DDD mentality means that understanding the problem comes first, and creating a solution for that problem through software only happens when you understand the problem you’re trying to solve. Just as collaborative modeling isn’t a silver bullet, DDD isn’t one either. It simply gives you a model and language to talk about a different mindset toward cre<a id="idTextAnchor017"></a>ating software systems.</p>
+<h3 class="fm-head2" id="heading_id_9">2.2.2 Who are the stakeholders?</h3>
+<p class="body">We’ve already mentioned that collaborative modeling should involve all the relevant stakeholders in a domain. That doesn’t mean you shouldn’t invite nonrelevant stakeholders, however, and we even advise it when possible because they can give different insights. Now, you might wonder who those people are exactly. In collaborative modeling, there are four stakeholder categories: domain experts, users, development team, and customers. As shown in figure 2.3, a stakeholder can be part of one<a id="idTextAnchor018"></a> or more categories.<a id="idIndexMarker026"></a><a id="idIndexMarker027"></a><a id="idIndexMarker028"></a></p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="468" src="../../OEBPS/Images/CH02_F03_Baas.png" width="421"/></p>
+<p class="figurecaption">Figure 2.3 This Venn diagram illustrates the interrelationships between four primary categories of stakeholders in a project or business context: Domain Experts, Users, Development Team, and Customers. Each category is depicted by overlapping shapes, indicating that stakeholders can simultaneously fulfill multiple roles. For example, a stakeholder may possess the specialized knowledge of a Domain Expert while also being a Customer of the product or service. This visual aid helps to identify the complex positions stakeholders may hold and the potential for shared interests and expertise among them.</p>
+</div>
+<p class="body"><a id="marker-27"></a>First, the <i class="fm-italics">development team</i> builds software to solve the business problems. That team should at least have software engineers who take ownership of the software they make and gain a shared understanding of the domain. The teams gain that understanding from domain experts. The <i class="fm-italics">domain experts</i> are people who understand or are experiencing the business problems. <i class="fm-italics">Customers</i> are the stakeholders who purchase the product or service the company is offering. <i class="fm-italics">Users</i> are the stakeholders who use the software system the development team is creating. There are a few common misconceptions about these categories:</p>
+<ul class="calibre6">
+<li class="fm-list-bullet">
+<p class="list">The domain experts are always users.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Customer is synonymous with user.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">The development team members aren’t customers, <a id="idTextAnchor019"></a>users, or domain experts.</p>
+</li>
+</ul>
+<p class="fm-head1">Misconception 1: The domain experts are always users</p>
+<p class="body">The domain experts can be anyone from your customers to any of your colleagues in the company. They don’t have to use the software system that you’re building. In BigScreen, if you want to know your company’s strategy or vision, or you want to know the key goals of the company for the next two years, your domain expert resides in higher management—your CEO, CTO, or CFO. They are the people who determine the modernization strategy, its budget, and so on. They don’t use the ticketing system nor the back office; they aren’t users, but they have valuable information that will influence how th<a id="idTextAnchor020"></a>e team builds the system.<a id="idIndexMarker029"></a><a id="idIndexMarker030"></a><a id="idIndexMarker031"></a></p>
+<p class="body">If you want to change the online ticket purchasing because 50% of your customers don’t finish buying a movie ticket online and end up at the register in the theater, then your domain experts are your product owner, your user experience (UX) designers, the customer help desk, and perhaps even the customers themselves—anyone who has relevant i<a id="idTextAnchor021"></a>nformation about the domain.</p>
+<p class="fm-head1">Misconception 2: Customer is synonymous with user</p>
+<p class="body"><i class="fm-italics">Customer</i> and <i class="fm-italics">user</i> aren’t interchangeable; they are two different categories. In BigScreen, we have customers who aren’t users and vice versa. The back office, for example, is only accessible by employees of BigScreen. These people are our users, but they aren’t our customers. BigScreen also organizes private events. Other companies want to do something special for their employees and contact BigScreen to book a private movie viewing with drinks. This isn’t done via the ticketing system but is managed by BigScreen’s employees via the back office. These companies are <a id="idTextAnchor022"></a>customers that aren’t users.<a id="idIndexMarker032"></a><a id="idIndexMarker033"></a><a id="idIndexMarker034"></a><a id="marker-28"></a></p>
+<p class="fm-head1">Misconception 3: The development team members aren’t customers, users, or domain experts</p>
+<p class="body">Employees of BigScreen, which includes the development team, also like going to the movies. This makes people from the development team also customers, which is a very good thing. It gives the development team the opportunity to test the ticketing system in their own lives and look for shortcomings and improvements they can make. Developers using their own products is a practice referred to as “eating your own dog food.”<a id="idIndexMarker035"></a><a id="idIndexMarker036"></a><a id="idIndexMarker037"></a></p>
+<p class="body">When we create internal services or libraries, the users are people inside the development teams. In BigScreen’s new architecture (refer to chapter 1, figure 1.3), there is a service called Movie Scheduling, which will be used by developers, making them also users of this service. Domain experts can also be part of the development team. Here are two examples:</p>
+<ul class="calibre6">
+<li class="fm-list-bullet">
+<p class="list">For domains that are very complex by nature, such as biology or chemistry, domain experts are often trained to become programmers or product owners.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">If we look at streaming services such as Netflix, an important business problem is the video streaming itself, which requires highly complex specialized software.</p>
+</li>
+</ul>
+<p class="body">For these scenarios, people on the development team are considered domain experts. Another way that developers become domain experts is through time. The longer developers work in a specific domain, the more knowledge they gain about the domain. In time, they become domain experts themselves.</p>
+<p class="body">If you want to better understand who your stakeholders are and the expectations you have of them, you can perform a stakeholder analysis using the four categories shown for BigScreen in figure 2.4. They can help you answer questions such as these:</p>
+<ul class="calibre6">
+<li class="fm-list-bullet">
+<p class="list">Do we want to inform your stakeholders?</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Do we want them to participate but not help decide, or do we want them involved in the decision-making?</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Do we have gaps in domain expertise?</p>
+</li>
+</ul>
+<p class="body">The outcome of such an analysis can help you decide what type of collaborative modeling session is needed when talking to a specific group of stakeholders and help you manage expectations for each group. Setting the right expectations and knowing when <i class="fm-italics">not</i> to invite a stakeholder will create a better engagement between you and the stakeholders. There is nothing more disengaging than being invited to a meeting and leaving it feeling like you wasted your time. If a domain expert knows that their presence will be helpful and that they in return will gain valuable knowledge by being in your session, they will be enthusiastic, which wil<a id="idTextAnchor023"></a>l <a id="idTextAnchor024"></a>result in better participation.<a id="idIndexMarker038"></a><a id="idIndexMarker039"></a><a id="idIndexMarker040"></a><a id="marker-29"></a></p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="567" src="../../OEBPS/Images/CH02_F04_Baas.png" width="510"/></p>
+<p class="figurecaption">Figure 2.4 This diagram showcases a simplified stakeholder analysis for BigScreen. Wei is a marketing user researcher and domain expert. Kathleen is the operations BA who serves as both user of the back office and domain expert. Nala, Ari, Susan, and Bruce are back-office users from the Operations and Marketing department. Developer Jack has been with the company for a while and possesses deep domain knowledge, alongside Rose who also loves to go to the movies, making her also a user and customer. Amir (tester) and Ralph (PO) are domain experts who also use and troubleshoot the application behind the scenes as support. Kala and Rick are part of the development team, alongside Caledon who also loves going to the cinema and is also a user and customer. Yuˉki is one of the customers of the Marketing department, who plans events for her company at the cinema. And Tiriaq is one of the many customers Wei contacts for user research. Meera (CTO) and Tiago (COO) are important stakeholders but are neither one of the four main type<a id="idTextAnchor025"></a>s, so we placed them on the outside.</p>
+</div>
+<h3 class="fm-head2" id="heading_id_10">2.2.3 Why DDD and collaborative modeling go hand in hand</h3>
+<p class="body">As previously mentioned, DDD encompasses a set of patterns, principles, and tools. Importantly, it doesn’t prescribe explicit rules or methods. For instance, while DDD emphasizes the need for a deep, shared understanding of the domain, it doesn’t dictate the exact means to achieve this understanding.<a id="idIndexMarker041"></a><a id="idIndexMarker042"></a></p>
+<p class="body">Enter collaborative modeling, a visualization technique tailored for analyzing complex domain problems. This approach provides visual tools that enable stakeholders to foster that deep, shared understanding. Furthermore, collaborative modeling aids in designing the ubiquitous language derived from the domain language and design models, as well as in identifying explicit domain boundaries.</p>
+<p class="body">There are tools tailored for both the strategic and tactical phases of design. In essence, collaborative modeling serves as a practical application of DDD principles. Some even argue that by engaging in collaborative modeling, one is inherently aligning software design with domain problems, effectively practicing DDD. However, it’s worth noting that DDD isn’t obligat<a id="idTextAnchor026"></a>ory when using collaborative modeling.<a id="idIndexMarker043"></a><a id="idIndexMarker044"></a></p>
+<h2 class="fm-head" id="heading_id_11">2.3 Different collaborative modeling tools</h2>
+<p class="body"><a id="marker-30"></a>Grasping complex business problems often requires modeling from multiple perspectives. To model different perspectives, we need to use different collaborative modeling tools. No collaborative modeling tool is a one-size-fits-all solution, silver bullet, golden hammer, or whatever metaphor you might use in your culture; each offers a unique perspective of the problem, abstracting the complexity of reality to address specific needs.<a id="idIndexMarker045"></a></p>
+<p class="body">For instance, one of the authors resides near Amsterdam. To visit the Rijksmuseum, we might refer to the map shown in figure 2.5, especially because we typically use the metro. Using this map, we could decide to board metro line 50 at Bijlmer Arena, transfer to line 52 at Zuid, and get off at Vijzelgracht. While we’re aware that the Rijksmuseum is adjacent to this station, the map doesn’t indicate this. Furthermore, the map doesn’t provide alternative transportation options to the Rijksmuseum.</p>
+<p class="body">Amsterdam is renowned for its extensive bike lanes. Perhaps cycling could offer a quicker route? However, to determine the fastest cycling route, we would need to consult a different map. Alternatively, we might consider taking the Metro to Zuid and then renting a bike to the Rijksmuseum, necessitating a look at both maps. Heck, if we don’t value our time and wallet, we might even drive to the Rijksmuseum, frustration guaranteed! This would require yet another map.</p>
+<p class="body">In essence, to determine the most efficient route, we must consult multiple detailed maps. Each map serves as a model for a specific mode of transportation, and a combination of these maps is ess<a id="idTextAnchor027"></a>ential to devise the optimal solution.</p>
+<p class="body">Another observation is that we present various solutions to the problem, enriching our understanding of the problem at hand. For example, we suggested driving as an option for those less concerned about time and cost. This can spark a discussion on the value of time and money in specific contexts, aspects not explicitly mentioned or clarified in the original problem statement. This underscores the importance of employing diverse collaborative modeling tools. By doing so, we can generate multiple models that offer deeper insights and varied perspectives on the problem, as well as<a id="idTextAnchor028"></a> provide a range of potential solutions.</p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="594" src="../../OEBPS/Images/CH02_F05_Baas.png" width="594"/></p>
+<p class="figurecaption">Figure 2.5 A metro map for the city of Amsterdam, showing how to get from one station to another. It doesn’t directly tell you the fastest route to the Rijksmuseum; for that, you need to use other maps that tell you how far each station is to the Rijksmuseum.</p>
+</div>
+<h3 class="fm-head2" id="heading_id_12">2.3.1 Collaborative modeling in the problem and solution space</h3>
+<p class="body"><a id="marker-31"></a>As mentioned a couple of times already, it’s important to have a deep, shared understanding of the problem. We can’t repeat that enough! Think of this as the <i class="fm-italics">problem space</i>—the area where we explore and define the challenges that we and the stakeholders face. Within this space, we do collaborative modeling to create models that help us grasp the problems. These models then guide us when we’re coming up with solutions. For example, when figuring out our route to the Rijksmuseum, we used maps from this problem space to help design our journey.<a id="idIndexMarker046"></a><a id="idIndexMarker047"></a><a id="idIndexMarker048"></a></p>
+<p class="body">In section 2.1, we emphasized the importance of testing our models. During our design phase, collaborative modeling allows us to design multiple models. Within the solution space, we might implement and experiment with several of these models to determine which one is most effective.</p>
+<p class="body">Take the journey to the Rijksmuseum as an example. We could have multiple routes or methods to get there. By weighing the pros and cons and analyzing each, we can narrow down the best options. However, the true test comes from real-world applications. For instance, biking might seem the quickest route, but there’s a twist: my bike gets “borrowed” (a light-hearted way we refer to theft in Amsterdam) once I arrive at the Rijksmuseum. This highlights the importance of testing multiple models or solutions for a single problem to determine the most suitable solution.</p>
+<p class="body">Over time, the solutions we develop and that our customers adopt can evolve into new challenges or become part of our problem space, as illustrated in figure 2.6. Let’s continue with the biking example. While biking might be my chosen solution, I could encounter new problems, such as frequent stops due to traffic lights on my chosen route. To address this, I might revisit the original map (or model) and update it with my bike route, noting potential obstacles such as traffic lights. In this way, what began as a solution (biking to the Rijksmuseum) has now been integrated into the problem space. However, always keep in mind that the original problem is how to get to the Rijksmuseum, and our solution might have new problems, or the problem changes by adding the need to go straight to Rotterdam after visiting the Rijksmuseum instead of going home. Thus, going by car mi<a id="idTextAnchor029"></a>ght just seem like the better solution now.<a id="marker-32"></a></p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="468" src="../../OEBPS/Images/CH02_F06_Baas.png" width="870"/></p>
+<p class="figurecaption">Figure 2.6 The problem space is where we use collaborative modeling to make models of the user/business needs, which can be goals, tasks, purpose, intent, and much more. The solution space is where the output of our design activities is placed. We perform a variety of design activities to go from the problem space to the solution space. With collaborative modeling, we iterate on our design to improve our models to solve the needs of the problem space.</p>
+</div>
+<div class="fm-sidebar-block">
+<p class="fm-sidebar-title">Different perspectives on the problem space and the solution space</p>
+<p class="fm-sidebar-text">Different perspectives on the problem space and the solution space already exist in the industry and can cause a lot of confusion when you jump into the rabbit hole of searching for the explanation for the two concepts. For this book, it’s important to understand the separation of the two spaces and that we use similar and different collaborative modeling tools for different purposes in both spaces. In the next chapter, we’ll dive more into the two spaces and how they will help drive our design. You can also go to the “When &amp; Why to Explore the Problem Space” blog post (<a class="url" href="https://mng.bz/KZgP">https://mng.bz/KZgP</a>) by Indi Young that explains the topic more fully a<a id="idTextAnchor030"></a>nd differentiates the spaces even more.</p>
+</div>
+<p class="body">We use various collaborative modeling tools tailored for different situations in both the problem and solution spaces. It’s worth noting that some tools are better suited for one space over the other. As mentioned in the introduction, we’ll share stories from our collaborative modeling sessions at BigScreen, and we use different tools in each story. However, our primary goal in chapters 6 to 11 is to ensure that you grasp the key takeaways and lessons from those chapters, rather than getting bogged down in the intricacies of each tool.</p>
+<p class="body"><a id="marker-33"></a>To that end, we’ll now offer you a brief introduction to the tools we used in each chapter, giving you just enough context to follow the narrative. For those seeking a deeper understanding, each chapter includes additional resources and recommended readings detailing that specific tool’s functionalities. It’s important to note that the tools we discuss aren’t exhaustive, nor do they represent the entirety of our toolkit or the tools that are out there used by others. In addition, the tools are all created to work independently, and you can combine them during a session or switch tools during collaboration when you feel the need to.</p>
+<p class="body">For a more comprehensive exploration of the tools and when to combine them, Kenny, one of our authors, is curating a Leanpub e-book titled <i class="fm-italics">Visual Collaboration Tools: For Teams Building Software</i> (<a class="url" href="https://leanpub.com/visualcollaborationtools/">https://leanpub.com/visualcollaborationtools/</a>). This community-contributed e-book delves into these tools, providing step-by-step guides accompanied by real-world stories. While the book is available for free, any contributions you make will be directed entirely to scholarship projects promoting diversity in tech.</p>
+<p class="body">Now, let’s return to our case study at BigScreen. We’ll delve into some of our most frequently used collaborative modeling tools, focusing on the “Anytime, Anywhere” campaign. This initiative aims to empower customers to purchase tickets on the go. BigScreen aspires to modernize its ticketing system, enabling mobile app purchases. However, the existing monolithic system poses challenges. While our instincts as software engineers might drive us to immediately address the monolith, it’s crucial first to understand the campaign’s underlying motivations in the problem space. This foundational understanding will u<a id="idTextAnchor031"></a>ndoubtedly shape our subsequent decisions.</p>
+<p class="fm-head1">Business Model Canvas</p>
+<p class="body">As mentioned earlier in this chapter, we’ve encountered many teams responsible for creating a software system that could not answer questions about the company they worked for. Yet, context is key. Having a shared understanding with the business will help teams make decisions, prioritize better, and, most importantly, think with the company and come up with ideas that will achieve success for this company. You can create a shared understanding with the business by discovering the company’s strategy. A strategy includes a <i class="fm-italics">business model</i>, which is a plan for what the company needs to succeed. Many tools are available that are designed to describe the business model of a company. One tool, <i class="fm-italics">Business Model Canvas</i> (created by Alexander Osterwalder) is our favorite because it’s simple and easy to use, yet it gives a good understanding of what a company needs to succeed. There are four sections in the canvas: offerings, customers, inf<a id="idTextAnchor032"></a>rastructure, and finances (figure 2.7).<a id="idIndexMarker049"></a><a id="idIndexMarker050"></a><a id="idIndexMarker051"></a><a id="marker-34"></a><a id="idIndexMarker052"></a></p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="456" src="../../OEBPS/Images/CH02_F07_Baas.png" width="772"/></p>
+<p class="figurecaption">Figure 2.7 The four sections of the Business Model Canvas tool. This canvas gives us an understanding of what we offer, who we offer it to, what we need<a id="idTextAnchor033"></a> to do to succeed, and what finances we have.</p>
+</div>
+<p class="fm-head1">Offerings</p>
+<p class="body">When we fill in the Business Model Canvas, we start with the offerings. Offerings only have one subsection, <i class="fm-italics">value propositions</i>. Value propositions take a central place in filling in the canvas, which is why we often give it a different color. As you can see in figure 2.8, it also sits in the middle of the canvas. The value propositions are important because these are the reasons that customers choose us instead of a competitor. Thinking about the value propositions first makes it easier to fill in the other sections. You can find the value propositions by looking at the marketing strategy of your company and asking the following questions:<a id="idIndexMarker053"></a><a id="idIndexMarker054"></a><a id="idIndexMarker055"></a><a id="idIndexMarker056"></a></p>
+<ul class="calibre6">
+<li class="fm-list-bullet">
+<p class="list">What are we offering the custo<a id="idTextAnchor034"></a>mer?</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Why would they use our products/services?</p>
+</li>
+</ul>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="458" src="../../OEBPS/Images/CH02_F08_Baas.png" width="773"/></p>
+<p class="figurecaption">Figure 2.8 The offerings section of the Business Model Canvas is given a different background color because the value <a id="idTextAnchor035"></a>propositio<a id="idTextAnchor036"></a>ns take a central place in the canvas.</p>
+</div>
+<p class="fm-head1">Customers</p>
+<p class="body">The customers section has three subsections: <i class="fm-italics">customer segments, customer relationships,</i> and <i class="fm-italics">channels</i>. The customer segments subsection can be very high level: business-to-consumer (B2C), business-to-business (B2B), or low level: students, food industry, pharmacies, and so on. You don’t have to pick a level, just make sure you have a good understanding of who your customers are.<a id="idIndexMarker057"></a><a id="idIndexMarker058"></a><a id="idIndexMarker059"></a><a id="idIndexMarker060"></a><a id="idIndexMarker061"></a><a id="marker-35"></a><a id="idIndexMarker062"></a></p>
+<p class="body">Next are the customer relationships. You can think of the customer relationships with the following question: How do we offer our value propositions to our customers? It’s important to understand that you don’t have a single relationship type. You might have a different relationship with your B2B customers than with your B2C customers. A few examples of relationship types are direct or indirect contact, self-service, or personal assistance.</p>
+<p class="body">The last subsection is channels, which you can think of as follows: What channels do we use during those relationships? Keep the different phases of a customer in mind when finding the channels: prospects, onboarding, active users, and so on. Figure 2.9 captures the keywords to remember when filling in the customers section:</p>
+<ul class="calibre6">
+<li class="fm-list-bullet">
+<p class="list">WHO are we offering the value propositions to?</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">HOW do we offer the value propositions to the cust<a id="idTextAnchor037"></a>omers?</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">What ENABLES us to have these relationships?</p>
+</li>
+</ul>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="499" src="../../OEBPS/Images/CH02_F09_Baas.png" width="849"/></p>
+<p class="figurecaption">Figure 2.9 The customers section of the Business Model Canvas tells us more about who our customers are, how we communicate with th<a id="idTextAnchor038"></a>em, and which channels we use for that communication.</p>
+</div>
+<p class="fm-head1">Infrastructure</p>
+<p class="body">Next comes the infrastructure, which also comprises three subsections: key activities, key resources, and key partners. We want to emphasize the <i class="fm-italics">key</i> here in each of the titles: companies have a lot of activities, resources, and partners. Don’t try to sum them all up; instead, focus on the most important ones we need to offer our customers as our value propositions. Figure 2.10 shows the short sentences you can use to remember how to fill in the infrastructure section:<a id="idIndexMarker063"></a><a id="idIndexMarker064"></a><a id="idIndexMarker065"></a><a id="idIndexMarker066"></a><a id="idIndexMarker067"></a><a id="marker-36"></a><a id="idIndexMarker068"></a></p>
+<ul class="calibre6">
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Key activities</i>—WHAT DO WE DO to make our value propositions possible?</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Key resources</i>—WHAT DO WE NEED to do those activities? Don’t forget the less visible resources here, such as people, their knowledge, and intellectual property.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Key partners</i>—WHO <a id="idTextAnchor039"></a>DO WE NEED to work together with to do those activities?</p>
+</li>
+</ul>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="499" src="../../OEBPS/Images/CH02_F10_Baas.png" width="850"/></p>
+<p class="figurecaption">Figure 2.10 The infrastructure section of the Business Model Canvas gives an overview of the key activities the company performs, as well as the most important r<a id="idTextAnchor040"></a>esources and partners we need to perform those activities.</p>
+</div>
+<p class="fm-head1">Finances</p>
+<p class="body">The last section, finances, is interesting, but it doesn’t often contain any information that can help the development team with decisions or priorities. This is why we marked it in gray in figure 2.11. The section answers two questions: What does it cost (cost structure), and how do we pay the costs (revenue streams)? A company has many costs, so try to focus on the most important ones and those that take up the largest chunks. Sometimes that will be surprising because we don’t always think about certain costs, such as legal fees. Lawyers are quite expensive in some countries. The revenue streams are pretty straightforward, and most people in the company know how their company makes money or at least they know the most important revenue stream. There is an opportunity here to discover new revenue streams, although that is rare. If one of your key resources is a piece of software that was difficult to create, and you know that this will stop being a differentiat<a id="idTextAnchor041"></a>or soon, you could look into selling it to competitors.<a id="idIndexMarker069"></a><a id="idIndexMarker070"></a><a id="idIndexMarker071"></a><a id="idIndexMarker072"></a><a id="idIndexMarker073"></a><a id="marker-37"></a></p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="537" src="../../OEBPS/Images/CH02_F11_Baas.png" width="850"/></p>
+<p class="figurecaption">Figure 2.11 The finances section of the Business Model Canvas contains the cost structure and the revenue stream<a id="idTextAnchor042"></a>s. It tells us the biggest costs and the main revenue streams.</p>
+</div>
+<p class="fm-head1">How to use Business Model Canvas</p>
+<p class="body">The Business Model Canvas is a good icebreaker for starting collaborative modeling with the business. It focuses on the company and the key aspects of its strategy. The Business Model Canvas shows the domain experts that you and the development team have a keen interest in understanding the business better. It’s further removed from software and feature discussions with the domain experts, yet it gives the development team important information on the company. We try to fill in the Business Model Canvas together with the development team. Afterward, we invite one of the domain experts to validate our understanding.<a id="idIndexMarker074"></a><a id="idIndexMarker075"></a><a id="idIndexMarker076"></a></p>
+<p class="body">For BigScreen, we did the same. We started with the value propositions: fun outing, easy to reach, comfortable movie experience, affordable for everyone, and a wide range of movies. We found these by digging into previous marketing campaigns. Then, we tried to get a sense of our customers and the infrastructure needed to support the propositions. We briefly tried to sum up the most important costs and revenue streams. The Business Model Canvas was incomplete, but we filled it in as best we could. Afterward, we spoke to the CTO, Meera, for about an hour to fill in the gaps in our knowledge (don’t worry, we didn’t write out the entire conversation):</p>
+<p class="body-ind">Us: So, we looked at previous campaigns, and we think the value propositions for BigScreen are fun outing, easy to reach, comfortable movie experience, affordable for everyone, and a wide range of movies.<a id="marker-38"></a></p>
+<p class="body-ind">Meera: Yeah, those are pretty good. I am not sure about the wide range of movies though, and, well, the latest campaign is missing, the “Anywhere, Anytime” one. It’s a really important one; it has to succeed. Every other movie theater offers this already, and we noticed that we are losing our mobile generation.</p>
+<p class="body-ind">Us: Okay, let’s first focus on the missing campaign. Who is the mobile generation?</p>
+<p class="body-ind">Meera: Oh, right. People between 18 and 30 years. Those generations were raised with a mobile phone. Hence the name. If they notice they can’t buy tickets with their mobile phone, they find a movie theater where they can do it. You have to understand, it’s not just about right now. Part of that group will start working soon, so they will have a bit more money to spend, or they will get married and have kids. So, they are our future customers for our themed events.</p>
+<p class="body-ind">Us: Themed events?</p>
+<p class="body-ind">Meera: Yeah, we organize themed events targeting a specific customer segment. For example, for parents with young kids, we organize Sunday-Funday events. They happen once a month. They are a huge success; we are always sold out in every city.</p>
+<p class="body">We adapted the Business Model Canvas during our conversations with the feedback and additional information we were receiving from Meera, which improved our understanding of the information. The CTO also felt that we appreciated her taking the time to talk to us about this and that we find understanding the business model important. We updated the value propositions and marked “buy a ticket anytime, anywhere” in its own color because this is a value proposition that isn’t possible right now. The other ones we marked in a different color because we’re successful as a company in offering these value propositions. We created a legend, as shown in fi<a id="idTextAnchor043"></a>gure 2.12, to capture the meaning of the colors on the canvas.</p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="372" src="../../OEBPS/Images/CH02_F12_Baas.png" width="316"/></p>
+<p class="figurecaption">Figure 2.12 The legend of the BigScreen Business Model Canvas. Try to capture the meaning of the different sticky note colors that you use by creating a short legend for each color.</p>
+</div>
+<p class="body"><a id="marker-39"></a>We also added the “mobile generation” explicitly to the canvas because that is the language that they use to talk about a specific customer type. We changed the language we used when filling in the canvas whenever it was appropriate during the conversation; for example, the business still talks about “movie tapes” even though they work with digital files now, so we captured this term in the key resources. This way, we can start creating our ubiquitous language from the domain language. We also discovered during the conversation that BigScreen has contracts with public transportation to stop in front of their movie theaters because they want their theaters to be easy to reach. We added public transportation as a key partner. Y<a id="idTextAnchor044"></a>ou can see the finished Business Model Canvas in figure 2.13.</p>
+<div class="fm-sidebar-block">
+<p class="fm-sidebar-title">Exercise 2.1: Your own Business Model Canvas</p>
+<p class="fm-sidebar-text">Whether you’re building in-house software to support the company’s activities or developing software to sell, your company will have a business model that you can capture with this canvas. Try filling in the canvas with your team for your own company. If your company is very large, such as a bank, take a part of that company that you belong to as input. Afterward, use it as a conversation starter with the domain experts inside your company. Remember, the Business Model Canvas is nice-to-have documentation, but the main focus is the conversation itself. Listen to the lan<a id="idTextAnchor045"></a>guage the domain expert is using, and capture it in the canvas.<a id="idIndexMarker077"></a><a id="idIndexMarker078"></a><a id="idIndexMarker079"></a><a id="idIndexMarker080"></a><a id="idIndexMarker081"></a><a id="idIndexMarker082"></a></p>
+</div>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="773" src="../../OEBPS/Images/CH02_F13_Baas.png" width="862"/></p>
+<p class="figurecaption">Figure 2.13 The finished Business Model Canvas for BigScreen. It captures the domain language and knowledge of the domain experts we disco<a id="idTextAnchor046"></a>vered while validating our understanding of the business model.</p>
+</div>
+<h3 class="fm-head2" id="heading_id_13">2.3.2 EventStorming</h3>
+<p class="body"><a id="marker-40"></a>Now that we have a grasp on our business model, we turn to EventStorming to visualize the entire process of purchasing a ticket. We refer to this as a <i class="fm-italics">flow</i> rather than a customer journey or business process because it’s the combination of both and more that delivers value to the customer. EventStorming facilitates the rapid creation of a shared understanding, leading to fresh insights.<a id="idIndexMarker083"></a><a id="idIndexMarker084"></a></p>
+<p class="body">EventStorming stands out as an adaptable collaborative modeling tool. One of its strengths is that participants can dive in and grasp the concept during a session, even without prior knowledge. This empowers the participants to convey their understanding of the narrative. As such, it’s an ideal tool for intricate, cross-disciplinary discussions among stakeholders from diverse backgrounds. The essence of EventStorming’s effectiveness lies in its ability to provide just the right a<a id="idTextAnchor047"></a>mount of structure to collaboratively generate knowledge and solutions.</p>
+<p class="fm-head1">Different types of EventStorming</p>
+<p class="body">Alberto Brandolini introduced EventStorming within the context of DDD as a tool to foster a shared and deep understanding of a domain. In his e-book, <i class="fm-italics">Introducing EventStorming: An Act of Deliberate Collective Learning</i>, available on Leanpub (<a class="url" href="https://leanpub.com/introducing_eventstorming">https://leanpub.com/introducing_eventstorming</a>), he describes three types of EventStorming:<a id="idIndexMarker085"></a><a id="idIndexMarker086"></a></p>
+<ul class="calibre6">
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Big Picture EventStorming</i>—This method encompasses the entirety of a business line or domain and usually engages 30 to 40 participants. For example, at BigScreen, we could conduct a Big Picture EventStorming session covering the complete domain of showing a movie. This would span from acquiring the movie rights, scheduling its screening, and facilitating ticket reservations, all the way to the actual day of the screening.<a id="idIndexMarker087"></a></p>
+</li>
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Process Modeling</i>—Multiple teams can work together to map out both the current (as-is) and desired future (to-be) customer journeys and business processes. For example, at BigScreen, we might first conduct a session to understand our existing movie planning process and then immediately transition into designing the envisioned future process.<a id="idIndexMarker088"></a><a id="marker-41"></a></p>
+</li>
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Software Design EventStorming</i>—Software development teams can tailor their design and implementation to specific business scenarios. For instance, at BigScreen, after conducting a to-be process session, we can delve deeper into designing how this process would integrate within our software architecture.<a id="idIndexMarker089"></a></p>
+</li>
+</ul>
+<p class="body">We refer to figure 2.14 for guidance on when to use each type of EventStorming, depending on the problem space and solution space. It’s worth noting that many discussions about EventStorming often focus on software design or aggregate design without specifying the type because Brandolini initially used EventStorming for software design and expanded to other types later. For a comprehensive understanding, we recommend reading his book on Leanpub.</p>
+<p class="body">In figure 2.14, we’ve shown overlapping types to indicate that during a session, you might transition from one type to another. For instance, a session might begin with Big Picture EventStorming to capture a broad scenario, such as onboarding a customer. However, if the core problem is identified in a specific segment, such as screening the customer, the focus might shift to Process Modeling. Similarly, while modeling a business scenario as-is using Process Modeling, the team might transition to designing the desired future to-be state.</p>
+<p class="body">You might question the term <i class="fm-italics">software design</i> instead of <i class="fm-italics">process design</i>. The journey typically starts with process design and culminates in software design. To avoid confusion among stak<a id="idTextAnchor048"></a>eholders, it’s often best not to specify the type in session invitations.</p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="389" src="../../OEBPS/Images/CH02_F14_Baas.png" width="850"/></p>
+<p class="figurecaption">Figure 2.14 When to use each type of EventStorming. For modeling the problem space of an enterprise, domain, or business line, we use Big Picture. Designing the solution space of a stakeholder needs to be done with Software Design. For everything in between, we can use Process Modeling. On the left side, you see th<a id="idTextAnchor049"></a>e different scopes of an organization where these types are typically used.</p>
+</div>
+<p class="fm-head1">Preparing for an EventStorming</p>
+<p class="body"><a id="marker-42"></a>Whether you conduct EventStorming in person or online, the essentials remain the same: enough modeling space and orange stickies. However, it’s important to note that the inherently chaotic nature of EventStorming often leads to heightened interaction and discovery during in-person sessions. While online sessions can still foster these interactions and discoveries, they demand a more structured approach and explicit facilitation. One potential challenge with online tools is that they might pose a steeper learning curve, potentially hindering participants from easily expressing their knowledge. Therefore, it’s advisable to allow participants to familiarize themselves with the online tool prior to the session, ensuring they’re comfortable using it. We added a blog post by Alberto in Section 2.5<a id="idTextAnchor050"></a> later in this chapter if you want to know more about online EventStorming.<a id="idIndexMarker090"></a><a id="idIndexMarker091"></a></p>
+<p class="fm-head1">Step 1: Chaotic exploration</p>
+<p class="body">Every EventStorming session often starts with what’s termed a <i class="fm-italics">chaotic exploration</i> of a given scenario or set of scenarios. In the realm of EventStorming, a <i class="fm-italics">scenario</i> refers to a sequence or set of business activities or processes that are being explored or modeled. It’s essential to understand that while <i class="fm-italics">scenario</i> implies a singular sequence, EventStorming can simultaneously tackle multiple scenarios. These can later be organized into distinct swimlanes for clarity.<a id="idIndexMarker092"></a><a id="idIndexMarker093"></a><a id="idIndexMarker094"></a></p>
+<p class="body">We start a chaotic exploration with every participant writing down all the domain events they can think of for the given scenario. A <i class="fm-italics">domain event</i> represents a significant occurrence within our scenario that holds business relevance. This relevance is determined by what our stakeholders deem relevant. For example, within the BigScreen context, domain events such as “Tickets are Purchased,” “Ticket are Paid,” and “Seats are Reserved” are seen as relevant. On the other hand, technical occurrences such as “Database Connection Lost” or “DDOS Attacked” aren’t seen as relevant to the stakeholders. Such technical aspects might be discussed later, once we finish modeling out the scenario enough and have a clear understanding of the problem.<a id="idIndexMarker095"></a></p>
+<p class="body">Note that domain events are phrased in the past tense, as they reflect events that have already happened. A common initial hurdle for participants is to distinguish between <i class="fm-italics">actions</i>, which are often about the future or the present, and <i class="fm-italics">events</i> that have already occurred. This distinction can be a bit confusing, especially for those new to this or those who’ve spent years modeling processes. Yet, it’s a crucial part of EventStorming. As facilitators, our job is to help participants understand this difference, making sure they focus on events rather than actions. If they struggle to find the right past tense words, let them know that the most important thing is t<a id="idTextAnchor051"></a>o write down their thoughts. We can always refine and adjust these details later.<a id="idIndexMarker096"></a><a id="marker-43"></a><a id="idIndexMarker097"></a></p>
+<p class="body">After participants have noted down all the domain events they can recall from the scenario, they place them on the modeling space, as illustrated in figure 2.15. This figure showcases a typical outcome of the chaotic exploration phase in Process Modeling. A fundamental principle of EventStorming is that the modeling space serves as a timeline, progressing from left to right in this context. Given that domain events signify occurrences that have transpired over time, participants are instructed to arrange these events chronologically on the timeline. For instance, as depicted <a id="idTextAnchor052"></a>in the figure, “Movie is picked” precedes “Spots are picked” in the sequence of events.</p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="478" src="../../OEBPS/Images/CH02_F15_Baas.png" width="841"/></p>
+<p class="figurecaption">Figure 2.15 An example outcome of the chaotic exploration step in EventStorming, where everyone used domain events to model the scenario for themselves</p>
+</div>
+<p class="body">Each EventStorming session is unique. For instance, the session depicted in figure 2.15 began in a rather chaotic manner. Participants were asked to independently identify domain events and position them on the timeline based on their understanding. In contrast, some sessions might follow a more structured approach, where participants collaboratively arrange the stickies in sequence and engage in discussions about specific domain events from the outset. Both approaches are valid. The primary goal at the beginning is to capture everyone’s interpretation of the scenario through domain events. In this context, the focus was on the ticket-purchasing process.</p>
+<p class="body">The figure also includes a distinct legend that defines a domain event. Maintaining an updated legend is crucial. While EventStorming has a foundational set of color-coded concepts, it’s acceptable to modify these colors or introd<a id="idTextAnchor053"></a>uce new concepts like wireframes or mock-ups, as long as these changes are accurately reflected in the legend.</p>
+<p class="fm-head1">Step 2: Enforcing the timeline</p>
+<p class="body"><a id="marker-44"></a>Now that everyone has put their understanding of the scenario on the board, it’s time to refine the timeline into a shared narrative. This step involves enforcing the timeline, which means we remove any repeated events and work together to create a single, meaningful timeline. It may sound easy to just put our domain events in order, but by asking the group to build one timeline, individual perceptions start to blend with others’ perceptions. This can bring up some unclear areas and disagreements on certain parts of the timeline that need to be addressed. These disagreements are actually useful. If we handle them well, they help us learn and build a shared understanding. We’ll explore this more in chapter 8.<a id="idIndexMarker098"></a><a id="idIndexMarker099"></a><a id="idIndexMarker100"></a></p>
+<p class="body">Sometimes, these disagreements can’t be sorted out right away, or they might slow down the whole group’s discussion, which leads to getting stuck in one point of the timeline. In these cases, we use a neon pink sticky note to mark these as hotspots. <i class="fm-italics">Hotspots</i> are areas of difficulty, conflict between people, or missing knowledge. It might also be a point where the timeline splits into different branches, as shown in figure 2.16 when a “Payment failed.” The goal of enforcing the timeline is to concentrate on finishing the happy path of the scenario before diving into these side effects. <a id="idIndexMarker101"></a></p>
+<p class="body">In EventStorming, it’s important to avoid narrowing our discussion too quickly. But as we enforce the timeline and explore from the start, we might venture into discussions that don’t directly influence the session’s end goal. Take, for example, the various ways customers choose tickets for a movie, which could range from seeing an ad on the home page, searching for upcoming movies, or having a specific film in mind. These paths to selection aren’t central to understanding the process of reserving tickets, as they are part of the movie selection phase. The selection phase ends when the “movie is selected” and the “number of tickets is chosen.” To focus our narrative, we can place a sticky note and on a vertical line on the modeling space, as depicted in figure 2.16, effectively dividing the EventStorming into segments before and after this pivotal moment. At this stage, hotspots are particularly useful for focusing on and capturing the essential dialogue. Scoping in this manner is<a id="idTextAnchor054"></a> c<a id="idTextAnchor055"></a>rucial for maintaining focus on the primary objective of the EventStorming session.</p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="665" src="../../OEBPS/Images/CH02_F16_Baas.png" width="842"/></p>
+<p class="figurecaption">Figure 2.16 Example of how to proceed with enforcing the timeline in EventStorming where the groups merge all of their own models into one timeline of the scenario. We added a pivotal domain<a id="idTextAnchor056"></a> event where we can now decide what is inside our storyline and what happened before.<a id="marker-45"></a></p>
+</div>
+<p class="body">In figure 2.16, we’ve simplified the scenario to make the process clearer; a real-life EventStorming session typically involves many more sticky notes. However, this streamlined version provides a general idea of how EventStorming usually unfolds. In chapter 6, we’ll delve into a more comprehensive example of Big Picture EventStorming, particularly focusing on ranking. This will be closer to what you can expect in your own experiences. It’s important to remember that company culture plays a significant role in how these sessions progress, especially in resolving conflicts that arise. A culture that encourages open communication, respect for diverse viewpoints, and a collaborative approach to problem-solving will greatly enhance the effectiveness of EventStorming. Such a culture helps to navigate disagreements constructively, allowing for a more productive and insightful session. If you do EventStorming within an organization that doesn’t have that open co<a id="idTextAnchor057"></a>mmunication, this book will definitely help you still make such a session worthwhile!</p>
+<p class="fm-head1">Step 3: Adding concepts iteratively</p>
+<p class="body">While enforcing the timeline, each type of EventStorming can add new concepts if needed in the form of stickies. These extra concepts aren’t a must to use, but they can help you categorize and make some conversations more explicit. Depending on the context you’re in, you might not even use these extra concepts; however, a session can become blocked at times because certain concepts weren’t clarified. In those cases, we can use the following concepts, as shown in figure 2.17:<a id="idIndexMarker102"></a><a id="idIndexMarker103"></a><a id="marker-46"></a></p>
+<ul class="calibre6">
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">(External) Syste</i><i class="fm-italics">m</i>—A system is a deployable IT system used as a solution for a problem in the domain. When we’ve finished making the timeline consistent, we can start mapping systems around domain events. Per Alberto Brandolini’s book mentioned earlier, we use a big pink sticky note for this.<a id="idIndexMarker104"></a></p>
+</li>
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Polic</i><i class="fm-italics">y</i>—In essence, a policy is a reaction that says “whenever <i class="fm-italics">X</i> happened, we do <i class="fm-italics">Y</i>,” eventually ending up within the flow between a domain event and a command/action. We use a big lilac sticky note for these.<a id="idIndexMarker105"></a></p>
+</li>
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Comman</i><i class="fm-italics">d</i>—This represents an instruction given in the domain, which is an action or intent with no certainty that it will succeed. We use a blue sticky for commands.<a id="idIndexMarker106"></a></p>
+</li>
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Query mode</i><i class="fm-italics">l</i>—To make decisions, an actor might need information, so we capture these in a query model. We officially use a green sticky to represent a query model.<a id="idIndexMarker107"></a></p>
+</li>
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Acto</i><i class="fm-italics">r</i>—An actor or agent is a group of people, a department, a team, or a specific person involved around a (group of) domain event(s) or triggers commands. The official color to use is a small yellow sticky.<a id="idIndexMarker108"></a></p>
+</li>
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Constrain</i><i class="fm-italics">t</i>—A constraint is a restriction we have or need to design from our problem space when we want to perform a command. The official color to use is a big yellow sticky. When we go from Software Design to aggregate design the yellow stickies can turn into aggregates, which it was originally called. But we rather not discuss aggregates in front of the stakeholders.<a id="idIndexMarker109"></a></p>
+</li>
+</ul>
+<p class="body">Now for some groups and for some people, all these colors can be overwhelming, together with their meaning. We’ve added the final result of the EventStorming and examples of the concept in figure 2.18. You can also find more information freely available on the ddd-crew EventStorming Glossary &amp; Cheat Sheet (<a class="url" href="https://mng.bz/9d9x">https://mng.bz/9d9x</a>), and we can’t mention enough the importance of reading Alberto Brandolini’s book on Leanpub for more in-depth examples of when and how to use these extra concepts.</p>
+<p class="body">One vital thing to understand is that the concepts just mentioned have names that might be confusing in your context. We once tried to explain the word policy in an insurance company. We can tell you that didn’t end well. Change the names of the concepts as necessary in your context. For instance, <i class="fm-italics">action</i> can be used instead of <i class="fm-italics">command</i>, <i class="fm-italics">information</i> instead of <i class="fm-italics">query model</i>, and <i class="fm-italics">business rule</i> instead of <i class="fm-italics">constraint</i>. You can also decide not to use some or all of the concepts, as long as you keep your legend up to date! You can use different color stickies, which is very handy when one color isn’t available. You can add your own concepts, such as lines between the concepts, as shown in figure 2.18. EventStorming is adaptable to the needs of the session’s goal, and the core concepts are the domain events set out in a timeline and the marked hotspots. Then you can add concepts as needed with the goal to discover and design a shared understanding of the problem. <a id="idIndexMarker110"></a><a id="idIndexMarker111"></a><a id="idIndexMarker112"></a><a id="idIndexMarker113"></a><a id="idIndexMarker114"></a><a id="marker-47"></a><a id="idIndexMarker115"></a></p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="411" src="../../OEBPS/Images/CH02_F17_Baas.png" width="596"/></p>
+<p class="figurecaption">Figure 2.17 All the EventStorming concepts. The lines represent how these concepts interact with each other in the flow. Only Process Modeling and Software Design types use all the concepts and the way they interact. Big Picture often only uses domain events, actors, external systems,<a id="idTextAnchor058"></a> and hotspots. Remember, you can always change the naming or add new concepts to the legend.</p>
+</div>
+<div class="fm-sidebar-block">
+<p class="fm-sidebar-title">Exercise 2.2: EventStorming your own context</p>
+<p class="fm-sidebar-text">You don’t need stakeholders in your session to do EventStorming. As an exercise, either with your team or just yourself, model a scenario in the software that you’re working on now. Of course, without stakeholders, it won’t be a collaborative modeling session, so you won’t build up that shared understanding, but it’s a great trial run, and you’ll be surprised at the discovery you’ll make in your team and see how aligned your team is. Just doing chaotic exploration and enforcing the timeline is usually enough for a lot of great insights and even more questions. Don’t be afraid to experiment, but make sure you do so when it’s safe to fa<a id="idTextAnchor059"></a>il, for instance, within your team and not with stakeholders where you might not get a second chance!<a id="idIndexMarker116"></a><a id="idIndexMarker117"></a><a id="idIndexMarker118"></a><a id="idIndexMarker119"></a></p>
+</div>
+<p class="body">Figure 2.18 is the final result of our Process Modeling EventStorming at BigScreen, with all the Process Modeling concepts that EventStorming offers. We could discover and dive into many more branches, but the key here is that we create a shared understanding as a group about the process. Now, we can decide how to move forward. As mentioned, go read the <i class="fm-italics">Visual Collaboration Tools: For Teams Building Software</i> book for a much more detailed description of all the EventStorming types, or just buy Alberto’s <i class="fm-italics">I<a id="idTextAnchor060"></a>ntroducing EventStorming: An Act of Deliberate Collective Learning</i> e-book as we did on Leanpub.<a id="idIndexMarker120"></a><a id="idIndexMarker121"></a><a id="idIndexMarker122"></a><a id="idIndexMarker123"></a></p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="850" src="../../OEBPS/Images/CH02_F18_Baas.png" width="842"/></p>
+<p class="figurecaption">Figure 2.18 The result of our Process Modeling EventStorming fo<a id="idTextAnchor061"></a>r BigPicture. The legend shows all the concepts EventStorming brings that can make the story clearer.</p>
+</div>
+<h3 class="fm-head2" id="heading_id_14">2.3.3 Example Mapping</h3>
+<p class="body"><a id="marker-48"></a>While EventStorming shines at modeling one or several scenarios in one timeline or process, it doesn’t shine so much at discovering several use cases happening at a certain moment in that scenario, timeline, or process. For instance, when the system reserves seats for our ticketing purchase, many constraints can keep the system from finding tickets to reserve for a movie. If we look back at figure 2.18 where there is a command saying “Reserve Seats” and two domain events called “Seats Reserved” and “No available seats found,” we know there are constraints that either give you “Seats Reserved” or “No available seats found” because there can only be one ticket per seat, or we can only reserve seats that are adjacent seats for a single reservation. Usually, at this point, we go into several examples trying to discover what constraints there are. As another example, when we’re designing a new flow, we might find ourselves locked into a discussion in EventStorming, going into several scenarios, and discussing different what-if scenarios; in this case, we should switch to another tool—Example Mapping. Exa<a id="idTextAnchor062"></a>mple Mapping visualizes the different examples and use cases that can happen at a certain moment in time.<a id="idIndexMarker124"></a><a id="idIndexMarker125"></a></p>
+<p class="body">During his time at Cucumber, Matt Wynne introduced Example Mapping in this blog in the Behavior-Driven Development (BDD) community (<a class="url" href="https://mng.bz/jXYz">https://mng.bz/jXYz</a>). With Example Mapping, the goal is to discover <i class="fm-italics">acceptance criteria,</i> which are the business requirements the implementation needs to meet. But we can also take constraints discovered during EventStorming as input for Example Mapping. It has a much lower threshold than EventStorming because all you need to do is discuss concrete examples happening during a certain point in the timeline and then visualize these in a structured way<a id="idTextAnchor063"></a> to discover new acceptance criteria. Next, let’s make this clearer with the user story of reserving seats.<a id="idIndexMarker126"></a><a id="marker-49"></a></p>
+<p class="fm-head1">Starting an Example Mapping</p>
+<p class="body">Our discussion began by differentiating between EventStorming and Example Mapping, and understanding when to opt for one tool over the other. It’s essential to recognize that Example Mapping is a standalone tool; there’s no prerequisite to conduct EventStorming before delving into Example Mapping. The primary requirement for Example Mapping is a use case or user story provided by a stakeholder.<a id="idIndexMarker127"></a><a id="idIndexMarker128"></a></p>
+<p class="body">To start Example Mapping, jot down the user story or use case on a yellow sticky, as illustrated in figure 2.19. Directly below this, list any known rules on blue stickies. Following this, capture specific examples related to these rules on green stickies. For instance, for the rule “Only 1 ticket per seat,” you’d detail clear examples on the green stickies. While we’ve used an online tool in this example, in-person sessions typically employ index cards. This choice is <a id="idTextAnchor064"></a>strategic: index cards can be effortlessly rearranged on a table, facilitating a dynamic discovery process.</p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="397" src="../../OEBPS/Images/CH02_F19_Baas.png" width="842"/></p>
+<p class="figurecaption">Figure 2.19 An example of how to start an Example Mapping. With a user story and the rules, we explore the first concrete example of the rule. On the right side, you can see how to do it either using a virtual board such as Miro or using index cards in a <a id="idTextAnchor065"></a>physical setting and drawing with a dry-erase marker on it. From here, we can discuss and find new examples.</p>
+</div>
+<p class="fm-head1">Discovering new rules</p>
+<p class="body">As you can see in figure 2.19, we visualized the examples. To make the example more explicit, we advise making a drawing of the example if you can. In this case, we drew a cinema room with the seating arrangement. Now, most of the time, the first examples are pretty straightforward. But as soon as you start discussing more complex rules, you’ll discover more what-ifs. You can find our final result in figure 2.20. While drawing the “only adjacent seating per row” examples, someone created an example showing two reservations that are adjacent to each other, but have one chair open in between. From here, we start discussing if we want to have one chair in between or not. Ralph, the product owner, then says no, we want to let people pick their own chairs, but we do want to fill up the entire room. Leaving one seat in between isn’t optimal because there aren’t a lot of one-person reservations. So, from here, the No Orphan Seats rule gets discovered, and examples for that rule are created. From here, as you can see in figure 2.20, more examples pop up, and more rules get created.<a id="idIndexMarker129"></a><a id="idIndexMarker130"></a></p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="609" src="../../OEBPS/Images/CH02_F20_Baas.png" width="842"/></p>
+<p class="figurecaption">Figure 2.20 The final result of our Example Mapping, showing we d<a id="idTextAnchor066"></a>iscovered and decided on new rules. We also discovered new concepts, such as there is a corridor, for example.</p>
+</div>
+<p class="body"><a id="marker-50"></a>It’s important that we have a diverse set of people in the room. In the BDD community, they call it the three amigos—developer, product owner, and tester. You should have at least all the relevant stakeholders in the room, as well as the entire team. The more diverse set of people, the more different insights you’ll get. Having a person with testing experience in the room who will challenge the scenarios or can come up with edge cases especially helps during this discovery.</p>
+<p class="body">Another important thing for Example Mapping is that everyone can write examples, and as you create more examples, even the obvious ones, and discuss them together, you need to make more rules to handle these examples. A general rule of thumb is as follows: you think it, you write it! We spread out the rules horizontally while categorizing the examples that explain the rule underneath. Another general principle is that if you need more than three examples<a id="idTextAnchor067"></a> to explain a rule, or you validate more than one option in the rule, you can probably discover a new rule.</p>
+<p class="fm-head1">Splitting up user stories</p>
+<p class="body">Sometimes, we choose to skip or not delve into a specific example because the risk seems low. Often, not all the necessary knowledge is available right away, or we go into too much detail too soon. So, we use a red sticky note or index card to note down things we need to follow up on after the session. We can also organize the rules by priority from a product perspective or group together rules that are related and affect each other. In a scrum-like development process, user stories or product backlog items are the smallest units of work to include in your sprint backlog for development. <a id="idIndexMarker131"></a><a id="idIndexMarker132"></a><a id="idIndexMarker133"></a></p>
+<p class="body"><a id="marker-51"></a>They need to be small, but a common challenge for teams is figuring out how to break these down into the smallest workable units. By categorizing the examples—whether they involve several rules that need to be built together or just one on its own—we can further divide our user stories. Example Mapping is a powerful tool for breaking down larger stories into smaller ones, which helps reduce the feedback loop through smaller, more manageable stories. However, it’s crucial to timebox discovery to 20 minutes, or else the story is still too confusing. After that 20 minutes is up, you can separate the rules that a<a id="idTextAnchor068"></a>re clear from the rules that still need more clarification before they can be Example Mapped in the next section.</p>
+<p class="fm-head1">Combining tools during a session</p>
+<p class="body">We already mentioned that EventStorming and Example Mapping, just like all the tools covered, are two separate tools that we can combine during a collaborative modeling session. If we do so, we can take the constraints that we captured as input, and we won’t have the yellow sticky. The rest stays the same. To see more examples of how to combine these too<a id="idTextAnchor069"></a>ls, check out the <i class="fm-italics">Visual Collaboration Tools: For Teams Building Software</i> e-book on Leanpub mentioned previously.<a id="idIndexMarker134"></a><a id="idIndexMarker135"></a><a id="idIndexMarker136"></a><a id="idIndexMarker137"></a></p>
+<h3 class="fm-head2" id="heading_id_15">2.3.4 Domain Storytelling</h3>
+<p class="body">Domain Storytelling has become very popular in the collaborative modeling community. It was created by Henning Schwentner and Stefan Hofer as a more structured way of telling a story. This method uses pictograms connected by arrows, with numbers to show the order of events in the story. Take a loo<a id="idTextAnchor070"></a>k at figure 2.21 for an example from a Domain Storytelling sess<a id="idTextAnchor071"></a>ion on the BigScreen’s ticket reservation scenario.<a id="idIndexMarker138"></a><a id="idIndexMarker139"></a><a id="marker-52"></a></p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="254" src="../../OEBPS/Images/CH02_F21_Baas.jpg" width="1026"/></p>
+<p class="figurecaption">Figure 2.21 BigScreen’s Domain Storytelling with legacy system</p>
+</div>
+<p class="body">We appreciate this tool because it captures the story clearly and visually, showing how people work together. As highlighted in the “Why EventStorming Practitioners Should Try Domain Storytelling” blog post by Schwentner and Hofer (<a class="url" href="https://mng.bz/WE84">https://mng.bz/WE84</a>), there are similarities between EventStorming and Domain Storytelling. Remember, no tool is perfect. What we find most useful about Domain Storytelling is how easy it is to record a conversation as it happens. This way, the group can talk about the story and decide what is important to include. The tool’s visual style is straightforward, which helps everyone understand what has been recorded.</p>
+<p class="body">While it might seem at first that the tool’s icons are too rigid for quick, spontaneous whiteboard sessions, the tool actually offers a lot of flexibility. The set of icons can be changed to fit the specific (sub-)domai<a id="idTextAnchor072"></a>n you’re working on. It’s a good idea<a id="idTextAnchor073"></a> to agree on what each icon means during your workshops and add it to the legend.</p>
+<p class="fm-head1">What makes Domain Storytelling shine</p>
+<p class="body">Domain Storytelling allows a facilitator to start modeling conversations quickly and easily. The clear pictograms and diagrams are almost self-explanatory, enabling the drawing of discussions for instant validation and a shared understanding. You can either draw these on a whiteboard or use a digital tool for online sessions. The authors of Domain Storytelling have created an open source tool, Egon.io, which is great for quickly sharing your screen and getting started.<a id="idIndexMarker140"></a><a id="idIndexMarker141"></a></p>
+<p class="body">A unique aspect of Domain Storytelling is how it clearly shows the level of cooperation in business processes. It’s easy to see the interactions between different participants, such as people, groups, or software systems. This feature is a key difference from EventStorming, where showing cooperation in a timeline of events isn’t as clear.</p>
+<p class="body">Domain Storytelling usually focuses on a single scenario, whereas EventStorming can cover multiple scenarios in one session. For instance, in figure 2.21, we focus on the process of buying a ticket. In EventStorming<a id="idTextAnchor074"></a>, this could be expanded to include what happens if a purchase fails, using different swimlanes for different scenarios.</p>
+<p class="body"><a id="marker-53"></a>Groups often prefer to explore every detail of a scenario, a tendency we call the Deep versus Wide approach. Balancing these approaches is vital for a successful session. However, people often lean toward one approach, which can split the group. We’ll talk more about managing this balance in chapter 10.<a id="idIndexMarker142"></a></p>
+<p class="body">For groups that tend to focus on details, Domain Storytelling can help broaden their perspective. It allows you, the facilitator, to stay focused on one scenario without going into too much depth. When new<a id="idTextAnchor075"></a> scenarios come up in Domain Storytelling, you can make notes for later exploration, keeping the current session focused.</p>
+<p class="fm-head1">Modeling without the current software landscape</p>
+<p class="body">Domain Storytelling works by capturing the interactions in a scenario as numbered steps. These interactions, whether they are between people or systems, are shown using pictograms. They represent conversations or objects and can be placed anywhere in the modeling area. The numbers on the steps guide us through the story. It’s important to think about what we’re modeling. In our example, we modeled the current process as it is, including the existing software systems. However, Domain Storytelling also allows you to break away from the cu<a id="idTextAnchor076"></a>rrent software setup and focus on what the story is really about. Let’s look at how this approach changes the diagram.<a id="idIndexMarker143"></a><a id="idIndexMarker144"></a></p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="287" src="../../OEBPS/Images/CH02_F22_Baas.png" width="1012"/></p>
+<p class="figurecaption">Figure 2.22 BigScreen’s Domain Storytelling without the legacy systems</p>
+</div>
+<p class="body">In figure 2.22, we took out the legacy systems to focus solely on what our customers really want. This approach of modeling a scenario without mentioning any software systems leads to a completely different discussion with your stakeholders. It’s especially helpful when working with people who might not know the names of the systems or call them something else. If you find that the conversation is getting too caught up in the specifics of the current software implementation, try leaving out system<a id="idTextAnchor077"></a> names altogether. This can help clear any confusion and guide the discussion back to the core objectives of the business.<a id="idIndexMarker145"></a><a id="idIndexMarker146"></a></p>
+<h3 class="fm-head2" id="heading_id_16">2.3.5 When to use what tool</h3>
+<p class="body">Many people often ask us when they should use which collaborative modeling tool. To help answer this, we’ve put together table 2.1, which provides an overview of the tools we’ve discussed, highlighting their strengths and weaknesses. It’s based on our own experiences with various collaborative modeling tools. Use this table as a starting point, and feel free to adjust it or create your own as you become more familiar with these tools.<a id="idIndexMarker147"></a></p>
+<p class="body">Another key factor to consider is the group’s experience with collaborative modeling. For those new to collaborative modeling, it’s best to start with a simple tool that can yield quick results. When we first began with collaborative modeling, we applied it in the solution space. This doesn’t require inviting additional people; you can simply take a user story or request and, for instance, use Example Mapping with your team. Starting in a familiar environment helps you safely experience the benefits and power of collaborative mod<a id="idTextAnchor078"></a>eling. Remember, for Example Mapping, all you need is a business rule and the following question: Can you give me an example?</p>
+<p class="fm-table-caption">Table 2.1 An overview of the collaborative modeling tools, their strengths, and their weaknesses<a id="idIndexMarker148"></a><a id="marker-54"></a></p>
+<table border="1" class="contenttable-1-table" id="table001" width="100%">
+<colgroup class="contenttable-0-colgroup">
+<col class="contenttable-0-col" span="1" width="20%"/>
+<col class="contenttable-0-col" span="1" width="20%"/>
+<col class="contenttable-0-col" span="1" width="20%"/>
+<col class="contenttable-0-col" span="1" width="20%"/>
+<col class="contenttable-0-col" span="1" width="20%"/>
+</colgroup>
+<thead class="contenttable-1-thead">
+<tr class="contenttable-0-tr">
+<th class="contenttable-1-th">
+<p class="fm-table-head">Tool</p>
+</th>
+<th class="contenttable-1-th">
+<p class="fm-table-head">When to Use</p>
+</th>
+<th class="contenttable-1-th">
+<p class="fm-table-head">Strengths</p>
+</th>
+<th class="contenttable-1-th">
+<p class="fm-table-head">Weaknesses</p>
+</th>
+<th class="contenttable-1-th">
+<p class="fm-table-head">What Space</p>
+</th>
+</tr>
+</thead>
+<tbody class="contenttable-1-thead">
+<tr class="contenttable-0-tr">
+<td class="contenttable-1-td">
+<p class="fm-table-body">Big Picture EventStorming</p>
+</td>
+<td class="contenttable-1-td">
+<p class="fm-table-body">When modeling or designing an enterprise, business line, or domain</p>
+</td>
+<td class="contenttable-1-td">
+<p class="fm-table-body">Adaptable, and quick to learn</p>
+<p class="fm-table-body">Chaotic nature gives a lot of insights</p>
+</td>
+<td class="contenttable-1-td">
+<p class="fm-table-body">A lot of people in one room, requires a lot of experience facilitators</p>
+<p class="fm-table-body">Only works with a timeline</p>
+</td>
+<td class="contenttable-1-td">
+<p class="fm-table-body">Problem Space</p>
+</td>
+</tr>
+<tr class="contenttable-0-tr">
+<td class="contenttable-1-td">
+<p class="fm-table-body">Process Modeling EventStorming</p>
+</td>
+<td class="contenttable-1-td">
+<p class="fm-table-body">When modeling or designing a story, process, or timeline</p>
+</td>
+<td class="contenttable-1-td">
+<p class="fm-table-body">Adaptable, and quick to learn</p>
+<p class="fm-table-body">Chaotic nature gives a lot of insights</p>
+</td>
+<td class="contenttable-1-td">
+<p class="fm-table-body">Difficult concepts to grasp</p>
+<p class="fm-table-body">Can feel like a high time investment</p>
+<p class="fm-table-body">Only works with a timeline</p>
+</td>
+<td class="contenttable-1-td">
+<p class="fm-table-body">Problem Space and Solution Space</p>
+</td>
+</tr>
+<tr class="contenttable-0-tr">
+<td class="contenttable-1-td">
+<p class="fm-table-body">Software Design EventStorming</p>
+</td>
+<td class="contenttable-1-td">
+<p class="fm-table-body">When designing software for stakeholder needs</p>
+</td>
+<td class="contenttable-1-td">
+<p class="fm-table-body">Adaptable, and quick to learn</p>
+<p class="fm-table-body">Chaotic nature gives a lot of insights</p>
+</td>
+<td class="contenttable-1-td">
+<p class="fm-table-body">Difficult concepts to grasp</p>
+<p class="fm-table-body">It can feel like a high time investment.</p>
+<p class="fm-table-body">Only works with a timeline</p>
+</td>
+<td class="contenttable-1-td">
+<p class="fm-table-body">Solution Space</p>
+</td>
+</tr>
+<tr class="contenttable-0-tr">
+<td class="contenttable-1-td">
+<p class="fm-table-body">Example Mapping</p>
+</td>
+<td class="contenttable-1-td">
+<p class="fm-table-body">When you want to discover different examples and rules for a scenario</p>
+</td>
+<td class="contenttable-1-td">
+<p class="fm-table-body">One of the simplest collaborative modeling tools to start with</p>
+<p class="fm-table-body">Can formalize acceptance criteria from the discovery</p>
+</td>
+<td class="contenttable-1-td">
+<p class="fm-table-body">Lacks visualization of the process or storyline, which can make people discuss invisible things</p>
+</td>
+<td class="contenttable-1-td">
+<p class="fm-table-body">Problem Space and Solution Space</p>
+</td>
+</tr>
+<tr class="contenttable-0-tr">
+<td class="contenttable-1-td">
+<p class="fm-table-body">Business Model Canvas</p>
+</td>
+<td class="contenttable-1-td">
+<p class="fm-table-body">When you need information on the context: the company and its strategy</p>
+</td>
+<td class="contenttable-1-td">
+<p class="fm-table-body">The business often knows this tool already because it’s a popular tool in business management.</p>
+</td>
+<td class="contenttable-1-td">
+<p class="fm-table-body">The tool is further removed from the software, and it’s harder for the development team to understand its importance before they have worked with it.</p>
+</td>
+<td class="contenttable-1-td">
+<p class="fm-table-body">Problem Space</p>
+</td>
+</tr>
+<tr class="contenttable-0-tr">
+<td class="contenttable-1-td">
+<p class="fm-table-body">Domain Storytelling</p>
+</td>
+<td class="contenttable-1-td">
+<p class="fm-table-body">When modeling one specific scenario, process, or timeline</p>
+</td>
+<td class="contenttable-1-td">
+<p class="fm-table-body">No learning curve, instant documentation</p>
+</td>
+<td class="contenttable-1-td">
+<p class="fm-table-body">Structured approach that can lower the amount of discovery</p>
+</td>
+<td class="contenttable-1-td">
+<p class="fm-table-body">Problem Space and Solution Space</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 class="fm-head" id="heading_id_17">2.4 <a id="idTextAnchor079"></a>Collaborative software design catalysts</h2>
+<p class="body">You might be thinking, “What now? How can I start applying what I’ve learned in this chapter?” Don’t worry, we’ve thought of that. At the end of each chapter, you’ll find a section called “Collaborative software design catalysts.” These are practical tips, suggestions, and practices that you can begin using right away, regardless of your current position in a team or your current software development life cycle. They’re designed to give you quick benefits from the insights in this book, even if you’re not modeling collaboratively, and get a jump start on applying these ideas. Let’s start by introducing the first two:<a id="idIndexMarker149"></a><a id="idIndexMarker150"></a><a id="marker-55"></a></p>
+<ul class="calibre6">
+<li class="fm-list-bullet">
+<p class="list">When discussing a business problem, for example, in a refinement or similar meeting, consider using domain events to map out the conversation on a timeline. You can do this on your own or get help from the group.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">When discussing business requirements with stakeholders, introduce a helpful rule: “You think it, you write it.” This encourages people to visually express their ideas, contributing their thoughts to the collective understanding. It’s an effective way to ensure everyone’s mental models are shared and understood by the group<a id="idTextAnchor080"></a>.</p>
+</li>
+</ul>
+<h2 class="fm-head" id="heading_id_18">2.5 Further reading</h2>
+<ul class="calibre6">
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Discovery: Explore Behaviour Using Examples</i> by Gaspar Nagy and Seb Rose (CreateSpace, 2018)<a id="idIndexMarker151"></a><a id="marker-56"></a></p>
+</li>
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Domain-Driven Design: Tackling Complexity in the Heart of Software</i> by Eric Evans (Addison-Wesley Professional, 2003)</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Domain Storytelling: A Collaborative, Visual, and Agile Way to Build Domain-Driven Software</i> by Stefan Hofer and Henning Schwentner (Addison-Wesley Professional, 2021)</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">“EventStorming in COVID-19 Times” blog (<a class="url" href="https://mng.bz/x25Y">https://mng.bz/x25Y</a>)</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Gamestorming: A Playbook for Innovators, Rulebreakers, and Changemakers</i> by Dave Gray, Sunni Brown, and James Macanufo (O’Reilly Media, 2010)</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Introducing EventStorming</i> by Alberto Brandolini (Leanpub, <a class="url" href="https://leanpub.com/introducing_eventstorming">https://leanpub.com/introducing_eventstormin<span id="idTextAnchor081">g</span></a>)</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Learning Domain-Driven Design: Aligning Software Architecture and Business Strategy</i> by Vlad Khononov (O’Reilly Media, 2021)</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">The Programmer’s Brain</i> by Felienne Hermans (Manning, 2021, <a class="url" href="https://www.manning.com/books/the-programmers-brain">www.manning.com/books/the-programmers-brain</a>)</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Visual Collaboration Tools: For Teams Building Software</i> by Kenny Baas-Schwegler, Krisztina Hirth (Leanpub, <a class="url" href="https://leanpub.com/visualcollaborationtools/">https://leanpub.com/visualcollaborationtools/</a>)</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">“When &amp; Why to Explore the Problem Space” blog (<a class="url" href="https://mng.bz/KZgP">https://mng.bz/KZg<span id="idTextAnchor082">P</span></a>)</p>
+</li>
+</ul>
+<h2 class="fm-head" id="heading_id_19">Summary</h2>
+<ul class="calibre6">
+<li class="fm-list-bullet">
+<p class="list">Teams often prioritize solutions over understanding user and stakeholder needs, leading to missed insights into the broader business challenges.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Understanding business problems requires analyzing user needs, stakeholder concerns, and system limitations before proposing software features.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Software’s role in businesses has evolved from support to a central component, necessitating adaptive development to align with company growth and market changes.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Collaborative modeling is essential for tackling complex problems, involving stakeholders in visualizing and analyzing decisions to achieve a shared understanding.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Effective problem exploration through collaborative modeling focuses on domain understanding, questioning assumptions, and using accessible tools to facilitate stakeholder engagement.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Collaborative modeling and Domain-Driven Design (DDD) synergize to deepen the understanding and design of domain models, prioritizing shared knowledge among all stakeholders.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Stakeholder roles are diverse, with distinctions between domain experts, customers, and users; effective stakeholder analysis is key for targeted engagement.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Misconceptions—such as equating domain experts with users or misunderstanding the roles within software development—underscore the need for clarity in stakeholder involvement.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">DDD’s principles guide the strategic and tactical phases of software design, with collaborative modeling serving as a practical toolset to apply these principles, though not mandatory.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Different collaborative modeling tools offer unique perspectives on complex business problems, each tailored for specific scenarios and needs.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Collaborative modeling tools are essential in both the problem space and solution space, helping to create shared understanding and test multiple solutions through visual and interactive tools.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">The Business Model Canvas aids in understanding a company’s strategy and business model, focusing on offerings, customers, infrastructure, and finances.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">EventStorming facilitates a rapid, collaborative understanding of business processes, enabling stakeholders to map out and analyze scenarios with a focus on domain events.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Example Mapping helps in breaking down user stories or use cases into actionable tasks, identifying acceptance criteria and constraints through structured example-based discussion.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Domain Storytelling provides a structured approach to capturing and visualizing business processes and interactions, highlighting cooperation and communication within scenarios.<a id="marker-57"></a></p>
+</li>
+</ul>
+<hr class="calibre7"/>
+<p class="fm-footnote"><a id="footnote-002"></a><sup class="footnotenumber"><a class="url1" href="#footnote-002-backlink">1</a></sup>   Kurtz, C. F., &amp; Snowden, D. The New Dynamics of Strategy: Sense-Making in a Complex and Complicated World, 2003. <i class="fm-italics">IBM Systems Journal</i>, <a class="url" href="https://ieeexplore.ieee.org/document/5386804">https://ieeexplore.ieee.org/document/5386804</a>.</p>
+<p class="fm-footnote"><a id="footnote-001"></a><sup class="footnotenumber"><a class="url1" href="#footnote-001-backlink">2</a></sup>   Basco-Carrera, L., Warren, A., van Beek, E., Jonoski, A., &amp; Giardino, A. “Collaborative Modelling or Participatory Modelling? A Framework for Water Resources Management,” 2017. <i class="fm-italics">Environmental Modelling &amp; Software</i>, 91, 95–110.</p>
+<p class="fm-footnote"><a id="footnote-000"></a><sup class="footnotenumber"><a class="url1" href="#footnote-000-backlink">3</a></sup>   Kurtz, C. F., &amp; Snowden, D. “The New Dynamics of Strategy: Sense-making in a Complex and Complicated World,” 2003. <i class="fm-italics">IBM Systems Journal</i>, <a class="url" href="https://ieeexplore.ieee.org/document/5386804">https://ieeexplore.ieee.org/document/5386804</a>.</p>
+</div></body>
+</html>

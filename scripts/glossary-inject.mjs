@@ -352,6 +352,14 @@ function loadGlossaries() {
         : [];
       for (const alias of aliases) {
         if (alias === term) continue;
+        // 英文匹配已大小写不敏感；仅大小写不同的别名会在索引里重复推同一气泡
+        if (
+          isAsciiTerm(term) &&
+          isAsciiTerm(alias) &&
+          alias.toLowerCase() === term.toLowerCase()
+        ) {
+          continue;
+        }
         if (byDomain[domain][alias]) {
           console.warn(
             `[glossary] alias collision ${domain}/${alias} (from ${term})`,
@@ -492,7 +500,10 @@ function buildTermIndex(byDomain, domains) {
       if (!index.has(key)) {
         index.set(key, { term, sources: [] });
       }
-      index.get(key).sources.push({ domain, ...meta });
+      const bucket = index.get(key);
+      // 主词 + 大小写别名等会折叠到同一 key；同域只保留一条
+      if (bucket.sources.some((s) => s.domain === domain)) continue;
+      bucket.sources.push({ domain, ...meta });
     }
   }
   return index;
@@ -659,6 +670,13 @@ function findContentRoot($) {
 
 function processFile(htmlPath, domains, byDomain) {
   const html = fs.readFileSync(htmlPath, "utf8");
+  // hugo server 非原子写盘时，inject 可能读到截断的 UTF-8 → U+FFFD（页面上一串「？」）
+  if (html.includes("\uFFFD")) {
+    console.warn(
+      `[glossary] skip corrupt UTF-8 (U+FFFD) in ${path.relative(root, htmlPath)}`,
+    );
+    return 0;
+  }
   const $ = cheerio.load(html, { decodeEntities: false });
   const contentRoot = findContentRoot($);
   if (!contentRoot) {
@@ -676,7 +694,14 @@ function processFile(htmlPath, domains, byDomain) {
   }
   const termIndex = buildTermIndex(byDomain, domains);
   const n = injectInRoot($, contentRoot, termIndex);
-  fs.writeFileSync(htmlPath, $.html(), "utf8");
+  const out = $.html();
+  if (out.includes("\uFFFD")) {
+    console.warn(
+      `[glossary] refuse to write U+FFFD in ${path.relative(root, htmlPath)}`,
+    );
+    return 0;
+  }
+  fs.writeFileSync(htmlPath, out, "utf8");
   return n;
 }
 

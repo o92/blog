@@ -1,0 +1,405 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title>12 Collaborative modeling beyond software design</title>
+<link href="../../page_styles.css" rel="stylesheet" type="text/css"/>
+<link href="../../stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div class="calibre1" id="sbo-rt-content"><h1 class="tochead" id="heading_id_2">12 <a id="idTextAnchor000"></a><a id="idTextAnchor001"></a><a id="idTextAnchor002"></a><a id="idTextAnchor003"></a><a id="idTextAnchor004"></a><a id="idTextAnchor005"></a><a id="idTextAnchor006"></a><a id="idTextAnchor007"></a><a id="idTextAnchor008"></a><a id="idTextAnchor009"></a><a id="idTextAnchor010"></a><a id="idTextAnchor011"></a><a id="idTextAnchor012"></a><a id="idTextAnchor013"></a><a id="idTextAnchor014"></a><a id="idTextAnchor015"></a><a id="idTextAnchor016"></a><a id="idTextAnchor017"></a><a id="idTextAnchor018"></a><a id="idTextAnchor019"></a><a id="idTextAnchor020"></a><a id="idTextAnchor021"></a><a id="idTextAnchor022"></a><a id="idTextAnchor023"></a><a id="idTextAnchor024"></a><a id="idTextAnchor025"></a><a id="idTextAnchor026"></a><a id="idTextAnchor027"></a><a id="idTextAnchor028"></a><a id="idTextAnchor029"></a><a id="idTextAnchor030"></a><a id="idTextAnchor031"></a><a id="idTextAnchor032"></a><a id="idTextAnchor033"></a>Collaborative modeling beyond software design</h1>
+<p class="co-summary-head"><a id="marker-348"></a>This chapter covers<a id="idIndexMarker000"></a></p>
+<ul class="calibre6">
+<li class="co-summary-bullet">Understanding the context through collaborative modeling with managing roles</li>
+<li class="co-summary-bullet">Collaborating with user researchers and product and engineering managers</li>
+<li class="co-summary-bullet">Moving toward implementation through collaborative modeling</li>
+</ul>
+<p class="body">We hope you’ve gotten a good understanding of why designing software requires collaborative software design with stakeholders. We also hope this book has been helpful as you take the first steps and understand how to do so. We discussed the different stages you’ll go through during collaborative modeling and what facilitation skills are needed to help the group move past certain blockers. We covered the social dynamics that come into play when bringing a diverse group of people together in a room, especially how to manage conflicts and include everyone when making software design decisions. We also demonstrated how to incorporate insights and onboard people who weren’t present during the collaboration. Additionally, we highlighted the importance of building in feedback loops to keep the decision-making process alive.</p>
+<p class="body">However, the knowledge we shared isn’t just useful in the domain of software design; in fact, much of the information came from the diverse fields of anthropology, behavioral science, and complexity science. So, you can imagine these skills have applications beyond software design. In this final chapter, we’ll provide examples of how collaborative modeling can be used for understanding context, mapping out strategies, and collaborating with user researchers, product owners, and engineering managers. We’ll conclude with a clear example of how to progress toward implementation.<a id="idTextAnchor034"></a></p>
+<h2 class="fm-head" id="heading_id_3">12.1 Moving toward understanding the context</h2>
+<p class="body"><a id="marker-349"></a>In chapter 2, we already introduced you to the Business Model Canvas as a way for a team to align with the business objectives. While many Business Model Canvases are created by management and product managers to explore their business, it also helps to include the development teams in this process. A very good example that shows the power of including teams in this process comes from Javier Fernández’s talk, “Black Ops DDD Using the Business Model Canvas” (<a class="url" href="https://www.youtube.com/watch?v=M5CbbWmdsFU">www.youtube.com/watch?v=M5CbbWmdsFU</a>). He conducted separate sessions with his CEO and the development team, and then compared outcomes. This approach gave the CEO new insights into value proposition opportunities.<a id="idTextAnchor035"></a><a id="idIndexMarker001"></a></p>
+<h3 class="fm-head2" id="heading_id_4">12.1.1 Focusing on customer needs</h3>
+<p class="body">Many times, we see people focusing on solutions when doing collaborative modeling. I hope this isn’t a new insight for you, but we often find ourselves falling into this sam<a id="idTextAnchor036"></a>e anti-pattern. When you conduct a Business Model Canvas, as explained in chapter 2, with either business stakeholders or teams, you should be wary of this anti-pattern, as it can divert your discovery away from understanding the context.<a id="idIndexMarker002"></a></p>
+<p class="body">Organizations often jump to solutions based on initial perceptions. For example, they might deduce that a client wants a chatbot feature in their app. However, this approach can be restrictive—don’t get lured into that trap! It’s crucial to first understand the “value proposition” of a Business Model Canvas, which means identifying the primary benefits or unique offerings your product or service brings to the market. Simultaneously, it’s equally important to identify the “customer segment” on the Business Model Canvas, which highlights the specific demographic or group you’re aiming to serve. A deeper dive into these elements can be achieved through<a id="idTextAnchor037"></a> a Value Proposition Canvas, as illustrated in figure 12.1, ensuring you cater directly to customer needs.</p>
+<p class="body">The same can happen when doing Domain Storytelling or EventStorming. When we model the process as it currently exists, the process may be designed to revolve around the current software systems. Businesses often buy software that might fit at the time, but as businesses change with the market, those software systems might wear them down. As a result, they start working around the problems with several patch processes to fix them—and don’t forget that Excel export that everyone wants! By removing the systems from EventStorming and Domain Storytelling, you’ll be able to refocus on customer needs and gain a deeper understanding of the context and business problems<a id="idTextAnchor038"></a>.</p>
+<div class="figure">
+<p class="figure1"><a id="idTextAnchor039"></a><img alt="" class="calibre5" height="492" src="../../OEBPS/Images/CH12_F01_Baas.png" width="772"/></p>
+<p class="figurecaption">Figure 12.1 The Value Proposition Canvas from Strategyzer. You start by filling in the customer segment before moving to the value proposition. This can be used as a base in your Business Model Canvas.</p>
+</div>
+<h3 class="fm-head2" id="heading_id_5">12.1.2 Connecting business strategy, product, and software architecture</h3>
+<p class="body"><a id="marker-350"></a>In the IT industry, there’s a common problem with aligning our solutions with the overall business strategy. Tools such as the Business Model Canvas can provide some guidance, but they don’t show us how our software architecture fits with the strategy. They also don’t help us adjust our software to see if it still aligns with our goals.<a id="idIndexMarker003"></a><a id="idIndexMarker004"></a><a id="idIndexMarker005"></a></p>
+<p class="body">This misalignment often leads to software systems that don’t adapt to meet the company’s strategy. When we build new systems on top of the existing ones without proper alignment, it only complicates the situation further. The systems become more intertwined and less adaptable to strategic changes. Strategies in the business world are often put into words that seem logical but don’t really help us grasp the entire situation. This leads to software systems that don’t effectively align with our strategic goals, resulting in a very rigid software architecture that is unable to accommodate business chang<a id="idTextAnchor040"></a>es.</p>
+<p class="fm-head1">Wardley Mapping</p>
+<p class="body">Simon Wardley (who created Wardley Mapping) faced this problem years ago when he was a CEO. Once, an executive asked him if his strategy made sense, and he realized he didn’t know what a genuine strategy should look like. Although his strategy seemed fine and resembled others he’d seen, with familiar diagrams and wording, he later discovered that no one really understood it. Wardley compared most boardroom strategies and strategic consultancy decisions to playing chess without a chessboard. Without seeing the board, people often end up mimicking others’ moves. In business, when there’s no clear understanding of the landscape of an organization, companies tend to adopt generic strategies that have worked for others. Common examples might include embracing microservices, the cloud, the Spotify model, or a digital-first approach.<a id="idIndexMarker006"></a><a id="idIndexMarker007"></a><a id="idIndexMarker008"></a><a id="idIndexMarker009"></a></p>
+<p class="body">But it’s difficult to discern what’s truly important for an organization without a clear view of its landscape or to know how to act based on a strategy that lacks context. How can development teams, often facing complex situations, be expected to move in the right direction? Wardley recognized this problem and created a strategy cycle, as illustrated in figure 12.2. Inspired by Sun Tzu’s <i class="fm-italics">The Art of War</i> and John Boyd’s OODA loop, the cycle begins with mapping out the current organizational landscape. This approach seeks to provide a clearer understanding of the organizational environment, so strategies can be more tailored, relevant, and effective.<a id="idIndexMarker010"></a><a id="idIndexMarker011"></a><a id="idIndexMarker012"></a><a id="marker-351"></a><a id="idIndexMarker013"></a></p>
+<p class="fm-callout"><span class="fm-callout-head">DEFINITION</span> The <i class="fm-italics">OODA loop (Observe, Orient, Decide, Act)</i> is a decision-making framework developed by military strategist John Boyd, emphasizing rapid, continuous cycles of observation, orientation, decision-making, and action to outmaneuver opponents or adapt to changing environments. It’s widely used in military, business, and other strategic fields to enhance responsiveness and effect<a id="idTextAnchor041"></a>iveness. <a id="idIndexMarker014"></a></p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="569" src="../../OEBPS/Images/CH12_F02_Baas.png" width="832"/></p>
+<p class="figurecaption">Figure 12.2 Wardley Mapping Strategy Cycle, based on Sun Tzu’s five factors and John Boyd’s OODA loop. It includes mapping the landscape, introducing climate patterns, adding doctrine, and making decisions that create a purpose. (Source: <a class="url" href="https://mng.bz/67PZ">https://mng.bz/67PZ</a>. Licensed by Simon Wardley under a Creative Commons Attribution-ShareAlike 4.0 license)</p>
+</div>
+<p class="body">Wardley Mapping is effective not only in the boardroom but also for other strategic decisions such as product, teams, and software architecture. It’s a powerful storytelling tool that creates a shared understanding of the current landscape and climate, where we can orient what principles to use and make collaborative decisions together. So, what exactly does Wardley mean by “landscape” in this cycle?</p>
+<p class="body">In chapter 10, we introduced you to the initial phase of mapping the landscape, which is the value chain as a vertical axis. We identified the users as an anchor on the map to start from. These users have needs that are fulfilled by the capabilities required to meet those needs in the organization. For user needs mapping we dived deeper in streamlets and team boundaries. For Wardley Mapping we go to the horizontal axis where we place each capability on the map in a stage of evolution. The four evolution stages are Genesis, Custom Build, Product &amp; Rental, and Commodity &amp; Utility. For each capability in the value chain, we collaborate on which evolution stage that capability is in based on the context of our organization.</p>
+<p class="body">Determining evolutionary stages collaboratively is pivotal for informed strategy and resource allocation. Different stages signal varied competitive advantages, risks, and required management practices. Recognizing a component’s stage aids in predicting its natural progression, optimizing supply chains, and tailoring operational approaches accordingly, ensuring organizations remain agile and competitive in their landscape. Different stages have different characteristics, so different approaches are needed to handle them. Let’s look at an example from BigScreen in figure 12.3 where we continued from the value chain; however, instead of looking for streamlets, we now place each capability in an evolutiona<a id="idTextAnchor042"></a><a id="marker-352"></a>ry stage.</p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="913" src="../../OEBPS/Images/CH12_F03_Baas.png" width="842"/></p>
+<p class="figurecaption">Figure 12.3 Step 2 of Wardley Mapping performed with the management and development teams of BigScreen. In this case, we placed each capability where the group believes the capability is in the context of BigScreen. We observed that people wondered why we will build the planning software ourselves, so we circled that with an arrow to the right and a red sticky to indicate that.<a id="marker-353"></a></p>
+</div>
+<p class="body">Placing the capabilities immediately raised a question: Why were we building our own planning software? We observed specific cinema rooms emerging on the map, where management could communicate that IMAX was reaching its market cap, while 4DX (movies shown with environmental effects such as seat movement) seemed to be maturing into a solid product. These insights could guide future design decisions.</p>
+<p class="body">Wardley Mapping involves many more steps than we cannot explain in a few paragraphs. Therefore, we advise you to visit <a class="url" href="https://learnwardleymapping.com/">https://learnwardleymapping.com/</a>. This website offers all Wardley Mapping resources for free and will answer many of the questions that you might still have. Make sure to read all the blogs that Simon has written about his journey, which are bundled tog<a id="idTextAnchor043"></a>ether i<a id="idTextAnchor044"></a>n an e-pub.<a id="idIndexMarker015"></a><a id="idIndexMarker016"></a><a id="idIndexMarker017"></a><a id="idIndexMarker018"></a></p>
+<p class="fm-head1">Collaborative stressor analysis for resilient software design</p>
+<p class="body">Another topic to consider is <i class="fm-italics">climate</i>, which refers to the external forces acting on your landscape. You can learn about these patterns as well at <a class="url" href="https://learnwardleymapping.com/">https://learnwardleymapping.com/</a>. Another tool we find useful for understanding the contextual effect of the complexity of these climate patterns is a <i class="fm-italics">stressor analysis</i>, which comes from residuality theory by Barry M. O'Reilly.</p>
+<p class="body">A fundamental idea in this theory is <i class="fm-italics">hyperliminality</i>,<sup class="footnotenumber" id="footnote-004-backlink"><a class="url1" href="#footnote-004">1</a></sup> which is an ordered system inside a disordered system. Software systems are ordered systems that are predictable, mappable, and testable, and they operate in our organization, which is the disordered system. In chapter 3, we already mentioned that a more fitting job title would be clairvoyant, because we can’t predict what will happen in that organization and the market it’s operating in. When we collaboratively design software, we’re forced to work toward an unknown future. Any event that arises in that unknown future, which the system isn’t designed for, is known as a <i class="fm-italics">stressor</i>.<sup class="footnotenumber" id="footnote-003-backlink"><a class="url1" href="#footnote-003">2</a></sup><a id="idIndexMarker019"></a><a id="idIndexMarker020"></a></p>
+<p class="body">These stressors all lead to something called an <i class="fm-italics">attractor</i>, a limited number of states in the network’s state space to which the system will repeatedly return.<sup class="footnotenumber" id="footnote-002-backlink"><a class="url1" href="#footnote-002">3</a></sup> There is more to unfold about attractors, which were demonstrated by Kaufmann networks in 1969.<sup class="footnotenumber" id="footnote-001-backlink"><a class="url1" href="#footnote-001">4</a></sup> Different stressors may lead to the same attractor that affects our system. Even a stressor that seems irrelevant, and which we might disregard due to its low likelihood, could end up affecting the system in the same way as a stressor that we didn’t foresee. That’s why when doing stressor analysis, we ignore probability. Heck, it’s even forbidden!<a id="marker-354"></a><a id="idIndexMarker021"></a></p>
+<p class="body">With a stressor analysis, we identify the stressor, understand how it affects the architecture, determine ways to detect it, and come up with ways to mitigate its effect. There are two approaches to this: One is to brainstorm as many potential stressors as you can think of and then outline their characteristics. The alternative is to start with a single stressor, fully define it, and allow additional stressors to emerge organically.</p>
+<p class="body">Personally, we prefer the former approach—identifying as many potential stressors first, and then assessing each one individually. Keep in mind that new stressors may surface as you delve deeper into the analysis of each one. In addition, if you can’t think of a lot of stressors, then you’re probably not dealing with a complex system.</p>
+<p class="body">Let’s consider an example relevant to our BigScreen: imagine everyone has purchased advanced virtual reality (VR) systems that provide a comparable audiovisual experience to that of a cinema, negating the need to visit the cinema. This scenario would affect the cinema’s ability to sell tickets. We could detect this trend through media reports and a decline in ticket sales. A potential mitigation strategy might be to begin offering VR movies on our online platform.</p>
+<p class="body">At some point when working out these stressors, you’ll find patterns in the stressors when a lot of the times you’ll use the same mitigation for different stressors. The stressors that lead to the same mitigation are considered attractors, which can be seen in the Wardley Mapping sense as climate patterns. Taking these mitigations into account when designing software will lead to more resilient architectures. If you want to read more, check out the blog post written by one of the authors called “Resilient Bounded Contexts: A Pragmatic Approach with Residuality Theory” (<a class="url" href="https://mng.bz/RZWa">https://mng.bz/RZWa</a>).</p>
+<p class="body">Business Model Canvas, Wardley Mapping, and stressor analysis all require your domain experts and stakeholders to actually possess the expertise required and have an overview of the entire system. Unfortunately, we often observe companies that have a siloed organization where no one has the full picture of what the entire business actually does. If you’re faced with that situation, we always advise to start with a Big Picture EventStorming by putting all of these people in a room. From that Big Picture EventStorming, you can distill several asp<a id="idTextAnchor046"></a>ects of your business.<a id="idIndexMarker022"></a><a id="idIndexMarker023"></a><a id="idIndexMarker024"></a><a id="idIndexMarker025"></a></p>
+<h2 class="fm-head" id="heading_id_6">12.2 Collaborative modeling beyond software design</h2>
+<p class="body">As mentioned before, software design is not all there is when it comes to collaborative modeling. In section 12.1, we zoomed out a bit to get a clear overview of the entire context we’re working in. The modeling part can really drag you down potential rabbit holes, so it’s good to zoom out every now and then and reconsider what it was that you wanted to achieve in the first place. <a id="idIndexMarker026"></a><a id="idIndexMarker027"></a></p>
+<p class="body">As far as context goes, it doesn’t stop there. It’s also important to consider that software design is only a small part of the entire cycle of teams and organizations. There are lots of different roles and people that are part of that bigger cycle who could also benefit from collaborative modeling. In this section, we want to zoom in on them an<a id="idTextAnchor047"></a>d their needs a little bit.</p>
+<h3 class="fm-head2" id="heading_id_7">12.2.1 Different roles, different modeling needs</h3>
+<p class="body">What we talked about so far in this book mainly focuses on software design. But, as mentioned, there’s more to that story. It’s just a small part of the bigger picture that we call an organization. Plus, the things we talked about so far aren’t limited to software design as they also apply to organizational change in a more general sense. Collaborative modeling implies a variety of stakeholders together in the same room. Big Picture EventStorms can be very useful for product managers and product owners to improve the requirements gathering process, for CTOs to optimize the (global) strategy, and for UX designers to improve user journeys and customer journeys, just to name a few. One of the authors even successfully used EventStorming to plan their wedding (check out <a class="url" href="https://mng.bz/2Kxw">https://mng.bz/2Kxw</a>). When a tool can even help you manage your in-laws, you can’t deny that it’s more broadly applicable than software design.<a id="idIndexMarker028"></a></p>
+<p class="body">Long story short, the different people and roles that are part of the entire context will have to do some form of collaborative modeling. They might have different needs than software developers, but they can still benefit from collaborative modeling tools. We’ll highlight a few of them to give you an idea of how to apply other forms of collaborative model<a id="idTextAnchor048"></a>ing to meet different needs.</p>
+<p class="fm-head1">The customer journey</p>
+<p class="body">You may have noticed how we’ve casually referred to customer journeys and user journeys. We introduced both customer and user journeys in chapter 2. These two tools are often used interchangeably, but there are some nuances. What they have in common is that they are both visual representations of the stages that customers go through and how they interact with the company and its products. Another important similarity is that they take the perspective of the customer as the starting point.</p>
+<p class="body">The difference we see is that a customer journey is a more holistic representation of the broader customer experience, including touch points and channels. So, interaction with marketing, customer service, and company employees (both digital and physical) are important aspects. In the case of BigScreen, the <i class="fm-italics">customer journey</i> represents the entire experience of customers from searching a movie to going home and reviewing the movie. A <i class="fm-italics">user journey</i>, on the other hand, is something we more often see in product design and development. The focus in a user journey map is more on the product itself and the user’s experience with that product, that is, understanding the different steps a user takes when using the product, what their needs are, and where they can run into challenges. To us, the main difference lies thus in the focus of the different maps: the entire customer journey versus the interaction of users with a product. For now, we’ll dive more into the customer journey that BigScreen created.</p>
+<p class="body"><a id="marker-356"></a>A customer journey can be an excellent starting point for various collaborative<a id="idTextAnchor049"></a> modeling sessions, including User Story Mapping, EventStorming, and Wardley Mapping. It tells you, from the perspective of your customer, what happens from start to finish. Apart from technical opportunities, linked (external) systems, and software design challenges, it provides insights into what’s important to your customer, which is a great addition to or starting point for your software architecture.</p>
+<p class="body">Our friends at BigScreen were very aware of that, and they created a customer journey themselves. It’s a work in progress, and based on iterative updates, it represents the general customer journey of people who are visiting BigScreen. Figure 12.4 shows the custo<a id="idTextAnchor050"></a>mer journey of BigScreen.</p>
+<p class="body">For the purpose of this chapter and book, we don‘t show all the details because they aren’t crucial in understanding the journey. This customer journey provides an overview of the main stages and the type of information that is required in a typical customer journey. We’ll use this journey to further explain some of the collaborative model<a id="idTextAnchor051"></a>ing tools that you can use.</p>
+<p class="fm-head1">User Story Mapping</p>
+<p class="body">To map your user stories to the customer journey, you must have a customer journey in the first place. In the customer journey of BigScreen just shown in figure 12.4, let’s take product managers or product owners as an example here. There is a product that needs to be managed, and User Story Mapping is an excellent collaborative modeling tool that you can use here. From a product management perspective, you want to create solutions that focus on the needs and desires of the actual users. It would also be great if everyone involved had the same understanding of what those needs are and which solutions (products) they are building.</p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="530" src="../../OEBPS/Images/CH12_F04_Baas.png" width="841"/></p>
+<p class="figurecaption">Figure 12.4 A simple customer journey of BigScreen, with details removed from it</p>
+</div>
+<p class="body">User Story Mapping can help you out with that! It’s a well-established tool coming from the Agile community and focuses on telling a story with the user perspective in mind. At the end of a User Story Mapping session, you have a visualized representation of the context of the customer journey, and you’ll be able to make your product backlog more transparent based on that visualization. As mentioned, User Story Mapping is a collaborative modeling tool. To create the best user experience, everyone who contributes to the delivery of customer value should be in the session, so you can expect product management, engineers, UX/design, sales, marketing, customer support, and legal to be represented.</p>
+<p class="body">The narrative is central here: it’s about the user experience. Taking that perspective prevents you from getting caught up in your own perspectives of what you believe would add value. If you take this too far, you’ll end up with a monstrous product backlog full of potentially irrelevant user stories. The goal is to map your user stories to the customer journey to make sure all your stories are relevant. By doing this, it will become easier to discover product increments and stay aligned with everyone involved. Based on that, you’ll be able to create a transparent and focused backlog with user stories that are relevant to your customers. As a bonus, writing user stories will also become much easier because they flow from the narrative you all follow. More guidance on how to run this exercise is extensively described in <i class="fm-italics">Visual Collaboration Tools: For Teams Building Software</i> (<a class="url" href="https://leanpub.com/visualcollaborationtools/">https://leanpub.com/visualcollaborationtools/</a>)<a id="idTextAnchor052"></a>.<a id="marker-357"></a></p>
+<p class="fm-head1">Impact Mapping</p>
+<p class="body">Whatever product you’re building, eventually you need to deliver business value. Impact Mapping is another well-established visualization tool that focuses on aligning user stories with business objectives. Together with relevant stakeholders, four questions will be answered (we’ll delve into these in detail later in this section):</p>
+<ul class="calibre6">
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Why?</i>—Goals</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Who?</i>—Actors</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">How?</i>—Impact</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">What?—</i>Deliverables</p>
+</li>
+</ul>
+<p class="body">Because it all starts with the intended goal of the product (milestone), everything that will be identified after will have a direct effect on achieving that goal. It’s a great tool to get a mutual understanding of the goals, visualize assumptions, set priorities, and discuss delivery options. Impact Mapping was introduced by Gojko Adzic in <i class="fm-italics">Impact Mapping</i> (Provoking Thoughts, 2012).</p>
+<p class="body">There are several reasons to create an Impact Map. As mentioned, focus, prioritization, and business value are important benefits. We see lots of companies and teams that get so caught up in building a solution that they forget what problem they were trying to solve or if the solution they’re building is (still) in line with business requirements. The map is visualized and simple, which makes it an excellent tool to have meaningful discussions with other stakeholders, including customers. It explains why certain features are being prioritized and why others aren’t, which is all linked back to that initial goal.</p>
+<p class="body">Impact Mapping can also be a way to detect cognitive bias and manage it when necessary. Availability bias, for example (as explained in chapter 7), can hinder us from taking on new perspectives and thinking creatively. With Impact Mapping, you can explore various options to reach a goal early on when no one has fallen deeply in love with any solution yet, and you’re still flexible enough to change course. You can visualize different options and pick the one that seems best.</p>
+<p class="body">Let’s briefly consider the steps that you go through when creating an Impact Map. As mentioned, it all starts with describing the goal of a product (milestone). That might sound easy, but formulating a good goal is challenging. “Creating a mobile Cinema app,” for example, isn’t a good goal, although it could be a means to an end. What do you want to achieve with this app? More early bird reservations, enhanced client satisfaction, increased mobile advertising revenue, and/or stronger customer loyalty? These are all examples that would work well. The first step is to decide on what the real goal is together with your relevant stakeholders:<a id="marker-358"></a></p>
+<ul class="calibre6">
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Step 1: Goal.</i> Why are you doing this? The preceding examples provide inspiration for this step. Don’t take it lightly. Spend significant time on specifying your goal and creating alignment.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Step 2: Actors</i>. Who has an effect on achieving the aforementioned goal? To answer this question, consider the following questions: Who can obstruct achieving the goal? For whom are we building this product; identifying our users and customers? Who will be affected by our product? There’s a strong link to behavior here: potential required behavioral change for the actors to achieve the goal determines step 3.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Step 3: Impact.</i> This is where we relate actors to our business goal: What behavior is required from our actors to achieve our goal? Do we need a behavioral change? What is the current undesired behavior we see? How does that negatively affect achieving our goal? What behavior that is currently there should not change? These questions should be answered for all actors identified in step 2.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Step 4: Deliverables</i>. Now that we know which role each actor plays in achieving our goal and which behavior is needed to get there, we can define deliverables such as features and organizational activities that support the impact we identified in step 3 and that are needed to achieve our goal.</p>
+</li>
+</ul>
+<p class="body">Figure 12.5 is an example of an Impact Map from Adzic’s book. As you can see, it’s a simple visualization that provides a lot of<a id="idTextAnchor053"></a><a id="marker-359"></a> insights and knowledge.</p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="541" src="../../OEBPS/Images/CH12_F05_Baas.png" width="843"/></p>
+<p class="figurecaption">Figure 12.5 A<a id="idTextAnchor054"></a>n example of an Impact Map</p>
+</div>
+<h3 class="fm-head2" id="heading_id_8">12.2.2 Customer journeys and EventStorming: A love story</h3>
+<p class="body">Different roles have unique needs and can benefit from different collaborative modeling tools, but the whole point of collaborative modeling is to do the modeling part together, meaning that there might be mutual value in different collaborative modeling efforts. From our experience, there definitely can be! Let’s take a look at a potential love story, specifically the one between customer journeys and EventStorming.</p>
+<p class="body">Imagine our situation at BigScreen. Several customer journeys have been mapped out by the UX designers, aiming at visualizing their needs and opportunities for BigScreen in terms of pain points and touch points. At the same time, a group of people visualized the bigger picture during a Big Picture EventStorming session as input for their software architecture. It doesn’t take a rocket scientist to see there is mutual value in these efforts. User journeys should fit the current software architecture, if we want to deliver the most value to our customers. What we often see happening, however, is that customer journeys are being mapped out in (partial) isolation and are mainly used for marketing efforts.</p>
+<p class="body">Here’s one example we’ve encountered: We once facilitated a Big Picture EventStorming session where both UX and developers were present, among others, of course. At one point, the architect wondered aloud if it would be useful to have customer journeys, so they could map that on the EventStorm to identify potential hotspots and opportunities. All of a sudden, someone stated (mildly frustrated), “Obviously, we mapped out all of our customer journeys already, and they are all available on <i class="fm-italics">&lt;shared drive&gt;</i>!” The room turned a bit quiet and was wondering what to do next. One of the authors here—we’ll anonymize for obvious reasons—raised their hand and asked the group: “So, just out of curiosity, who of you have seen these customer journeys or are aware of their existence?” Turned out that apart from UX, no one was aware of these mapped-out journeys or had seen them.</p>
+<p class="body">This side story emphasizes the opportunities available to combine and align different collaborative modeling efforts. When customer journeys are mapped out in isolation, missing validation or input from domain experts, chances are they won’t fit in the current software architecture. If they complement each other, it would be easier to identify opportunities and (technical) solutions for pain points identified in the customer journeys.</p>
+<p class="body">The love story of customer journeys and EventStorming is rooted in how they complement each other. The customer journeys are focused on what end users or customers have to do and the stages they go through. An EventStorm also includes systems and how they support the process. To strengthen collaboration, you could include existing customer journeys in your EventStorming session, adding existing wireframes or mock ups. It’s a way to validate your customer journeys and to add crucial wisdom from a customer perspective to your EventStorm.</p>
+<p class="body"><a id="marker-360"></a>If you take another look at the customer journey shown earlier in figure 12.4, you can see how it maps to (parts of) the Big Picture EventStorm. The Purchase stage, for example, is also visualized in the EventStorm. When we were designing boundaries in chapter 3, figure 3.6 showed a small part of the Big Picture EventStorm that captures the Payments part. As shown in that figure, external systems are mapped on two different bounded contexts: Movie Scheduling and Ticketing. By combining your customer journey and EventStorm, you can validate both and let them complement each other. In that way, you also allow all the present wisdom and knowledge to be p<a id="idTextAnchor055"></a>art of the bigger picture.</p>
+<h3 class="fm-head2" id="heading_id_9">12.2.3 Aligning capabilities with your strategy</h3>
+<p class="body">Once you understand your entire context, you can take it one step further. If you know what you want to achieve, and you know what your context looks like, you can assess your current capabilities and discover if and which new capabilities you might need to reach your goals. We want to highlight two tools that we use to dive into understanding team processes and capabilities. With those outcomes, you can further strategize for the <a id="idTextAnchor056"></a>future and implementation.</p>
+<p class="fm-head1">Team Topologies</p>
+<p class="body">We’ve already briefly discussed how the value chain of Wardley Mapping can be used to identify streamlets with user needs mapping. However, an important aspect we haven’t covered yet is cognitive load, a concept characterized by psychologist John Sweller in 1988 as “the total amount of mental effort being used in the working memory.”<sup class="footnotenumber" id="footnote-000-backlink"><a class="url1" href="#footnote-000">5</a></sup></p>
+<p class="body">Engineering managers need to consider the cognitive load their teams are dealing with. For example, a software architecture that, theoretically, might be the most decoupled—such as a large number of small microservices—might result in teams grappling with a multitude of cross-cutting concerns. Alternatively, if the software architecture isn’t intentionally structured, it could result in excessive collaboration among teams, which can not only be costly but also cognitively demanding.</p>
+<p class="body">Team together with management, we can use Team Topologies as a collaborative modeling tool to map out teams and their interactions. The goal is to consider these independent business flows and the teams’ cognitive loads. It’s essential to keep in mind that when you begin collaborative software design, particularly with complex systems, circumstances can change quickly. This fluidity means you might need to adjust the teams and reevaluate their collaborations. Don’t apply Team Topologies once and then forget about it; instead, decide how you can strategize over time to transition teams from high collaboration to what Team Topologies calls “as-a-service.” Team Topologies is meant to be used as a collaborative modeling tool and dynamically changing teams over time to accommodate for changing business needs and problems.</p>
+<p class="body">For those keen to delve deeper into the theoretical integration of Domain-Driven Design (DDD), Wardley Mapping, and Team Topologies, we highly recommend exploring the insightful resources provided by Susanne Kaiser. Her videos and the upcoming book offer a valuable exploration of these ideas. We’ve included her blog post on this topic in the further reading list in section 12.6 for a more comprehensive understanding.<a id="marker-361"></a><a id="idTextAnchor057"></a></p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="754" src="../../OEBPS/Images/CH12_F06_Baas.png" width="841"/></p>
+<p class="figurecaption">Figure 12.6 The positive and negative effects of the polarity “coding versus collaborative modeling”</p>
+</div>
+<p class="fm-head1">Change/Maturity mapping</p>
+<p class="body">In Team Topologies, we can design an enabling team to infuse new knowledge into the Stream-aligned team. When modernizing your architecture, as we did at BigScreen, the team may require new capabilities to implement that architecture. For example, transitioning toward a microservice architecture necessitates many new capabilities to handle cross-cutting concerns and introduces a plethora of methods for observability.</p>
+<p class="body">Traditionally, many managers resort to using a skills matrix, or worse, a maturity model. The problem with these methods is that they don’t account for the context in which a team operates. Each team may require different capabilities and find themselves in unique contextual situations regarding their abilities. That’s why we can employ a variant of Wardley Mapping, created by Marc Burgauer an<a id="idTextAnchor058"></a>d Chris McDermott, known as Maturity Mapping (<a class="url" href="https://maturitymapping.com/">https://maturitymapping.com/</a>).</p>
+<p class="body">The concept is similar to Wardley Mapping, but we map out Capabilities as practices, which evolve from Novel, to Emerging, to Good, and finally to Best. However, it’s crucial to understand the team’s objective: What problem are they solving? From there, we can create a value chain and align every practice with the problem they are addressing for the business. This top anchor provides the context the team needs to map their maturity and understand their position.</p>
+<p class="body">This map empowers the team to decide how they should develop their capabilities. They can initiate experiments by having one or two people investigate a new capability. Once that capability has emerged and seems to work, the team can then advance it to a “good practice” and perhaps document the way of working. This map also provides the engineering manager with information for discussions about how individuals’ personal growth can align with the team’s goals. It can also inform decisions about whether to hire specialists, or if several teams are experiencing the same capability problem, whether to create an enabling team. Collaborative modeling and mapping out a landscape together serve as powerful tools for collaboration be<a id="idTextAnchor059"></a>tween management and teams!</p>
+<h2 class="fm-head" id="heading_id_10">12.3 Moving toward implementation</h2>
+<p class="body">The end goal of collaborative modeling is to create a functioning software system that fits the user needs. To do that, there are a few questions left, which we’ll answer in this section:<a id="idIndexMarker029"></a><a id="marker-362"></a></p>
+<ul class="calibre6">
+<li class="fm-list-bullet">
+<p class="list">When do we know it’s time to start coding?</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Now that we have our EventS<a id="idTextAnchor060"></a>torm, what do we do with it?</p>
+</li>
+</ul>
+<h3 class="fm-head2" id="heading_id_11">12.3.1 When to go from collaborative modeling to coding</h3>
+<p class="body">Let’s start with the first one: When do we know it’s time to start coding? We can also ask ourselves the reverse: How do we know we haven’t modeled enough yet? Collaborative Modeling versus Coding is another polarity that needs to be managed, which we spoke about in chapter 10. A design stays a design, until it’s tested in production—only then do we know the feasibility of our models. On the other hand, modeling with stickies is cheaper than having to refactor.<a id="idIndexMarker030"></a></p>
+<p class="body">As a facilitator, it’s interesting to map out this polarity together with the group you’re facilitating to understand the signals and actions of the polarity. In figure 12.6, you can see some examples of the positive and negative effects of staying too long in both poles. We called the positive effects of coding and collaborative modeling, L+ and R+, Domain-Oriented Modeling. We named the negative effects, L− and R−, Shal<a id="idTextAnchor061"></a>low Technical Programming.<a id="idIndexMarker031"></a><a id="idIndexMarker032"></a></p>
+<p class="body">Next, you can ask the group for signals that they have been modeling too long or not long enough. If you start coding, and you have to add a lot of comments in the code to explain what’s happening, it’s time to go back to the virtual drawing board together with your team and dig a bit deeper into this part of the business logic. Ask the group questions such as the following: Can we introduce a new concept in our ubiquitous language that will make the code more readable?</p>
+<p class="body">Then, you fill in the actions that the group can take when they notice one of the signals. If you have too many comments in your code, you can model that specific scenario in detail. If you’re mainly discussing technical aspects of the model, it’s time to implement those technical aspects into the code. In figure 12.7, you can s<a id="idTextAnchor062"></a>ee our signals and actions.<a id="marker-363"></a></p>
+<p class="body">As you may have noticed, those are fairly generic. Signals and heuristics are context dependent, and what is a signal or a possible action in one group of people, won<a id="idTextAnchor063"></a>’t be there in another group. We wrote more in details about this polarity for EventStore which we added a link to in the further reading.</p>
+<div class="fm-sidebar-block">
+<p class="fm-sidebar-title">Exercise 12.1</p>
+<p class="fm-sidebar-text">In exercise 10.1 in chapter 10, we asked you to create the polarity map for Collaborative Modeling versus Coding polarity. Compare your solution with ours:</p>
+<ul class="calibre6">
+<li class="fm-list-bullet2">
+<p class="list-s">What are the similarities and differences between the effects?</p>
+</li>
+<li class="fm-list-bullet2">
+<p class="list-s">Did we think of different signals and actions than you did?</p>
+</li>
+</ul>
+<p class="fm-sidebar-text">At this point, you already have two important polarities you can use when introducing collaborative modeling into your teams: Deep versus Wide for use during the modeling sessions and Collaborative Modeling versus Coding to know when to start or stop modeling again. In the next section, we’ll look at how to conve<a id="marker-364"></a><a id="idTextAnchor064"></a>rt your EventStorm into code.</p>
+</div>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="655" src="../../OEBPS/Images/CH12_F07_Baas.png" width="853"/></p>
+<p class="figurecaption">Figure 12.7 Signals and actions that you can use to move between collaborative modeling and implementing the solution</p>
+</div>
+<h3 class="fm-head2" id="heading_id_12">12.3.2 From collaborative modeling to code</h3>
+<p class="body">Now that we know when to go from collaborative modeling to code, let’s dive a bit deeper into how to do that. In chapter 2, we showed a piece of the EventStorm that we did together with the business at BigScreen. You can see a portion of this in figure 12.8. Where we want to end up is functionality implemented in the software. In this section, we’ll walk you through our approach to get there. We’ll leave the customer changing seats out of scope, and we’ll fo<a id="idTextAnchor065"></a>cus on purchasing tickets.<a id="idIndexMarker033"></a><a id="marker-365"></a></p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="894" src="../../OEBPS/Images/CH12_F08_Baas.png" width="775"/></p>
+<p class="figurecaption">Figure 12.8 A small part of the process for buying a ticket and allocating a seat</p>
+</div>
+<p class="body">We’ve already designed the bounded contexts here, but that doesn’t mean we can just start implementing. We’re going to walk through the EventStorm again and add questions we still have that prevent us from implem<a id="idTextAnchor066"></a>enting this (figure 12.9).</p>
+<p class="body">One of the questions we still have is around the cancellation policy: we’re trying to buy a ticket, but something with the seat allocation can go wrong. We said that this cancellation policy needs to deallocate the seat, but we also already requested the ticket. So, we also need to release the reserved tickets when their reservation has expired.<a id="marker-366"></a><a id="idTextAnchor067"></a></p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="888" src="../../OEBPS/Images/CH12_F09_Baas.png" width="711"/></p>
+<p class="figurecaption">Figure 12.9 Your EventStorm will look something like this after you’ve iterated on it again. We now have added the questions we still need answered to start implementing them explicitly.</p>
+</div>
+<p class="fm-head1">Diving into constraints</p>
+<p class="body">In chapter 2, we demonstrated Example Mapping. To go from collaborative modeling to implementation, we need to understand the constraints best of all. Those are stickies that will turn into code. We had a hotspot sticky next to the event that said “What do we do when this happens?” We can find that hotspot in our examples too. If you look at figure 12.10, there are still some cases in which we don’t allocate seats. It was conflicting with other information that we received, stating that seats always need to ha<a id="idTextAnchor068"></a>ve an initial allocation.<a id="idIndexMarker034"></a><a id="idIndexMarker035"></a><a id="marker-367"></a></p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="856" src="../../OEBPS/Images/CH12_F10_Baas.png" width="774"/></p>
+<p class="figurecaption">Figure 12.10 Some constraints result in not allocating seats when customers are purchasing a ticket. These are clues that we don’t fully understand the constraints yet.</p>
+</div>
+<p class="body">We went back to the business with some concrete examples of how we could allocate seats when we still had availability, but it didn’t match any of the constraints we discussed before. You can see the result of this in figure 12.11. We gave the business possible options and asked which one they preferred. When there are still seats available, but not in a single row, the business wanted us to balance the seats over multiple rows.<a id="idTextAnchor069"></a><a id="marker-368"></a></p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="465" src="../../OEBPS/Images/CH12_F11_Baas.png" width="851"/></p>
+<p class="figurecaption">Figure 12.11 Digging deeper into the examples: What do we need to do when there are still seats available, but not adjacent in a single row? We provided two options to figure out what the business preferred.</p>
+</div>
+<p class="body">The constraint “Only adjacent seating per row” is now seen as a first attempt to allocate seats, not the only constraint that we have. We also have a backup constraint to continue trying to allocate: when no single row allocation is possible, we balance seats over multiple rows. We did the same for “No adjacent seats over the corridor.” We provided them with four options here, as you<a id="idTextAnchor070"></a> can see in figure 12.12.</p>
+<p class="body">Our initial two constraints have now transformed into a series of constraints with a specific order:</p>
+<ul class="calibre6">
+<li class="fm-list-bullet">
+<p class="list">When allocating for the first time, we should try to allocate in a single row.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">When no single row allocation is possible, we balance seats over multiple rows.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">When we can’t balance in a column, we balance over corridors.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">When there are only scattered seats left, we allocate as close as possible.</p>
+</li>
+</ul>
+<p class="body">Digging deeper into the seat allocation constraints gave us very valuable information. There always should be a seat allocation, unless we don’t<a id="idTextAnchor071"></a> have the capacity anymore.</p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="613" src="../../OEBPS/Images/CH12_F12_Baas.png" width="841"/></p>
+<p class="figurecaption">Figure 12.12 Examining the “No adjacent seats over corridor” constraint. What happens when we only have scattered seats available? We discovered that we’re allowed to allocate seats with a corridor in between, but we should try this only when we can’t balance seats in a column.</p>
+</div>
+<p class="fm-head1">Designing for implementation</p>
+<p class="body">After digging deeper into the constraints and resolving some hotspots from figure 12.9, we have a much clearer idea already of how to implement the functionality of the EventStorm. There are still some pieces missing right now, however:<a id="marker-369"></a><a id="idIndexMarker036"></a></p>
+<ul class="calibre6">
+<li class="fm-list-bullet">
+<p class="list">Where are the consistency boundaries?</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">How can we glue commands together with the events the system is supposed to respond to?</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Which bounded context has the information to answer the queries that our customers<a id="idTextAnchor072"></a> need to make a decision?</p>
+</li>
+</ul>
+<p class="body">Most of the functionality is part of the Seat Allocations bounded context, but as you can see in figure 12.13, we have two commands and events that are in a different boundary: Price Calculation and Payments. We’re going to leave those as is for now and fo<a id="idTextAnchor073"></a>cus on Seat Allocations.</p>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="1065" src="../../OEBPS/Images/CH12_F13_Baas.png" width="850"/></p>
+<p class="figurecaption">Figure 12.13 The end result of digging deeper into the constraints and resolving the hotspots. By resolving the hotspots, we came to the conclusion that we need to not only cancel or confirm seat allocations but also do the same for the ticket reservation.<a id="marker-370"></a></p>
+</div>
+<div class="figure">
+<p class="figure1"><img alt="" class="calibre5" height="1054" src="../../OEBPS/Images/CH12_F14_Baas.png" width="843"/></p>
+<p class="figurecaption">Figure 12.14 Our EventStorm is divided into consistency boundaries (rectangles). Most of the events reside within the Seat allocations context. Two commands and events are from different bounded contexts (rounded corners): Price Calculation and Payments.<a id="marker-371"></a></p>
+</div>
+<p class="body">In figure 12.14, the rectangles represent aggregates, a key tactical design pattern from DDD. An <i class="fm-italics">aggregate</i> serves as a consistency boundary surrounding a cluster of domain objects, safeguarding business invariants. Our goal is to maintain the consistency of these domain objects, ensuring they don’t reach an invalid state. To achieve this, constraints must be applied within the same boundary and dur<a id="idTextAnchor074"></a>ing a single transaction. <a id="idIndexMarker037"></a></p>
+<p class="fm-callout"><span class="fm-callout-head">DESIGN HEURISTIC</span> Design consistency boundaries (aggregates) to guarantee that the business invariants aren’t violated.</p>
+<p class="body">Take a simple yet illustrative example: It’s important to prevent the allocation of a single seat to multiple tickets. If not, two individual tickets hold a reservation for the same seat, resulting in customer dissatisfaction. To avoid this, we might encapsulate the Seat, Row, and ScheduledMovieSeating domain objects within an aggregate, managing modifications through ScheduledMovieSeating (aggregate root). This approach ensures that the entire collection of domain objects remain correct in relation to the business invariant “Allocate 1 seat per ticket.” In this part of the EventStorm, we’ve designed two aggregates: ScheduledMovie and ScheduledMovieSeating. Coming up next, we’ll delve into the process of converting these aggre<a id="idTextAnchor075"></a>gates into executable code.</p>
+<p class="fm-head1">Going to code</p>
+<p class="body">It has taken a bit of time, but we’re ready to start implementing our design! As you can see on the EventStorm in figure 12.14, we have multiple rectangles called ScheduledMovie. If you look at listing 12.1, you can see that the three blocks of ScheduledMovie have <a id="idTextAnchor076"></a>been converted to a method.<a id="idIndexMarker038"></a><a id="marker-372"></a></p>
+<p class="fm-code-listing-caption">Listing 12.1 Simplified aggregate ScheduledMovie</p>
+<pre class="programlisting">public class ScheduledMovie {
+  
+   private int reservedTickets;
+   private int purchasedTickets;
+ 
+   private readonly int capacity;
+  
+   private int AvailableTickets =&gt; 
+     this.capacity - this.reservedTickets - this.purchasedTickets;
+  
+   public ScheduledMovie() {
+      this.capacity = 200;
+   }
+  
+   public TicketsRequested RequestTickets(RequestTickets command) {
+      if(command.Amount &gt; 8) {
+         throw new TicketRequestTooLarge(command.Quantity);
+      }
+  
+      if(this.AvailableTickets &lt; command.Quantity) {
+         throw new TicketRequestExceedsCapacity(
+            command.Amount, this.capacity);
+      }
+  
+      this.reservedTickets += command.Quantity;
+      return new TicketsRequested(command.Quantity);
+   }
+  
+   public TicketsCancelled CancelReservedTickets(CancelTickets command) {
+      this.reservedTickets -= command.Quantity;
+      return new TicketsCancelled(command.Quantity);
+   }
+  
+   public TicketsConfirmed ConfirmTicketPurchase(ConfirmTickets command) {
+      this.reservedTickets -= command.Quantity;
+      this.purchasedTickets += command.Quantity;
+      return new TicketsConfirmed(command.Quantity);
+   }
+}</pre>
+<p class="body">If we take a closer look at the <code class="fm-code-in-text">RequestTickets</code> method, we can see two <code class="fm-code-in-text">if</code> statements there. Those are the constraints from our EventStorm “amount of tickets must not exceed available tickets” and “tickets must not exceed 8.” This aggregate and code design is far from finished, and it only serves as a simplified example to show how those constraints ended up in code. We also only looked at a very small piece of the EventStorm in this section. As mentioned in chapter 11, section 11.3, software design is nonlinear, which can be best described as a whirlpool, and that includes the coding part. However, this gives you a good idea of how to go from collaborative modeling to code:<a id="idIndexMarker039"></a></p>
+<ul class="calibre6">
+<li class="fm-list-bullet">
+<p class="list">A block on your EventStorm is a method in your aggregate.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">The method has an input parameter, which is the command.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">The method has a return type, which is the event.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">The constraints get implemented in the method.</p>
+</li>
+</ul>
+<p class="body">There are a lot of ways to go from collaborative modeling to code, and a lot of books in the DDD community go a lot deeper into that. So be sure to go to <a class="url" href="https://virtualddd.com">https://virtualddd.com</a> and join the comm<a id="idTextAnchor077"></a>unity to learn more about it.<a id="idIndexMarker040"></a><a id="marker-373"></a><a id="idIndexMarker041"></a></p>
+<h2 class="fm-head" id="heading_id_13">12.4 Collaborative software design catalysts</h2>
+<ul class="calibre6">
+<li class="fm-list-bullet">
+<p class="list">When the team needs to implement a new feature, create a customer journey for this feature.<a id="idIndexMarker042"></a><a id="idIndexMarker043"></a></p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Organize a “Lunch and Learn” session within your company to explore the Impact Map.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">With your team, create your own Collaborative Modeling versus Coding polarity map.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Go back to the business logic of your code: Take a large piece of code and create an EventStorm out of it. If applicable,<a id="idTextAnchor078"></a> draw the consistency boundaries.</p>
+</li>
+</ul>
+<div class="calibre8"></div><h2 class="fm-head" id="heading_id_14">12.5 Chapter heuristics</h2>
+<p class="body"><i class="fm-italics">Design</i> <i class="fm-italics">heuristic</i></p>
+<ul class="calibre6">
+<li class="fm-list-bullet">
+<p class="list">Design consistency boundaries (aggregates) to guarantee that the business invariants aren’t violated.<a id="idIndexMarker044"></a></p>
+</li>
+</ul>
+<h2 class="fm-head" id="heading_id_15">12.6 Further reading</h2>
+<ul class="calibre6">
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Adaptive Systems with Domain-Driven Design, Wardley Mapping, and Team Topologies: Architecture for Flow</i> by Susanne Kaiser (Pearson Education, 2024)<a id="idIndexMarker045"></a><a id="idIndexMarker046"></a><a id="marker-374"></a></p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">“Architecture for Flow with Wardley Mapping, DDD, and Team Topologies” by Susanne Kaiser (QCon Plus conference video), <a class="url" href="https://mng.bz/ZE59">https://mng.bz/ZE59</a><a id="idIndexMarker047"></a></p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">“Black Ops DDD Using the Business Model Canvas” by Javier Fernández (Explore DDD conference video), <a class="url" href="https://www.youtube.com/watch?v=M5CbbWmdsFU">www.youtube.com/watch?v=M5CbbWmdsFU</a><a id="idIndexMarker048"></a></p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">“DDD, Wardley Mapping, &amp; Team Topologies” by Susanne Kaiser (InfoQ podcast), <a class="url" href="https://mng.bz/1GxR">https://mng.bz/1GxR</a> <a id="idIndexMarker049"></a></p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">“EventStorming the Perfect Wedding” by Kenny Baas-Schwegler, <a class="url" href="https://mng.bz/2Kxw">https://mng.bz/2Kxw</a><a id="idIndexMarker050"></a></p>
+</li>
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Impact Mapping: Making a Big Impact with Software Products and Projects</i> by Gojko Adzic (Provoking Thoughts, 2012)<a id="idIndexMarker051"></a><a id="idIndexMarker052"></a></p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">“Resilient Bounded Contexts: A Pragmatic Approach with Residuality Theory” by Kenny Baas-Schwegler, <a class="url" href="https://mng.bz/RZWa">https://mng.bz/RZWa</a><a id="idIndexMarker053"></a></p>
+</li>
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">User Story Mapping: Discover the Whole Story, Build the Ri<a id="idTextAnchor079"></a><a id="idTextAnchor080"></a>ght Product</i> by Jeff Patton (O’Reilly, 2014)</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Residues: Time, Change, and Uncertainty in Software Architecture</i>, Barry M. O'Reilly (Leanpub, 2024)</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list"><i class="fm-italics">Team Topologies: Organizing for fast flow of value</i>, by Manuel Pais and Matthew Skelton (It Revolution Press, 2019)</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">“When to go from collaborative modelling to coding? Part 1” by Kenny Baas-Schwegler, Evelyn van Kelle, and Gien Verschatse, <a class="url" href="https://www.eventstore.com/blog/when-to-go-from-collaborative-modelling-to-coding-part-1">https://www.eventstore.com/blog/when-to-go-from-collaborative-modelling-to-coding-part-1</a><a id="idIndexMarker054"></a><a id="idIndexMarker055"></a></p>
+</li>
+</ul>
+<h2 class="fm-head" id="heading_id_16">Summary</h2>
+<ul class="calibre6">
+<li class="fm-list-bullet">
+<p class="list">Avoid the trap of preconceived solutions; prioritize understanding customer needs and context in collaborative modeling tools such as Business Model Canvas and EventStorming. Refocus on value proposition and customer segment, eliminating software-centric biases to gain deeper insights.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">By mapping the business landscape, introducing climate patterns, and using evolution stages, Wardley Mapping provides a clear view for tailored, effective strategies, aiding decisions in product, teams, and software design areas.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Stressor analysis, derived from residuality theory, uncovers hidden stressors in complex systems, guiding mitigation strategies and fostering resilient software architectures through shared approaches.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Collaborative modeling, applicable beyond software design, benefits product manager and UX designer roles through techniques such as Big Picture EventStorming.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Customer journeys encompass overall experiences, while user journeys focus on product interactions; both enhance sessions such as User Story Mapping and EventStorming, enriching software architecture with customer-centric insights.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Impact Mapping, introduced by Gojko Adzic, visually aligns user stories with business goals by clarifying why, who, how, and what. This technique aids prioritization, fosters discussions, detects cognitive bias, and guides product development by connecting behavior change with deliverables.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Integrating mapped customer journeys into EventStorming sessions validates and enhances understanding, helping identify pain points, opportunities, and solutions for a more comprehensive perspective.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Consider cognitive load when designing software architecture, as the most decoupled architecture may lead to cross-cutting concerns or excessive collaboration. Team Topologies, when combined with Maturity Mapping, offers a collaborative modeling approach to strategically structure teams, manage capabilities, and foster adaptive development in evolving contexts.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Address the balance between collaborative modeling and coding by recognizing signals and actions. Domain-Oriented Modeling (L+ and R+) supports meaningful design, while Shallow Technical Programming (L− and R−) leads to inefficiencies.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Transitioning from collaborative modeling to code implementation involves transforming EventStorm blocks into aggregate methods.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Constraints identified in the EventStorm guide the implementation process and are incorporated into the body of the methods of the aggregate.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Deeper analysis and discussions with the business refine constraints, leading to a clearer implementation plan.</p>
+</li>
+<li class="fm-list-bullet">
+<p class="list">Aggregates define consistency boundaries around domain objects, maintaining internal consistency.<a id="marker-375"></a></p>
+</li>
+</ul>
+<hr class="calibre7"/>
+<p class="fm-footnote"><a id="footnote-004"></a><sup class="footnotenumber"><a class="url1" href="#footnote-004-backlink">1</a></sup>   O’Reilly, B. M. “Residuality Theory, Random Simulation, and Attractor Networks,” 2022. Procedia Computer Science, 201:639–645.</p>
+<p class="fm-footnote"><a id="footnote-003"></a><sup class="footnotenumber"><a class="url1" href="#footnote-003-backlink">2</a></sup>   O’Reilly, “Residuality Theory,” 639–645.</p>
+<p class="fm-footnote"><a id="footnote-002"></a><sup class="footnotenumber"><a class="url1" href="#footnote-002-backlink">3</a></sup>   Ibid.</p>
+<p class="fm-footnote"><a id="footnote-001"></a><sup class="footnotenumber"><a class="url1" href="#footnote-001-backlink">4</a></sup>   Ibid.</p>
+<p class="fm-footnote"><a id="footnote-000"></a><sup class="footnotenumber"><a class="url1" href="#footnote-000-backlink">5</a></sup>   Skelton, M., &amp; Pais, M. “Team Cognitive Load,” 2021, <a class="url" href="https://itrevolution.com/articles/cognitive-load/">https://itrevolution.com/articles/cognitive-load/</a>.</p>
+</div></body>
+</html>

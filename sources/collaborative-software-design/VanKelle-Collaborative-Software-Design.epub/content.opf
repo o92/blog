@@ -1,0 +1,205 @@
+<?xml version="1.0"  encoding="UTF-8"?>
+<package xmlns="http://www.idpf.org/2007/opf" version="2.0" unique-identifier="uuid_id">
+  <metadata xmlns:opf="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:calibre="http://calibre.kovidgoyal.net/2009/metadata">
+    <dc:title>Collaborative Software Design: How to facilitate domain modeling decisions</dc:title>
+    <dc:creator opf:role="aut" opf:file-as="Evelyn van Kelle, Gien Verschatse &amp; Baas-Schwegler, Kenny">Evelyn van Kelle, Gien Verschatse</dc:creator>
+    <dc:creator opf:role="aut">Kenny Baas-Schwegler</dc:creator>
+    <dc:contributor opf:role="bkp">calibre (7.0.0) [https://calibre-ebook.com]</dc:contributor>
+    <dc:publisher>Manning Publications Co.</dc:publisher>
+    <dc:date>2024-10-26T23:00:00+00:00</dc:date>
+    <dc:identifier id="uuid_id" opf:scheme="uuid">8de5c472-10c6-4d9b-943e-0df9659f27ff</dc:identifier>
+    <dc:language>en</dc:language>
+    <dc:identifier opf:scheme="calibre">8de5c472-10c6-4d9b-943e-0df9659f27ff</dc:identifier>
+    <meta name="calibre:title_sort" content="Collaborative Software Design: How to facilitate domain modeling decisions"/>
+    <meta name="calibre:timestamp" content="2024-12-16T21:54:00.416163+00:00"/>
+    <meta name="cover" content="cover"/>
+  </metadata>
+  <manifest>
+    <item id="titlepage" href="titlepage.xhtml" media-type="application/xhtml+xml"/>
+    <item id="title.htm" href="OEBPS/Text/title.htm" media-type="application/xhtml+xml"/>
+    <item id="copyright.htm" href="OEBPS/Text/copyright.htm" media-type="application/xhtml+xml"/>
+    <item id="dedication.htm" href="OEBPS/Text/dedication.htm" media-type="application/xhtml+xml"/>
+    <item id="toc.xhtml" href="OEBPS/Text/toc.xhtml" media-type="application/xhtml+xml"/>
+    <item id="fm.xhtml" href="OEBPS/Text/fm.xhtml" media-type="application/xhtml+xml"/>
+    <item id="x01.xhtml" href="OEBPS/Text/01.xhtml" media-type="application/xhtml+xml"/>
+    <item id="x02.xhtml" href="OEBPS/Text/02.xhtml" media-type="application/xhtml+xml"/>
+    <item id="x03.xhtml" href="OEBPS/Text/03.xhtml" media-type="application/xhtml+xml"/>
+    <item id="x04.xhtml" href="OEBPS/Text/04.xhtml" media-type="application/xhtml+xml"/>
+    <item id="x05.xhtml" href="OEBPS/Text/05.xhtml" media-type="application/xhtml+xml"/>
+    <item id="x06.xhtml" href="OEBPS/Text/06.xhtml" media-type="application/xhtml+xml"/>
+    <item id="x07.xhtml" href="OEBPS/Text/07.xhtml" media-type="application/xhtml+xml"/>
+    <item id="x08.xhtml" href="OEBPS/Text/08.xhtml" media-type="application/xhtml+xml"/>
+    <item id="x09.xhtml" href="OEBPS/Text/09.xhtml" media-type="application/xhtml+xml"/>
+    <item id="x10.xhtml" href="OEBPS/Text/10.xhtml" media-type="application/xhtml+xml"/>
+    <item id="x11.xhtml" href="OEBPS/Text/11.xhtml" media-type="application/xhtml+xml"/>
+    <item id="x12.xhtml" href="OEBPS/Text/12.xhtml" media-type="application/xhtml+xml"/>
+    <item id="A.xhtml" href="OEBPS/Text/A.xhtml" media-type="application/xhtml+xml"/>
+    <item id="index.xhtml" href="OEBPS/Text/index.xhtml" media-type="application/xhtml+xml"/>
+    <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
+    <item id="page_css" href="page_styles.css" media-type="text/css"/>
+    <item id="css" href="stylesheet.css" media-type="text/css"/>
+    <item id="cover" href="cover.jpeg" media-type="image/jpeg"/>
+    <item id="APPA_F01_Baas.png" href="OEBPS/Images/APPA_F01_Baas.png" media-type="image/png"/>
+    <item id="Author-Schwegler.jpg" href="OEBPS/Images/Author-Schwegler.jpg" media-type="image/jpeg"/>
+    <item id="Author-van-Kelle.jpg" href="OEBPS/Images/Author-van-Kelle.jpg" media-type="image/jpeg"/>
+    <item id="Author-Verschatse.png" href="OEBPS/Images/Author-Verschatse.png" media-type="image/png"/>
+    <item id="CH01_F01_Baas.png" href="OEBPS/Images/CH01_F01_Baas.png" media-type="image/png"/>
+    <item id="CH01_F02_Baas.png" href="OEBPS/Images/CH01_F02_Baas.png" media-type="image/png"/>
+    <item id="CH01_F03_Baas.png" href="OEBPS/Images/CH01_F03_Baas.png" media-type="image/png"/>
+    <item id="CH01_F04_Baas.png" href="OEBPS/Images/CH01_F04_Baas.png" media-type="image/png"/>
+    <item id="CH01_F05_Baas.png" href="OEBPS/Images/CH01_F05_Baas.png" media-type="image/png"/>
+    <item id="CH01_F06_Baas.png" href="OEBPS/Images/CH01_F06_Baas.png" media-type="image/png"/>
+    <item id="CH01_F07_Baas.png" href="OEBPS/Images/CH01_F07_Baas.png" media-type="image/png"/>
+    <item id="CH02_F01_Baas.png" href="OEBPS/Images/CH02_F01_Baas.png" media-type="image/png"/>
+    <item id="CH02_F02_Baas.png" href="OEBPS/Images/CH02_F02_Baas.png" media-type="image/png"/>
+    <item id="CH02_F03_Baas.png" href="OEBPS/Images/CH02_F03_Baas.png" media-type="image/png"/>
+    <item id="CH02_F04_Baas.png" href="OEBPS/Images/CH02_F04_Baas.png" media-type="image/png"/>
+    <item id="CH02_F05_Baas.png" href="OEBPS/Images/CH02_F05_Baas.png" media-type="image/png"/>
+    <item id="CH02_F06_Baas.png" href="OEBPS/Images/CH02_F06_Baas.png" media-type="image/png"/>
+    <item id="CH02_F07_Baas.png" href="OEBPS/Images/CH02_F07_Baas.png" media-type="image/png"/>
+    <item id="CH02_F08_Baas.png" href="OEBPS/Images/CH02_F08_Baas.png" media-type="image/png"/>
+    <item id="CH02_F09_Baas.png" href="OEBPS/Images/CH02_F09_Baas.png" media-type="image/png"/>
+    <item id="CH02_F10_Baas.png" href="OEBPS/Images/CH02_F10_Baas.png" media-type="image/png"/>
+    <item id="CH02_F11_Baas.png" href="OEBPS/Images/CH02_F11_Baas.png" media-type="image/png"/>
+    <item id="CH02_F12_Baas.png" href="OEBPS/Images/CH02_F12_Baas.png" media-type="image/png"/>
+    <item id="CH02_F13_Baas.png" href="OEBPS/Images/CH02_F13_Baas.png" media-type="image/png"/>
+    <item id="CH02_F14_Baas.png" href="OEBPS/Images/CH02_F14_Baas.png" media-type="image/png"/>
+    <item id="CH02_F15_Baas.png" href="OEBPS/Images/CH02_F15_Baas.png" media-type="image/png"/>
+    <item id="CH02_F16_Baas.png" href="OEBPS/Images/CH02_F16_Baas.png" media-type="image/png"/>
+    <item id="CH02_F17_Baas.png" href="OEBPS/Images/CH02_F17_Baas.png" media-type="image/png"/>
+    <item id="CH02_F18_Baas.png" href="OEBPS/Images/CH02_F18_Baas.png" media-type="image/png"/>
+    <item id="CH02_F19_Baas.png" href="OEBPS/Images/CH02_F19_Baas.png" media-type="image/png"/>
+    <item id="CH02_F20_Baas.png" href="OEBPS/Images/CH02_F20_Baas.png" media-type="image/png"/>
+    <item id="CH02_F21_Baas.jpg" href="OEBPS/Images/CH02_F21_Baas.jpg" media-type="image/jpeg"/>
+    <item id="CH02_F22_Baas.png" href="OEBPS/Images/CH02_F22_Baas.png" media-type="image/png"/>
+    <item id="CH03_F01_Baas.png" href="OEBPS/Images/CH03_F01_Baas.png" media-type="image/png"/>
+    <item id="CH03_F02_Baas.png" href="OEBPS/Images/CH03_F02_Baas.png" media-type="image/png"/>
+    <item id="CH03_F03_Baas.png" href="OEBPS/Images/CH03_F03_Baas.png" media-type="image/png"/>
+    <item id="CH03_F04_Baas.png" href="OEBPS/Images/CH03_F04_Baas.png" media-type="image/png"/>
+    <item id="CH03_F05_Baas.png" href="OEBPS/Images/CH03_F05_Baas.png" media-type="image/png"/>
+    <item id="CH03_F06_Baas.png" href="OEBPS/Images/CH03_F06_Baas.png" media-type="image/png"/>
+    <item id="CH03_F07_Baas.png" href="OEBPS/Images/CH03_F07_Baas.png" media-type="image/png"/>
+    <item id="CH03_F08_Baas.png" href="OEBPS/Images/CH03_F08_Baas.png" media-type="image/png"/>
+    <item id="CH03_F09_Baas.png" href="OEBPS/Images/CH03_F09_Baas.png" media-type="image/png"/>
+    <item id="CH03_F10_Baas.png" href="OEBPS/Images/CH03_F10_Baas.png" media-type="image/png"/>
+    <item id="CH04_F01_Baas.png" href="OEBPS/Images/CH04_F01_Baas.png" media-type="image/png"/>
+    <item id="CH04_F02_Baas.png" href="OEBPS/Images/CH04_F02_Baas.png" media-type="image/png"/>
+    <item id="CH04_F03_Baas.png" href="OEBPS/Images/CH04_F03_Baas.png" media-type="image/png"/>
+    <item id="CH04_F04_Baas.png" href="OEBPS/Images/CH04_F04_Baas.png" media-type="image/png"/>
+    <item id="CH04_F05_Baas.png" href="OEBPS/Images/CH04_F05_Baas.png" media-type="image/png"/>
+    <item id="CH04_F06_Baas.png" href="OEBPS/Images/CH04_F06_Baas.png" media-type="image/png"/>
+    <item id="CH04_F07_Baas.png" href="OEBPS/Images/CH04_F07_Baas.png" media-type="image/png"/>
+    <item id="CH04_F08_Baas.png" href="OEBPS/Images/CH04_F08_Baas.png" media-type="image/png"/>
+    <item id="CH04_F09_Baas.png" href="OEBPS/Images/CH04_F09_Baas.png" media-type="image/png"/>
+    <item id="CH04_F10_Baas.png" href="OEBPS/Images/CH04_F10_Baas.png" media-type="image/png"/>
+    <item id="CH04_F11_Baas.png" href="OEBPS/Images/CH04_F11_Baas.png" media-type="image/png"/>
+    <item id="CH04_F12_Baas.png" href="OEBPS/Images/CH04_F12_Baas.png" media-type="image/png"/>
+    <item id="CH04_F13_Baas.png" href="OEBPS/Images/CH04_F13_Baas.png" media-type="image/png"/>
+    <item id="CH04_F14_Baas.png" href="OEBPS/Images/CH04_F14_Baas.png" media-type="image/png"/>
+    <item id="CH04_F15_Baas.png" href="OEBPS/Images/CH04_F15_Baas.png" media-type="image/png"/>
+    <item id="CH04_F16_Baas.png" href="OEBPS/Images/CH04_F16_Baas.png" media-type="image/png"/>
+    <item id="CH04_F17_Baas.png" href="OEBPS/Images/CH04_F17_Baas.png" media-type="image/png"/>
+    <item id="CH04_F18_Baas.png" href="OEBPS/Images/CH04_F18_Baas.png" media-type="image/png"/>
+    <item id="CH04_F19_Baas.jpg" href="OEBPS/Images/CH04_F19_Baas.jpg" media-type="image/jpeg"/>
+    <item id="CH04_F20_Baas.png" href="OEBPS/Images/CH04_F20_Baas.png" media-type="image/png"/>
+    <item id="CH04_F21_Baas.png" href="OEBPS/Images/CH04_F21_Baas.png" media-type="image/png"/>
+    <item id="CH04_F22_Baas.png" href="OEBPS/Images/CH04_F22_Baas.png" media-type="image/png"/>
+    <item id="CH05_F01_Baas.png" href="OEBPS/Images/CH05_F01_Baas.png" media-type="image/png"/>
+    <item id="CH05_F02_Baas.png" href="OEBPS/Images/CH05_F02_Baas.png" media-type="image/png"/>
+    <item id="CH05_F03_Baas.png" href="OEBPS/Images/CH05_F03_Baas.png" media-type="image/png"/>
+    <item id="CH05_F04_Baas.png" href="OEBPS/Images/CH05_F04_Baas.png" media-type="image/png"/>
+    <item id="CH05_F05_Baas.png" href="OEBPS/Images/CH05_F05_Baas.png" media-type="image/png"/>
+    <item id="CH05_F06_Baas.png" href="OEBPS/Images/CH05_F06_Baas.png" media-type="image/png"/>
+    <item id="CH05_F07_Baas.png" href="OEBPS/Images/CH05_F07_Baas.png" media-type="image/png"/>
+    <item id="CH05_F08_Baas.png" href="OEBPS/Images/CH05_F08_Baas.png" media-type="image/png"/>
+    <item id="CH05_F09_Baas.png" href="OEBPS/Images/CH05_F09_Baas.png" media-type="image/png"/>
+    <item id="CH06_F01_Baas.png" href="OEBPS/Images/CH06_F01_Baas.png" media-type="image/png"/>
+    <item id="CH06_F02_Baas.png" href="OEBPS/Images/CH06_F02_Baas.png" media-type="image/png"/>
+    <item id="CH06_F03_Baas.png" href="OEBPS/Images/CH06_F03_Baas.png" media-type="image/png"/>
+    <item id="CH06_F04_Baas.png" href="OEBPS/Images/CH06_F04_Baas.png" media-type="image/png"/>
+    <item id="CH06_F05_Baas.png" href="OEBPS/Images/CH06_F05_Baas.png" media-type="image/png"/>
+    <item id="CH07_F01_Baas.png" href="OEBPS/Images/CH07_F01_Baas.png" media-type="image/png"/>
+    <item id="CH07_F02_Baas.png" href="OEBPS/Images/CH07_F02_Baas.png" media-type="image/png"/>
+    <item id="CH07_F03_Baas.png" href="OEBPS/Images/CH07_F03_Baas.png" media-type="image/png"/>
+    <item id="CH07_F04_Baas.png" href="OEBPS/Images/CH07_F04_Baas.png" media-type="image/png"/>
+    <item id="CH07_F05_Baas.png" href="OEBPS/Images/CH07_F05_Baas.png" media-type="image/png"/>
+    <item id="CH07_F06_Baas.png" href="OEBPS/Images/CH07_F06_Baas.png" media-type="image/png"/>
+    <item id="CH08_F01_Baas.png" href="OEBPS/Images/CH08_F01_Baas.png" media-type="image/png"/>
+    <item id="CH08_F02_Baas.png" href="OEBPS/Images/CH08_F02_Baas.png" media-type="image/png"/>
+    <item id="CH08_F03_Baas.png" href="OEBPS/Images/CH08_F03_Baas.png" media-type="image/png"/>
+    <item id="CH08_F04_Baas.png" href="OEBPS/Images/CH08_F04_Baas.png" media-type="image/png"/>
+    <item id="CH08_F05_Baas.png" href="OEBPS/Images/CH08_F05_Baas.png" media-type="image/png"/>
+    <item id="CH08_F06_Baas.png" href="OEBPS/Images/CH08_F06_Baas.png" media-type="image/png"/>
+    <item id="CH09_F01_Baas.png" href="OEBPS/Images/CH09_F01_Baas.png" media-type="image/png"/>
+    <item id="CH09_F02_Baas.png" href="OEBPS/Images/CH09_F02_Baas.png" media-type="image/png"/>
+    <item id="CH09_F03_Baas.png" href="OEBPS/Images/CH09_F03_Baas.png" media-type="image/png"/>
+    <item id="CH09_F04_Baas.png" href="OEBPS/Images/CH09_F04_Baas.png" media-type="image/png"/>
+    <item id="CH09_F05_Baas.png" href="OEBPS/Images/CH09_F05_Baas.png" media-type="image/png"/>
+    <item id="CH09_F06_Baas.png" href="OEBPS/Images/CH09_F06_Baas.png" media-type="image/png"/>
+    <item id="CH09_F07_Baas.png" href="OEBPS/Images/CH09_F07_Baas.png" media-type="image/png"/>
+    <item id="CH09_F08a_Baas.png" href="OEBPS/Images/CH09_F08a_Baas.png" media-type="image/png"/>
+    <item id="CH09_F08b_Baas.png" href="OEBPS/Images/CH09_F08b_Baas.png" media-type="image/png"/>
+    <item id="CH09_F08c_Baas.png" href="OEBPS/Images/CH09_F08c_Baas.png" media-type="image/png"/>
+    <item id="CH09_F09_Baas.png" href="OEBPS/Images/CH09_F09_Baas.png" media-type="image/png"/>
+    <item id="CH10_F01_Baas.png" href="OEBPS/Images/CH10_F01_Baas.png" media-type="image/png"/>
+    <item id="CH10_F02_Baas.png" href="OEBPS/Images/CH10_F02_Baas.png" media-type="image/png"/>
+    <item id="CH10_F03_Baas.png" href="OEBPS/Images/CH10_F03_Baas.png" media-type="image/png"/>
+    <item id="CH10_F04_Baas.png" href="OEBPS/Images/CH10_F04_Baas.png" media-type="image/png"/>
+    <item id="CH10_F05_Baas.png" href="OEBPS/Images/CH10_F05_Baas.png" media-type="image/png"/>
+    <item id="CH10_F06_Baas.png" href="OEBPS/Images/CH10_F06_Baas.png" media-type="image/png"/>
+    <item id="CH10_F07_Baas.png" href="OEBPS/Images/CH10_F07_Baas.png" media-type="image/png"/>
+    <item id="CH10_F08_Baas.png" href="OEBPS/Images/CH10_F08_Baas.png" media-type="image/png"/>
+    <item id="CH10_F09_Baas.png" href="OEBPS/Images/CH10_F09_Baas.png" media-type="image/png"/>
+    <item id="CH10_F10_Baas.png" href="OEBPS/Images/CH10_F10_Baas.png" media-type="image/png"/>
+    <item id="CH10_F11_Baas.png" href="OEBPS/Images/CH10_F11_Baas.png" media-type="image/png"/>
+    <item id="CH10_F12_Baas.png" href="OEBPS/Images/CH10_F12_Baas.png" media-type="image/png"/>
+    <item id="CH11_F01_Baas.png" href="OEBPS/Images/CH11_F01_Baas.png" media-type="image/png"/>
+    <item id="CH11_F02_Baas.png" href="OEBPS/Images/CH11_F02_Baas.png" media-type="image/png"/>
+    <item id="CH11_F03_Baas.png" href="OEBPS/Images/CH11_F03_Baas.png" media-type="image/png"/>
+    <item id="CH11_F04_Baas.png" href="OEBPS/Images/CH11_F04_Baas.png" media-type="image/png"/>
+    <item id="CH11_F05_Baas.png" href="OEBPS/Images/CH11_F05_Baas.png" media-type="image/png"/>
+    <item id="CH11_F06_Baas.png" href="OEBPS/Images/CH11_F06_Baas.png" media-type="image/png"/>
+    <item id="CH11_F07_Baas.png" href="OEBPS/Images/CH11_F07_Baas.png" media-type="image/png"/>
+    <item id="CH12_F01_Baas.png" href="OEBPS/Images/CH12_F01_Baas.png" media-type="image/png"/>
+    <item id="CH12_F02_Baas.png" href="OEBPS/Images/CH12_F02_Baas.png" media-type="image/png"/>
+    <item id="CH12_F03_Baas.png" href="OEBPS/Images/CH12_F03_Baas.png" media-type="image/png"/>
+    <item id="CH12_F04_Baas.png" href="OEBPS/Images/CH12_F04_Baas.png" media-type="image/png"/>
+    <item id="CH12_F05_Baas.png" href="OEBPS/Images/CH12_F05_Baas.png" media-type="image/png"/>
+    <item id="CH12_F06_Baas.png" href="OEBPS/Images/CH12_F06_Baas.png" media-type="image/png"/>
+    <item id="CH12_F07_Baas.png" href="OEBPS/Images/CH12_F07_Baas.png" media-type="image/png"/>
+    <item id="CH12_F08_Baas.png" href="OEBPS/Images/CH12_F08_Baas.png" media-type="image/png"/>
+    <item id="CH12_F09_Baas.png" href="OEBPS/Images/CH12_F09_Baas.png" media-type="image/png"/>
+    <item id="CH12_F10_Baas.png" href="OEBPS/Images/CH12_F10_Baas.png" media-type="image/png"/>
+    <item id="CH12_F11_Baas.png" href="OEBPS/Images/CH12_F11_Baas.png" media-type="image/png"/>
+    <item id="CH12_F12_Baas.png" href="OEBPS/Images/CH12_F12_Baas.png" media-type="image/png"/>
+    <item id="CH12_F13_Baas.png" href="OEBPS/Images/CH12_F13_Baas.png" media-type="image/png"/>
+    <item id="CH12_F14_Baas.png" href="OEBPS/Images/CH12_F14_Baas.png" media-type="image/png"/>
+    <item id="Manning_copyright.png" href="OEBPS/Images/Manning_copyright.png" media-type="image/png"/>
+    <item id="Manning_M_small.png" href="OEBPS/Images/Manning_M_small.png" media-type="image/png"/>
+  </manifest>
+  <spine toc="ncx">
+    <itemref idref="titlepage"/>
+    <itemref idref="title.htm"/>
+    <itemref idref="copyright.htm"/>
+    <itemref idref="dedication.htm"/>
+    <itemref idref="toc.xhtml"/>
+    <itemref idref="fm.xhtml"/>
+    <itemref idref="x01.xhtml"/>
+    <itemref idref="x02.xhtml"/>
+    <itemref idref="x03.xhtml"/>
+    <itemref idref="x04.xhtml"/>
+    <itemref idref="x05.xhtml"/>
+    <itemref idref="x06.xhtml"/>
+    <itemref idref="x07.xhtml"/>
+    <itemref idref="x08.xhtml"/>
+    <itemref idref="x09.xhtml"/>
+    <itemref idref="x10.xhtml"/>
+    <itemref idref="x11.xhtml"/>
+    <itemref idref="x12.xhtml"/>
+    <itemref idref="A.xhtml"/>
+    <itemref idref="index.xhtml"/>
+  </spine>
+  <guide>
+    <reference type="cover" href="titlepage.xhtml" title="Cover"/>
+  </guide>
+</package>

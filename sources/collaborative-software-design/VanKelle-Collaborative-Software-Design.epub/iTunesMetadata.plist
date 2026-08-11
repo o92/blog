@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>BKAllocatedSize</key>
+	<integer>12673024</integer>
+	<key>BKDisplayName</key>
+	<string>Collaborative Software Design- How to facilitate domain -- Evelyn van Kelle, Gien Verschatse; Kenny Baas-Schwegler -- 1, 2024 -- Manning Publications -- isbn13 9781633439252 -- a0de5c15827c82cb042170e46dabfbf8 -- Anna’s Archive</string>
+	<key>BKGenerationCount</key>
+	<integer>2</integer>
+	<key>BKInsertionDate</key>
+	<integer>804502245</integer>
+	<key>artistName</key>
+	<string>Evelyn van Kelle, Gien Verschatse</string>
+	<key>book-info</key>
+	<dict>
+		<key>cover-image-hash</key>
+		<string>F5A7780C1AA23B9C8EB04309D982959B</string>
+		<key>cover-image-path</key>
+		<string>cover.jpeg</string>
+		<key>mime-type</key>
+		<string>application/epub+zip</string>
+		<key>package-file-hash</key>
+		<string>667D2FAD55F1F78D88013C75BCF909B1</string>
+		<key>publisher-unique-id</key>
+		<string>8de5c472-10c6-4d9b-943e-0df9659f27ff</string>
+		<key>unique-id</key>
+		<integer>-2935702449436905619</integer>
+		<key>update-level</key>
+		<integer>2</integer>
+	</dict>
+	<key>isPreview</key>
+	<false/>
+	<key>itemName</key>
+	<string>Collaborative Software Design: How to facilitate domain modeling decisions</string>
+	<key>updateDate</key>
+	<date>2026-06-30T08:50:45Z</date>
+</dict>
+</plist>

@@ -1,0 +1,679 @@
+# 协作软件设计术语（Collaborative Software Design）
+
+Collaborative Software Design:
+  summary: "团队与利益相关方共同拥有设计/架构决策：兼顾业务语境与会话中的 Social Dynamics，追求可持续、可落地的设计决策——而不只是「画一张架构图」。"
+  source: "collaborative-software-design/01-need/01-terms.md#Collaborative Software Design"
+  aliases:
+    - "协作软件设计"
+
+Collaborative Modeling:
+  summary: "可视化技术：与相关利益相关方和决策者一起，分析复杂、易冲突的决策过程，建立共享理解。有时也称 participatory modeling。工具 alone 不够，常需 Facilitation。"
+  source: "collaborative-software-design/01-need/01-terms.md#Collaborative Modeling"
+  aliases:
+    - "协作建模"
+
+Facilitation:
+  summary: "有人引导协作过程：选工具与协作风格、维持心理安全、显式处理阻碍性社会动力学、促成共识。软件架构师常适合充当 enabler，但任何角色在获得支持后都可以学。"
+  source: "collaborative-software-design/01-need/01-terms.md#Facilitation"
+  aliases:
+    - "引导"
+
+BigScreen:
+  summary: "书中虚构国际连锁影院（约 80 家、12 国）。票务与后台纠缠成大泥球，无法支撑「Anytime, Anywhere」移动购票；用来演示协作建模如何同时改善架构与协作。"
+  source: "collaborative-software-design/01-need/01-terms.md#BigScreen"
+  aliases: []
+
+Agile Theater:
+  summary: "开发侧表面采用 SCRUM 等仪式、小批量交付，但组织层级与 idea-to-production 价值链仍在；业务侧仍是瀑布心态（要清单、估工期、把协作当成浪费）。"
+  source: "collaborative-software-design/01-need/01-terms.md#Agile Theater"
+  aliases:
+    - "敏捷剧场"
+
+Social Dynamics:
+  summary: "协作中人与人互动产生的行为与张力（排序、偏见、冲突、极性等）。多数工程教育很少教；书认为这是协作建模难起步的主因之一。"
+  source: "collaborative-software-design/01-need/01-terms.md#Social Dynamics"
+  aliases:
+    - "社会动力学"
+
+Catalyst:
+  summary: "书中比喻：Facilitator（以及协作软件设计本身）催化团队接管架构所有权、做出更可持续的设计决策——不是替团队「钦定」设计。"
+  source: "collaborative-software-design/01-need/01-terms.md#Catalyst"
+  aliases:
+    - "催化剂"
+
+Big Ball of Mud:
+  summary: "缺少清晰架构与边界、靠补丁堆出来的系统；改一处牵全身。BigScreen 票务/后台/逻辑纠缠是典型。"
+  source: "collaborative-software-design/01-need/01-terms.md#Big Ball of Mud"
+  aliases:
+    - "大泥球"
+    - "BBoM"
+    - "泥球"
+
+Kickoff Session:
+  summary: "这里指顾问介入后最先几场协作建模会话，用来对齐「公司大图景 / 业务语境」以及它与当前软件架构的关系——不是日常站会，也不是单纯宣讲项目计划。BigScreen 案例里先做 3 次 kickof…"
+  source: "collaborative-software-design/01-need/01-terms.md#Kickoff Session"
+  aliases:
+    - "启动会"
+    - "Kickoff"
+    - "kickoff"
+
+Waterfall:
+  summary: "把造软件拆成顺序阶段（需求 → 设计 → 编码 → 测试…），上一步完成再开下一步，中途难大改。多从制造/建造业项目管理借来；书用它对照后来的 Agile Theater。"
+  source: "collaborative-software-design/01-need/01-terms.md#Waterfall"
+  aliases:
+    - "瀑布"
+    - "瀑布模型"
+
+Psychological Safety:
+  summary: "人们敢说出想法、异议、情绪与无知，而不怕被罚或丢脸。处理 Social Dynamics「阴影」的前提；引导者需刻意营造。"
+  source: "collaborative-software-design/01-need/01-terms.md#Psychological Safety"
+  aliases:
+    - "心理安全"
+
+Enabler:
+  summary: "书中架构师等角色的定位：创造条件让团队自己做设计决策（引导、教练、教协作建模），而不是替团队钦定方案。常与 Facilitator 叠合，但强调「教会团队自立」。"
+  source: "collaborative-software-design/01-need/01-terms.md#Enabler"
+  aliases:
+    - "赋能者"
+    - "促成者"
+
+"Scrum（书中用法）":
+  summary: "书中多指开发团队采用的站会、迭代、细化等仪式。若只有开发侧在做这些、业务与价值链仍是瀑布，就落入 Agile Theater——不等于组织已真正敏捷。更完整见站内 Scrum 笔记。"
+  source: "collaborative-software-design/01-need/01-terms.md#Scrum（书中用法）"
+  aliases:
+    - "Scrum"
+    - "SCRUM"
+
+Business Problem:
+  summary: "用户与利益相关方的各类需要：目标、任务、客户/用户旅程、业务流程、约束、痛点等。书强调：先理解问题，再想「怎么塞进现有系统当功能」。"
+  source: "collaborative-software-design/02-collaborative-modeling/01-terms.md#Business Problem"
+  aliases:
+    - "业务问题"
+
+Complicated Problem:
+  summary: "借 Cynefin 语感：有序、可预期、有解但需专家。多数用软件解决的问题落在 complicated / complex；因果若只能事后看清，偏复杂。"
+  source: "collaborative-software-design/02-collaborative-modeling/01-terms.md#Complicated Problem"
+  aliases:
+    - "繁杂问题"
+
+Complex Problem:
+  summary: "高不确定、无固定解，需探索与协作试多种模型。"
+  source: "collaborative-software-design/02-collaborative-modeling/01-terms.md#Complex Problem"
+  aliases:
+    - "复杂问题"
+
+Problem Space:
+  summary: "探索并定义挑战；协作建模产出问题侧模型，再引导方案。"
+  source: "collaborative-software-design/02-collaborative-modeling/01-terms.md#Problem Space"
+  aliases:
+    - "问题空间"
+
+Solution Space:
+  summary: "设计活动的输出所在；可实现/实验多种模型；方案又可能回流成新问题。"
+  source: "collaborative-software-design/02-collaborative-modeling/01-terms.md#Solution Space"
+  aliases:
+    - "解决方案空间"
+
+Stakeholder:
+  summary: "书分四类（可重叠）：Domain Experts、Users、Development Team、Customers。常见误解：领域专家≠总是用户；Customer≠User；开发者也可能是客户/…"
+  source: "collaborative-software-design/02-collaborative-modeling/01-terms.md#Stakeholder"
+  aliases:
+    - "利益相关方"
+    - "干系人"
+
+Domain Expert:
+  summary: "理解或正在经历业务问题的人；引导共享理解。例如定战略的高管不必是票务系统用户。"
+  source: "collaborative-software-design/02-collaborative-modeling/01-terms.md#Domain Expert"
+  aliases:
+    - "领域专家"
+
+EventStorming:
+  summary: "以 Domain Event（业务相关、通常过去时）铺时间线的协作建模。类型含 Big Picture / Process Modeling / Software Design；学习曲线低，适跨…"
+  source: "collaborative-software-design/02-collaborative-modeling/01-terms.md#EventStorming"
+  aliases:
+    - "事件风暴"
+    - "Big Picture EventStorming"
+
+Domain Event:
+  summary: "场景中对业务有意义、已发生的事（如「票已购买」）；技术故障类通常先不当作利益相关方相关事件。"
+  source: "collaborative-software-design/02-collaborative-modeling/01-terms.md#Domain Event"
+  aliases:
+    - "领域事件"
+
+Hotspot:
+  summary: "EventStorming 里用醒目颜色标出的难点：冲突、缺知识、时间线分叉、一时无法定论之处。先标上、先走完主路径，再回头处理。"
+  source: "collaborative-software-design/02-collaborative-modeling/01-terms.md#Hotspot"
+  aliases:
+    - "热点"
+
+Cynefin:
+  summary: "Dave Snowden 的决策语境框架。书常对照 Complicated（繁杂：有解需专家）与 Complex（复杂：需探索试模型）；多数软件问题落在这两域。"
+  source: "collaborative-software-design/02-collaborative-modeling/01-terms.md#Cynefin"
+  aliases: []
+
+Example Mapping:
+  summary: "在某一时刻/用户故事上，用具体例子发现规则与验收标准。低门槛；擅拆故事、发现约束；不强调整段流程可视化。"
+  source: "collaborative-software-design/02-collaborative-modeling/01-terms.md#Example Mapping"
+  aliases:
+    - "示例映射"
+
+Domain Storytelling:
+  summary: "用图标、箭头与序号记录协作故事；易即时记录与校验；擅显示人/系统协作；通常聚焦单一场景。可去掉遗留系统名，把讨论拉回业务目标。"
+  source: "collaborative-software-design/02-collaborative-modeling/01-terms.md#Domain Storytelling"
+  aliases:
+    - "领域故事讲述"
+
+Business Model Canvas:
+  summary: "Osterwalder 画布：价值主张、客户、基础设施、财务。适合理解公司语境与战略；常作协作建模的破冰，并捕获领域语言。"
+  source: "collaborative-software-design/02-collaborative-modeling/01-terms.md#Business Model Canvas"
+  aliases:
+    - "商业模式画布"
+
+Software Architecture:
+  summary: "书采 Grady Booch 口径：显著设计决策所塑造的系统形态；显著性用变更成本衡量。编码时改集成名、牵动多系统——也是架构决策。团队应拥有架构，但须先被赋能，而不是「赶走架构师」了事。"
+  source: "collaborative-software-design/03-design-architecture/01-terms.md#Software Architecture"
+  aliases:
+    - "软件架构"
+
+Software Design:
+  summary: "把当前软件系统改成期望形态的各类设计活动；产出常含计划与设计决策。Booch：「所有架构都是设计，但并非所有设计都是架构。」不牵动基础结构的改动，不必升格为架构议题。"
+  source: "collaborative-software-design/03-design-architecture/01-terms.md#Software Design"
+  aliases:
+    - "软件设计"
+
+Sociotechnical System:
+  summary: "社会、技术、认知等多方面相互纠缠的网络。技术决策会改团队动力学与认知负荷，反之亦然；只优化一侧会放大系统复杂度。协作建模要在这一整系统里做决策。"
+  source: "collaborative-software-design/03-design-architecture/01-terms.md#Sociotechnical System"
+  aliases:
+    - "社会技术系统"
+
+Heuristic:
+  summary: "基于经验的简短规则，帮助在时间紧、无法深分析时快速做决策并推进。常见三类（见 [dddheuristics.com](https://dddheuristics.com/)）：Design（如何…"
+  source: "collaborative-software-design/03-design-architecture/01-terms.md#Heuristic"
+  aliases:
+    - "启发式"
+
+Competing Heuristics:
+  summary: "两条及以上启发式在同一情境都「说得通」，但指向不同行动。冲突本身有信息量：把张力摊开，才选得了更贴语境的那条（或组合）。"
+  source: "collaborative-software-design/03-design-architecture/01-terms.md#Competing Heuristics"
+  aliases:
+    - "竞争启发式"
+
+Boundary:
+  summary: "从问题空间迭代进入解决方案空间时划出的边界（语言、部门、角色等）。边界设计是协作活动：多视角、多迭代；单人难以兼顾业务价值、体验、技术约束等。"
+  source: "collaborative-software-design/03-design-architecture/01-terms.md#Boundary"
+  aliases:
+    - "设计边界"
+
+Implicit Architecture:
+  summary: "决策未说清、未被理解或无法沟通时形成的「默契架构」。团队靠 workaround 摸黑，复杂度上升。对策：协作建模把设计决策显式化。"
+  source: "collaborative-software-design/03-design-architecture/01-terms.md#Implicit Architecture"
+  aliases:
+    - "隐式架构"
+
+Deployable Unit:
+  summary: "部署边界；与 Bounded Context（语言边界）不必 1:1。多个上下文可进同一单元（modular monolith）；一个上下文拆多单元一般不建议。"
+  source: "collaborative-software-design/03-design-architecture/01-terms.md#Deployable Unit"
+  aliases:
+    - "可部署单元"
+
+Domain Message Flow:
+  summary: "Nick Tune 基于 Domain Storytelling、面向 Bounded Context 设计的建模工具：看命令/事件如何在上下文间流动。可与 Context Mapping 等并用，暴露新权衡。"
+  source: "collaborative-software-design/03-design-architecture/01-terms.md#Domain Message Flow"
+  aliases:
+    - "领域消息流"
+
+Collaborative Modeling Stages:
+  summary: "书用的非线性框架（非刚性流程）六段：Preparation → Check-in → Modeling with tools → Check-out → Retrospective → Comm…"
+  source: "collaborative-software-design/04-ingredients/01-terms.md#Collaborative Modeling Stages"
+  aliases:
+    - "协作建模阶段"
+
+Sensemaking:
+  summary: "弄清环境与群体中「看不见」的部分（信念、担忧、冲突、极性等），把阴影说清楚，形成共享现实感以便行动。不是对错审判，而是补全对群体模式的心智模型。"
+  source: "collaborative-software-design/04-ingredients/01-terms.md#Sensemaking"
+  aliases:
+    - "意义建构"
+    - "感知厘清"
+
+Check-in:
+  summary: "会话开始时把焦点放在人而非目标：让人安心，并朝向会话目标定向。"
+  source: "collaborative-software-design/04-ingredients/01-terms.md#Check-in"
+  aliases:
+    - "开场签入"
+
+Check-out:
+  summary: "会话结束时再把焦点放回人：把冲突与会话张力留在门口，不背回家；也可收集反馈。"
+  source: "collaborative-software-design/04-ingredients/01-terms.md#Check-out"
+  aliases:
+    - "收场签出"
+
+Premortem:
+  summary: "假设项目已失败，倒推可能死因；在协作建模之外/之中，提前暴露风险与盲点。"
+  source: "collaborative-software-design/04-ingredients/01-terms.md#Premortem"
+  aliases:
+    - "事前验尸"
+
+Together Alone:
+  summary: "同一空间/板上，各自先建模或写想法，再汇合——减少被主导者带走、提高选项量。"
+  source: "collaborative-software-design/04-ingredients/01-terms.md#Together Alone"
+  aliases:
+    - "一起但各自"
+
+Split and Merge:
+  summary: "大组按 pivotal event 等切成小组深入，再合并模型与洞见；控制复杂度与人数。"
+  source: "collaborative-software-design/04-ingredients/01-terms.md#Split and Merge"
+  aliases:
+    - "拆分再合并"
+
+Small Group Diverge and Converge:
+  summary: "小组各自发散出模型/方案，再收敛比较权衡（常配合简单 tradeoff 表）。"
+  source: "collaborative-software-design/04-ingredients/01-terms.md#Small Group Diverge and Converge"
+  aliases:
+    - "小组发散—收敛"
+
+"1-2-4-All":
+  summary: "独自 → 两人 → 四人 → 全体，逐级放大想法并保留多样性，再合并。"
+  source: "collaborative-software-design/04-ingredients/01-terms.md#1-2-4-All"
+  aliases:
+    - "1-2-4-全体"
+
+Ensemble:
+  summary: "借鉴 ensemble programming：少数角色（如 driver 等）轮换，带知识缺口的群体一起操作同一模型。"
+  source: "collaborative-software-design/04-ingredients/01-terms.md#Ensemble"
+  aliases:
+    - "合奏式建模"
+
+Fishbowl:
+  summary: "内圈 3–6 人建模，外圈只观察记洞见；可限时切入或内外换位。适演示期望做法、大组经验不均。"
+  source: "collaborative-software-design/04-ingredients/01-terms.md#Fishbowl"
+  aliases:
+    - "鱼缸"
+
+"Anarchy!":
+  summary: "经验相当、长期共事的团队：少干预风格与工具，让群体自组织；引导者更盯阴影与反思。"
+  source: "collaborative-software-design/04-ingredients/01-terms.md#Anarchy!"
+  aliases:
+    - "无政府式"
+
+Guerilla:
+  summary: "不在正式会话里用，而是为争取买账：公开角落自己开画、故意露假设/错误，引路人加入。"
+  source: "collaborative-software-design/04-ingredients/01-terms.md#Guerilla"
+  aliases:
+    - "游击建模"
+
+The Secret Modeler:
+  summary: "战术：无权组织正式会话时，私下（笔记本/个人白板/在线板）把对话可视化，借图问有力问题。"
+  source: "collaborative-software-design/04-ingredients/01-terms.md#The Secret Modeler"
+  aliases:
+    - "秘密建模者"
+
+Retrospective:
+  summary: "会话结束后（通常不含全体）反思协作：何好何差、学到什么；便于下一场改进。与 check-out 不同。"
+  source: "collaborative-software-design/04-ingredients/01-terms.md#Retrospective"
+  aliases:
+    - "回顾"
+
+Facilitator:
+  summary: "词源「使容易」：让协作建模的流程与动力学更容易；不对结果负责——结果归群体。任何职位都可担任；多数会话宜有至少一名专职引导，避免与参与者角色强行合并分心。"
+  source: "collaborative-software-design/05-facilitating/01-terms.md#Facilitator"
+  aliases:
+    - "引导者"
+
+Neutrality:
+  summary: "完全中立不可得；目标是 equally different：人人独特，却同有被承认与尊重的权利。尽量不把个人利害与偏见压进决策；心理安全允许不适，但不允许不安全。"
+  source: "collaborative-software-design/05-facilitating/01-terms.md#Neutrality"
+  aliases:
+    - "中立"
+
+Observing:
+  summary: "引导者的基础 stance：看模式、听内容，也听语气与身体语言；发现词与「音乐」不一致（double signals）时深挖。访谈、会前准备也属观察。"
+  source: "collaborative-software-design/05-facilitating/01-terms.md#Observing"
+  aliases:
+    - "观察"
+
+Compassion:
+  summary: "理解自身阴影后，更能容纳他人的复杂情绪与局限；在冲突与脆弱话题上仍支持人把话说完。"
+  source: "collaborative-software-design/05-facilitating/01-terms.md#Compassion"
+  aliases:
+    - "慈悲"
+    - "共情关怀"
+
+Active Listening:
+  summary: "源自临床心理：全神贯注、少抢话少塞方案；开放式追问、复述确认，让人感到被听见。"
+  source: "collaborative-software-design/05-facilitating/01-terms.md#Active Listening"
+  aliases:
+    - "主动倾听"
+
+Holding Space:
+  summary: "为人保留表达与情绪的空间：不急着修、不急着裁判；必要时并行建模多种愿景并命名。沉默也可以是空间的一部分。"
+  source: "collaborative-software-design/05-facilitating/01-terms.md#Holding Space"
+  aliases:
+    - "守住空间"
+
+Climate Report:
+  summary: "把观察到的无意识群体行为（有人退后、有人抢话等）还回群体，使其可被处理（第 8 章展开）。属 Enabler stance 常用手法。"
+  source: "collaborative-software-design/05-facilitating/01-terms.md#Climate Report"
+  aliases:
+    - "氛围报告"
+
+Remote Facilitation:
+  summary: "技能要求与线下同，但缺物理临场：弱信号与私下交流更难读；须用工作约定、双屏观察、会前白板预习等补齐。书倾向全线上或全线下，慎用 hybrid。"
+  source: "collaborative-software-design/05-facilitating/01-terms.md#Remote Facilitation"
+  aliases:
+    - "远程引导"
+
+Ranking:
+  summary: "社会层级中的相对位置；主观、依情境变化。自己相对他人的定位会塑造想法与行为——协作建模里谁先发言、谁沉默、谁替群体拍板，常与 rank 有关。"
+  source: "collaborative-software-design/06-ranking/01-terms.md#Ranking"
+  aliases:
+    - "排序"
+    - "rank"
+
+Explicit Ranking:
+  summary: "因组织图职位、正式权力、头衔等可见层级而被感知到的相对权力。"
+  source: "collaborative-software-design/06-ranking/01-terms.md#Explicit Ranking"
+  aliases:
+    - "显式排序"
+
+Implicit Ranking:
+  summary: "通常非「挣来」的相对权力，靠社会规范支撑：性别、肤色、年龄、族裔、国籍、教育、知识、经验等。"
+  source: "collaborative-software-design/06-ranking/01-terms.md#Implicit Ranking"
+  aliases:
+    - "隐式排序"
+
+Symbolic Violence:
+  summary: "Bourdieu：权力差下的非身体支配；靠声望、权威等符号维系层级，而非武力。协作里常见：低位者自我贬低贡献、高位者无意中压制他人声音。"
+  source: "collaborative-software-design/06-ranking/01-terms.md#Symbolic Violence"
+  aliases:
+    - "符号暴力"
+
+Epistemic Injustice:
+  summary: "Miranda Fricker：某人作为「知者」所受伤害。含 testimonial injustice（证词/可信度因身份偏见被贬低）与 hermeneutical injustice（解释资…"
+  source: "collaborative-software-design/06-ranking/01-terms.md#Epistemic Injustice"
+  aliases:
+    - "认知不公"
+    - "认识不正义"
+
+Own Play Share Rank:
+  summary: "来自 Braun & Kramer 等：引导者须 own（承认并扛起过程领导权）、play（用行为与沟通维持有效影响）、share（把发言权与影响力分给群体，尤其放大低位声音）。三者合称 own…"
+  source: "collaborative-software-design/06-ranking/01-terms.md#Own Play Share Rank"
+  aliases:
+    - "拥有"
+    - "扮演"
+    - "分享你的排序"
+
+Cognitive Bias:
+  summary: "相对某规范的系统性偏离，影响判断与决策；可视为帮助理解世界的心理捷径。因系统性而可观察、可预期。"
+  source: "collaborative-software-design/07-cognitive-bias/01-terms.md#Cognitive Bias"
+  aliases:
+    - "认知偏差"
+    - "偏见"
+    - "认知偏见"
+
+"System 1 / System 2":
+  summary: "Kahneman《Thinking, Fast and Slow》：System 1 近乎自动、直觉、省力；System 2 更慢、有意识、更费力。偏差主要作用在 System 1。"
+  source: "collaborative-software-design/07-cognitive-bias/01-terms.md#System 1 / System 2"
+  aliases:
+    - "系统 1"
+    - "系统 2"
+
+Confirmation Bias:
+  summary: "搜寻或解释信息时偏向证实已有信念。"
+  source: "collaborative-software-design/07-cognitive-bias/01-terms.md#Confirmation Bias"
+  aliases:
+    - "确认偏差"
+
+Law of Triviality:
+  summary: "组织把更多时间花在琐碎问题上，而非重要难题（如争论限界上下文名字，却回避职责与接口）。"
+  source: "collaborative-software-design/07-cognitive-bias/01-terms.md#Law of Triviality"
+  aliases:
+    - "琐事定律"
+
+False-Consensus Effect:
+  summary: "假定自己的特质、信念、行为在人群中普遍存在——协作里常变成「用户都像我们这间会议室里的人」。"
+  source: "collaborative-software-design/07-cognitive-bias/01-terms.md#False-Consensus Effect"
+  aliases:
+    - "虚假共识效应"
+
+Availability Bias:
+  summary: "依赖脑中迅速浮现的例子：来得快就被当成重要；群体易收敛到相似模型。"
+  source: "collaborative-software-design/07-cognitive-bias/01-terms.md#Availability Bias"
+  aliases:
+    - "可得性偏差"
+
+Loss Aversion:
+  summary: "相对同等收益，对损失的情绪反应更强；设计上难放手已有方案，易做 model fitting（把问题硬塞进旧模型）。"
+  source: "collaborative-software-design/07-cognitive-bias/01-terms.md#Loss Aversion"
+  aliases:
+    - "损失厌恶"
+
+Additive Bias:
+  summary: "默认用「加东西」而非删减来应对；与损失厌恶相连，推高耦合与维护成本。"
+  source: "collaborative-software-design/07-cognitive-bias/01-terms.md#Additive Bias"
+  aliases:
+    - "加法偏差"
+
+Nudge:
+  summary: "以可预期方式改变决策行为，且须易回避、保留选择自由（Thaler & Sunstein）。"
+  source: "collaborative-software-design/07-cognitive-bias/01-terms.md#Nudge"
+  aliases:
+    - "助推"
+
+Choice Architect:
+  summary: "设计决策环境、促使人们做出更好选择的人；引导者常扮演此角色——助推须文化敏感，忌照搬。"
+  source: "collaborative-software-design/07-cognitive-bias/01-terms.md#Choice Architect"
+  aliases:
+    - "选择架构师"
+
+Conflict:
+  summary: "最基本形式：两人或多人之间的意见差异；本身未必负面。分 functional / task-based（围绕内容与任务的建设性分歧）与 dysfunctional / relationship（…"
+  source: "collaborative-software-design/08-resistance-conflict/01-terms.md#Conflict"
+  aliases:
+    - "冲突"
+
+Resistance:
+  summary: "当人不觉得被听见、意见未被纳入群体决策时表现出的冲突形态。可沿 resistance line（Lewis Deep Democracy；早期称 terrorist line）升级：讽刺玩笑 →…"
+  source: "collaborative-software-design/08-resistance-conflict/01-terms.md#Resistance"
+  aliases:
+    - "阻力"
+    - "抗拒"
+
+Edge Behavior:
+  summary: "冲突回避时出现的、乍看不合逻辑或矛盾的行为；处在个人/群体意识与无意识的边界。想避开冲突、又尚未准备好正面处理。勿急于评判——待在不适里很难。"
+  source: "collaborative-software-design/08-resistance-conflict/01-terms.md#Edge Behavior"
+  aliases:
+    - "边缘行为"
+
+Kissing the Group Over the Edge:
+  summary: "温和地把「边」拉进群体意识：护送群体略出舒适区，面对难题、冲突或张力——而非 hot check-in 式直接把冲突扔进压力锅。"
+  source: "collaborative-software-design/08-resistance-conflict/01-terms.md#Kissing the Group Over the Edge"
+  aliases:
+    - "轻吻群体过边"
+
+Role Fluidity:
+  summary: "Deep Democracy role theory：角色可以是社会角色、情绪、想法、行为等，存在于群体意识与无意识。目标是让人能认同多种角色、在他人身上认出自己；角色冻在少数人身上时，群体极化…"
+  source: "collaborative-software-design/08-resistance-conflict/01-terms.md#Role Fluidity"
+  aliases:
+    - "角色流动性"
+
+Decision:
+  summary: "在两个及以上 Alternatives（备选计划）之间做出的有意识选择，并伴随对时间、金钱或精力等资源的不可撤销分配。只口头宣称不算决策；改主意几乎零成本，也说明尚未真正决策。"
+  source: "collaborative-software-design/09-decisions/01-terms.md#Decision"
+  aliases:
+    - "决策"
+
+Decision vs Outcome:
+  summary: "决策质量 ≠ 结果质量。结果会受执行中的意外事件影响；用结果好坏直接判定当初决策好坏，是扑克界所称的 resulting，常叠 hindsight bias。应记录完整分析与语境，而不是只记「选…"
+  source: "collaborative-software-design/09-decisions/01-terms.md#Decision vs Outcome"
+  aliases:
+    - "决策 vs 结果"
+
+Buy-in:
+  summary: "相关利益相关方主动支持并参与落实决策后行动。买账不足会表现为拖延、挖苦、闲话、消极执行等阻力。Lewis Deep Democracy 把买账层级分为 Idea / Suggestion / P…"
+  source: "collaborative-software-design/09-decisions/01-terms.md#Buy-in"
+  aliases:
+    - "买账"
+    - "认同"
+
+Autocracy:
+  summary: "持有决策权的人不把该权利下放给群体：一人（或极少咨询）拍板。快、清晰、歧义少；但可能压制创意、伤士气，并在无买账时触发阻力线。仍有一人拥有「decision rights」。"
+  source: "collaborative-software-design/09-decisions/01-terms.md#Autocracy"
+  aliases:
+    - "专制决策"
+
+Democracy:
+  summary: "决策者把决策权下放给群体（仍存在持有权利的决策者）。利于承诺、参与与集体智慧，更易形成可持续决策；但慢、难找对的人、歧义上升。风格可与专制混用（如专制框定备选，群体在框内民主选）。"
+  source: "collaborative-software-design/09-decisions/01-terms.md#Democracy"
+  aliases:
+    - "民主决策"
+
+Go Fishing:
+  summary: "多数决后仍无法对「纳入少数派需要」达成一致时，可选的加深步骤：让全员（含反对方）先充分说某一侧的好处，再换另一侧；再请每人分享「什么说到心坎上」。常能露出水位线下的脆弱与真需求，再投一轮。更深的…"
+  source: "collaborative-software-design/09-decisions/01-terms.md#Go Fishing"
+  aliases:
+    - "去钓鱼"
+
+"Consent（决策语境）":
+  summary: "全组集体同意由子群去做某项决策，再带回全组。仍属民主一脉，买账相对高，效率更好——设计决策常可这样拆。"
+  source: "collaborative-software-design/09-decisions/01-terms.md#Consent（决策语境）"
+  aliases:
+    - "授权同意"
+    - "给同意"
+
+Polarity:
+  summary: "Ongoing、看似对立实则互补互依的一对极（both/and），无法永久「选一边了事」。某一刻可偏某一极，但另一极迟早要回来。目标是最大化两侧好处、最小化两侧坏处，而不是 either/or 解题。"
+  source: "collaborative-software-design/10-polarities/01-terms.md#Polarity"
+  aliases:
+    - "极性"
+    - "持续张力"
+
+Polarity Map:
+  summary: "Barry Johnson 式可视化：左右两极各有 L+/L−、R+/R− 四象限；中间 ∞（lemniscate）提醒永续摆动。填完象限后补 Signals（观察：偏某一极太久的行为）与 Ac…"
+  source: "collaborative-software-design/10-polarities/01-terms.md#Polarity Map"
+  aliases:
+    - "极性图"
+
+Crusaders:
+  summary: "极性中推动「该换到另一极」的人：盯着当前极的负面与变革必要。易只看见己侧好处与对侧坏处。"
+  source: "collaborative-software-design/10-polarities/01-terms.md#Crusaders"
+  aliases:
+    - "十字军"
+    - "变革推动者"
+
+Tradition Bearers:
+  summary: "极性中守「现在这样有用」的人：不想换极，怕对侧负面；口头禅常是「没坏就别修」。与 Crusaders 对峙时，双方都难看见对侧正面——而管理极性恰恰需要两侧正面。"
+  source: "collaborative-software-design/10-polarities/01-terms.md#Tradition Bearers"
+  aliases:
+    - "传统守持者"
+
+Conversation on Four Feet:
+  summary: "用站位约束把「听了要反驳」拧成「听了要理解」：一人陈述 → 同意者站其身后、不同意者站对面 → 引导者请对面的人再陈述。约 10–15 分钟后陈述开始循环，再请群体分享观察。"
+  source: "collaborative-software-design/10-polarities/01-terms.md#Conversation on Four Feet"
+  aliases:
+    - "四脚对话"
+
+Role Mapping:
+  summary: "Deep Democracy：头脑风暴场中角色 → 按互动与对立归类 → 常能露出主导极性，再作极性图输入。"
+  source: "collaborative-software-design/10-polarities/01-terms.md#Role Mapping"
+  aliases:
+    - "角色映射"
+
+Pros-Cons-and-Fixes:
+  summary: "在利弊表上多一列 Fixes：写下缺点后立刻想「如何中和 / 修补」。先写 Pros（对抗只盯坏处）；不是每个 con 都有 fix。既是决策后果可视化，也可随时嵌进设计流；可扩一列 Neutr…"
+  source: "collaborative-software-design/11-communicate-document/01-terms.md#Pros-Cons-and-Fixes"
+  aliases:
+    - "利弊与修补清单"
+
+"ADR (Architectural Decision Record)":
+  summary: "Michael Nygard（2011）起流行的决策文档：至少含 Title / Status / Context / Decision / Consequences。格式自由（画布 / Mar…"
+  source: "collaborative-software-design/11-communicate-document/01-terms.md#ADR (Architectural Decision Record)"
+  aliases:
+    - "架构决策记录"
+
+Whirlpool:
+  summary: "Eric Evans 的模型探索图：非线性反馈环——Harvest & Document → 场景 / 模型 → code probe → 再挑战。协作建模应视为多环，而非「发现→战略→写码」直…"
+  source: "collaborative-software-design/11-communicate-document/01-terms.md#Whirlpool"
+  aliases:
+    - "建模漩涡"
+
+Living Documentation:
+  summary: "决策与模型随反馈持续改写；文档不是终点石碑。伴随「偶尔扔掉模型」——因为语境、人、市场、预算都在变。"
+  source: "collaborative-software-design/11-communicate-document/01-terms.md#Living Documentation"
+  aliases:
+    - "活文档"
+
+Model Fitting:
+  summary: "因依恋既有模型，扭曲、增删问题域要素硬塞进旧模型，而不是按新信息重设计。常叠 availability / loss aversion / sunk cost。"
+  source: "collaborative-software-design/11-communicate-document/01-terms.md#Model Fitting"
+  aliases:
+    - "模型硬塞"
+    - "模型拟合"
+
+Customer Journey:
+  summary: "从客户视角看更整体的体验：触点与渠道（营销、客服、线上线下员工等）。BigScreen 例：找片 → 观影 → 回家评价。常作 User Story Mapping / EventStormin…"
+  source: "collaborative-software-design/12-beyond/01-terms.md#Customer Journey"
+  aliases:
+    - "客户旅程"
+
+User Journey:
+  summary: "更偏产品设计：用户与产品本身交互的步骤、需要与卡点。与 Customer Journey 常被混用；书侧重点是「全旅程 vs 产品交互」。"
+  source: "collaborative-software-design/12-beyond/01-terms.md#User Journey"
+  aliases:
+    - "用户旅程"
+
+Impact Mapping:
+  summary: "Gojko Adzic：用 Why（目标）→ Who（Actors）→ How（Impact / 行为变化）→ What（Deliverables）对齐故事与业务目标。利于优先级、暴露假设与认知…"
+  source: "collaborative-software-design/12-beyond/01-terms.md#Impact Mapping"
+  aliases:
+    - "影响映射"
+
+Wardley Mapping:
+  summary: "Simon Wardley：先画组织景观（价值链式），再加气候模式、Doctrine，再决策——对标「没棋盘就下棋」的空战略。可与 DDD、Team Topologies 联用（见 Susann…"
+  source: "collaborative-software-design/12-beyond/01-terms.md#Wardley Mapping"
+  aliases:
+    - "沃德利映射"
+
+Team Topologies:
+  summary: "Skelton & Pais：按流与认知负荷设计团队与交互（含 stream-aligned、enabling、as-a-service 等）。书当作协作建模工具：随业务变动态调团队，而不是贴一…"
+  source: "collaborative-software-design/12-beyond/01-terms.md#Team Topologies"
+  aliases:
+    - "团队拓扑"
+
+Stressor Analysis:
+  summary: "识别未知未来中系统未设计应对的 stressor → 影响 → 检测 → 缓解。禁止按概率筛选；多 stressor 常收敛到同一 attractor（缓解模式），可当气候模式输入韧性设计。"
+  source: "collaborative-software-design/12-beyond/01-terms.md#Stressor Analysis"
+  aliases:
+    - "压力源分析"
+
+Maturity Mapping:
+  summary: "Wardley 变体：把能力当实践，沿 Novel → Emerging → Good → Best 演化；顶锚是团队要解的业务问题。比静态技能矩阵更贴语境，可指导实验、文档化、招人 / enabling team。"
+  source: "collaborative-software-design/12-beyond/01-terms.md#Maturity Mapping"
+  aliases:
+    - "成熟度映射"
+
+"Facilitator's Toolbox":
+  summary: "场上可用的建模工具、协作风格、ingredients（阶段 / check-in…）、以及各类 heuristics。引导者要能按目标与社会动力学调配，而不是一次只用一种手法。"
+  source: "collaborative-software-design/13-appendix/01-terms.md#Facilitator's Toolbox"
+  aliases:
+    - "引导者工具箱"
+
+Shadows:
+  summary: "群体无意识里影响会话的动力学：ranking、认知偏差、冲突与阻力、极性等。不点破时难前进；点破后才可管理。不等于有人故意使坏。"
+  source: "collaborative-software-design/13-appendix/01-terms.md#Shadows"
+  aliases:
+    - "阴影"
+
+Flashlight:
+  summary: "引导者把阴影照进群体意识的动作（如 climate report、sensemaking、显式化极性）。照见 ≠ 强制处理——要不要管，仍由群体定。"
+  source: "collaborative-software-design/13-appendix/01-terms.md#Flashlight"
+  aliases:
+    - "手电筒"
+
+Demons:
+  summary: "阴影长期不处理时长成的更大障碍：挡共享理解、挡可持续设计决策。附录图里用 demon 夸张示意失控后的形态。"
+  source: "collaborative-software-design/13-appendix/01-terms.md#Demons"
+  aliases:
+    - "恶灵"
+    - "拦路鬼"
+

@@ -10,7 +10,13 @@
  * 避免 Hugo 在占用时自动换到 1314+。
  */
 import { spawn, execSync } from "node:child_process";
-import { watch, readFileSync, existsSync, readdirSync } from "node:fs";
+import {
+  watch,
+  readFileSync,
+  existsSync,
+  readdirSync,
+  unlinkSync,
+} from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -195,16 +201,28 @@ function walkHtml(dir, out = []) {
 
 function publicNeedsInject() {
   if (Date.now() < suppressWatchUntil) return false;
+  let need = false;
   for (const abs of walkHtml(path.join(root, "public"))) {
     try {
       const html = readFileSync(abs, "utf8");
       if (!html.includes("post-content")) continue;
-      if (!html.includes("glossary-term")) return true;
+      // 截断写盘残留：删掉让 hugo 重写干净 HTML，再注入
+      if (html.includes("\uFFFD")) {
+        try {
+          unlinkSync(abs);
+          log(`removed corrupt HTML (U+FFFD): ${path.relative(root, abs)}`);
+        } catch {
+          /* ignore */
+        }
+        need = true;
+        continue;
+      }
+      if (!html.includes("glossary-term")) need = true;
     } catch {
       /* ignore */
     }
   }
-  return false;
+  return need;
 }
 
 killStaleDev();

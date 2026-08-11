@@ -1,0 +1,1527 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1" xml:lang="eng">
+  <head>
+    <meta name="dtb:uid" content="8de5c472-10c6-4d9b-943e-0df9659f27ff"/>
+    <meta name="dtb:depth" content="4"/>
+    <meta name="dtb:generator" content="calibre (7.0.0)"/>
+    <meta name="dtb:totalPageCount" content="0"/>
+    <meta name="dtb:maxPageNumber" content="0"/>
+  </head>
+  <docTitle>
+    <text>Collaborative Software Design: How to facilitate domain modeling decisions</text>
+  </docTitle>
+  <navMap>
+    <navPoint id="navPoint-1" playOrder="1" class="chapter">
+      <navLabel>
+        <text>Collaborative Software Design</text>
+      </navLabel>
+      <content src="OEBPS/Text/title.htm"/>
+    </navPoint>
+    <navPoint id="navPoint-2" playOrder="2" class="chapter">
+      <navLabel>
+        <text>Copyright</text>
+      </navLabel>
+      <content src="OEBPS/Text/copyright.htm"/>
+    </navPoint>
+    <navPoint id="navPoint-3" playOrder="3" class="chapter">
+      <navLabel>
+        <text>dedication</text>
+      </navLabel>
+      <content src="OEBPS/Text/dedication.htm"/>
+    </navPoint>
+    <navPoint id="navPoint-4" playOrder="4" class="chapter">
+      <navLabel>
+        <text>contents</text>
+      </navLabel>
+      <content src="OEBPS/Text/toc.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-5" playOrder="5" class="chapter">
+      <navLabel>
+        <text>front matter</text>
+      </navLabel>
+      <content src="OEBPS/Text/fm.xhtml"/>
+      <navPoint id="navPoint-6" playOrder="6" class="chapter">
+        <navLabel>
+          <text>forewords</text>
+        </navLabel>
+        <content src="OEBPS/Text/fm.xhtml#heading_id_3"/>
+      </navPoint>
+      <navPoint id="navPoint-7" playOrder="7" class="chapter">
+        <navLabel>
+          <text>preface</text>
+        </navLabel>
+        <content src="OEBPS/Text/fm.xhtml#heading_id_4"/>
+      </navPoint>
+      <navPoint id="navPoint-8" playOrder="8" class="chapter">
+        <navLabel>
+          <text>acknowledgments</text>
+        </navLabel>
+        <content src="OEBPS/Text/fm.xhtml#heading_id_5"/>
+      </navPoint>
+      <navPoint id="navPoint-9" playOrder="9" class="chapter">
+        <navLabel>
+          <text>about this book</text>
+        </navLabel>
+        <content src="OEBPS/Text/fm.xhtml#heading_id_6"/>
+        <navPoint id="navPoint-10" playOrder="10" class="chapter">
+          <navLabel>
+            <text>Who should read this book?</text>
+          </navLabel>
+          <content src="OEBPS/Text/fm.xhtml#heading_id_7"/>
+        </navPoint>
+        <navPoint id="navPoint-11" playOrder="11" class="chapter">
+          <navLabel>
+            <text>How this book is organized: a roadmap</text>
+          </navLabel>
+          <content src="OEBPS/Text/fm.xhtml#heading_id_8"/>
+        </navPoint>
+        <navPoint id="navPoint-12" playOrder="12" class="chapter">
+          <navLabel>
+            <text>liveBook discussion forum</text>
+          </navLabel>
+          <content src="OEBPS/Text/fm.xhtml#heading_id_9"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-13" playOrder="13" class="chapter">
+        <navLabel>
+          <text>about the authors</text>
+        </navLabel>
+        <content src="OEBPS/Text/fm.xhtml#heading_id_10"/>
+      </navPoint>
+      <navPoint id="navPoint-14" playOrder="14" class="chapter">
+        <navLabel>
+          <text>about the cover illustration</text>
+        </navLabel>
+        <content src="OEBPS/Text/fm.xhtml#heading_id_11"/>
+      </navPoint>
+    </navPoint>
+    <navPoint id="navPoint-15" playOrder="15" class="chapter">
+      <navLabel>
+        <text>1 The need for collaborative software design</text>
+      </navLabel>
+      <content src="OEBPS/Text/01.xhtml"/>
+      <navPoint id="navPoint-16" playOrder="16" class="chapter">
+        <navLabel>
+          <text>1.1 Design decisions gone wrong at BigScreen</text>
+        </navLabel>
+        <content src="OEBPS/Text/01.xhtml#heading_id_3"/>
+        <navPoint id="navPoint-17" playOrder="17" class="chapter">
+          <navLabel>
+            <text>1.1.1 Understanding the landscape</text>
+          </navLabel>
+          <content src="OEBPS/Text/01.xhtml#heading_id_4"/>
+        </navPoint>
+        <navPoint id="navPoint-18" playOrder="18" class="chapter">
+          <navLabel>
+            <text>1.1.2 BigScreen’s attempt at refactoring</text>
+          </navLabel>
+          <content src="OEBPS/Text/01.xhtml#heading_id_5"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-19" playOrder="19" class="chapter">
+        <navLabel>
+          <text>1.2 BigScreen: How collaborative modeling helped to improve design decisions</text>
+        </navLabel>
+        <content src="OEBPS/Text/01.xhtml#heading_id_6"/>
+        <navPoint id="navPoint-20" playOrder="20" class="chapter">
+          <navLabel>
+            <text>1.2.1 Our approach for BigScreen</text>
+          </navLabel>
+          <content src="OEBPS/Text/01.xhtml#heading_id_7"/>
+        </navPoint>
+        <navPoint id="navPoint-21" playOrder="21" class="chapter">
+          <navLabel>
+            <text>1.2.2 The new architecture</text>
+          </navLabel>
+          <content src="OEBPS/Text/01.xhtml#heading_id_8"/>
+        </navPoint>
+        <navPoint id="navPoint-22" playOrder="22" class="chapter">
+          <navLabel>
+            <text>1.2.3 A brief history of software design</text>
+          </navLabel>
+          <content src="OEBPS/Text/01.xhtml#heading_id_9"/>
+        </navPoint>
+        <navPoint id="navPoint-23" playOrder="23" class="chapter">
+          <navLabel>
+            <text>1.2.4 The Agile theater</text>
+          </navLabel>
+          <content src="OEBPS/Text/01.xhtml#heading_id_10"/>
+        </navPoint>
+        <navPoint id="navPoint-24" playOrder="24" class="chapter">
+          <navLabel>
+            <text>1.2.5 Enabling teams to do collaborative software design</text>
+          </navLabel>
+          <content src="OEBPS/Text/01.xhtml#heading_id_11"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-25" playOrder="25" class="chapter">
+        <navLabel>
+          <text>1.3 Collaborative software design as a catalyst for better design decisions</text>
+        </navLabel>
+        <content src="OEBPS/Text/01.xhtml#heading_id_12"/>
+        <navPoint id="navPoint-26" playOrder="26" class="chapter">
+          <navLabel>
+            <text>1.3.1 Collaborative modeling, design, and architecture</text>
+          </navLabel>
+          <content src="OEBPS/Text/01.xhtml#heading_id_13"/>
+        </navPoint>
+        <navPoint id="navPoint-27" playOrder="27" class="chapter">
+          <navLabel>
+            <text>1.3.2 Collaborative modeling ingredients and potential benefits of facilitation</text>
+          </navLabel>
+          <content src="OEBPS/Text/01.xhtml#heading_id_14"/>
+        </navPoint>
+        <navPoint id="navPoint-28" playOrder="28" class="chapter">
+          <navLabel>
+            <text>1.3.3 The effect of social dynamics on collaborative modeling sessions</text>
+          </navLabel>
+          <content src="OEBPS/Text/01.xhtml#heading_id_15"/>
+        </navPoint>
+        <navPoint id="navPoint-29" playOrder="29" class="chapter">
+          <navLabel>
+            <text>1.3.4 Collaborative decision-making</text>
+          </navLabel>
+          <content src="OEBPS/Text/01.xhtml#heading_id_16"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-30" playOrder="30" class="chapter">
+        <navLabel>
+          <text>Summary</text>
+        </navLabel>
+        <content src="OEBPS/Text/01.xhtml#heading_id_17"/>
+      </navPoint>
+    </navPoint>
+    <navPoint id="navPoint-31" playOrder="31" class="chapter">
+      <navLabel>
+        <text>2 What is collaborative modeling?</text>
+      </navLabel>
+      <content src="OEBPS/Text/02.xhtml"/>
+      <navPoint id="navPoint-32" playOrder="32" class="chapter">
+        <navLabel>
+          <text>2.1 Understanding the business problems</text>
+        </navLabel>
+        <content src="OEBPS/Text/02.xhtml#heading_id_3"/>
+        <navPoint id="navPoint-33" playOrder="33" class="chapter">
+          <navLabel>
+            <text>2.1.1 What problems are we trying to solve?</text>
+          </navLabel>
+          <content src="OEBPS/Text/02.xhtml#heading_id_4"/>
+        </navPoint>
+        <navPoint id="navPoint-34" playOrder="34" class="chapter">
+          <navLabel>
+            <text>2.1.2 What is collaborative modeling?</text>
+          </navLabel>
+          <content src="OEBPS/Text/02.xhtml#heading_id_5"/>
+        </navPoint>
+        <navPoint id="navPoint-35" playOrder="35" class="chapter">
+          <navLabel>
+            <text>2.1.3 Exploring business problems using collaborative modeling</text>
+          </navLabel>
+          <content src="OEBPS/Text/02.xhtml#heading_id_6"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-36" playOrder="36" class="chapter">
+        <navLabel>
+          <text>2.2 Domain-Driven Design and collaborative modeling</text>
+        </navLabel>
+        <content src="OEBPS/Text/02.xhtml#heading_id_7"/>
+        <navPoint id="navPoint-37" playOrder="37" class="chapter">
+          <navLabel>
+            <text>2.2.1 What is Domain-Driven Design?</text>
+          </navLabel>
+          <content src="OEBPS/Text/02.xhtml#heading_id_8"/>
+        </navPoint>
+        <navPoint id="navPoint-38" playOrder="38" class="chapter">
+          <navLabel>
+            <text>2.2.2 Who are the stakeholders?</text>
+          </navLabel>
+          <content src="OEBPS/Text/02.xhtml#heading_id_9"/>
+        </navPoint>
+        <navPoint id="navPoint-39" playOrder="39" class="chapter">
+          <navLabel>
+            <text>2.2.3 Why DDD and collaborative modeling go hand in hand</text>
+          </navLabel>
+          <content src="OEBPS/Text/02.xhtml#heading_id_10"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-40" playOrder="40" class="chapter">
+        <navLabel>
+          <text>2.3 Different collaborative modeling tools</text>
+        </navLabel>
+        <content src="OEBPS/Text/02.xhtml#heading_id_11"/>
+        <navPoint id="navPoint-41" playOrder="41" class="chapter">
+          <navLabel>
+            <text>2.3.1 Collaborative modeling in the problem and solution space</text>
+          </navLabel>
+          <content src="OEBPS/Text/02.xhtml#heading_id_12"/>
+        </navPoint>
+        <navPoint id="navPoint-42" playOrder="42" class="chapter">
+          <navLabel>
+            <text>2.3.2 EventStorming</text>
+          </navLabel>
+          <content src="OEBPS/Text/02.xhtml#heading_id_13"/>
+        </navPoint>
+        <navPoint id="navPoint-43" playOrder="43" class="chapter">
+          <navLabel>
+            <text>2.3.3 Example Mapping</text>
+          </navLabel>
+          <content src="OEBPS/Text/02.xhtml#heading_id_14"/>
+        </navPoint>
+        <navPoint id="navPoint-44" playOrder="44" class="chapter">
+          <navLabel>
+            <text>2.3.4 Domain Storytelling</text>
+          </navLabel>
+          <content src="OEBPS/Text/02.xhtml#heading_id_15"/>
+        </navPoint>
+        <navPoint id="navPoint-45" playOrder="45" class="chapter">
+          <navLabel>
+            <text>2.3.5 When to use what tool</text>
+          </navLabel>
+          <content src="OEBPS/Text/02.xhtml#heading_id_16"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-46" playOrder="46" class="chapter">
+        <navLabel>
+          <text>2.4 Collaborative software design catalysts</text>
+        </navLabel>
+        <content src="OEBPS/Text/02.xhtml#heading_id_17"/>
+      </navPoint>
+      <navPoint id="navPoint-47" playOrder="47" class="chapter">
+        <navLabel>
+          <text>2.5 Further reading</text>
+        </navLabel>
+        <content src="OEBPS/Text/02.xhtml#heading_id_18"/>
+      </navPoint>
+      <navPoint id="navPoint-48" playOrder="48" class="chapter">
+        <navLabel>
+          <text>Summary</text>
+        </navLabel>
+        <content src="OEBPS/Text/02.xhtml#heading_id_19"/>
+      </navPoint>
+    </navPoint>
+    <navPoint id="navPoint-49" playOrder="49" class="chapter">
+      <navLabel>
+        <text>3 Using collaborative modeling for design and architecture</text>
+      </navLabel>
+      <content src="OEBPS/Text/03.xhtml"/>
+      <navPoint id="navPoint-50" playOrder="50" class="chapter">
+        <navLabel>
+          <text>3.1 What is software design and architecture?</text>
+        </navLabel>
+        <content src="OEBPS/Text/03.xhtml#heading_id_3"/>
+        <navPoint id="navPoint-51" playOrder="51" class="chapter">
+          <navLabel>
+            <text>3.1.1 The importance of meaning and definitions</text>
+          </navLabel>
+          <content src="OEBPS/Text/03.xhtml#heading_id_4"/>
+        </navPoint>
+        <navPoint id="navPoint-52" playOrder="52" class="chapter">
+          <navLabel>
+            <text>3.1.2 What is software architecture?</text>
+          </navLabel>
+          <content src="OEBPS/Text/03.xhtml#heading_id_5"/>
+        </navPoint>
+        <navPoint id="navPoint-53" playOrder="53" class="chapter">
+          <navLabel>
+            <text>3.1.3 What is software design?</text>
+          </navLabel>
+          <content src="OEBPS/Text/03.xhtml#heading_id_6"/>
+        </navPoint>
+        <navPoint id="navPoint-54" playOrder="54" class="chapter">
+          <navLabel>
+            <text>3.1.4 What are sociotechnical systems?</text>
+          </navLabel>
+          <content src="OEBPS/Text/03.xhtml#heading_id_7"/>
+        </navPoint>
+        <navPoint id="navPoint-55" playOrder="55" class="chapter">
+          <navLabel>
+            <text>3.1.5 Design decisions and collaborative modeling</text>
+          </navLabel>
+          <content src="OEBPS/Text/03.xhtml#heading_id_8"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-56" playOrder="56" class="chapter">
+        <navLabel>
+          <text>3.2 Heuristics for collaborative modeling</text>
+        </navLabel>
+        <content src="OEBPS/Text/03.xhtml#heading_id_9"/>
+        <navPoint id="navPoint-57" playOrder="57" class="chapter">
+          <navLabel>
+            <text>3.2.1 What are heuristics?</text>
+          </navLabel>
+          <content src="OEBPS/Text/03.xhtml#heading_id_10"/>
+        </navPoint>
+        <navPoint id="navPoint-58" playOrder="58" class="chapter">
+          <navLabel>
+            <text>3.2.2 Competing heuristics</text>
+          </navLabel>
+          <content src="OEBPS/Text/03.xhtml#heading_id_11"/>
+        </navPoint>
+        <navPoint id="navPoint-59" playOrder="59" class="chapter">
+          <navLabel>
+            <text>3.2.3 How to use heuristics</text>
+          </navLabel>
+          <content src="OEBPS/Text/03.xhtml#heading_id_12"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-60" playOrder="60" class="chapter">
+        <navLabel>
+          <text>3.3 Driving the design by understanding the business</text>
+        </navLabel>
+        <content src="OEBPS/Text/03.xhtml#heading_id_13"/>
+        <navPoint id="navPoint-61" playOrder="61" class="chapter">
+          <navLabel>
+            <text>3.3.1 Designing boundaries</text>
+          </navLabel>
+          <content src="OEBPS/Text/03.xhtml#heading_id_14"/>
+        </navPoint>
+        <navPoint id="navPoint-62" playOrder="62" class="chapter">
+          <navLabel>
+            <text>3.3.2 Why boundaries are designed through collaboration</text>
+          </navLabel>
+          <content src="OEBPS/Text/03.xhtml#heading_id_15"/>
+        </navPoint>
+        <navPoint id="navPoint-63" playOrder="63" class="chapter">
+          <navLabel>
+            <text>3.3.3 From design to architecture</text>
+          </navLabel>
+          <content src="OEBPS/Text/03.xhtml#heading_id_16"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-64" playOrder="64" class="chapter">
+        <navLabel>
+          <text>3.4 Collaborative software design catalysts</text>
+        </navLabel>
+        <content src="OEBPS/Text/03.xhtml#heading_id_17"/>
+      </navPoint>
+      <navPoint id="navPoint-65" playOrder="65" class="chapter">
+        <navLabel>
+          <text>3.5 Chapter heuristics</text>
+        </navLabel>
+        <content src="OEBPS/Text/03.xhtml#heading_id_18"/>
+      </navPoint>
+      <navPoint id="navPoint-66" playOrder="66" class="chapter">
+        <navLabel>
+          <text>3.6 Further reading</text>
+        </navLabel>
+        <content src="OEBPS/Text/03.xhtml#heading_id_19"/>
+      </navPoint>
+      <navPoint id="navPoint-67" playOrder="67" class="chapter">
+        <navLabel>
+          <text>Summary</text>
+        </navLabel>
+        <content src="OEBPS/Text/03.xhtml#heading_id_20"/>
+      </navPoint>
+    </navPoint>
+    <navPoint id="navPoint-68" playOrder="68" class="chapter">
+      <navLabel>
+        <text>4 The ingredients of collaborative modeling</text>
+      </navLabel>
+      <content src="OEBPS/Text/04.xhtml"/>
+      <navPoint id="navPoint-69" playOrder="69" class="chapter">
+        <navLabel>
+          <text>4.1 The collaborative modeling stages</text>
+        </navLabel>
+        <content src="OEBPS/Text/04.xhtml#heading_id_3"/>
+        <navPoint id="navPoint-70" playOrder="70" class="chapter">
+          <navLabel>
+            <text>4.1.1 Why use our stages?</text>
+          </navLabel>
+          <content src="OEBPS/Text/04.xhtml#heading_id_4"/>
+        </navPoint>
+        <navPoint id="navPoint-71" playOrder="71" class="chapter">
+          <navLabel>
+            <text>4.1.2 The stages</text>
+          </navLabel>
+          <content src="OEBPS/Text/04.xhtml#heading_id_5"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-72" playOrder="72" class="chapter">
+        <navLabel>
+          <text>4.2 Preparing for a session</text>
+        </navLabel>
+        <content src="OEBPS/Text/04.xhtml#heading_id_6"/>
+        <navPoint id="navPoint-73" playOrder="73" class="chapter">
+          <navLabel>
+            <text>4.2.1 Preparing the content</text>
+          </navLabel>
+          <content src="OEBPS/Text/04.xhtml#heading_id_7"/>
+        </navPoint>
+        <navPoint id="navPoint-74" playOrder="74" class="chapter">
+          <navLabel>
+            <text>4.2.2 Preparing the space</text>
+          </navLabel>
+          <content src="OEBPS/Text/04.xhtml#heading_id_8"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-75" playOrder="75" class="chapter">
+        <navLabel>
+          <text>4.3 Sensemaking</text>
+        </navLabel>
+        <content src="OEBPS/Text/04.xhtml#heading_id_9"/>
+        <navPoint id="navPoint-76" playOrder="76" class="chapter">
+          <navLabel>
+            <text>4.3.1 Conscious and unconscious minds</text>
+          </navLabel>
+          <content src="OEBPS/Text/04.xhtml#heading_id_10"/>
+        </navPoint>
+        <navPoint id="navPoint-77" playOrder="77" class="chapter">
+          <navLabel>
+            <text>4.3.2 Opening up conversations</text>
+          </navLabel>
+          <content src="OEBPS/Text/04.xhtml#heading_id_11"/>
+        </navPoint>
+        <navPoint id="navPoint-78" playOrder="78" class="chapter">
+          <navLabel>
+            <text>4.3.3 What is sensemaking?</text>
+          </navLabel>
+          <content src="OEBPS/Text/04.xhtml#heading_id_12"/>
+        </navPoint>
+        <navPoint id="navPoint-79" playOrder="79" class="chapter">
+          <navLabel>
+            <text>4.3.4 Why would you do sensemaking?</text>
+          </navLabel>
+          <content src="OEBPS/Text/04.xhtml#heading_id_13"/>
+        </navPoint>
+        <navPoint id="navPoint-80" playOrder="80" class="chapter">
+          <navLabel>
+            <text>4.3.5 In-person or remote?</text>
+          </navLabel>
+          <content src="OEBPS/Text/04.xhtml#heading_id_14"/>
+        </navPoint>
+        <navPoint id="navPoint-81" playOrder="81" class="chapter">
+          <navLabel>
+            <text>4.3.6 Premortem</text>
+          </navLabel>
+          <content src="OEBPS/Text/04.xhtml#heading_id_15"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-82" playOrder="82" class="chapter">
+        <navLabel>
+          <text>4.4 Check-in and check-out</text>
+        </navLabel>
+        <content src="OEBPS/Text/04.xhtml#heading_id_16"/>
+        <navPoint id="navPoint-83" playOrder="83" class="chapter">
+          <navLabel>
+            <text>4.4.1 What is a check-in and check-out?</text>
+          </navLabel>
+          <content src="OEBPS/Text/04.xhtml#heading_id_17"/>
+        </navPoint>
+        <navPoint id="navPoint-84" playOrder="84" class="chapter">
+          <navLabel>
+            <text>4.4.2 Characteristics of a check-in and check-out</text>
+          </navLabel>
+          <content src="OEBPS/Text/04.xhtml#heading_id_18"/>
+        </navPoint>
+        <navPoint id="navPoint-85" playOrder="85" class="chapter">
+          <navLabel>
+            <text>4.4.3 Why would you do a check-in and check-out?</text>
+          </navLabel>
+          <content src="OEBPS/Text/04.xhtml#heading_id_19"/>
+        </navPoint>
+        <navPoint id="navPoint-86" playOrder="86" class="chapter">
+          <navLabel>
+            <text>4.4.4 Capturing feedback through check-outs</text>
+          </navLabel>
+          <content src="OEBPS/Text/04.xhtml#heading_id_20"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-87" playOrder="87" class="chapter">
+        <navLabel>
+          <text>4.5 Different collaboration styles for modeling with tools</text>
+        </navLabel>
+        <content src="OEBPS/Text/04.xhtml#heading_id_21"/>
+        <navPoint id="navPoint-88" playOrder="88" class="chapter">
+          <navLabel>
+            <text>4.5.1 Together, Alone</text>
+          </navLabel>
+          <content src="OEBPS/Text/04.xhtml#heading_id_22"/>
+        </navPoint>
+        <navPoint id="navPoint-89" playOrder="89" class="chapter">
+          <navLabel>
+            <text>4.5.2 Split and Merge</text>
+          </navLabel>
+          <content src="OEBPS/Text/04.xhtml#heading_id_23"/>
+        </navPoint>
+        <navPoint id="navPoint-90" playOrder="90" class="chapter">
+          <navLabel>
+            <text>4.5.3 Small Group Diverge and Converge</text>
+          </navLabel>
+          <content src="OEBPS/Text/04.xhtml#heading_id_24"/>
+        </navPoint>
+        <navPoint id="navPoint-91" playOrder="91" class="chapter">
+          <navLabel>
+            <text>4.5.4 Liberating structures: 1-2-4-All</text>
+          </navLabel>
+          <content src="OEBPS/Text/04.xhtml#heading_id_25"/>
+        </navPoint>
+        <navPoint id="navPoint-92" playOrder="92" class="chapter">
+          <navLabel>
+            <text>4.5.5 Ensemble</text>
+          </navLabel>
+          <content src="OEBPS/Text/04.xhtml#heading_id_26"/>
+        </navPoint>
+        <navPoint id="navPoint-93" playOrder="93" class="chapter">
+          <navLabel>
+            <text>4.5.6 Fishbowl</text>
+          </navLabel>
+          <content src="OEBPS/Text/04.xhtml#heading_id_27"/>
+        </navPoint>
+        <navPoint id="navPoint-94" playOrder="94" class="chapter">
+          <navLabel>
+            <text>4.5.7 Anarchy!</text>
+          </navLabel>
+          <content src="OEBPS/Text/04.xhtml#heading_id_28"/>
+        </navPoint>
+        <navPoint id="navPoint-95" playOrder="95" class="chapter">
+          <navLabel>
+            <text>4.5.8 Guerilla</text>
+          </navLabel>
+          <content src="OEBPS/Text/04.xhtml#heading_id_29"/>
+        </navPoint>
+        <navPoint id="navPoint-96" playOrder="96" class="chapter">
+          <navLabel>
+            <text>4.5.9 The secret modeler</text>
+          </navLabel>
+          <content src="OEBPS/Text/04.xhtml#heading_id_30"/>
+        </navPoint>
+        <navPoint id="navPoint-97" playOrder="97" class="chapter">
+          <navLabel>
+            <text>4.5.10 How to use the styles</text>
+          </navLabel>
+          <content src="OEBPS/Text/04.xhtml#heading_id_31"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-98" playOrder="98" class="chapter">
+        <navLabel>
+          <text>4.6 Retrospective</text>
+        </navLabel>
+        <content src="OEBPS/Text/04.xhtml#heading_id_32"/>
+        <navPoint id="navPoint-99" playOrder="99" class="chapter">
+          <navLabel>
+            <text>4.6.1 Evaluating the outcome of the session</text>
+          </navLabel>
+          <content src="OEBPS/Text/04.xhtml#heading_id_33"/>
+        </navPoint>
+        <navPoint id="navPoint-100" playOrder="100" class="chapter">
+          <navLabel>
+            <text>4.6.2 When we don’t do a retrospective</text>
+          </navLabel>
+          <content src="OEBPS/Text/04.xhtml#heading_id_34"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-101" playOrder="101" class="chapter">
+        <navLabel>
+          <text>4.7 Collaborative software design catalysts</text>
+        </navLabel>
+        <content src="OEBPS/Text/04.xhtml#heading_id_35"/>
+      </navPoint>
+      <navPoint id="navPoint-102" playOrder="102" class="chapter">
+        <navLabel>
+          <text>4.8 Chapter heuristics</text>
+        </navLabel>
+        <content src="OEBPS/Text/04.xhtml#heading_id_36"/>
+      </navPoint>
+      <navPoint id="navPoint-103" playOrder="103" class="chapter">
+        <navLabel>
+          <text>4.9 Further reading</text>
+        </navLabel>
+        <content src="OEBPS/Text/04.xhtml#heading_id_37"/>
+      </navPoint>
+      <navPoint id="navPoint-104" playOrder="104" class="chapter">
+        <navLabel>
+          <text>Summary</text>
+        </navLabel>
+        <content src="OEBPS/Text/04.xhtml#heading_id_38"/>
+      </navPoint>
+    </navPoint>
+    <navPoint id="navPoint-105" playOrder="105" class="chapter">
+      <navLabel>
+        <text>5 Facilitating collaborative modeling</text>
+      </navLabel>
+      <content src="OEBPS/Text/05.xhtml"/>
+      <navPoint id="navPoint-106" playOrder="106" class="chapter">
+        <navLabel>
+          <text>5.1 The role of a facilitator</text>
+        </navLabel>
+        <content src="OEBPS/Text/05.xhtml#heading_id_3"/>
+        <navPoint id="navPoint-107" playOrder="107" class="chapter">
+          <navLabel>
+            <text>5.1.1 The facilitator as an observer</text>
+          </navLabel>
+          <content src="OEBPS/Text/05.xhtml#heading_id_4"/>
+        </navPoint>
+        <navPoint id="navPoint-108" playOrder="108" class="chapter">
+          <navLabel>
+            <text>5.1.2 Other stances of a facilitator</text>
+          </navLabel>
+          <content src="OEBPS/Text/05.xhtml#heading_id_5"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-109" playOrder="109" class="chapter">
+        <navLabel>
+          <text>5.2 The core competencies of a facilitator</text>
+        </navLabel>
+        <content src="OEBPS/Text/05.xhtml#heading_id_6"/>
+        <navPoint id="navPoint-110" playOrder="110" class="chapter">
+          <navLabel>
+            <text>5.2.1 Neutrality</text>
+          </navLabel>
+          <content src="OEBPS/Text/05.xhtml#heading_id_7"/>
+        </navPoint>
+        <navPoint id="navPoint-111" playOrder="111" class="chapter">
+          <navLabel>
+            <text>5.2.2 Observing</text>
+          </navLabel>
+          <content src="OEBPS/Text/05.xhtml#heading_id_8"/>
+        </navPoint>
+        <navPoint id="navPoint-112" playOrder="112" class="chapter">
+          <navLabel>
+            <text>5.2.3 Compassion</text>
+          </navLabel>
+          <content src="OEBPS/Text/05.xhtml#heading_id_9"/>
+        </navPoint>
+        <navPoint id="navPoint-113" playOrder="113" class="chapter">
+          <navLabel>
+            <text>5.2.4 Using and learning the core competencies</text>
+          </navLabel>
+          <content src="OEBPS/Text/05.xhtml#heading_id_10"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-114" playOrder="114" class="chapter">
+        <navLabel>
+          <text>5.3 Skill set of a facilitator</text>
+        </navLabel>
+        <content src="OEBPS/Text/05.xhtml#heading_id_11"/>
+        <navPoint id="navPoint-115" playOrder="115" class="chapter">
+          <navLabel>
+            <text>5.3.1 Clear communication</text>
+          </navLabel>
+          <content src="OEBPS/Text/05.xhtml#heading_id_12"/>
+        </navPoint>
+        <navPoint id="navPoint-116" playOrder="116" class="chapter">
+          <navLabel>
+            <text>5.3.2 Active listening</text>
+          </navLabel>
+          <content src="OEBPS/Text/05.xhtml#heading_id_13"/>
+        </navPoint>
+        <navPoint id="navPoint-117" playOrder="117" class="chapter">
+          <navLabel>
+            <text>5.3.3 Holding space</text>
+          </navLabel>
+          <content src="OEBPS/Text/05.xhtml#heading_id_14"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-118" playOrder="118" class="chapter">
+        <navLabel>
+          <text>5.4 Facilitating sensemaking and collaborative styles</text>
+        </navLabel>
+        <content src="OEBPS/Text/05.xhtml#heading_id_15"/>
+        <navPoint id="navPoint-119" playOrder="119" class="chapter">
+          <navLabel>
+            <text>5.4.1 Why do you need a facilitator?</text>
+          </navLabel>
+          <content src="OEBPS/Text/05.xhtml#heading_id_16"/>
+        </navPoint>
+        <navPoint id="navPoint-120" playOrder="120" class="chapter">
+          <navLabel>
+            <text>5.4.2 The role of a facilitator during sensemaking</text>
+          </navLabel>
+          <content src="OEBPS/Text/05.xhtml#heading_id_17"/>
+        </navPoint>
+        <navPoint id="navPoint-121" playOrder="121" class="chapter">
+          <navLabel>
+            <text>5.4.3 Facilitating check-ins and check-outs</text>
+          </navLabel>
+          <content src="OEBPS/Text/05.xhtml#heading_id_18"/>
+        </navPoint>
+        <navPoint id="navPoint-122" playOrder="122" class="chapter">
+          <navLabel>
+            <text>5.4.4 Preparing to facilitate sensemaking</text>
+          </navLabel>
+          <content src="OEBPS/Text/05.xhtml#heading_id_19"/>
+        </navPoint>
+        <navPoint id="navPoint-123" playOrder="123" class="chapter">
+          <navLabel>
+            <text>5.4.5 Facilitating collaborative styles</text>
+          </navLabel>
+          <content src="OEBPS/Text/05.xhtml#heading_id_20"/>
+        </navPoint>
+        <navPoint id="navPoint-124" playOrder="124" class="chapter">
+          <navLabel>
+            <text>5.4.6 What if you’re not the facilitator?</text>
+          </navLabel>
+          <content src="OEBPS/Text/05.xhtml#heading_id_21"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-125" playOrder="125" class="chapter">
+        <navLabel>
+          <text>5.5 Dealing with remote facilitation</text>
+        </navLabel>
+        <content src="OEBPS/Text/05.xhtml#heading_id_22"/>
+        <navPoint id="navPoint-126" playOrder="126" class="chapter">
+          <navLabel>
+            <text>5.5.1 Benefits and potential downsides of the different forms</text>
+          </navLabel>
+          <content src="OEBPS/Text/05.xhtml#heading_id_23"/>
+        </navPoint>
+        <navPoint id="navPoint-127" playOrder="127" class="chapter">
+          <navLabel>
+            <text>5.5.2 Preparing a remote facilitation</text>
+          </navLabel>
+          <content src="OEBPS/Text/05.xhtml#heading_id_24"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-128" playOrder="128" class="chapter">
+        <navLabel>
+          <text>5.6 Collaborative software design catalysts</text>
+        </navLabel>
+        <content src="OEBPS/Text/05.xhtml#heading_id_25"/>
+      </navPoint>
+      <navPoint id="navPoint-129" playOrder="129" class="chapter">
+        <navLabel>
+          <text>5.7 Chapter heuristics</text>
+        </navLabel>
+        <content src="OEBPS/Text/05.xhtml#heading_id_26"/>
+      </navPoint>
+      <navPoint id="navPoint-130" playOrder="130" class="chapter">
+        <navLabel>
+          <text>5.8 Further reading</text>
+        </navLabel>
+        <content src="OEBPS/Text/05.xhtml#heading_id_27"/>
+      </navPoint>
+      <navPoint id="navPoint-131" playOrder="131" class="chapter">
+        <navLabel>
+          <text>Summary</text>
+        </navLabel>
+        <content src="OEBPS/Text/05.xhtml#heading_id_28"/>
+      </navPoint>
+    </navPoint>
+    <navPoint id="navPoint-132" playOrder="132" class="chapter">
+      <navLabel>
+        <text>6 The influence of ranking</text>
+      </navLabel>
+      <content src="OEBPS/Text/06.xhtml"/>
+      <navPoint id="navPoint-133" playOrder="133" class="chapter">
+        <navLabel>
+          <text>6.1 Ranking explained</text>
+        </navLabel>
+        <content src="OEBPS/Text/06.xhtml#heading_id_3"/>
+        <navPoint id="navPoint-134" playOrder="134" class="chapter">
+          <navLabel>
+            <text>6.1.1 What is ranking?</text>
+          </navLabel>
+          <content src="OEBPS/Text/06.xhtml#heading_id_4"/>
+        </navPoint>
+        <navPoint id="navPoint-135" playOrder="135" class="chapter">
+          <navLabel>
+            <text>6.1.2 Implicit versus explicit ranking</text>
+          </navLabel>
+          <content src="OEBPS/Text/06.xhtml#heading_id_5"/>
+        </navPoint>
+        <navPoint id="navPoint-136" playOrder="136" class="chapter">
+          <navLabel>
+            <text>6.1.3 Symbolic violence</text>
+          </navLabel>
+          <content src="OEBPS/Text/06.xhtml#heading_id_6"/>
+        </navPoint>
+        <navPoint id="navPoint-137" playOrder="137" class="chapter">
+          <navLabel>
+            <text>6.1.4 Epistemic injustice</text>
+          </navLabel>
+          <content src="OEBPS/Text/06.xhtml#heading_id_7"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-138" playOrder="138" class="chapter">
+        <navLabel>
+          <text>6.2 Becoming aware of ranking during collaboration and software design</text>
+        </navLabel>
+        <content src="OEBPS/Text/06.xhtml#heading_id_8"/>
+        <navPoint id="navPoint-139" playOrder="139" class="chapter">
+          <navLabel>
+            <text>6.2.1 Group ranking</text>
+          </navLabel>
+          <content src="OEBPS/Text/06.xhtml#heading_id_9"/>
+        </navPoint>
+        <navPoint id="navPoint-140" playOrder="140" class="chapter">
+          <navLabel>
+            <text>6.2.2 People</text>
+          </navLabel>
+          <content src="OEBPS/Text/06.xhtml#heading_id_10"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-141" playOrder="141" class="chapter">
+        <navLabel>
+          <text>6.3 Facilitating ranking</text>
+        </navLabel>
+        <content src="OEBPS/Text/06.xhtml#heading_id_11"/>
+        <navPoint id="navPoint-142" playOrder="142" class="chapter">
+          <navLabel>
+            <text>6.3.1 Analyzing the group rank</text>
+          </navLabel>
+          <content src="OEBPS/Text/06.xhtml#heading_id_12"/>
+        </navPoint>
+        <navPoint id="navPoint-143" playOrder="143" class="chapter">
+          <navLabel>
+            <text>6.3.2 Own, play, and share your rank</text>
+          </navLabel>
+          <content src="OEBPS/Text/06.xhtml#heading_id_13"/>
+        </navPoint>
+        <navPoint id="navPoint-144" playOrder="144" class="chapter">
+          <navLabel>
+            <text>6.3.3 Making the group aware of their rank</text>
+          </navLabel>
+          <content src="OEBPS/Text/06.xhtml#heading_id_14"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-145" playOrder="145" class="chapter">
+        <navLabel>
+          <text>6.4 Collaborative software design catalysts</text>
+        </navLabel>
+        <content src="OEBPS/Text/06.xhtml#heading_id_15"/>
+      </navPoint>
+      <navPoint id="navPoint-146" playOrder="146" class="chapter">
+        <navLabel>
+          <text>6.5 Chapter heuristics</text>
+        </navLabel>
+        <content src="OEBPS/Text/06.xhtml#heading_id_16"/>
+      </navPoint>
+      <navPoint id="navPoint-147" playOrder="147" class="chapter">
+        <navLabel>
+          <text>6.6 Further reading</text>
+        </navLabel>
+        <content src="OEBPS/Text/06.xhtml#heading_id_17"/>
+      </navPoint>
+      <navPoint id="navPoint-148" playOrder="148" class="chapter">
+        <navLabel>
+          <text>Summary</text>
+        </navLabel>
+        <content src="OEBPS/Text/06.xhtml#heading_id_18"/>
+      </navPoint>
+    </navPoint>
+    <navPoint id="navPoint-149" playOrder="149" class="chapter">
+      <navLabel>
+        <text>7 The effect and opportunities of cognitive bias</text>
+      </navLabel>
+      <content src="OEBPS/Text/07.xhtml"/>
+      <navPoint id="navPoint-150" playOrder="150" class="chapter">
+        <navLabel>
+          <text>7.1 Cognitive bias explained</text>
+        </navLabel>
+        <content src="OEBPS/Text/07.xhtml#heading_id_3"/>
+        <navPoint id="navPoint-151" playOrder="151" class="chapter">
+          <navLabel>
+            <text>7.1.1 What is cognitive bias?</text>
+          </navLabel>
+          <content src="OEBPS/Text/07.xhtml#heading_id_4"/>
+        </navPoint>
+        <navPoint id="navPoint-152" playOrder="152" class="chapter">
+          <navLabel>
+            <text>7.1.2 What does cognitive bias look like?</text>
+          </navLabel>
+          <content src="OEBPS/Text/07.xhtml#heading_id_5"/>
+        </navPoint>
+        <navPoint id="navPoint-153" playOrder="153" class="chapter">
+          <navLabel>
+            <text>7.1.3 System 1 and System 2: A crash course</text>
+          </navLabel>
+          <content src="OEBPS/Text/07.xhtml#heading_id_6"/>
+        </navPoint>
+        <navPoint id="navPoint-154" playOrder="154" class="chapter">
+          <navLabel>
+            <text>7.1.4 Embracing cognitive bias</text>
+          </navLabel>
+          <content src="OEBPS/Text/07.xhtml#heading_id_7"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-155" playOrder="155" class="chapter">
+        <navLabel>
+          <text>7.2 Cognitive bias during collaboration and software design</text>
+        </navLabel>
+        <content src="OEBPS/Text/07.xhtml#heading_id_8"/>
+        <navPoint id="navPoint-156" playOrder="156" class="chapter">
+          <navLabel>
+            <text>7.2.1 Confirmation bias</text>
+          </navLabel>
+          <content src="OEBPS/Text/07.xhtml#heading_id_9"/>
+        </navPoint>
+        <navPoint id="navPoint-157" playOrder="157" class="chapter">
+          <navLabel>
+            <text>7.2.2 The law of triviality</text>
+          </navLabel>
+          <content src="OEBPS/Text/07.xhtml#heading_id_10"/>
+        </navPoint>
+        <navPoint id="navPoint-158" playOrder="158" class="chapter">
+          <navLabel>
+            <text>7.2.3 False-consensus effect</text>
+          </navLabel>
+          <content src="OEBPS/Text/07.xhtml#heading_id_11"/>
+        </navPoint>
+        <navPoint id="navPoint-159" playOrder="159" class="chapter">
+          <navLabel>
+            <text>7.2.4 Availability bias</text>
+          </navLabel>
+          <content src="OEBPS/Text/07.xhtml#heading_id_12"/>
+        </navPoint>
+        <navPoint id="navPoint-160" playOrder="160" class="chapter">
+          <navLabel>
+            <text>7.2.5 Loss aversion</text>
+          </navLabel>
+          <content src="OEBPS/Text/07.xhtml#heading_id_13"/>
+        </navPoint>
+        <navPoint id="navPoint-161" playOrder="161" class="chapter">
+          <navLabel>
+            <text>7.2.6 Additive bias</text>
+          </navLabel>
+          <content src="OEBPS/Text/07.xhtml#heading_id_14"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-162" playOrder="162" class="chapter">
+        <navLabel>
+          <text>7.3 Facilitating cognitive bias</text>
+        </navLabel>
+        <content src="OEBPS/Text/07.xhtml#heading_id_15"/>
+        <navPoint id="navPoint-163" playOrder="163" class="chapter">
+          <navLabel>
+            <text>7.3.1 Self-fulfilling prophecy</text>
+          </navLabel>
+          <content src="OEBPS/Text/07.xhtml#heading_id_16"/>
+        </navPoint>
+        <navPoint id="navPoint-164" playOrder="164" class="chapter">
+          <navLabel>
+            <text>7.3.2 Altering behavior through nudges</text>
+          </navLabel>
+          <content src="OEBPS/Text/07.xhtml#heading_id_17"/>
+        </navPoint>
+        <navPoint id="navPoint-165" playOrder="165" class="chapter">
+          <navLabel>
+            <text>7.3.3 The different dimensions of nudges</text>
+          </navLabel>
+          <content src="OEBPS/Text/07.xhtml#heading_id_18"/>
+        </navPoint>
+        <navPoint id="navPoint-166" playOrder="166" class="chapter">
+          <navLabel>
+            <text>7.3.4 Becoming a choice architect</text>
+          </navLabel>
+          <content src="OEBPS/Text/07.xhtml#heading_id_19"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-167" playOrder="167" class="chapter">
+        <navLabel>
+          <text>7.4 Collaborative software design catalysts</text>
+        </navLabel>
+        <content src="OEBPS/Text/07.xhtml#heading_id_20"/>
+      </navPoint>
+      <navPoint id="navPoint-168" playOrder="168" class="chapter">
+        <navLabel>
+          <text>7.5 Chapter heuristics</text>
+        </navLabel>
+        <content src="OEBPS/Text/07.xhtml#heading_id_21"/>
+      </navPoint>
+      <navPoint id="navPoint-169" playOrder="169" class="chapter">
+        <navLabel>
+          <text>7.6 Further reading</text>
+        </navLabel>
+        <content src="OEBPS/Text/07.xhtml#heading_id_22"/>
+      </navPoint>
+      <navPoint id="navPoint-170" playOrder="170" class="chapter">
+        <navLabel>
+          <text>Summary</text>
+        </navLabel>
+        <content src="OEBPS/Text/07.xhtml#heading_id_23"/>
+      </navPoint>
+    </navPoint>
+    <navPoint id="navPoint-171" playOrder="171" class="chapter">
+      <navLabel>
+        <text>8 Resistance and conflict resolution</text>
+      </navLabel>
+      <content src="OEBPS/Text/08.xhtml"/>
+      <navPoint id="navPoint-172" playOrder="172" class="chapter">
+        <navLabel>
+          <text>8.1 Why people show resistance and have conflicts</text>
+        </navLabel>
+        <content src="OEBPS/Text/08.xhtml#heading_id_3"/>
+        <navPoint id="navPoint-173" playOrder="173" class="chapter">
+          <navLabel>
+            <text>8.1.1 What conflict is all about</text>
+          </navLabel>
+          <content src="OEBPS/Text/08.xhtml#heading_id_4"/>
+        </navPoint>
+        <navPoint id="navPoint-174" playOrder="174" class="chapter">
+          <navLabel>
+            <text>8.1.2 Edge behavior</text>
+          </navLabel>
+          <content src="OEBPS/Text/08.xhtml#heading_id_5"/>
+        </navPoint>
+        <navPoint id="navPoint-175" playOrder="175" class="chapter">
+          <navLabel>
+            <text>8.1.3 What is resistance?</text>
+          </navLabel>
+          <content src="OEBPS/Text/08.xhtml#heading_id_6"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-176" playOrder="176" class="chapter">
+        <navLabel>
+          <text>8.2 Resistance and conflict during collaboration</text>
+        </navLabel>
+        <content src="OEBPS/Text/08.xhtml#heading_id_7"/>
+        <navPoint id="navPoint-177" playOrder="177" class="chapter">
+          <navLabel>
+            <text>8.2.1 Recognizing resistance and conflict in collaborative modeling</text>
+          </navLabel>
+          <content src="OEBPS/Text/08.xhtml#heading_id_8"/>
+        </navPoint>
+        <navPoint id="navPoint-178" playOrder="178" class="chapter">
+          <navLabel>
+            <text>8.2.2 The effect of resistance and conflict on software design</text>
+          </navLabel>
+          <content src="OEBPS/Text/08.xhtml#heading_id_9"/>
+        </navPoint>
+        <navPoint id="navPoint-179" playOrder="179" class="chapter">
+          <navLabel>
+            <text>8.2.3 Resistance and conflict as learning opportunities</text>
+          </navLabel>
+          <content src="OEBPS/Text/08.xhtml#heading_id_10"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-180" playOrder="180" class="chapter">
+        <navLabel>
+          <text>8.3 Facilitating toward a resolution</text>
+        </navLabel>
+        <content src="OEBPS/Text/08.xhtml#heading_id_11"/>
+        <navPoint id="navPoint-181" playOrder="181" class="chapter">
+          <navLabel>
+            <text>8.3.1 Resistance and conflict in practice</text>
+          </navLabel>
+          <content src="OEBPS/Text/08.xhtml#heading_id_12"/>
+        </navPoint>
+        <navPoint id="navPoint-182" playOrder="182" class="chapter">
+          <navLabel>
+            <text>8.3.2 Kissing the group over the edge</text>
+          </navLabel>
+          <content src="OEBPS/Text/08.xhtml#heading_id_13"/>
+        </navPoint>
+        <navPoint id="navPoint-183" playOrder="183" class="chapter">
+          <navLabel>
+            <text>8.3.3 Creating role fluidity</text>
+          </navLabel>
+          <content src="OEBPS/Text/08.xhtml#heading_id_14"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-184" playOrder="184" class="chapter">
+        <navLabel>
+          <text>8.4 Collaborative software design catalysts</text>
+        </navLabel>
+        <content src="OEBPS/Text/08.xhtml#heading_id_15"/>
+      </navPoint>
+      <navPoint id="navPoint-185" playOrder="185" class="chapter">
+        <navLabel>
+          <text>8.5 Chapter heuristics</text>
+        </navLabel>
+        <content src="OEBPS/Text/08.xhtml#heading_id_16"/>
+      </navPoint>
+      <navPoint id="navPoint-186" playOrder="186" class="chapter">
+        <navLabel>
+          <text>8.6 Further reading</text>
+        </navLabel>
+        <content src="OEBPS/Text/08.xhtml#heading_id_17"/>
+      </navPoint>
+      <navPoint id="navPoint-187" playOrder="187" class="chapter">
+        <navLabel>
+          <text>Summary</text>
+        </navLabel>
+        <content src="OEBPS/Text/08.xhtml#heading_id_18"/>
+      </navPoint>
+    </navPoint>
+    <navPoint id="navPoint-188" playOrder="188" class="chapter">
+      <navLabel>
+        <text>9 Making sustainable design decisions</text>
+      </navLabel>
+      <content src="OEBPS/Text/09.xhtml"/>
+      <navPoint id="navPoint-189" playOrder="189" class="chapter">
+        <navLabel>
+          <text>9.1 Decisions, decisions, decisions</text>
+        </navLabel>
+        <content src="OEBPS/Text/09.xhtml#heading_id_3"/>
+        <navPoint id="navPoint-190" playOrder="190" class="chapter">
+          <navLabel>
+            <text>9.1.1 What is a decision anyway?</text>
+          </navLabel>
+          <content src="OEBPS/Text/09.xhtml#heading_id_4"/>
+        </navPoint>
+        <navPoint id="navPoint-191" playOrder="191" class="chapter">
+          <navLabel>
+            <text>9.1.2 Decision vs. outcome</text>
+          </navLabel>
+          <content src="OEBPS/Text/09.xhtml#heading_id_5"/>
+        </navPoint>
+        <navPoint id="navPoint-192" playOrder="192" class="chapter">
+          <navLabel>
+            <text>9.1.3 What you need to make a decision</text>
+          </navLabel>
+          <content src="OEBPS/Text/09.xhtml#heading_id_6"/>
+        </navPoint>
+        <navPoint id="navPoint-193" playOrder="193" class="chapter">
+          <navLabel>
+            <text>9.1.4 Reactive vs. proactive decisions</text>
+          </navLabel>
+          <content src="OEBPS/Text/09.xhtml#heading_id_7"/>
+        </navPoint>
+        <navPoint id="navPoint-194" playOrder="194" class="chapter">
+          <navLabel>
+            <text>9.1.5 Sustainability in software design</text>
+          </navLabel>
+          <content src="OEBPS/Text/09.xhtml#heading_id_8"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-195" playOrder="195" class="chapter">
+        <navLabel>
+          <text>9.2 Decision-making styles and levels of buy-in</text>
+        </navLabel>
+        <content src="OEBPS/Text/09.xhtml#heading_id_9"/>
+        <navPoint id="navPoint-196" playOrder="196" class="chapter">
+          <navLabel>
+            <text>9.2.1 Autocracy vs. democracy</text>
+          </navLabel>
+          <content src="OEBPS/Text/09.xhtml#heading_id_10"/>
+        </navPoint>
+        <navPoint id="navPoint-197" playOrder="197" class="chapter">
+          <navLabel>
+            <text>9.2.2 Creating buy-in on decisions</text>
+          </navLabel>
+          <content src="OEBPS/Text/09.xhtml#heading_id_11"/>
+        </navPoint>
+        <navPoint id="navPoint-198" playOrder="198" class="chapter">
+          <navLabel>
+            <text>9.2.3 Buy-in on software design decisions</text>
+          </navLabel>
+          <content src="OEBPS/Text/09.xhtml#heading_id_12"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-199" playOrder="199" class="chapter">
+        <navLabel>
+          <text>9.3 Facilitating sustainable design decisions</text>
+        </navLabel>
+        <content src="OEBPS/Text/09.xhtml#heading_id_13"/>
+        <navPoint id="navPoint-200" playOrder="200" class="chapter">
+          <navLabel>
+            <text>9.3.1 Moving toward a majority vote</text>
+          </navLabel>
+          <content src="OEBPS/Text/09.xhtml#heading_id_14"/>
+        </navPoint>
+        <navPoint id="navPoint-201" playOrder="201" class="chapter">
+          <navLabel>
+            <text>9.3.2 Go fishing!</text>
+          </navLabel>
+          <content src="OEBPS/Text/09.xhtml#heading_id_15"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-202" playOrder="202" class="chapter">
+        <navLabel>
+          <text>9.4 Collaborative software design catalysts</text>
+        </navLabel>
+        <content src="OEBPS/Text/09.xhtml#heading_id_16"/>
+      </navPoint>
+      <navPoint id="navPoint-203" playOrder="203" class="chapter">
+        <navLabel>
+          <text>9.5 Chapter heuristics</text>
+        </navLabel>
+        <content src="OEBPS/Text/09.xhtml#heading_id_17"/>
+      </navPoint>
+      <navPoint id="navPoint-204" playOrder="204" class="chapter">
+        <navLabel>
+          <text>9.6 Further reading</text>
+        </navLabel>
+        <content src="OEBPS/Text/09.xhtml#heading_id_18"/>
+      </navPoint>
+      <navPoint id="navPoint-205" playOrder="205" class="chapter">
+        <navLabel>
+          <text>Summary</text>
+        </navLabel>
+        <content src="OEBPS/Text/09.xhtml#heading_id_19"/>
+      </navPoint>
+    </navPoint>
+    <navPoint id="navPoint-206" playOrder="206" class="chapter">
+      <navLabel>
+        <text>10 Managing unsolvable problems</text>
+      </navLabel>
+      <content src="OEBPS/Text/10.xhtml"/>
+      <navPoint id="navPoint-207" playOrder="207" class="chapter">
+        <navLabel>
+          <text>10.1 Polarities: Some problems can’t be solved</text>
+        </navLabel>
+        <content src="OEBPS/Text/10.xhtml#heading_id_3"/>
+        <navPoint id="navPoint-208" playOrder="208" class="chapter">
+          <navLabel>
+            <text>10.1.1 What are polarities?</text>
+          </navLabel>
+          <content src="OEBPS/Text/10.xhtml#heading_id_4"/>
+        </navPoint>
+        <navPoint id="navPoint-209" playOrder="209" class="chapter">
+          <navLabel>
+            <text>10.1.2 Recognizing polarities</text>
+          </navLabel>
+          <content src="OEBPS/Text/10.xhtml#heading_id_5"/>
+        </navPoint>
+        <navPoint id="navPoint-210" playOrder="210" class="chapter">
+          <navLabel>
+            <text>10.1.3 Common polarities in collaborative modeling</text>
+          </navLabel>
+          <content src="OEBPS/Text/10.xhtml#heading_id_6"/>
+        </navPoint>
+        <navPoint id="navPoint-211" playOrder="211" class="chapter">
+          <navLabel>
+            <text>10.1.4 Crusaders and tradition bearers</text>
+          </navLabel>
+          <content src="OEBPS/Text/10.xhtml#heading_id_7"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-212" playOrder="212" class="chapter">
+        <navLabel>
+          <text>10.2 Visualizing a polarity</text>
+        </navLabel>
+        <content src="OEBPS/Text/10.xhtml#heading_id_8"/>
+        <navPoint id="navPoint-213" playOrder="213" class="chapter">
+          <navLabel>
+            <text>10.2.1 Creating a shared understanding of a polarity</text>
+          </navLabel>
+          <content src="OEBPS/Text/10.xhtml#heading_id_9"/>
+        </navPoint>
+        <navPoint id="navPoint-214" playOrder="214" class="chapter">
+          <navLabel>
+            <text>10.2.2 Managing the polarity</text>
+          </navLabel>
+          <content src="OEBPS/Text/10.xhtml#heading_id_10"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-215" playOrder="215" class="chapter">
+        <navLabel>
+          <text>10.3 Managing polarities during collaborative modeling</text>
+        </navLabel>
+        <content src="OEBPS/Text/10.xhtml#heading_id_11"/>
+        <navPoint id="navPoint-216" playOrder="216" class="chapter">
+          <navLabel>
+            <text>10.3.1 Getting stuck in a polarity</text>
+          </navLabel>
+          <content src="OEBPS/Text/10.xhtml#heading_id_12"/>
+        </navPoint>
+        <navPoint id="navPoint-217" playOrder="217" class="chapter">
+          <navLabel>
+            <text>10.3.2 Managing a polarity as facilitator</text>
+          </navLabel>
+          <content src="OEBPS/Text/10.xhtml#heading_id_13"/>
+        </navPoint>
+        <navPoint id="navPoint-218" playOrder="218" class="chapter">
+          <navLabel>
+            <text>10.3.3 Letting the group manage the polarity</text>
+          </navLabel>
+          <content src="OEBPS/Text/10.xhtml#heading_id_14"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-219" playOrder="219" class="chapter">
+        <navLabel>
+          <text>10.4 Collaborative software design catalysts</text>
+        </navLabel>
+        <content src="OEBPS/Text/10.xhtml#heading_id_15"/>
+      </navPoint>
+      <navPoint id="navPoint-220" playOrder="220" class="chapter">
+        <navLabel>
+          <text>10.5 Chapter heuristics</text>
+        </navLabel>
+        <content src="OEBPS/Text/10.xhtml#heading_id_16"/>
+      </navPoint>
+      <navPoint id="navPoint-221" playOrder="221" class="chapter">
+        <navLabel>
+          <text>10.6 Further reading</text>
+        </navLabel>
+        <content src="OEBPS/Text/10.xhtml#heading_id_17"/>
+      </navPoint>
+      <navPoint id="navPoint-222" playOrder="222" class="chapter">
+        <navLabel>
+          <text>Summary</text>
+        </navLabel>
+        <content src="OEBPS/Text/10.xhtml#heading_id_18"/>
+      </navPoint>
+    </navPoint>
+    <navPoint id="navPoint-223" playOrder="223" class="chapter">
+      <navLabel>
+        <text>11 Communicating and documenting decisions</text>
+      </navLabel>
+      <content src="OEBPS/Text/11.xhtml"/>
+      <navPoint id="navPoint-224" playOrder="224" class="chapter">
+        <navLabel>
+          <text>11.1 Formalizing a decision</text>
+        </navLabel>
+        <content src="OEBPS/Text/11.xhtml#heading_id_3"/>
+        <navPoint id="navPoint-225" playOrder="225" class="chapter">
+          <navLabel>
+            <text>11.1.1 Finding the consequences</text>
+          </navLabel>
+          <content src="OEBPS/Text/11.xhtml#heading_id_4"/>
+        </navPoint>
+        <navPoint id="navPoint-226" playOrder="226" class="chapter">
+          <navLabel>
+            <text>11.1.2 Capturing the decision</text>
+          </navLabel>
+          <content src="OEBPS/Text/11.xhtml#heading_id_5"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-227" playOrder="227" class="chapter">
+        <navLabel>
+          <text>11.2 Spreading the knowledge through the company</text>
+        </navLabel>
+        <content src="OEBPS/Text/11.xhtml#heading_id_6"/>
+        <navPoint id="navPoint-228" playOrder="228" class="chapter">
+          <navLabel>
+            <text>11.2.1 Communicating decisions</text>
+          </navLabel>
+          <content src="OEBPS/Text/11.xhtml#heading_id_7"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-229" playOrder="229" class="chapter">
+        <navLabel>
+          <text>11.3 Keeping the decision alive</text>
+        </navLabel>
+        <content src="OEBPS/Text/11.xhtml#heading_id_8"/>
+        <navPoint id="navPoint-230" playOrder="230" class="chapter">
+          <navLabel>
+            <text>11.3.1 The modeling process as a whirlpool</text>
+          </navLabel>
+          <content src="OEBPS/Text/11.xhtml#heading_id_9"/>
+        </navPoint>
+        <navPoint id="navPoint-231" playOrder="231" class="chapter">
+          <navLabel>
+            <text>11.3.2 Don’t fall in love with your model</text>
+          </navLabel>
+          <content src="OEBPS/Text/11.xhtml#heading_id_10"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-232" playOrder="232" class="chapter">
+        <navLabel>
+          <text>11.4 Collaborative software design catalysts</text>
+        </navLabel>
+        <content src="OEBPS/Text/11.xhtml#heading_id_11"/>
+      </navPoint>
+      <navPoint id="navPoint-233" playOrder="233" class="chapter">
+        <navLabel>
+          <text>11.5 Chapter heuristics</text>
+        </navLabel>
+        <content src="OEBPS/Text/11.xhtml#heading_id_12"/>
+      </navPoint>
+      <navPoint id="navPoint-234" playOrder="234" class="chapter">
+        <navLabel>
+          <text>11.6 Further reading</text>
+        </navLabel>
+        <content src="OEBPS/Text/11.xhtml#heading_id_13"/>
+      </navPoint>
+      <navPoint id="navPoint-235" playOrder="235" class="chapter">
+        <navLabel>
+          <text>Summary</text>
+        </navLabel>
+        <content src="OEBPS/Text/11.xhtml#heading_id_14"/>
+      </navPoint>
+    </navPoint>
+    <navPoint id="navPoint-236" playOrder="236" class="chapter">
+      <navLabel>
+        <text>12 Collaborative modeling beyond software design</text>
+      </navLabel>
+      <content src="OEBPS/Text/12.xhtml"/>
+      <navPoint id="navPoint-237" playOrder="237" class="chapter">
+        <navLabel>
+          <text>12.1 Moving toward understanding the context</text>
+        </navLabel>
+        <content src="OEBPS/Text/12.xhtml#heading_id_3"/>
+        <navPoint id="navPoint-238" playOrder="238" class="chapter">
+          <navLabel>
+            <text>12.1.1 Focusing on customer needs</text>
+          </navLabel>
+          <content src="OEBPS/Text/12.xhtml#heading_id_4"/>
+        </navPoint>
+        <navPoint id="navPoint-239" playOrder="239" class="chapter">
+          <navLabel>
+            <text>12.1.2 Connecting business strategy, product, and software architecture</text>
+          </navLabel>
+          <content src="OEBPS/Text/12.xhtml#heading_id_5"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-240" playOrder="240" class="chapter">
+        <navLabel>
+          <text>12.2 Collaborative modeling beyond software design</text>
+        </navLabel>
+        <content src="OEBPS/Text/12.xhtml#heading_id_6"/>
+        <navPoint id="navPoint-241" playOrder="241" class="chapter">
+          <navLabel>
+            <text>12.2.1 Different roles, different modeling needs</text>
+          </navLabel>
+          <content src="OEBPS/Text/12.xhtml#heading_id_7"/>
+        </navPoint>
+        <navPoint id="navPoint-242" playOrder="242" class="chapter">
+          <navLabel>
+            <text>12.2.2 Customer journeys and EventStorming: A love story</text>
+          </navLabel>
+          <content src="OEBPS/Text/12.xhtml#heading_id_8"/>
+        </navPoint>
+        <navPoint id="navPoint-243" playOrder="243" class="chapter">
+          <navLabel>
+            <text>12.2.3 Aligning capabilities with your strategy</text>
+          </navLabel>
+          <content src="OEBPS/Text/12.xhtml#heading_id_9"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-244" playOrder="244" class="chapter">
+        <navLabel>
+          <text>12.3 Moving toward implementation</text>
+        </navLabel>
+        <content src="OEBPS/Text/12.xhtml#heading_id_10"/>
+        <navPoint id="navPoint-245" playOrder="245" class="chapter">
+          <navLabel>
+            <text>12.3.1 When to go from collaborative modeling to coding</text>
+          </navLabel>
+          <content src="OEBPS/Text/12.xhtml#heading_id_11"/>
+        </navPoint>
+        <navPoint id="navPoint-246" playOrder="246" class="chapter">
+          <navLabel>
+            <text>12.3.2 From collaborative modeling to code</text>
+          </navLabel>
+          <content src="OEBPS/Text/12.xhtml#heading_id_12"/>
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-247" playOrder="247" class="chapter">
+        <navLabel>
+          <text>12.4 Collaborative software design catalysts</text>
+        </navLabel>
+        <content src="OEBPS/Text/12.xhtml#heading_id_13"/>
+      </navPoint>
+      <navPoint id="navPoint-248" playOrder="248" class="chapter">
+        <navLabel>
+          <text>12.5 Chapter heuristics</text>
+        </navLabel>
+        <content src="OEBPS/Text/12.xhtml#heading_id_14"/>
+      </navPoint>
+      <navPoint id="navPoint-249" playOrder="249" class="chapter">
+        <navLabel>
+          <text>12.6 Further reading</text>
+        </navLabel>
+        <content src="OEBPS/Text/12.xhtml#heading_id_15"/>
+      </navPoint>
+      <navPoint id="navPoint-250" playOrder="250" class="chapter">
+        <navLabel>
+          <text>Summary</text>
+        </navLabel>
+        <content src="OEBPS/Text/12.xhtml#heading_id_16"/>
+      </navPoint>
+    </navPoint>
+    <navPoint id="navPoint-251" playOrder="251" class="chapter">
+      <navLabel>
+        <text>Appendix A.</text>
+      </navLabel>
+      <content src="OEBPS/Text/A.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-252" playOrder="252" class="chapter">
+      <navLabel>
+        <text>index</text>
+      </navLabel>
+      <content src="OEBPS/Text/index.xhtml"/>
+    </navPoint>
+  </navMap>
+</ncx>
