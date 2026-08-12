@@ -7,7 +7,7 @@ weight = 4
 
 ## 用业务理解驱动设计（3.3.1）
 
-问题空间模型（如 Big Picture EventStorm）是设计活动的**输入**；在解决方案空间里对 Bounded Context 做多轮迭代，模型逐步吃进更多域复杂度。第一轮常靠**直觉** + 入门包启发式（语言 / 部门 / 角色）。
+问题空间的领域模型（如 Big Picture EventStorm）是设计活动的**输入**；在解决方案空间里对 Bounded Context 做多轮迭代，领域模型逐步吃进更多域复杂度。第一轮常靠**直觉** + 入门包启发式（语言 / 部门 / 角色）。
 
 **别一上来空谈「该有几个上下文、对不对」**——先挑边界画出来，再迭代：
 
@@ -39,12 +39,12 @@ weight = 4
 
 1. 先与直接造系统的人做几轮设计  
 2. 再向其他利益相关方校验  
-3. 收反馈，继续迭代 → 理解加深，模型变好  
+3. 收反馈，继续迭代 → 理解加深，领域模型变好  
 
 工具不止 EventStorming：
 
 - **Domain Message Flow**：看命令/事件在 Bounded Context 之间流动（Nick Tune，基于 Domain Storytelling，偏上下文设计）
-- **Context Mapping**：模型、语言、团队沟通关系  
+- **Context Mapping**：领域模型、语言、团队沟通关系  
 
 设计永不「完工」，但仍须择机开建（设计 vs 实现的极性见第 10 章）。
 
@@ -66,4 +66,4 @@ weight = 4
 - What changes together, **gets deployed** together.（部署）  
 - 若两年后仍总是一起部署，可考虑合并成一个。（章末启发式）
 
-BigScreen 现状：多域、**单** Bounded Context（泥球）+ **单**部署单元（单体本身不坏，坏在无清晰边界）。新架构：多 Bounded Context + 多部署——例如 Price Calculation / Payments / Seat Allocations 可一对一部署；UI 与 Ticketing 可同部署；PaS 与 Movie Scheduling 同域却可两部署。复杂度被架构**显式**承载，从而撑起「Anytime, Anywhere」。
+BigScreen 现状：多域、**单** Bounded Context（泥球）+ **单**部署单元（单体本身不坏，坏在无清晰边界）。新架构：多 Bounded Context + 多部署——例如 Price Calculation / Payments / Seat Allocations 可一对一部署；UI 与 Ticketing 可同部署；Planning and Scheduling 与 Movie Scheduling 同域却可两部署。复杂度被架构**显式**承载，从而撑起「Anytime, Anywhere」。

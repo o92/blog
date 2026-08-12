@@ -23,11 +23,11 @@ weight = 1
 ### Wardley Mapping
 
 - **中文**：沃德利映射
-- Simon Wardley：先画组织景观（价值链式），再加气候模式、Doctrine，再决策——对标「没棋盘就下棋」的空战略。可与 DDD、Team Topologies 联用（见 Susanne Kaiser 等）；纵轴起步常称 value chain / user needs mapping；横轴为演化阶段（Genesis → Custom → Product → Commodity）。
+- Simon Wardley：先画组织景观（价值链式），再加气候模式、Doctrine，再决策——对标「没棋盘就下棋」的空战略。可与 Domain-Driven Design、Team Topologies 联用（见 Susanne Kaiser 等）；纵轴起步常称 value chain / user needs mapping；横轴为演化阶段（Genesis → Custom → Product → Commodity）。
 
 ### Stressor Analysis
 
-- **中文**：压力源分析（残差理论 / residuality）
+- **中文**：压力源分析
 - 识别未知未来中系统未设计应对的 **stressor** → 影响 → 检测 → 缓解。**禁止按概率筛选**；多 stressor 常收敛到同一 **attractor**（缓解模式），可当气候模式输入韧性设计。
 
 ### Team Topologies
@@ -37,5 +37,10 @@ weight = 1
 
 ### Maturity Mapping
 
-- **中文**：成熟度映射（Burgauer & McDermott）
+- **中文**：成熟度映射
 - Wardley 变体：把能力当实践，沿 Novel → Emerging → Good → Best 演化；顶锚是团队要解的业务问题。比静态技能矩阵更贴语境，可指导实验、文档化、招人 / enabling team。
+
+### OODA Loop
+
+- **中文**：观察–调整–决策–行动环
+- Boyd 决策环（Observe–Orient–Decide–Act）；Wardley 策略环常与之并提。

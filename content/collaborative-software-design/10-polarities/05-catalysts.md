@@ -1,5 +1,5 @@
 +++
-title = "Catalysts（可立刻试）"
+title = "Catalysts"
 weight = 5
 +++
 
@@ -11,7 +11,7 @@ weight = 5
    写下语境里正在观察或挣扎的极性；说明为何是「要管理的极性」而非「要解决的问题」。
 
 2. **拿一两项回群体验证**  
-   选显著影响协作的极性，用 sensemaking 或 climate report 验证，并提议可视化。
+   选显著影响协作的极性，用 sensemaking 或 Climate Report验证，并提议可视化。
 
 3. **一起画极性图**  
    用本章四象限 + signals + actions；事后讨论洞见与结果。
@@ -22,5 +22,5 @@ weight = 5
 - 发现极性 → 验证 → 问「现在可视化有价值吗？」  
 - 用当前极性做 check-in / sensemaking 的极化问题  
 - 极性妨碍本场目标时，可做连上各方需要的提案式推进  
-- 用 climate report 让群体意识到自己在对付极性  
+- 用 Climate Report让群体意识到自己在对付极性  
 - 用四脚对话把倾听从「为反驳」拧到「为理解」  

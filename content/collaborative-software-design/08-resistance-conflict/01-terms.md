@@ -27,7 +27,7 @@ weight = 1
 
 ### Kissing the Group Over the Edge
 
-- **中文**：轻吻群体过边（Myrna Lewis 隐喻）
+- **中文**：轻吻群体过边
 - 温和地把「边」拉进群体意识：护送群体略出舒适区，面对难题、冲突或张力——而非 **hot check-in** 式直接把冲突扔进压力锅。
 
 ### Role Fluidity

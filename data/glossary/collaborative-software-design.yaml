@@ -36,7 +36,7 @@ Social Dynamics:
     - "社会动力学"
 
 Catalyst:
-  summary: "书中比喻：Facilitator（以及协作软件设计本身）催化团队接管架构所有权、做出更可持续的设计决策——不是替团队「钦定」设计。"
+  summary: "书中比喻：Facilitator，以及协作软件设计本身，催化团队接管架构所有权、做出更可持续的设计决策——不是替团队「钦定」设计。"
   source: "collaborative-software-design/01-need/01-terms.md#Catalyst"
   aliases:
     - "催化剂"
@@ -77,11 +77,10 @@ Enabler:
     - "赋能者"
     - "促成者"
 
-"Scrum（书中用法）":
+Scrum:
   summary: "书中多指开发团队采用的站会、迭代、细化等仪式。若只有开发侧在做这些、业务与价值链仍是瀑布，就落入 Agile Theater——不等于组织已真正敏捷。更完整见站内 Scrum 笔记。"
-  source: "collaborative-software-design/01-need/01-terms.md#Scrum（书中用法）"
+  source: "collaborative-software-design/01-need/01-terms.md#Scrum"
   aliases:
-    - "Scrum"
     - "SCRUM"
 
 Business Problem:
@@ -297,7 +296,7 @@ Fishbowl:
     - "无政府式"
 
 Guerilla:
-  summary: "不在正式会话里用，而是为争取买账：公开角落自己开画、故意露假设/错误，引路人加入。"
+  summary: "不在正式会话里用，而是为争取 Buy-in：公开角落自己开画、故意露假设/错误，引路人加入。"
   source: "collaborative-software-design/04-ingredients/01-terms.md#Guerilla"
   aliases:
     - "游击建模"
@@ -510,14 +509,14 @@ Decision vs Outcome:
     - "决策 vs 结果"
 
 Buy-in:
-  summary: "相关利益相关方主动支持并参与落实决策后行动。买账不足会表现为拖延、挖苦、闲话、消极执行等阻力。Lewis Deep Democracy 把买账层级分为 Idea / Suggestion / P…"
+  summary: "相关利益相关方主动支持并参与落实决策后行动。Buy-in 不足会表现为拖延、挖苦、闲话、消极执行等阻力。Lewis Deep Democracy 把 Buy-in 层级分为 Idea / Suggestion / P…"
   source: "collaborative-software-design/09-decisions/01-terms.md#Buy-in"
   aliases:
-    - "买账"
     - "认同"
+    - "买账"
 
 Autocracy:
-  summary: "持有决策权的人不把该权利下放给群体：一人（或极少咨询）拍板。快、清晰、歧义少；但可能压制创意、伤士气，并在无买账时触发阻力线。仍有一人拥有「decision rights」。"
+  summary: "持有决策权的人不把该权利下放给群体：一人（或极少咨询）拍板。快、清晰、歧义少；但可能压制创意、伤士气，并在无 Buy-in 时触发阻力线。仍有一人拥有「decision rights」。"
   source: "collaborative-software-design/09-decisions/01-terms.md#Autocracy"
   aliases:
     - "专制决策"
@@ -534,9 +533,9 @@ Go Fishing:
   aliases:
     - "去钓鱼"
 
-"Consent（决策语境）":
-  summary: "全组集体同意由子群去做某项决策，再带回全组。仍属民主一脉，买账相对高，效率更好——设计决策常可这样拆。"
-  source: "collaborative-software-design/09-decisions/01-terms.md#Consent（决策语境）"
+Consent:
+  summary: "全组集体同意由子群去做某项决策，再带回全组。仍属民主一脉，Buy-in 相对高，效率更好——设计决策常可这样拆。"
+  source: "collaborative-software-design/09-decisions/01-terms.md#Consent"
   aliases:
     - "授权同意"
     - "给同意"
@@ -558,7 +557,6 @@ Crusaders:
   summary: "极性中推动「该换到另一极」的人：盯着当前极的负面与变革必要。易只看见己侧好处与对侧坏处。"
   source: "collaborative-software-design/10-polarities/01-terms.md#Crusaders"
   aliases:
-    - "十字军"
     - "变革推动者"
 
 Tradition Bearers:
@@ -585,30 +583,39 @@ Pros-Cons-and-Fixes:
   aliases:
     - "利弊与修补清单"
 
-"ADR (Architectural Decision Record)":
+Architectural Decision Record:
   summary: "Michael Nygard（2011）起流行的决策文档：至少含 Title / Status / Context / Decision / Consequences。格式自由（画布 / Mar…"
-  source: "collaborative-software-design/11-communicate-document/01-terms.md#ADR (Architectural Decision Record)"
+  source: "collaborative-software-design/11-communicate-document/01-terms.md#Architectural Decision Record"
   aliases:
     - "架构决策记录"
+    - "ADR"
 
 Whirlpool:
-  summary: "Eric Evans 的模型探索图：非线性反馈环——Harvest & Document → 场景 / 模型 → code probe → 再挑战。协作建模应视为多环，而非「发现→战略→写码」直…"
+  summary: "Eric Evans 的领域模型探索图：非线性反馈环——Harvest & Document → 场景 / 领域模型 → code probe → 再挑战。协作建模应视为多环，而非「发现→战略→写码」直线。"
   source: "collaborative-software-design/11-communicate-document/01-terms.md#Whirlpool"
   aliases:
     - "建模漩涡"
 
 Living Documentation:
-  summary: "决策与模型随反馈持续改写；文档不是终点石碑。伴随「偶尔扔掉模型」——因为语境、人、市场、预算都在变。"
+  summary: "决策与领域模型随反馈持续改写；文档不是终点石碑。伴随「偶尔扔掉领域模型」——因为语境、人、市场、预算都在变。"
   source: "collaborative-software-design/11-communicate-document/01-terms.md#Living Documentation"
   aliases:
     - "活文档"
 
 Model Fitting:
-  summary: "因依恋既有模型，扭曲、增删问题域要素硬塞进旧模型，而不是按新信息重设计。常叠 availability / loss aversion / sunk cost。"
+  summary: "因依恋既有领域模型，扭曲、增删问题域要素硬塞进旧领域模型，而不是按新信息重设计。常叠 availability / loss aversion / sunk cost。"
   source: "collaborative-software-design/11-communicate-document/01-terms.md#Model Fitting"
   aliases:
+    - "领域模型硬塞"
+    - "领域模型拟合"
     - "模型硬塞"
     - "模型拟合"
+
+Domain Model:
+  summary: "对某块业务知识的显式表达（事件怎么串、概念怎么切、边界怎么划等）。协作建模是把各人心里的理解贴到墙上，变成可改、可对比、可推翻的领域模型——不是 Business Model Canvas 那种「商业模式」。"
+  source: "collaborative-software-design/02-collaborative-modeling/01-terms.md#Domain Model"
+  aliases:
+    - "领域模型"
 
 Customer Journey:
   summary: "从客户视角看更整体的体验：触点与渠道（营销、客服、线上线下员工等）。BigScreen 例：找片 → 观影 → 回家评价。常作 User Story Mapping / EventStormin…"
@@ -629,7 +636,7 @@ Impact Mapping:
     - "影响映射"
 
 Wardley Mapping:
-  summary: "Simon Wardley：先画组织景观（价值链式），再加气候模式、Doctrine，再决策——对标「没棋盘就下棋」的空战略。可与 DDD、Team Topologies 联用（见 Susann…"
+  summary: "Simon Wardley：先画组织景观（价值链式），再加气候模式、Doctrine，再决策——对标「没棋盘就下棋」的空战略。可与 Domain-Driven Design、Team Topologies 联用（见 Susann…"
   source: "collaborative-software-design/12-beyond/01-terms.md#Wardley Mapping"
   aliases:
     - "沃德利映射"
@@ -677,3 +684,75 @@ Demons:
     - "恶灵"
     - "拦路鬼"
 
+Pivotal Event:
+  summary: "EventStorming 时间线上把流程切成几大段的关键事件；常用来拆组深挖或划边界讨论的锚点。"
+  source: "collaborative-software-design/03-design-architecture/01-terms.md#Pivotal Event"
+  aliases:
+    - "枢纽事件"
+
+Enabling Constraints:
+  summary: "限制选项以促进流动的协作规则（如协作风格）：少到足以聚焦，又松到仍能发现。"
+  source: "collaborative-software-design/04-ingredients/01-terms.md#Enabling Constraints"
+  aliases:
+    - "赋能约束"
+    - "enabling constraints"
+
+Question–Heuristic–Answer:
+  summary: "Wirfs-Brock 卡片写法：把「对方设计在解什么问题、用什么启发式、得出什么答案」写清，便于对比备选。"
+  source: "collaborative-software-design/09-decisions/01-terms.md#Question–Heuristic–Answer"
+  aliases:
+    - "问题–启发式–答案"
+    - "QHE"
+
+Highest Paid Person's Opinion:
+  summary: "决策被职位/薪酬最高的人意见牵着走的现象。"
+  source: "collaborative-software-design/09-decisions/01-terms.md#Highest Paid Person's Opinion"
+  aliases:
+    - "最高薪者意见"
+    - "HIPPO"
+
+Streamlet:
+  summary: "价值流上可由一个团队端到端拥有的一小段；Wardley / user-needs 映射时常用来找可交付边界。"
+  source: "collaborative-software-design/10-polarities/01-terms.md#Streamlet"
+  aliases:
+    - "价值流小段"
+    - "streamlets"
+
+OODA Loop:
+  summary: "Boyd 决策环：Observe–Orient–Decide–Act（观察–调整–决策–行动）；Wardley 策略环常与之并提。"
+  source: "collaborative-software-design/12-beyond/01-terms.md#OODA Loop"
+  aliases:
+    - "观察–调整–决策–行动环"
+    - "OODA"
+
+C4 Model:
+  summary: "Simon Brown：Context / Container / Component / Code 分层架构图；书中用于传播架构变化。"
+  source: "collaborative-software-design/11-communicate-document/01-terms.md#C4 Model"
+  aliases:
+    - "C4 模型"
+    - "C4"
+
+Subject Matter Expert:
+  summary: "对某业务或技术主题有深度知识的人；引导者若同时也是主题专家，需合约后再换 stance 发言。"
+  source: "collaborative-software-design/05-facilitating/01-terms.md#Subject Matter Expert"
+  aliases:
+    - "主题专家"
+    - "SME"
+
+Product Owner:
+  summary: "常代表业务优先级与需求入口的角色；书中案例常经 Product Owner 收需求，也可能把实现细节写进 user story。"
+  source: "collaborative-software-design/02-collaborative-modeling/01-terms.md#Product Owner"
+  aliases:
+    - "产品负责人"
+
+Business Analyst:
+  summary: "分析业务问题与需求的角色；协作建模常与 Product Owner、领域专家一起出现。"
+  source: "collaborative-software-design/02-collaborative-modeling/01-terms.md#Business Analyst"
+  aliases:
+    - "业务分析师"
+
+User Experience:
+  summary: "用户使用产品时的体验相关角色/工作；书中常与 Product Owner、客服等并列作专家来源。"
+  source: "collaborative-software-design/02-collaborative-modeling/01-terms.md#User Experience"
+  aliases:
+    - "用户体验"

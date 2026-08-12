@@ -49,3 +49,8 @@ weight = 1
 
 - **中文**：领域消息流（图）
 - Nick Tune 基于 Domain Storytelling、面向 Bounded Context 设计的建模工具：看命令/事件如何在上下文间流动。可与 Context Mapping 等并用，暴露新权衡。
+
+### Pivotal Event
+
+- **中文**：枢纽事件
+- EventStorming 时间线上把流程切成几大段的关键事件；常用来拆组深挖或划边界讨论的锚点。

@@ -7,7 +7,7 @@ weight = 4
 
 ## Collaborative Modeling vs Coding 是极性（12.3.1）
 
-设计要上线才知是否可行；便利贴比重构便宜。——这是第 10 章要管理的极性，不是一劳永逸的阈值。
+设计要上线才知是否可行；便利贴比重构成本更低。——这是第 10 章要管理的极性，不是一劳永逸的阈值。
 
 与群体画极性图：两侧正面可称为 Domain-Oriented Modeling，两侧负面可称为 Shallow Technical Programming（书图口径）。再约定 **signals / actions**，例如：
 

@@ -1,5 +1,5 @@
 +++
-title = "找后果、Pros-Cons-and-Fixes 与 ADR"
+title = "找后果、Pros-Cons-and-Fixes 与 Architectural Decision Record"
 weight = 2
 +++
 
@@ -10,7 +10,7 @@ weight = 2
 1. 弄清所选备选的 **consequences**  
 2. 把决策**落到纸上**  
 
-否则后人只能猜「他们当时在想什么」。荷兰谚语大意：烫了屁股就得坐水泡——做了就要扛后果；协作里却很少把后果写下来。可视化讨论比纯口嗨更容易收束。
+否则后人只能猜「他们当时在想什么」。荷兰谚语大意：烫了屁股就得坐水泡——做了就要扛后果；协作里却很少把后果写下来。可视化讨论比纯靠口头更容易收束。
 
 ## Pros-Cons-and-Fixes（11.1.1）
 
@@ -29,16 +29,16 @@ weight = 2
 - 不是每个 con 都有 fix——有时要接受负面（拆服务后全局复杂度上升，只能管控、不能抹掉）  
 - Fix 须**可执行**：列表本身是研究时刻；「查一下是否」「鼓励大家」不够——不确定能否雇人时，不能假装已有 fix  
 - 两方案难抉时，显式写 tradeoff：选 A 得 xyz 付 ab；选 B 得 abz 付 bc  
-- 盯住整张表，别抠一两行空转；可用 climate report / 休息 / 隔天再谈拉回焦点  
-- 每条须**能独立站住**：勿写「更好边界」——两年后 BBoM 没了就看不懂。追问「比什么更好？快在哪？」  
+- 盯住整张表，别只抠一两行、讨论原地打转；可用 Climate Report / 休息 / 隔天再谈拉回焦点  
+- 每条须**能独立站住**：勿写「更好边界」——两年后 Big Ball of Mud 没了就看不懂。追问「比什么更好？快在哪？」  
 - 可加 **Neutral** 列（对 A 队中性、对 B 队可能是 con——如学 Python）  
 - 团队时：个人先写 → 合并；cons 与 fixes **两趟**，让每人也能给别人的 cons 想 fix  
 
 > GUIDING：「better / more / less / extra」等词是挖真后果的扳机。
 
-## ADR：捕获整次决策（11.1.2）
+## Architectural Decision Record：捕获整次决策（11.1.2）
 
-只记「选了谁」不够。ADR 投资现在，减少未来迷惑。最低字段：
+只记「选了谁」不够。Architectural Decision Record 投资现在，减少未来迷惑。最低字段：
 
 | 字段 | 作用 |
 |--|--|
@@ -48,6 +48,6 @@ weight = 2
 | **Decision** | 选了什么（主动语态：我们将…），含 why；可列未选方案与取舍理由 |
 | **Consequences** | 可直接接 Pros-Cons-and-Fixes |
 
-BigScreen 在 Miro 用 ADR 画布，贴着设计与利弊表。Accepted 可标日期；上线前永无 100% 确定——新信息来了就**新开 ADR** 并标记旧为 Superseded，而不是抹掉历史。
+BigScreen 在 Miro 用 Architectural Decision Record 画布，贴着设计与利弊表。Accepted 可标日期；上线前永无 100% 确定——新信息来了就**新开 Architectural Decision Record** 并标记旧为 Superseded，而不是抹掉历史。
 
 可持续决策 = 在不确定下决策 + **愿意重评**。

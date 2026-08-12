@@ -1,5 +1,5 @@
 +++
-title = "Catalysts（可立刻试）"
+title = "Catalysts"
 weight = 5
 +++
 
@@ -11,6 +11,6 @@ weight = 5
    在细化会或类似讨论里，把对话中的业务进展写成 Domain Event，排在时间线上（可独自记，也可请大家一起贴）。立刻让「我们在谈哪一步」可见。
 
 2. **You think it, you write it**  
-   与利益相关方谈需求时约定：想到就写下来/画出来，把个人心智模型贡献进集体可见模型，减少「以为对齐了」。
+   与利益相关方谈需求时约定：想到就写下来/画出来，把个人心智模型贡献进集体可见的领域模型，减少「以为对齐了」。
 
 （原书 2.5 Further reading 列了 EventStorming、Domain Storytelling、Evans、Hermans《The Programmer’s Brain》等；需要深挖工具时再查原书书单。）

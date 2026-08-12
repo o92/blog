@@ -7,14 +7,14 @@ weight = 4
 
 ## 卡住长什么样（10.3.1）
 
-咨询案例：四队共啃带 **shared kernel** 的单体，向往微服务与自治。共享模型一改就要跨队对齐，发布与升级都慢——**Centralized vs Decentralized** 决策极性被当成「上微服务就解决」。把 both/and 当 either/or，冲突与失望会上来。
+咨询案例：四队共啃带 **shared kernel** 的单体，向往微服务与自治。共享领域模型一改就要跨队对齐，发布与升级都慢——**Centralized vs Decentralized** 决策极性被当成「上微服务就解决」。把 both/and 当 either/or，冲突与失望会上来。
 
 ## 引导者怎么管极性（10.3.2）
 
 看见「必须二选一」的说服战时，先**显式化极性**：
 
 - Sensemaking：两极放线段两端，请人站位  
-- 或 **Climate report**  
+- 或 **Climate Report**  
 - 再建议一起填极性图，或请群体授权由引导者在本场代管摆动  
 
 > GUIDING：把当前影响群体的极性写成 check-in / sensemaking 的**极化问题**。
@@ -23,7 +23,7 @@ weight = 4
 
 Value chain mapping（Wardley 纵轴 / user needs mapping 语感）时，Deep vs Wide 又冒头。有人想深挖用户核心需要，目标却是找团队可拥有的 streamlets。
 
-可用 **Proposal 级专制边界** 推进（说清目标），同时用角色流动性追问「为什么要再深？」——常是要校验 UX 假设。需要都连进提案时，专制提案也能服务极性管理。
+可用 **Proposal 级专制边界** 推进（说清目标），同时用角色流动性追问「为什么要再深？」——常是要校验 User Experience 假设。需要都连进提案时，专制提案也能服务极性管理。
 
 > GUIDING：极性已妨碍本场目标时，可做**连上各方需要**的提案式（偏专制）推进。
 
@@ -31,9 +31,9 @@ Value chain mapping（Wardley 纵轴 / user needs mapping 语感）时，Deep vs
 
 ### Climate report → Conversation on four feet
 
-小组画链时 Wide 的 downside 再冒头（有人要深挖 Movies 组件逻辑，有人要先看整图）。引导给 climate report：「各组地图已完成，有人在争该细到哪」；点头承认后再报「来回打断多」。
+小组画链时 Wide 的 downside 再冒头（有人要深挖 Movies 组件逻辑，有人要先看整图）。引导给 Climate Report：「各组地图已完成，有人在争该细到哪」；点头承认后再报「来回打断多」。
 
-> GUIDING：用 climate report 让群体意识到自己在对付极性。
+> GUIDING：用 Climate Report让群体意识到自己在对付极性。
 
 群体同意插一段探索 Deep vs Wide 后，可开 **conversation on four feet**：陈述 → 站位 → 对面再陈述——把「听了要反驳」拧成「听了要理解」。
 

@@ -17,7 +17,7 @@ weight = 4
 
 ## BigScreen：先让角色流动
 
-设计 EventStorming 后两套 Bounded Context 备选仍卡住（Back-Office Separated vs Payments Separated）。用改编的 Small Group Diverge and Converge：偏好对立的人结对互访，抽出对方设计在解什么问题，写成 **QHE**（Question–Heuristic–Answer，Wirfs-Brock）卡片。
+设计 EventStorming 后两套 Bounded Context 备选仍卡住（Back-Office Separated vs Payments Separated）。用改编的 Small Group Diverge and Converge：偏好对立的人结对互访，抽出对方设计在解什么问题，写成 **Question–Heuristic–Answer**卡片。
 
 效果：决策变具体；**role fluidity**（听懂对方需要）。两边都冒出「怎么拆团队」——
 
@@ -33,7 +33,7 @@ weight = 4
 
 Caledon 建议再拆：定价与支付是两个业务问题 → 重命名为 Pricing and Payments。投票：3 人维持原状，15 人赞成再拆。问少数「怎样才肯一起走」——Jack 的点不在「拆本身」，而在「右边改过了，左边 Rose 的设计也该同等探索」。底层需要常在投票后才露头；协作场往往偏爱外向快决策者，分析型人可能在投票时或会后才赶上。
 
-Rose 起初说「不确定需要什么」——安静下来本身可能是 edge behavior。引导用积极倾听（「你有点不确定？」+ 沉默）托出真忧虑：再拆 → 跨边界通信暴增；团队习惯单模型、一致事务、单代码库；没经验写分布式会成项目风险。把阴影照出来，比实现期再炸便宜。用 role theory：问「谁也担心跨边界通信太复杂？」——多数举手 → 下一场先做 domain message flow（暂缓 Example Mapping），两边设计都建模。这里用的是 **Proposal** 级专制边界：纳入已知需要、仍留调整口；专制本身不坏，关键是接上群体智慧与需要。
+Rose 起初说「不确定需要什么」——安静下来本身可能是 edge behavior。引导用积极倾听（「你有点不确定？」+ 沉默）托出真忧虑：再拆 → 跨边界通信暴增；团队习惯单一领域模型、一致事务、单代码库；没经验写分布式会成项目风险。把阴影照出来，比等到实现期再爆成本更低。用 role theory：问「谁也担心跨边界通信太复杂？」——多数举手 → 下一场先做 domain message flow（暂缓 Example Mapping），两边设计都建模。这里用的是 **Proposal** 级专制边界：纳入已知需要、仍留调整口；专制本身不坏，关键是接上群体智慧与需要。
 
 ## 多数仍不够时：Go fishing!（9.3.2）
 
@@ -49,7 +49,7 @@ Rose 起初说「不确定需要什么」——安静下来本身可能是 edge 
 4. 轮流分享、不打断（像 check-in）  
 5. 再投一轮；纳入少数条件（如「有编舞经验后再开辩」）
 
-更深的「throwing arrows」（刺激互批两侧）需专业冲突引导，本书少用。Go fishing 把水位线再压低一点，让脆弱可见——Jack 分享「想追新技术，但『小步学习失败』说到了」——阴影出来，群体才好往前。
+更深的「throwing arrows」（刺激互批两侧）需专业冲突引导，本书少用。Go fishing 把意识水位线（Deep Democracy：水面下还有未说出口的）再压低一点，让脆弱可见——Jack 分享「想追新技术，但『小步学习失败』说到了」——阴影出来，群体才好往前。
 
 ## 与极性的交接
 

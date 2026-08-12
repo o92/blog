@@ -18,7 +18,7 @@ glossary = ["collaborative-software-design", "ddd"]
 
 | 笔记 | 关系 |
 |--|--|
-| [Domain-Driven Design（DDD）]({{< ref "ddd" >}}) | 书把协作建模当作落实 Domain-Driven Design 原则（共享理解、统一语言、限界上下文）的常见实践；用协作建模**不必**强制上完整的 Domain-Driven Design |
+| [Domain-Driven Design]({{< ref "ddd" >}}) | 书把协作建模当作落实 Domain-Driven Design 原则（共享理解、统一语言、限界上下文）的常见实践；用协作建模**不必**强制上完整的 Domain-Driven Design |
 | [产品运作模型]({{< ref "product-operating-model" >}}) | 都强调「先理解问题/结果，再堆功能」；本书更偏领域建模会话与社会动力学 |
 | [Scrum]({{< ref "scrum" >}}) | 书批评仅开发侧仪式化的 **Agile theater**；真正敏捷架构需要团队能与利益相关方共做设计 |
 

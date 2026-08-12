@@ -1,5 +1,5 @@
 +++
-title = "Catalysts（可立刻试）"
+title = "Catalysts"
 weight = 5
 +++
 
@@ -13,7 +13,7 @@ weight = 5
 2. **事后反思这张表**  
    何时有用？对你 / 团队在什么情境下有价值？
 
-3. **小步试 ADR**  
+3. **小步试 Architectural Decision Record**  
    不要一上来就重文档工程；用轻量格式试，看团队是否觉得有价值。
 
 ## 可抄进 journal 的启发式（11.5，摘要）
@@ -22,9 +22,9 @@ weight = 5
 
 - Pros-Cons 里「better / more / less / extra」→ 挖真后果  
 - 白板过大 → 按团队 / 架构拆  
-- 写 ADR 时冻结模型，后续用副本  
+- 写 Architectural Decision Record 时冻结领域模型，后续用副本  
 
 **Value-based**
 
 - 通知未出席但受影响或有专长的人  
-- 别恋爱模型；该扔就扔  
+- 别迷恋领域模型；该扔就扔  

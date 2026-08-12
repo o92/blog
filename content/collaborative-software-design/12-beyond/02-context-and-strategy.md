@@ -7,7 +7,7 @@ weight = 2
 
 ## 先理解语境（12.1）
 
-第 2 章的 Business Model Canvas 不只给管理层：开发一起做，能改价值主张洞见（Fernández「Black Ops Domain-Driven Design」：CEO 与开发分开画再对比）。
+第 2 章的 Business Model Canvas 不只给管理层：开发一起做，能改价值主张洞见（Fernández「Black Ops Domain-Driven Design」：Chief Executive Officer 与开发分开画再对比）。
 
 ### 盯客户需要，别盯现成方案（12.1.1）
 
@@ -21,7 +21,7 @@ Business Model Canvas 帮对齐目标，却难回答「架构是否还跟得上�
 
 ### Wardley Mapping
 
-Wardley 策略环（孙武五事 + Boyd **OODA**）：先映射当前景观 → 气候模式 → Doctrine → 带目的的决策。给产品、团队、软件设计更贴语境的动作，而不是通用口号。
+Wardley 策略环（孙武五事 + Boyd **OODA Loop**）：先映射当前景观 → 气候模式 → Doctrine → 带目的的决策。给产品、团队、软件设计更贴语境的动作，而不是通用口号。
 
 - **纵轴**：价值链式 / user needs（用户锚 → 需要 → 能力）——第 10 章已用它找 streamlets  
 - **横轴**：演化阶段 Genesis / Custom Build / Product & Rental / Commodity & Utility——协作标定能力所处阶段，影响竞争、风险与管理方式  
@@ -34,4 +34,4 @@ BigScreen：把能力摆上演化轴后，立刻有人问「为何自建排片�
 
 做法：尽量列 stressor → 影响 / 检测 / 缓解（或从一个深挖、再自然冒出更多）。例：人人在家用 VR 看片 → 票房跌 → 媒体与销量监测 → 线上 VR 片库等缓解。缓解模式可回灌架构（韧性 Bounded Context）。列不出多少 → 可能系统并不复杂。
 
-组织若严重竖井、无人有全图：先做 Big Picture EventStorming，再蒸馏业务侧面。
+组织若严重的部门墙（silo）、无人有全图：先做 Big Picture EventStorming，再蒸馏业务侧面。

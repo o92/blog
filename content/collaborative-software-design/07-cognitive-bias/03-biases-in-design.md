@@ -13,7 +13,7 @@ weight = 3
 
 ## Law of Triviality / bikeshedding（7.2.2）
 
-组织在**琐事**上耗时远超重要难题。划 Bounded Context 时长时间争论名字，却回避：职责是什么、对外接口怎么服务两套系统、如何从存量拆出——难讨论常因开发者与架构师旧冲突的阴影仍在。琐事安全、易发言；真正设计冲突被绕开，模型质量受害。
+组织在**琐事**上耗时远超重要难题。划 Bounded Context 时长时间争论名字，却回避：职责是什么、对外接口怎么服务两套系统、如何从存量拆出——难讨论常因开发者与架构师旧冲突的阴影仍在。琐事安全、易发言；真正设计冲突被绕开，领域模型质量受害。
 
 ## False-Consensus Effect（7.2.3）
 
@@ -21,13 +21,13 @@ weight = 3
 
 ## Availability Bias（7.2.4）
 
-脑中**立刻浮现**的例子被当成重要；「好」常被换成「容易想起」。协作里常偏向**第一版**设计。Movie Scheduling：先做出简单「movie」模型，后做出更贴「某日某厅某时放映」的「movie showing」——有人说左图更好，「因为想得快、少挣扎」——把可得性/省力当成了质量。相关还有 functional fixedness、bandwagon、status quo、anchoring。刚 EventStorm 过同一时间线、又无模板时，Example Mapping 可能写不出新例子——卡在现状与可得性。
+脑中**立刻浮现**的例子被当成重要；「好」常被换成「容易想起」。协作里常偏向**第一版**设计。Movie Scheduling：先做出简单「movie」领域模型，后做出更贴「某日某厅某时放映」的「movie showing」——有人说左图更好，「因为想得快、少挣扎」——把可得性/省力当成了质量。相关还有 functional fixedness、bandwagon、status quo、anchoring。刚 EventStorm 过同一时间线、又无模板时，Example Mapping 可能写不出新例子——卡在现状与可得性。
 
 ## Loss Aversion（7.2.5）
 
-对损失的情绪强于同等收益。上线已久的模型难放手；口头要灵活，实际舍不得改。常伴 **model fitting**：扭曲或裁剪问题域，硬塞进已有抽象——怕丢面子时尤甚。
+对损失的情绪强于同等收益。上线已久的领域模型难放手；口头要灵活，实际舍不得改。常伴 **model fitting**：扭曲或裁剪问题域，硬塞进已有抽象——怕丢面子时尤甚。
 
-BigScreen：`Movie Showing`（slot + movie）上线很好用后，业务要加「企业包场 + 接待」。开发怕丢现模型、怕在业务面前丢脸，于是说「包场就是两个 slot：接待 + 电影」，给 Showing 加 `IsPrivate`、给 slot 加 `IsReception`（接待无厅）——典型 model fitting。
+BigScreen：`Movie Showing`（slot + movie）上线很好用后，业务要加「企业包场 + 接待」。开发怕丢掉现有领域模型、怕在业务面前丢脸，于是说「包场就是两个 slot：接待 + 电影」，给 Showing 加 `IsPrivate`、给 slot 加 `IsReception`（接待无厅）——典型 model fitting。
 
 ## Additive Bias（7.2.6）
 

@@ -1,5 +1,5 @@
 +++
-title = "Catalysts（可立刻试）"
+title = "Catalysts"
 weight = 5
 +++
 
@@ -31,7 +31,7 @@ weight = 5
 
 - Do sensemaking to test your assumptions  
 - Ask who can relate to (even part of) what was just discussed  
-- Indicate emerging pivotal events；Create different groups between pivotal events  
+- Indicate emerging Pivotal Events；Create different groups between Pivotal Events  
 - Add minority wisdom to the group  
 - Discuss conflicts with the entire group；Split and merge during diverging conversations  
 

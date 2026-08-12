@@ -7,7 +7,7 @@ weight = 3
 
 ## 什么是 Heuristic（3.2 / 3.2.1）
 
-会话里常卡住：边界画哪、便签算不算重复、话题跑飞……都需要**做决定才能往前**。经验会沉淀成简单规则——**Heuristic（启发式）**。
+会话里常卡住：边界画哪、便签算不算重复、话题跑飞……都需要**做决定才能往前**。经验会沉淀成简单规则——**Heuristic**。
 
 定义：帮你（快速）做决策的简单规则。
 
@@ -27,7 +27,7 @@ weight = 3
 
 ## Bounded Context Pattern
 
-第 2 章提过；Evans：模型被定义并适用的边界（常是子系统或某团队工作范围）。大项目多模型（用户需要不同、团队独立、工具不同）；硬揉在一起易出 bug、沟通乱。Bounded Context 让术语在边界内无歧义，模型可独立演化。协作会话大量时间在谈边界：什么进、什么出、谁负责、依赖在哪——这正是在设计 Bounded Context。有用启发：「Find the natural boundaries in the domain。」
+第 2 章提过；Evans：领域模型被定义并适用的边界（常是子系统或某团队工作范围）。大项目多种领域模型（用户需要不同、团队独立、工具不同）；硬揉在一起易出 bug、沟通乱。Bounded Context 让术语在边界内无歧义，领域模型可独立演化。协作会话大量时间在谈边界：什么进、什么出、谁负责、依赖在哪——这正是在设计 Bounded Context。有用启发：「Find the natural boundaries in the domain。」
 
 ## Competing Heuristics（3.2.2）
 
@@ -35,7 +35,7 @@ weight = 3
 
 **例 1：大图 EventStorm 强制时间线**
 
-- Create different groups between pivotal events.（拆组加快进度）
+- Create different groups between Pivotal Events.（拆组加快进度）
 - Add minority wisdom to the group.（全员保全视角）
 
 都对：拆组可能丢少数声音；保全员可能走不完时间线。经验演化后的做法：先拆组推进，约每 30 分钟全员汇合走一遍时间线；汇合时多问「谁能多少对上一点刚才说的？」尽量把少数智慧补回小组。

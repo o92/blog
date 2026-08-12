@@ -35,6 +35,6 @@ weight = 3
 - **Signals / observations**：偏某一极太久时的可见行为（语境相关；可从带阈值起步再放宽——2 分钟内 10 人中 4 人看表，可能该换极）  
 - **Actions / heuristics**：往另一极移动的动作（一对一或一对多）
 
-例：多人看表 / 混乱感 → climate report 或 sensemaking；确认混乱后 brainstorm 缺口或换场景建模。观察尽量**中立陈述**，少加解读。
+例：多人看表 / 混乱感 → Climate Report或 sensemaking；确认混乱后 brainstorm 缺口或换场景建模。观察尽量**中立陈述**，少加解读。
 
 练习：自己填一张「Collaborative Modeling vs Coding」极性图（象限 + 信号 + 动作）——第 12 章还会用到。

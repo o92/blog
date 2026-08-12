@@ -7,7 +7,7 @@ weight = 3
 
 ## 不同角色，不同建模需要（12.2.1）
 
-协作建模也服务 Product Owner / Product Manager（需求）、CTO（战略）、UX（旅程）——作者甚至用 EventStorming 办婚礼。工具可跨域；需要不同。
+协作建模也服务管需求的 Product Owner / Product Manager、管战略的 Chief Technology Officer、管旅程的 User Experience——作者甚至用 EventStorming 办婚礼。工具可跨域；需要不同。
 
 ### Customer Journey vs User Journey
 
@@ -20,7 +20,7 @@ weight = 3
 
 ### User Story Mapping
 
-把用户故事贴回客户旅程叙事：交付相关角色同场，避免「自嗨式 backlog」。故事从叙事流出，增量与对齐更容易。
+把用户故事贴回客户旅程叙事：交付相关角色同场，避免「自说自话式 backlog」。故事从叙事流出，增量与对齐更容易。
 
 ### Impact Mapping
 
@@ -35,7 +35,7 @@ weight = 3
 
 ## Customer Journey + EventStorming（12.2.2）
 
-UX 设计独自画好的旅程常躺在共享盘里——EventStorm 现场才发现开发几乎没人见过。应把已有旅程 / 线框带进 Big Picture：校验旅程是否嵌得进架构，并用领域事件标痛点与机会。旅程管「客户要经历什么」；EventStorm 补「系统如何支撑」。
+User Experience 设计独自画好的旅程常躺在共享盘里——EventStorm 现场才发现开发几乎没人见过。应把已有旅程 / 线框带进 Big Picture：校验旅程是否嵌得进架构，并用领域事件标痛点与机会。旅程管「客户要经历什么」；EventStorm 补「系统如何支撑」。
 
 ## Capabilities 对齐策略（12.2.3）
 
@@ -43,7 +43,7 @@ UX 设计独自画好的旅程常躺在共享盘里——EventStorm 现场才发
 
 ### Team Topologies
 
-最解耦的微服务架构也可能把横切与协作成本堆给团队——**认知负荷**（Sweller）是工程管理议题。与管理一起用 Team Topologies 映射团队与交互，对准独立业务流；随系统变化把高协作关系演进到 as-a-service。结合 DDD + Wardley 见 Kaiser 等延伸阅读。
+最解耦的微服务架构也可能把横切与协作成本堆给团队——**认知负荷**（Sweller）是工程管理议题。与管理一起用 Team Topologies 映射团队与交互，对准独立业务流；随系统变化把高协作关系演进到 as-a-service。结合 Domain-Driven Design + Wardley 见 Kaiser 等延伸阅读。
 
 ### Maturity Mapping / Change mapping
 
