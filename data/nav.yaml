@@ -13,7 +13,12 @@ categories:
             book: ddd
           - title: 协作软件设计
             book: collaborative-software-design
-      # 预留二级（暂无笔记不挂空节点）：软件架构、软件需求、软件测试…
+      - title: 软件架构
+        ka: Software Architecture
+        children:
+          - title: Google AIP（General）
+            book: google-aip-general
+      # 预留二级（暂无笔记不挂空节点）：软件需求、软件测试…
   - title: 项目管理
     bok: PMBOK
     children:

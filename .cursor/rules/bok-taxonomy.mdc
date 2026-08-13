@@ -21,6 +21,8 @@ alwaysApply: true
 
 - 软件工程 → **软件设计** → **设计模式** → `content/design-patterns`
 - 软件工程 → **软件设计** → 领域驱动设计(DDD) → `content/ddd`
+- 软件工程 → **软件设计** → 协作软件设计 → `content/collaborative-software-design`
+- 软件工程 → **软件架构** → Google AIP（General） → `content/google-aip-general`
 - 项目管理 → **敏捷** → Scrum → `content/scrum`
 - 项目管理 → **产品管理** → 产品运作模型 (Product Operating Model) → `content/product-operating-model`
 
@@ -42,6 +44,7 @@ alwaysApply: true
 | 充血/贫血、Domain Model；DDD 战术/战略 | 软件工程 | 软件设计 | 领域驱动设计 |
 | GoF 创建型/结构型/行为型 | 软件工程 | 软件设计 | 设计模式 |
 | 分层/六边形、微服务、EDA（系统结构） | 软件工程 | 软件架构 | （按主题开笔记） |
+| Google AIP（General）资源导向 API 规范 | 软件工程 | 软件架构 | Google AIP（General） |
 | Scrum、Kanban、Sprint 流程 | 项目管理 | 敏捷 | Scrum |
 | Product Operating Model、赋能团队、产品发现（Cagan） | 项目管理 | 产品管理 | 产品运作模型 |
 

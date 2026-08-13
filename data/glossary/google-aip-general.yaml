@@ -1,0 +1,530 @@
+# Google AIP（General）术语——随细译按章补入
+
+AIP:
+  summary: "API Improvement Proposal：面向 API 开发的高层、简明设计文档；在 Google 作为 API 相关文档的事实来源，也是 API 团队讨论并达成 API 指导共识的方式。"
+  source: "google-aip-general/01-meta/01-terms.md#AIP"
+  aliases:
+    - "API 改进提案"
+    - "API Improvement Proposal"
+
+Guidance:
+  summary: "指导类 AIP：描述 API 设计指导，给 API producer 写简单、直观、一致的 API；API reviewer 据此写评审意见。"
+  source: "google-aip-general/01-meta/01-terms.md#Guidance"
+  aliases:
+    - "指导类 AIP"
+
+Process:
+  summary: "过程类 AIP：描述围绕 API 设计的过程；常影响 AIP 过程本身，用来改进 AIP 的处理方式。"
+  source: "google-aip-general/01-meta/01-terms.md#Process"
+  aliases:
+    - "过程类 AIP"
+
+API producer:
+  summary: "产出 API service 的实体。对 Google APIs 而言，通常是负责该 API service 的 Google 团队。"
+  source: "google-aip-general/01-meta/01-terms.md#API producer"
+  aliases:
+    - "API 生产者"
+
+AIP Editors:
+  summary: "对 AIP 做决定的人：批准 Pull Request、分配提案编号、管理议程、设置 AIP 状态，并确保 AIP 可读。general scope 下他们是各 AIP 的 approver。"
+  source: "google-aip-general/01-meta/01-terms.md#AIP Editors"
+  aliases:
+    - "AIP 编辑"
+    - "editors"
+
+Technical Lead:
+  summary: "原文作 TL。AIP 过程的最终决策者与最终升级点。按职责域分为 Infrastructure Technical Lead 与 Design Technical Lead。"
+  source: "google-aip-general/01-meta/01-terms.md#Technical Lead"
+  aliases:
+    - "技术负责人"
+
+Draft:
+  summary: "AIP 初始状态：主要由原作者讨论与迭代；编辑此阶段可以介入，但非必须。"
+  source: "google-aip-general/01-meta/01-terms.md#Draft"
+  aliases:
+    - "草稿"
+
+Reviewing:
+  summary: "AIP 状态：讨论大体结束、尚未正式接受；作者已大致达成共识，编辑介入。进入此状态须有作者以外至少一名 approver 签字，且无其他 approver 正式反对。"
+  source: "google-aip-general/01-meta/01-terms.md#Reviewing"
+  aliases:
+    - "评审中"
+
+Approved:
+  summary: "AIP 状态：已达成一致，视为当前最佳实践。API producer 应主要依赖此状态的 AIP。"
+  source: "google-aip-general/01-meta/01-terms.md#Approved"
+  aliases:
+    - "已批准"
+
+Withdrawn:
+  summary: "AIP 状态：由作者或 champion 撤回；可由另一 champion 接手。"
+  source: "google-aip-general/01-meta/01-terms.md#Withdrawn"
+  aliases:
+    - "已撤回"
+
+Rejected:
+  summary: "AIP 状态：由 AIP editors 拒绝；文档保留，供日后讨论参考。"
+  source: "google-aip-general/01-meta/01-terms.md#Rejected"
+  aliases:
+    - "已拒绝"
+
+Deferred:
+  summary: "AIP 状态：长时间未推进时，编辑可标为此状态。"
+  source: "google-aip-general/01-meta/01-terms.md#Deferred"
+  aliases:
+    - "已延期"
+
+Replaced:
+  summary: "AIP 状态：被另一篇 AIP 取代；编辑须说明取代与理由。"
+  source: "google-aip-general/01-meta/01-terms.md#Replaced"
+  aliases:
+    - "已取代"
+
+Precedent:
+  summary: "已发布 API 若违反现行 AIP，不得被新 API 当作「曾经批准过」而沿用。须用 aip.dev/not-precedent 注释标明例外及原因。仅 beta 或 GA 的 API 才视为可立先例。"
+  source: "google-aip-general/01-meta/01-terms.md#Precedent"
+  aliases:
+    - "先例"
+    - "not-precedent"
+
+API backend:
+  summary: "实现 API service 业务逻辑的一组服务器及相关基础设施。单个 API backend 服务器常称为 API server。"
+  source: "google-aip-general/01-meta/01-terms.md#API backend"
+  aliases:
+    - "API 后端"
+
+API consumer:
+  summary: "消费 API service 的实体。对 Google APIs 而言，通常是拥有客户端应用或服务器资源的 Google project。"
+  source: "google-aip-general/01-meta/01-terms.md#API consumer"
+  aliases:
+    - "API 消费者"
+
+API definition:
+  summary: "API 的定义，通常写在 Protocol Buffer service 中。同一 API definition 可由任意数量的 API service 实现。"
+  source: "google-aip-general/01-meta/01-terms.md#API definition"
+  aliases:
+    - "API 定义"
+
+API frontend:
+  summary: "为各 API service 提供负载均衡、认证等共性能力的一组服务器及相关基础设施。单个常称为 API proxy。"
+  source: "google-aip-general/01-meta/01-terms.md#API frontend"
+  aliases:
+    - "API 前端"
+
+API interface:
+  summary: "API 规范 IDL 中对 API method 分组的元素，例如 Protocol Buffers 的 service。多数编程语言映射为 class 或 interface。"
+  source: "google-aip-general/01-meta/01-terms.md#API interface"
+  aliases:
+    - "API 接口"
+
+API method:
+  summary: "API 中的单个操作。Protocol Buffers 中通常是 rpc，多数编程语言映射为函数。"
+  source: "google-aip-general/01-meta/01-terms.md#API method"
+  aliases:
+    - "API 方法"
+
+API product:
+  summary: "API service 及其服务条款、文档、client libraries、支持等一并作为产品呈现给客户。人们有时把 API product 直接叫做 API。"
+  source: "google-aip-general/01-meta/01-terms.md#API product"
+  aliases:
+    - "API 产品"
+
+API service:
+  summary: "一个或多个 API 的已部署实现，暴露在一个或多个网络地址上，例如 Cloud Pub/Sub API。"
+  source: "google-aip-general/01-meta/01-terms.md#API service"
+  aliases:
+    - "API 服务"
+
+Network API:
+  summary: "跨计算机网络运作的 API，使用 HTTP 等网络协议通信；生产方与消费方常常分属不同组织。"
+  source: "google-aip-general/01-meta/01-terms.md#Network API"
+  aliases:
+    - "网络 API"
+
+Google API:
+  summary: "Google 服务暴露的 Network API。多数托管在 googleapis.com。不包括 client libraries、Software Development Kit 等其它类型的 API。"
+  source: "google-aip-general/01-meta/01-terms.md#Google API"
+  aliases: []
+
+Declarative Clients:
+  summary: "亦称 Infrastructure as Code：消费表示 API 资源的标记语言或代码，并执行相应命令式动作，把资源驱动到期望状态。须把客户端设定的字段当只读并认真保留。"
+  source: "google-aip-general/01-meta/01-terms.md#Declarative Clients"
+  aliases:
+    - "声明式客户端"
+    - "Infrastructure as Code"
+    - "IaC"
+
+API design review:
+  summary: "为在整个 API 语料中保证简单、直观、一致的 API 体验而做的评审。用户会直接对其写代码且发布级别为 beta 或 GA 时，通常需要批准。"
+  source: "google-aip-general/02-process/01-terms.md#API design review"
+  aliases:
+    - "API 设计评审"
+
+Alpha:
+  summary: "发布级别：为尽早收集客户反馈的临时 API，可多次变更。设计评审可选但建议做；未完成评审的 Alpha 不得把当时的设计决定固化为先例。"
+  source: "google-aip-general/02-process/01-terms.md#Alpha"
+  aliases: []
+
+Beta:
+  summary: "发布级别：API 趋于稳定。升到 Beta 前必须完成设计评审；可用性与文体问题须处理。标了 beta-blocker 的设计必须在 Beta 前改掉。"
+  source: "google-aip-general/02-process/01-terms.md#Beta"
+  aliases: []
+
+GA:
+  summary: "Generally Available。若相对 Beta 有变更，设计评审为 Required；若无变更则为 FYI。"
+  source: "google-aip-general/02-process/01-terms.md#GA"
+  aliases:
+    - "Generally Available"
+    - "正式发布"
+
+beta-blocker:
+  summary: "Alpha 中暂未处理、升 Beta 前必须再审的可用性或标准违反。用内部注释 aip.dev/beta-blocker 标明，并写明 Beta 应做何种修改。若例外要带到 Beta 与 GA，见 Precedent。"
+  source: "google-aip-general/02-process/01-terms.md#beta-blocker"
+  aliases:
+    - "阻碍 Beta 的变更"
+    - "Beta-blocking changes"
+
+Plane:
+  summary: "API 上的资源与方法可按其驻留或操作的 plane 划分。AIP 只定义接口层面的 Management plane 与 Data plane；control plane、power plane 等不在 AIP-111 定义。"
+  source: "google-aip-general/03-api-concepts/01-terms.md#Plane"
+  aliases:
+    - "平面"
+
+Management plane:
+  summary: "统一、面向资源的 API，主要用于配置并允许检索资源。管理资源与方法主要为 data plane 所对接的资源做供给、配置与审计。"
+  source: "google-aip-general/03-api-concepts/01-terms.md#Management plane"
+  aliases:
+    - "管理平面"
+
+Data plane:
+  summary: "异质 API（最好仍面向资源），读写用户数据；常连接到由 management plane 供给的实体。因高吞吐、低延迟或既有接口规范，在更大 API 表面上可以异质。"
+  source: "google-aip-general/03-api-concepts/01-terms.md#Data plane"
+  aliases:
+    - "数据平面"
+
+Resource name:
+  summary: "用户用来引用并应存储为规范名的唯一标识。格式按 URI path schema，但无前导斜杠。单 API 范围内只需唯一，也称 relative resource name。"
+  source: "google-aip-general/04-resource-design/01-terms.md#Resource name"
+  aliases:
+    - "资源名称"
+    - "relative resource name"
+
+Full resource name:
+  summary: "无 scheme 的 URI：拥有方 API 的 service name 加上相对资源名称。仅在字段可能指向多个 API、存在歧义时使用。"
+  source: "google-aip-general/04-resource-design/01-terms.md#Full resource name"
+  aliases:
+    - "完整资源名称"
+
+Resource type:
+  summary: "全局唯一类型名，模式为 {Service Name}/{Type}。Type 须与 Protobuf message 名对齐，单数，PascalCase。"
+  source: "google-aip-general/04-resource-design/01-terms.md#Resource type"
+  aliases:
+    - "资源类型"
+
+Standard methods:
+  summary: "Get、List、Create、Update、Delete。应优先于 custom methods。资源至少必须支持 Get；除 singleton 外还必须支持 List。"
+  source: "google-aip-general/04-resource-design/01-terms.md#Standard methods"
+  aliases:
+    - "标准方法"
+
+Singleton resource:
+  summary: "在任意给定 parent 下恰好始终存在一个实例（常见于 config）。没有用户或系统生成的 ID；随 parent 隐式创建/删除，不得定义 Create/Delete。"
+  source: "google-aip-general/04-resource-design/01-terms.md#Singleton resource"
+  aliases:
+    - "单例资源"
+    - "singleton"
+
+reconciling:
+  summary: "声明式友好资源上的 bool reconciling 字段（output only）：当前状态与用户意图不一致、系统正在调和时为 true。GET 必须返回当前状态而非意图状态。"
+  source: "google-aip-general/04-resource-design/01-terms.md#reconciling"
+  aliases:
+    - "调和中"
+
+effective value:
+  summary: "客户端未指定时由服务分配/生成/计算的值。API 须拆成用户可设且服务不得改的可变字段，以及名为 effective_ 前缀的 OUTPUT_ONLY 生效字段。"
+  source: "google-aip-general/04-resource-design/01-terms.md#effective value"
+  aliases:
+    - "生效值"
+
+Policy experiment:
+  summary: "嵌在 live policy 下、用于 preview 的新配置。类型名须为 RegularResourceTypeExperiment。用户用 startPreview 对照生产流量打日志，再用 commit 提升为 live。"
+  source: "google-aip-general/04-resource-design/01-terms.md#Policy experiment"
+  aliases:
+    - "策略实验"
+
+Standard collection methods:
+  summary: "对资源集合操作：List 或 Create。Declarative client / CLI / UI / SDK 均可自动化。"
+  source: "google-aip-general/05-operations/01-terms.md#Standard collection methods"
+  aliases:
+    - "标准集合方法"
+
+Standard resource methods:
+  summary: "获取或变更单个资源：Get、Update、Delete。Declarative client 可自动化。"
+  source: "google-aip-general/05-operations/01-terms.md#Standard resource methods"
+  aliases:
+    - "标准资源方法"
+
+Batch methods:
+  summary: "按 name 在同一集合中获取或变更多个资源：BatchGet、BatchCreate、BatchUpdate、BatchDelete。可用于优化查询。"
+  source: "google-aip-general/05-operations/01-terms.md#Batch methods"
+  aliases:
+    - "批量方法"
+
+Custom methods:
+  summary: "无法干净映射到标准方法的功能。使用传统 HTTP 动词（通常 POST），在 URI 中定义自定义动词（: 后）。Declarative client 通常需手写。"
+  source: "google-aip-general/05-operations/01-terms.md#Custom methods"
+  aliases:
+    - "自定义方法"
+
+Long-running operation:
+  summary: "无法在典型 RPC 时限内完成的工作。方法返回 google.longrunning.Operation；客户端轮询或等待直到 done。"
+  source: "google-aip-general/05-operations/01-terms.md#Long-running operation"
+  aliases:
+    - "长时运行操作"
+    - "LRO"
+
+FieldMask:
+  summary: "google.protobuf.FieldMask，Update 上名为 update_mask。省略时视为已填充字段；特殊值 * 表示完整替换。显式列出字段通常比 * 更安全。"
+  source: "google-aip-general/05-operations/01-terms.md#FieldMask"
+  aliases:
+    - "字段掩码"
+    - "update_mask"
+
+etag:
+  summary: "资源上表示内容的不透明、服务器计算值。Update/Delete 若提供 etag，必须与服务器值匹配，否则 ABORTED。"
+  source: "google-aip-general/05-operations/01-terms.md#etag"
+  aliases:
+    - "实体标签"
+
+allow_missing:
+  summary: "Update 上为 true 时，更新不存在的资源会创建它。Delete 上为 true 时，删除不存在的资源是 no-op。调用仍须具备相应权限。"
+  source: "google-aip-general/05-operations/01-terms.md#allow_missing"
+  aliases:
+    - "允许缺失"
+
+Cascading delete:
+  summary: "删除 parent 及其 child resources。请求上应提供 bool force；force 为 false 或未设置且存在 children 时必须 FAILED_PRECONDITION。"
+  source: "google-aip-general/05-operations/01-terms.md#Cascading delete"
+  aliases:
+    - "级联删除"
+
+Partial success:
+  summary: "批量 Create/Update/Delete 中部分条目成功、部分失败。同步 batch 必须原子；异步 batch 可用 failed_requests map 报告部分成功。"
+  source: "google-aip-general/05-operations/01-terms.md#Partial success"
+  aliases:
+    - "部分成功"
+
+Stateless methods:
+  summary: "不挂在资源上、对 API 内数据无永久影响的 custom methods（例如翻译文本）。动词与名词都放在 : 之后；涉及计费时必须用 POST。"
+  source: "google-aip-general/05-operations/01-terms.md#Stateless methods"
+  aliases:
+    - "无状态方法"
+
+field_behavior:
+  summary: "google.api.field_behavior annotation，描述 required / optional / output only 等。请求中使用的每个字段都必须标注。"
+  source: "google-aip-general/06-fields/01-terms.md#field_behavior"
+  aliases:
+    - "字段行为"
+
+IDENTIFIER:
+  summary: "仅附着在资源 name 字段：create 时视为 OUTPUT_ONLY，变更（如 Update）时视为 IMMUTABLE 并作为输入接受。"
+  source: "google-aip-general/06-fields/01-terms.md#IDENTIFIER"
+  aliases:
+    - "标识符（字段行为）"
+
+IMMUTABLE:
+  summary: "资源创建后不能更改的字段。Update 中若值匹配则忽略；若请求变更则 INVALID_ARGUMENT。"
+  source: "google-aip-general/06-fields/01-terms.md#IMMUTABLE"
+  aliases:
+    - "不可变"
+
+INPUT_ONLY:
+  summary: "请求中提供、响应中不返回。应只用于资源 message 上的字段，而非 *Request。很少见。"
+  source: "google-aip-general/06-fields/01-terms.md#INPUT_ONLY"
+  aliases:
+    - "仅输入"
+
+OUTPUT_ONLY:
+  summary: "响应中提供；请求中出现必须清除且不得报错；update mask 中必须忽略。"
+  source: "google-aip-general/06-fields/01-terms.md#OUTPUT_ONLY"
+  aliases:
+    - "仅输出"
+
+UNORDERED_LIST:
+  summary: "repeated 字段上表示服务不保证顺序。服务仍可以稳定排序，也可以随机返回。"
+  source: "google-aip-general/06-fields/01-terms.md#UNORDERED_LIST"
+  aliases:
+    - "无序列表"
+
+FieldInfo:
+  summary: "google.api.FieldInfo：在名称与类型之外标注格式（UUID4、IPV4、IPV6、IPV4_OR_IPV6）。新格式须有 IETF RFC 或 Google AIP。"
+  source: "google-aip-general/06-fields/01-terms.md#FieldInfo"
+  aliases:
+    - "字段信息"
+    - "field_info"
+
+display_name:
+  summary: "人类可读、用户可设、用于 UI 的显示名称；不应要求唯一，建议不超过 63 字符。更正式的官方名用 title。"
+  source: "google-aip-general/06-fields/01-terms.md#display_name"
+  aliases:
+    - "显示名称"
+
+annotations:
+  summary: "map<string, string>，供客户端工具存少量任意状态；须遵守 Kubernetes 限制。与可供服务端策略使用的 labels 不同。"
+  source: "google-aip-general/06-fields/01-terms.md#annotations"
+  aliases:
+    - "注解（资源字段）"
+
+oneof:
+  summary: "类型联合：只填充其中一个字段。新增选项是兼容变更；把现有字段移入或移出 oneof 会破坏 Go stubs。"
+  source: "google-aip-general/06-fields/01-terms.md#oneof"
+  aliases:
+    - "单选字段组"
+
+State transition methods:
+  summary: "把资源 State enum 从一个值转到另一个的 custom method。State 不得经 Create/Update 直接写入；不允许的转换返回 FAILED_PRECONDITION。"
+  source: "google-aip-general/06-fields/01-terms.md#State transition methods"
+  aliases:
+    - "状态转换方法"
+
+request_id:
+  summary: "请求 message 上的唯一标识（不得放在资源上）。提供则必须保证幂等；重复请求应返回先前成功响应。建议 UUID4。"
+  source: "google-aip-general/07-design-patterns/01-terms.md#request_id"
+  aliases:
+    - "请求标识"
+
+validate_only:
+  summary: "请求上的 bool：校验并预览与真实执行相同的响应，但不实际执行。必须做权限与其它会失败的校验。"
+  source: "google-aip-general/07-design-patterns/01-terms.md#validate_only"
+  aliases:
+    - "仅校验"
+
+Soft delete:
+  summary: "Delete 只标记删除、不完全移除。默认 List 不返回（除非 show_deleted）；Get 仍返回该资源。应有 delete_time 与 purge_time。"
+  source: "google-aip-general/07-design-patterns/01-terms.md#Soft delete"
+  aliases:
+    - "软删除"
+
+Undelete:
+  summary: "软删除资源上的 custom method（POST + :undelete），返回资源本身。对未删除的资源返回 ALREADY_EXISTS。"
+  source: "google-aip-general/07-design-patterns/01-terms.md#Undelete"
+  aliases:
+    - "恢复删除"
+
+Expunge:
+  summary: "立即永久删除的 custom method（:expunge）。须与标准 delete 分开的显式权限。"
+  source: "google-aip-general/07-design-patterns/01-terms.md#Expunge"
+  aliases:
+    - "彻底清除"
+
+page_token:
+  summary: "List 的分页令牌。必须不透明、URL-safe、不可被用户解析。空的 next_page_token 是传达集合结束的唯一方式。"
+  source: "google-aip-general/07-design-patterns/01-terms.md#page_token"
+  aliases:
+    - "分页令牌"
+    - "next_page_token"
+
+Normalization Form C:
+  summary: "Unicode 规范化形式 C。unique identifier 在查唯一性之前必须规范化为 NFC，或拒绝非 NFC 输入。"
+  source: "google-aip-general/07-design-patterns/01-terms.md#Normalization Form C"
+  aliases:
+    - "NFC"
+    - "Unicode 规范化形式 C"
+
+ttl:
+  summary: "相对过期：oneof expiration 中 INPUT_ONLY 的 Duration ttl。输出始终填 expire_time 并留空 ttl。"
+  source: "google-aip-general/07-design-patterns/01-terms.md#ttl"
+  aliases:
+    - "存活时间"
+    - "time-to-live"
+
+unreachable:
+  summary: "List 响应中的 repeated string，填 service-relative resource names。跨集合读取部分失败时必须提供。"
+  source: "google-aip-general/07-design-patterns/01-terms.md#unreachable"
+  aliases:
+    - "不可达资源"
+
+Resource revision:
+  summary: "嵌套集合 revisions，含 OUTPUT_ONLY 的 snapshot。用 revision 不用 version。可用 Rollback / alias。AIP-162 仍为 draft。"
+  source: "google-aip-general/07-design-patterns/01-terms.md#Resource revision"
+  aliases:
+    - "资源修订"
+
+Source compatibility:
+  summary: "针对先前版本编写的代码必须能对更新版本编译，并成功与更新版本的客户端库运行。"
+  source: "google-aip-general/08-compatibility/01-terms.md#Source compatibility"
+  aliases:
+    - "源码兼容"
+
+Wire compatibility:
+  summary: "针对先前版本编写的代码必须能与更新的服务器正确通信：输入输出兼容，且序列化 / 反序列化期望继续匹配。"
+  source: "google-aip-general/08-compatibility/01-terms.md#Wire compatibility"
+  aliases:
+    - "线上兼容"
+
+Semantic compatibility:
+  summary: "针对先前版本编写的代码必须继续收到大多数合理开发者会期望的东西。"
+  source: "google-aip-general/08-compatibility/01-terms.md#Semantic compatibility"
+  aliases:
+    - "语义兼容"
+
+Channel-based versioning:
+  summary: "推荐的版本策略。每个主版本每个稳定性级别最多一个长寿命 channel。stable 用 v1，beta / alpha 用 v1beta / v1alpha，就地接收新功能。"
+  source: "google-aip-general/08-compatibility/01-terms.md#Channel-based versioning"
+  aliases:
+    - "基于通道的版本控制"
+
+Release-based versioning:
+  summary: "新服务不常用。alpha / beta 为有限寿命的个别发布（v1beta1、v1alpha5）；stable 仍就地更新。"
+  source: "google-aip-general/08-compatibility/01-terms.md#Release-based versioning"
+  aliases:
+    - "基于发布的版本控制"
+
+Visibility-based versioning:
+  summary: "用 google.api.visibility 从一个内部表面暴露多个外部视图。label 为大小写敏感的 allow-list；未标注则隐式 PUBLIC。"
+  source: "google-aip-general/08-compatibility/01-terms.md#Visibility-based versioning"
+  aliases:
+    - "基于可见性的版本控制"
+
+interface name:
+  summary: ".proto 中 service 定义所用名称，区别于实现侧的 Service Name（如 pubsub.googleapis.com）。应使用直观名词。"
+  source: "google-aip-general/09-polish/01-terms.md#interface name"
+  aliases:
+    - "接口名"
+
+ErrorInfo:
+  summary: "google.rpc.ErrorInfo：所有错误响应的 details 中必须包含。reason + domain 构成机器可读标识；请求特定信息必须进 metadata。"
+  source: "google-aip-general/09-polish/01-terms.md#ErrorInfo"
+  aliases:
+    - "错误信息"
+
+LocalizedMessage:
+  summary: "google.rpc.LocalizedMessage：按用户 locale（IETF BCP 47）提供错误文案。若 Status.message 因兼容而不能改，可用它提供更好消息。"
+  source: "google-aip-general/09-polish/01-terms.md#LocalizedMessage"
+  aliases:
+    - "本地化消息"
+
+HTTP transcoding:
+  summary: "把面向资源的 gRPC RPCs 同时呈现为 REST/JSON。每个 RPC（双向流除外）必须用 google.api.http 声明 HTTP 方法与路径。"
+  source: "google-aip-general/10-protocol-buffers/01-terms.md#HTTP transcoding"
+  aliases:
+    - "HTTP 转码"
+
+"google.api.http":
+  summary: "标注 RPC 的 HTTP 动词、URI 模板与 body。URI 用 {foo=bar/*} 填请求字段；GET / DELETE 不得有 body。"
+  source: "google-aip-general/10-protocol-buffers/01-terms.md#google.api.http"
+  aliases:
+    - "HTTP 注解"
+
+additional_bindings:
+  summary: "google.api.http 上的递归字段，让同一 RPC 对应多个 URI。不得嵌套 additional binding；各绑定的 body 必须相同。"
+  source: "google-aip-general/10-protocol-buffers/01-terms.md#additional_bindings"
+  aliases:
+    - "额外绑定"
+
+common components:
+  summary: "意在被多个 APIs 使用的 proto packages。组织范围的必须以 .type 结尾；全局的如 google.protobuf.*、google.type.*、google.rpc.*。"
+  source: "google-aip-general/10-protocol-buffers/01-terms.md#common components"
+  aliases:
+    - "公共组件"
+
