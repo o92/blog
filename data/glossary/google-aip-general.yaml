@@ -208,6 +208,7 @@ Resource name:
   aliases:
     - "资源名称"
     - "relative resource name"
+    - "resource names"
 
 Full resource name:
   summary: "无 scheme 的 URI：拥有方 API 的 service name 加上相对资源名称。仅在字段可能指向多个 API、存在歧义时使用。"
@@ -233,6 +234,21 @@ Singleton resource:
   aliases:
     - "单例资源"
     - "singleton"
+    - "singleton resources"
+
+Declarative-friendly:
+  summary: "资源按声明式客户端可管理来设计：须支持 Get/List，变更常为 long-running，并提供 etag、allow_missing、reconciling 等。"
+  source: "google-aip-general/04-resource-design/01-terms.md#Declarative-friendly"
+  aliases:
+    - "声明式友好"
+    - "声明式友好资源"
+    - "声明式友好 APIs"
+
+Strong consistency:
+  summary: "management plane 上一次变更完成后，资源的存在与所有用户可设值必须达到稳态；随后 Get 必须立刻反映该结果。"
+  source: "google-aip-general/04-resource-design/01-terms.md#Strong consistency"
+  aliases:
+    - "强一致性"
 
 reconciling:
   summary: "声明式友好资源上的 bool reconciling 字段（output only）：当前状态与用户意图不一致、系统正在调和时为 true。GET 必须返回当前状态而非意图状态。"
@@ -275,6 +291,7 @@ Custom methods:
   source: "google-aip-general/05-operations/01-terms.md#Custom methods"
   aliases:
     - "自定义方法"
+    - "custom method"
 
 Long-running operation:
   summary: "无法在典型 RPC 时限内完成的工作。方法返回 google.longrunning.Operation；客户端轮询或等待直到 done。"
@@ -282,6 +299,9 @@ Long-running operation:
   aliases:
     - "长时运行操作"
     - "LRO"
+    - "Long-running operations"
+    - "long-running operations"
+    - "Long Running Operations"
 
 FieldMask:
   summary: "google.protobuf.FieldMask，Update 上名为 update_mask。省略时视为已填充字段；特殊值 * 表示完整替换。显式列出字段通常比 * 更安全。"
@@ -295,6 +315,7 @@ etag:
   source: "google-aip-general/05-operations/01-terms.md#etag"
   aliases:
     - "实体标签"
+    - "ETags"
 
 allow_missing:
   summary: "Update 上为 true 时，更新不存在的资源会创建它。Delete 上为 true 时，删除不存在的资源是 no-op。调用仍须具备相应权限。"
@@ -343,12 +364,15 @@ INPUT_ONLY:
   source: "google-aip-general/06-fields/01-terms.md#INPUT_ONLY"
   aliases:
     - "仅输入"
+    - "input-only"
 
 OUTPUT_ONLY:
   summary: "响应中提供；请求中出现必须清除且不得报错；update mask 中必须忽略。"
   source: "google-aip-general/06-fields/01-terms.md#OUTPUT_ONLY"
   aliases:
     - "仅输出"
+    - "Output only"
+    - "output-only"
 
 UNORDERED_LIST:
   summary: "repeated 字段上表示服务不保证顺序。服务仍可以稳定排序，也可以随机返回。"
@@ -398,6 +422,7 @@ validate_only:
   source: "google-aip-general/07-design-patterns/01-terms.md#validate_only"
   aliases:
     - "仅校验"
+    - "validate-only"
 
 Soft delete:
   summary: "Delete 只标记删除、不完全移除。默认 List 不返回（除非 show_deleted）；Get 仍返回该资源。应有 delete_time 与 purge_time。"
@@ -449,6 +474,12 @@ Resource revision:
   source: "google-aip-general/07-design-patterns/01-terms.md#Resource revision"
   aliases:
     - "资源修订"
+
+Reading across collections:
+  summary: "List 的 parent 用 - 通配多个 parents（例如 publishers/-/books）。部分失败时须提供 unreachable。"
+  source: "google-aip-general/07-design-patterns/01-terms.md#Reading across collections"
+  aliases:
+    - "跨集合读取"
 
 Source compatibility:
   summary: "针对先前版本编写的代码必须能对更新版本编译，并成功与更新版本的客户端库运行。"
@@ -509,6 +540,7 @@ HTTP transcoding:
   source: "google-aip-general/10-protocol-buffers/01-terms.md#HTTP transcoding"
   aliases:
     - "HTTP 转码"
+    - "HTTP and gRPC Transcoding"
 
 "google.api.http":
   summary: "标注 RPC 的 HTTP 动词、URI 模板与 body。URI 用 {foo=bar/*} 填请求字段；GET / DELETE 不得有 body。"

@@ -40,6 +40,16 @@ weight = 1
 - **中文**：单例资源
 - 在任意给定 parent 下恰好始终存在一个实例（常见于 config）。没有用户或系统生成的 ID；随 parent 隐式创建/删除，不得定义 Create/Delete。
 
+### Declarative-friendly
+
+- **中文**：声明式友好
+- 资源按 Infrastructure as Code / 声明式客户端可管理来设计（AIP-128）：须支持 Get/List，变更常为 long-running，并提供 `etag`、`allow_missing`、`reconciling` 等。
+
+### Strong consistency
+
+- **中文**：强一致性
+- management plane 上一次变更完成后，资源的存在与所有用户可设值必须达到稳态；随后 Get 必须立刻反映该结果。
+
 ### reconciling
 
 - **中文**：调和中

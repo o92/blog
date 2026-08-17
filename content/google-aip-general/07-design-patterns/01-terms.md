@@ -54,3 +54,8 @@ weight = 1
 
 - **中文**：资源修订
 - 嵌套集合 `{resource}/revisions/{id}`，message 名为 `{ResourceType}Revision`，含 OUTPUT_ONLY 的 `snapshot`。用 *revision* 不用 *version*。可用 `Rollback` / `alias`。本文仍为 draft。
+
+### Reading across collections
+
+- **中文**：跨集合读取
+- List 的 `parent` 用 `-` 通配多个 parents（例如 `publishers/-/books`）。部分失败时须提供 `unreachable`。
